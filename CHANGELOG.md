@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.2.10] - 2026-03-17
+
+### Other
+- Update examples/testing/test_fixtures.py
+
 ## [0.2.9] - 2026-03-17
 
 ### Docs
