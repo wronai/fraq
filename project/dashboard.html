@@ -60,17 +60,17 @@
 <p style="color:var(--muted);font-size:.85rem;">
   Analyzed 2026-03-17 by code2llm
   &nbsp;·&nbsp; Primary language: <strong>python</strong>
-  &nbsp;·&nbsp; Python: 32, Shell: 1
+  &nbsp;·&nbsp; Python: 43, Shell: 1
 </p>
 
 <div class="grid">
-  <div class="card"><div class="value">196</div><div class="label">Functions</div></div>
-  <div class="card"><div class="value">35</div><div class="label">Classes</div></div>
-  <div class="card"><div class="value">29</div><div class="label">Files</div></div>
-  <div class="card"><div class="value">5,691</div><div class="label">Lines</div></div>
+  <div class="card"><div class="value">261</div><div class="label">Functions</div></div>
+  <div class="card"><div class="value">53</div><div class="label">Classes</div></div>
+  <div class="card"><div class="value">38</div><div class="label">Files</div></div>
+  <div class="card"><div class="value">7,433</div><div class="label">Lines</div></div>
   <div class="card"><div class="value">2</div><div class="label">Languages</div></div>
   <div class="card"><div class="value">3.1</div><div class="label">Avg CC</div></div>
-  <div class="card"><div class="value">6</div><div class="label">Critical (CC≥10)</div></div>
+  <div class="card"><div class="value">10</div><div class="label">Critical (CC≥10)</div></div>
   <div class="card"><div class="value">0</div><div class="label">Duplicates</div></div>
   <div class="card"><div class="value">3</div><div class="label">Cycles</div></div>
 </div>
@@ -95,13 +95,13 @@
     <h2 style="border:none;margin:0 0 .5rem;">Evolution (2026-03-17)</h2>
     <div class="evo-cards">
       <div class="card"><div class="value">3.1</div><div class="label">CC̄ →</div></div>
-      <div class="card"><div class="value">6</div><div class="label">Critical →</div></div>
-      <div class="card"><div class="value">5691</div><div class="label">Lines</div></div>
+      <div class="card"><div class="value">10</div><div class="label">Critical →</div></div>
+      <div class="card"><div class="value">7433</div><div class="label">Lines</div></div>
     </div>
     <p class="trend" style="margin-top:.5rem;">Run analysis multiple times to build a trend chart (≥3 data points needed).</p>
   </div>
   <div>
-    <h2>Top Modules (33)</h2>
+    <h2>Top Modules (44)</h2>
     <div class="card"><div class="table-wrap">
     <table>
       <thead><tr><th>Module</th><th>Path</th><th style="text-align:right">Lines</th><th style="text-align:right">Funcs</th><th style="text-align:right">Classes</th><th style="text-align:right">CC max</th></tr></thead>
@@ -117,8 +117,8 @@
             <tr>
                 <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>cli.py</td>
                 <td style="color:var(--muted);font-size:.75rem">fraq</td>
-                <td style="text-align:right">449</td>
-                <td style="text-align:right">18</td>
+                <td style="text-align:right">467</td>
+                <td style="text-align:right">24</td>
                 <td style="text-align:right">0</td>
                 <td style="text-align:right">8</td>
             </tr>
@@ -131,11 +131,35 @@
                 <td style="text-align:right">8</td>
             </tr>
             <tr>
-                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>__init__.py</td>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>inference.py</td>
                 <td style="color:var(--muted);font-size:.75rem">fraq</td>
-                <td style="text-align:right">310</td>
+                <td style="text-align:right">347</td>
+                <td style="text-align:right">10</td>
                 <td style="text-align:right">4</td>
-                <td style="text-align:right">0</td>
+                <td style="text-align:right">16</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>ifs.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">288</td>
+                <td style="text-align:right">11</td>
+                <td style="text-align:right">5</td>
+                <td style="text-align:right">7</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>file_search.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq/adapters</td>
+                <td style="text-align:right">268</td>
+                <td style="text-align:right">18</td>
+                <td style="text-align:right">3</td>
+                <td style="text-align:right">7</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>benchmarks.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">263</td>
+                <td style="text-align:right">8</td>
+                <td style="text-align:right">4</td>
                 <td style="text-align:right">11</td>
             </tr>
             <tr>
@@ -171,12 +195,12 @@
                 <td style="text-align:right">11</td>
             </tr>
             <tr>
-                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>formats.py</td>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>api.py</td>
                 <td style="color:var(--muted);font-size:.75rem">fraq</td>
-                <td style="text-align:right">196</td>
-                <td style="text-align:right">14</td>
-                <td style="text-align:right">1</td>
-                <td style="text-align:right">11</td>
+                <td style="text-align:right">189</td>
+                <td style="text-align:right">6</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">10</td>
             </tr>
             <tr>
                 <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>network.py</td>
@@ -187,12 +211,28 @@
                 <td style="text-align:right">5</td>
             </tr>
             <tr>
-                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>file_search.py</td>
-                <td style="color:var(--muted);font-size:.75rem">fraq/adapters</td>
-                <td style="text-align:right">165</td>
-                <td style="text-align:right">8</td>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>faker_provider.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq/providers</td>
+                <td style="text-align:right">177</td>
+                <td style="text-align:right">13</td>
+                <td style="text-align:right">3</td>
+                <td style="text-align:right">6</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>dataframes.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">173</td>
+                <td style="text-align:right">4</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">4</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>__init__.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">155</td>
                 <td style="text-align:right">1</td>
-                <td style="text-align:right">8</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">2</td>
             </tr>
             <tr>
                 <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>session.py</td>
@@ -225,76 +265,57 @@
                 <td style="text-align:right">8</td>
                 <td style="text-align:right">1</td>
                 <td style="text-align:right">6</td>
-            </tr>
-            <tr>
-                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>streaming.py</td>
-                <td style="color:var(--muted);font-size:.75rem">fraq</td>
-                <td style="text-align:right">93</td>
-                <td style="text-align:right">5</td>
-                <td style="text-align:right">1</td>
-                <td style="text-align:right">3</td>
-            </tr>
-            <tr>
-                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>router.py</td>
-                <td style="color:var(--muted);font-size:.75rem">fraq/text2fraq</td>
-                <td style="text-align:right">88</td>
-                <td style="text-align:right">4</td>
-                <td style="text-align:right">1</td>
-                <td style="text-align:right">9</td>
-            </tr>
-            <tr>
-                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>sql_adapter.py</td>
-                <td style="color:var(--muted);font-size:.75rem">fraq/adapters</td>
-                <td style="text-align:right">64</td>
-                <td style="text-align:right">5</td>
-                <td style="text-align:right">1</td>
-                <td style="text-align:right">6</td>
-            </tr>
-            <tr>
-                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>sensor_adapter.py</td>
-                <td style="color:var(--muted);font-size:.75rem">fraq/adapters</td>
-                <td style="text-align:right">61</td>
-                <td style="text-align:right">4</td>
-                <td style="text-align:right">1</td>
-                <td style="text-align:right">3</td>
-            </tr>
-            <tr>
-                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>main_websocket.py</td>
-                <td style="color:var(--muted);font-size:.75rem">.</td>
-                <td style="text-align:right">52</td>
-                <td style="text-align:right">3</td>
-                <td style="text-align:right">0</td>
-                <td style="text-align:right">5</td>
             </tr></tbody>
     </table>
     </div></div>
   </div>
 </div>
 
-<h2>Alerts (16)</h2>
+<h2>Alerts (19)</h2>
 <div class="card"><div class="table-wrap">
 <table>
   <thead><tr><th>Severity</th><th>Target</th><th>Type</th><th>Value</th><th>Limit</th></tr></thead>
   <tbody>
-            <tr class="critical">
-                <td><span class="badge critical">critical</span></td>
-                <td>_parse_args</td>
-                <td>high_fan_out</td>
-                <td>21</td>
-                <td>10</td>
-            </tr>
-            <tr class="error">
-                <td><span class="badge error">error</span></td>
-                <td>generate</td>
-                <td>high_fan_out</td>
-                <td>16</td>
-                <td>10</td>
-            </tr>
             <tr class="error">
                 <td><span class="badge error">error</span></td>
                 <td>FileSearchText2Fraq._collect_files_filtered</td>
                 <td>high_fan_out</td>
                 <td>16</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>FractalAnalyzer.box_counting_dimension</td>
+                <td>cc_exceeded</td>
+                <td>16</td>
+                <td>15</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>FractalAnalyzer.detect_hierarchy</td>
+                <td>cc_exceeded</td>
+                <td>15</td>
+                <td>15</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>FractalAnalyzer.analyze_correlations</td>
+                <td>cc_exceeded</td>
+                <td>15</td>
+                <td>15</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>FractalAnalyzer.detect_hierarchy</td>
+                <td>high_fan_out</td>
+                <td>14</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>FractalAnalyzer.box_counting_dimension</td>
+                <td>high_fan_out</td>
+                <td>13</td>
                 <td>10</td>
             </tr>
             <tr class="warning">
@@ -313,14 +334,14 @@
             </tr>
             <tr class="warning">
                 <td><span class="badge warning">warning</span></td>
-                <td>WebCrawlerAdapter.crawl_async</td>
+                <td>_parse_transform</td>
                 <td>high_fan_out</td>
                 <td>12</td>
                 <td>10</td>
             </tr>
             <tr class="warning">
                 <td><span class="badge warning">warning</span></td>
-                <td>FileSearchAdapter._collect_files</td>
+                <td>WebCrawlerAdapter.crawl_async</td>
                 <td>high_fan_out</td>
                 <td>12</td>
                 <td>10</td>
@@ -341,14 +362,7 @@
             </tr>
             <tr class="warning">
                 <td><span class="badge warning">warning</span></td>
-                <td>FileSearchAdapter.load_root</td>
-                <td>high_fan_out</td>
-                <td>11</td>
-                <td>10</td>
-            </tr>
-            <tr class="warning">
-                <td><span class="badge warning">warning</span></td>
-                <td>_to_csv</td>
+                <td>_dispatch_command</td>
                 <td>high_fan_out</td>
                 <td>10</td>
                 <td>10</td>
@@ -362,21 +376,7 @@
             </tr>
             <tr class="warning">
                 <td><span class="badge warning">warning</span></td>
-                <td>_dispatch_command</td>
-                <td>high_fan_out</td>
-                <td>10</td>
-                <td>10</td>
-            </tr>
-            <tr class="warning">
-                <td><span class="badge warning">warning</span></td>
-                <td>HTTPAdapter.load_root</td>
-                <td>high_fan_out</td>
-                <td>10</td>
-                <td>10</td>
-            </tr>
-            <tr class="warning">
-                <td><span class="badge warning">warning</span></td>
-                <td>SQLAdapter.load_root</td>
+                <td>FractalAnalyzer.analyze_correlations</td>
                 <td>high_fan_out</td>
                 <td>10</td>
                 <td>10</td>
@@ -392,21 +392,23 @@
   <thead><tr><th>Function</th><th>Fan-out</th><th>Note</th></tr></thead>
   <tbody>
             <tr>
-                <td><strong>_parse_args</strong></td>
-                <td>21</td>
-                <td>Parse command line arguments.</td>
-            </tr>
-            <tr>
-                <td><strong>generate</strong></td>
-                <td>16</td>
-                <td>Generate records with simple field specification.
-
-This is the EASIEST way to cr</td>
-            </tr>
-            <tr>
                 <td><strong>FileSearchText2Fraq._collect_files_filtered</strong></td>
                 <td>16</td>
                 <td>Collect files with exclusion filtering.</td>
+            </tr>
+            <tr>
+                <td><strong>FractalAnalyzer.detect_hierarchy</strong></td>
+                <td>14</td>
+                <td>Detect hierarchical structure in data.
+
+Analyzes parent-child relationships to f</td>
+            </tr>
+            <tr>
+                <td><strong>FractalAnalyzer.box_counting_dimension</strong></td>
+                <td>13</td>
+                <td>Calculate box-counting dimension of value distribution.
+
+True fractals have non-</td>
             </tr>
             <tr>
                 <td><strong>FileAdapter.load_root</strong></td>
@@ -419,14 +421,16 @@ This is the EASIEST way to cr</td>
                 <td>WebSocket endpoint for streaming fractal data.</td>
             </tr>
             <tr>
+                <td><strong>_parse_transform</strong></td>
+                <td>12</td>
+                <td>Parse type specification and return transform function.
+
+Handles: range hints (f</td>
+            </tr>
+            <tr>
                 <td><strong>WebCrawlerAdapter.crawl_async</strong></td>
                 <td>12</td>
                 <td>Crawl website and return all pages.</td>
-            </tr>
-            <tr>
-                <td><strong>FileSearchAdapter._collect_files</strong></td>
-                <td>12</td>
-                <td>Iterate filesystem and collect matching files.</td>
             </tr>
             <tr>
                 <td><strong>ws_stream</strong></td>
@@ -439,52 +443,58 @@ This is the EASIEST way to cr</td>
                 <td>Orchestrates 11 calls</td>
             </tr>
             <tr>
-                <td><strong>FileSearchAdapter.load_root</strong></td>
-                <td>11</td>
-                <td>Orchestrates 11 calls</td>
+                <td><strong>_dispatch_command</strong></td>
+                <td>10</td>
+                <td>10-way dispatch</td>
             </tr></tbody>
 </table>
 </div></div>
 </div>
 
 <div>
-<h2>Refactoring Priorities (6)</h2>
+<h2>Refactoring Priorities (7)</h2>
 <div class="card"><div class="table-wrap">
 <table>
   <thead><tr><th>#</th><th>Action</th><th>Impact</th><th>Effort</th></tr></thead>
   <tbody>
             <tr>
                 <td>1</td>
-                <td>Break circular dependency: fraq.formats._prepare</td>
+                <td>Split FractalAnalyzer.box_counting_dimension (CC=16 → target CC<10)</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>low</td>
             </tr>
             <tr>
                 <td>2</td>
-                <td>Break circular dependency: fraq.formats._simple_yaml</td>
+                <td>Split FractalAnalyzer.detect_hierarchy (CC=15 → target CC<10)</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>low</td>
             </tr>
             <tr>
                 <td>3</td>
-                <td>Break circular dependency: fraq.formats._mp_encode</td>
+                <td>Split FractalAnalyzer.analyze_correlations (CC=15 → target CC<10)</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>low</td>
             </tr>
             <tr>
                 <td>4</td>
-                <td>Reduce _parse_args fan-out (currently 21)</td>
+                <td>Break circular dependency: fraq.formats.prepare.prepare</td>
                 <td><span class="badge medium">medium</span></td>
-                <td>medium</td>
+                <td>low</td>
             </tr>
             <tr>
                 <td>5</td>
-                <td>Reduce generate fan-out (currently 16)</td>
+                <td>Break circular dependency: fraq.formats.binary.mp_encode</td>
                 <td><span class="badge medium">medium</span></td>
-                <td>medium</td>
+                <td>low</td>
             </tr>
             <tr>
                 <td>6</td>
+                <td>Break circular dependency: fraq.formats.text.simple_yaml</td>
+                <td><span class="badge medium">medium</span></td>
+                <td>low</td>
+            </tr>
+            <tr>
+                <td>7</td>
                 <td>Reduce FileSearchText2Fraq._collect_files_filtered fan-out (currently 16)</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>medium</td>
@@ -494,7 +504,7 @@ This is the EASIEST way to cr</td>
 </div>
 </div>
 
-<footer>Generated by code2llm on 2026-03-17 21:43</footer>
+<footer>Generated by code2llm on 2026-03-17 22:01</footer>
 
 <script>
 // Evolution chart disabled — fewer than 3 data points
@@ -506,7 +516,7 @@ new Chart(langCtx, {
   data: {
     labels: ['Python', 'Shell'],
     datasets: [{
-      data: [32, 1],
+      data: [43, 1],
       backgroundColor: ['#3572A5', '#89e051'],
       borderColor: 'var(--border)', borderWidth: 1
     }]
@@ -524,8 +534,8 @@ const modLinesCtx = document.getElementById('modLinesChart').getContext('2d');
 new Chart(modLinesCtx, {
   type: 'bar',
   data: {
-    labels: ['schema_export.py', 'cli.py', 'core.py', '__init__.py', 'query.py', 'server.py', 'web_crawler.py', 'file_search_parser.py', 'formats.py', 'network.py', 'file_search.py', 'session.py', 'generators.py', 'parser_llm.py', 'parser_rules.py'],
-    datasets: [{ label: 'Lines', data: [476, 449, 412, 310, 220, 217, 204, 200, 196, 186, 165, 149, 117, 109, 93],
+    labels: ['schema_export.py', 'cli.py', 'core.py', 'inference.py', 'ifs.py', 'file_search.py', 'benchmarks.py', 'query.py', 'server.py', 'web_crawler.py', 'file_search_parser.py', 'api.py', 'network.py', 'faker_provider.py', 'dataframes.py'],
+    datasets: [{ label: 'Lines', data: [476, 467, 412, 347, 288, 268, 263, 220, 217, 204, 200, 189, 186, 177, 173],
       backgroundColor: '#3b82f6'
     }]
   },
@@ -544,8 +554,8 @@ const modFuncsCtx = document.getElementById('modFuncsChart').getContext('2d');
 new Chart(modFuncsCtx, {
   type: 'bar',
   data: {
-    labels: ['cli.py', 'core.py', 'formats.py', 'web_crawler.py', 'query.py', 'file_search_parser.py', 'network.py', 'generators.py', 'file_search.py', 'parser_rules.py', 'session.py', 'server.py', 'schema_export.py', 'parser_llm.py', 'sql_adapter.py'],
-    datasets: [{ label: 'Functions', data: [18, 17, 14, 12, 12, 11, 11, 9, 8, 8, 8, 7, 7, 7, 5],
+    labels: ['cli.py', 'file_search.py', 'core.py', 'faker_provider.py', 'web_crawler.py', 'query.py', 'file_search_parser.py', 'ifs.py', 'network.py', 'inference.py', 'generators.py', 'benchmarks.py', 'parser_rules.py', 'session.py', 'server.py'],
+    datasets: [{ label: 'Functions', data: [24, 18, 17, 13, 12, 12, 11, 11, 11, 10, 9, 8, 8, 8, 7],
       backgroundColor: '#22c55e'
     }]
   },

@@ -8,34 +8,42 @@ flowchart TD
     examples_streaming["examples.streaming<br/>4 funcs"]
     examples_text2fraq["examples.text2fraq<br/>27 funcs"]
     examples_v028["examples.v028<br/>4 funcs"]
-    fraq["fraq<br/>4 funcs"]
-    fraq_adapters["fraq.adapters<br/>54 funcs"]
-    fraq_cli["fraq.cli<br/>18 funcs"]
+    fraq_adapters["fraq.adapters<br/>64 funcs"]
+    fraq_api["fraq.api<br/>6 funcs"]
+    fraq_benchmarks["fraq.benchmarks<br/>8 funcs"]
+    fraq_cli["fraq.cli<br/>24 funcs"]
     fraq_core["fraq.core<br/>17 funcs"]
+    fraq_dataframes["fraq.dataframes<br/>4 funcs"]
     fraq_formats["fraq.formats<br/>14 funcs"]
     fraq_generators["fraq.generators<br/>9 funcs"]
+    fraq_ifs["fraq.ifs<br/>11 funcs"]
+    fraq_providers["fraq.providers<br/>13 funcs"]
     fraq_query["fraq.query<br/>12 funcs"]
     fraq_schema_export["fraq.schema_export<br/>7 funcs"]
     fraq_server["fraq.server<br/>7 funcs"]
     fraq_streaming["fraq.streaming<br/>5 funcs"]
     fraq_text2fraq["fraq.text2fraq<br/>46 funcs"]
-    examples_basic ==>|11| fraq
+    examples_basic ==>|11| fraq_api
     examples_text2fraq ==>|10| fraq_schema_export
     examples_text2fraq ==>|7| fraq_text2fraq
     fraq_cli ==>|6| fraq_formats
     fraq_adapters ==>|6| fraq_formats
-    examples_etl ==>|5| fraq
+    examples_etl ==>|5| fraq_api
+    fraq_benchmarks ==>|4| fraq_api
     examples_fastapi_docker ==>|4| fraq_formats
-    examples_iot -->|3| fraq
-    examples_streaming -->|3| fraq
-    examples_ai_ml -->|2| fraq
-    examples_database -->|2| fraq
+    fraq_dataframes -->|3| fraq_api
+    examples_iot -->|3| fraq_api
+    examples_streaming -->|3| fraq_api
+    examples_ai_ml -->|2| fraq_api
+    examples_database -->|2| fraq_api
     fraq_cli -->|1| fraq_text2fraq
+    fraq_api -->|1| fraq_providers
+    fraq_benchmarks -->|1| fraq_ifs
     fraq_generators -->|1| fraq_core
     fraq_query -->|1| fraq_formats
+    examples_v028 -->|1| fraq_text2fraq
+    examples_basic -->|1| fraq_streaming
     examples_fastapi_docker -->|1| fraq_text2fraq
     examples_fastapi_docker -->|1| fraq_streaming
-    examples_basic -->|1| fraq_streaming
     fraq_text2fraq -->|1| fraq_formats
-    examples_v028 -->|1| fraq_text2fraq
     fraq_server -->|1| fraq_text2fraq

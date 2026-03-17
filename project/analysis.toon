@@ -1,157 +1,204 @@
-# code2llm | 33f 4343L | python:32,shell:1 | 2026-03-17
-# CC̄=3.1 | critical:6/320 | dups:0 | cycles:3
+# code2llm | 44f 5883L | python:43,shell:1 | 2026-03-17
+# CC̄=3.1 | critical:10/385 | dups:0 | cycles:3
 
-HEALTH[0]: ok
+HEALTH[3]:
+  🟡 CC    box_counting_dimension CC=16 (limit:15)
+  🟡 CC    detect_hierarchy CC=15 (limit:15)
+  🟡 CC    analyze_correlations CC=15 (limit:15)
 
-REFACTOR[1]:
-  1. break 3 circular dependencies
+REFACTOR[2]:
+  1. split 3 high-CC methods  (CC>15)
+  2. break 3 circular dependencies
 
 COUPLING:
-                            fraq   fraq.adapters  fraq.text2fraq
-            fraq              ──              ←6               2  hub
-   fraq.adapters               6              ──                
-  fraq.text2fraq               1                              ──
+                    fraq.formats            fraq   fraq.adapters  fraq.text2fraq  fraq.providers
+    fraq.formats              ──              ←7              ←6              ←1                  hub
+            fraq               7              ──                               2               1  !! fan-out
+   fraq.adapters               6                              ──                                
+  fraq.text2fraq               1              ←2                              ──                
+  fraq.providers                              ←1                                              ──
   CYCLES: 3
-  HUB: fraq/ (fan-in=7)
+  HUB: fraq.formats/ (fan-in=14)
+  SMELL: fraq/ fan-out=10 → split needed
 
 LAYERS:
   ./                              CC̄=3.7    ←in:0  →out:0
   │ main_websocket              52L  0C    3m  CC=5      ←0
   │ project.sh                  14L  0C    0m  CC=0.0    ←0
   │
-  fraq/                           CC̄=3.1    ←in:7  →out:2
+  fraq/                           CC̄=3.1    ←in:0  →out:10  !! split
   │ schema_export              476L  0C    7m  CC=5      ←1
-  │ cli                        449L  0C   18m  CC=8      ←0
+  │ cli                        467L  0C   24m  CC=8      ←0
   │ core                       412L  4C   17m  CC=8      ←1
-  │ !  __init__                   310L  0C    4m  CC=11     ←8
+  │ !! inference                  347L  4C   10m  CC=16     ←0
+  │ ifs                        288L  5C   11m  CC=7      ←1
+  │ file_search                268L  3C   18m  CC=7      ←0
+  │ !  benchmarks                 263L  4C    8m  CC=11     ←0
   │ query                      220L  4C   12m  CC=9      ←0
   │ server                     217L  3C    7m  CC=8      ←0
   │ !  web_crawler                204L  1C   12m  CC=10     ←0
   │ !  file_search_parser         200L  1C   11m  CC=11     ←0
-  │ !  formats                    196L  1C   14m  CC=11     ←10
+  │ !  api                        189L  0C    6m  CC=10     ←10
   │ network                    186L  1C   11m  CC=5      ←0
-  │ file_search                165L  1C    8m  CC=8      ←0
+  │ faker_provider             177L  3C   13m  CC=6      ←1
+  │ dataframes                 173L  0C    4m  CC=4      ←0
+  │ __init__                   155L  0C    1m  CC=2      ←0
   │ session                    149L  1C    8m  CC=6      ←0
   │ generators                 117L  4C    9m  CC=2      ←0
   │ parser_llm                 109L  1C    7m  CC=5      ←0
   │ streaming                   93L  1C    5m  CC=3      ←2
   │ parser_rules                93L  1C    8m  CC=6      ←1
   │ router                      88L  1C    4m  CC=9      ←0
+  │ __init__                    74L  0C    0m  CC=0.0    ←0
+  │ text                        71L  0C    5m  CC=7      ←0
   │ sql_adapter                 64L  1C    5m  CC=6      ←0
+  │ !  binary                      62L  0C    3m  CC=11     ←0
   │ sensor_adapter              61L  1C    4m  CC=3      ←0
   │ hybrid_adapter              51L  1C    4m  CC=8      ←0
   │ shortcuts                   47L  0C    3m  CC=2      ←2
+  │ prepare                     47L  0C    2m  CC=8      ←2
   │ file_adapter                47L  1C    3m  CC=3      ←1
   │ http_adapter                46L  1C    2m  CC=3      ←0
   │ config                      42L  1C    1m  CC=1      ←8
   │ types                       42L  0C    0m  CC=0.0    ←0
   │ models                      41L  2C    2m  CC=5      ←0
+  │ registry                    40L  1C    4m  CC=2      ←10
   │ llm_client                  35L  1C    2m  CC=4      ←0
+  │ __init__                    35L  0C    0m  CC=0.0    ←0
   │ registry                    33L  0C    1m  CC=3      ←0
   │ base                        32L  1C    4m  CC=1      ←0
-  │ __init__                    27L  0C    0m  CC=0.0    ←0
+  │ __init__                    31L  0C    0m  CC=0.0    ←0
   │ __init__                    25L  0C    0m  CC=0.0    ←0
   │
 
 DUPLICATES[0]: none
 
-FUNCTIONS (CC≥10, 6 of 196):
-   11.0  _mp_encode                                 26n   9exit  loops+cond+ret
-   11.0  generate                                    8n   2exit  loops+cond+ret
+FUNCTIONS (CC≥10, 10 of 261):
+   16.0  FractalAnalyzer.box_counting_dimension     15n   4exit  loops+cond+ret  !! split
+   15.0  FractalAnalyzer.detect_hierarchy           14n   2exit  loops+cond+ret  !! split
+   15.0  FractalAnalyzer.analyze_correlations       12n   3exit  loops+cond+ret  !! split
+   11.0  print_summary                              12n   1exit  loops+cond
    11.0  FileSearchText2Fraq._collect_files_filtered    7n   2exit  cond+ret
+   11.0  mp_encode                                  26n   9exit  loops+cond+ret
+   10.0  _parse_transform                           11n   4exit  cond+ret
    10.0  stream                                     10n   1exit  loops+cond
    10.0  WebCrawlerAdapter.crawl_async              11n   2exit  loops+cond+ret
    10.0  WebCrawlerAdapter.stream_pages             10n   1exit  loops+cond
 
   summary:
-    critical(≥10): 6 | high(5-10): 42 | medium(2-5): 85 | low(<2): 63
-    3% CC≥10  24% CC≥5
+    critical(≥10): 10 | high(5-10): 47 | medium(2-5): 116 | low(<2): 88
+    4% CC≥10  22% CC≥5
 
 HOTSPOTS:
-  #1  _parse_args                          fan=21   "calls 21 functions"
-  #2  generate                             fan=16   "calls 16 functions"
-  #3  FileSearchText2Fraq._collect_files_filtered  fan=16   "FileSearchText2Fraq method, fan-out=16"
+  #1  FileSearchText2Fraq._collect_files_filtered  fan=16   "FileSearchText2Fraq method, fan-out=16"
+  #2  FractalAnalyzer.detect_hierarchy     fan=14   "FractalAnalyzer method, fan-out=14"
+  #3  FractalAnalyzer.box_counting_dimension  fan=13   "FractalAnalyzer method, fan-out=13"
   #4  FileAdapter.load_root                fan=13   "FileAdapter method, fan-out=13"
   #5  ws_stream                            fan=13   "calls 13 functions"
-  #6  WebCrawlerAdapter.crawl_async        fan=12   "WebCrawlerAdapter method, fan-out=12"
-  #7  FileSearchAdapter._collect_files     fan=12   "FileSearchAdapter method, fan-out=12"
+  #6  _parse_transform                     fan=12   "calls 12 functions"
+  #7  WebCrawlerAdapter.crawl_async        fan=12   "WebCrawlerAdapter method, fan-out=12"
   #8  ws_stream                            fan=11   "calls 11 functions"
   #9  cmd_schema                           fan=11   "calls 11 functions"
-  #10 FileSearchAdapter.load_root          fan=11   "FileSearchAdapter method, fan-out=11"
+  #10 _dispatch_command                    fan=10   "10-way dispatch"
 
 CLASSES:
   WebCrawlerAdapter              ████████████████████████  12m  CC̄=3.7   max=10  
   FileSearchText2Fraq            ██████████████████████    11m  CC̄=4.2   max=11  
   NetworkAdapter                 ██████████████████████    11m  CC̄=2.8   max=5   
+  FileSearchAdapter              ████████████████████      10m  CC̄=3.6   max=7   
   FraqSession                    ████████████████           8m  CC̄=2.9   max=6   
-  FileSearchAdapter              ████████████████           8m  CC̄=4.0   max=8   
   Text2Fraq                      ██████████████             7m  CC̄=2.6   max=5   
   FraqQuery                      ████████████               6m  CC̄=1.5   max=3   
+  IFSGenerator                   ██████████                 5m  CC̄=3.8   max=7   
   FraqNode                       ██████████                 5m  CC̄=3.6   max=5   
+  InferredSchema                 ██████████                 5m  CC̄=3.4   max=5   
+  ProviderRegistry               ██████████                 5m  CC̄=2.2   max=4   
   SQLAdapter                     ██████████                 5m  CC̄=3.0   max=6   
-  FormatRegistry                 ████████                   4m  CC̄=1.5   max=2   
   FraqSchema                     ████████                   4m  CC̄=5.8   max=8   
   FraqCursor                     ████████                   4m  CC̄=2.2   max=4   
+  FractalAnalyzer                ████████                   4m  CC̄=11.8  max=16    !!
   FraqExecutor                   ████████                   4m  CC̄=3.8   max=9   
   Text2FraqSimple                ████████                   4m  CC̄=2.2   max=5   
   ModelRouter                    ████████                   4m  CC̄=3.8   max=9   
+  FormatRegistry                 ████████                   4m  CC̄=1.5   max=2   
   BaseAdapter                    ████████                   4m  CC̄=1.0   max=1   
+  FakerProvider                  ████████                   4m  CC̄=2.8   max=6   
   SensorAdapter                  ████████                   4m  CC̄=1.8   max=3   
   HybridAdapter                  ████████                   4m  CC̄=3.2   max=8   
+  FileSystemPort                 ████████                   4m  CC̄=1.0   max=1   
+  RealFileSystem                 ████████                   4m  CC̄=1.8   max=3   
   AsyncFraqStream                ██████                     3m  CC̄=2.3   max=3   
   FibonacciGenerator             ██████                     3m  CC̄=1.3   max=2   
   FileAdapter                    ██████                     3m  CC̄=2.0   max=3   
+  SpeedBenchmark                 ████                       2m  CC̄=2.5   max=3   
+  MemoryBenchmark                ████                       2m  CC̄=2.0   max=3   
+  StructuralBenchmark            ████                       2m  CC̄=4.0   max=5   
   HashGenerator                  ████                       2m  CC̄=1.0   max=1   
   PerlinGenerator                ████                       2m  CC̄=1.5   max=2   
   SensorStreamGenerator          ████                       2m  CC̄=1.0   max=1   
+  OrganizationalMapper           ████                       2m  CC̄=2.0   max=2   
+  ValueProvider                  ████                       2m  CC̄=1.0   max=1   
   HTTPAdapter                    ████                       2m  CC̄=2.5   max=3   
   LiteLLMClient                  ████                       2m  CC̄=2.5   max=4   
+  AffineTransform                ██                         1m  CC̄=3.0   max=3   
+  ValueMapper                    ██                         1m  CC̄=1.0   max=1   
+  NetworkMapper                  ██                         1m  CC̄=4.0   max=4   
   FraqFilter                     ██                         1m  CC̄=9.0   max=9   
   Text2FraqConfig                ██                         1m  CC̄=1.0   max=1   
   ParsedQuery                    ██                         1m  CC̄=5.0   max=5   
   LLMClient                      ██                         1m  CC̄=1.0   max=1   
+  BenchmarkResult                                           0m  CC̄=0.0   max=0.0 
   FieldDef                                                  0m  CC̄=0.0   max=0.0 
+  FractalDimension                                          0m  CC̄=0.0   max=0.0 
+  PatternSignature                                          0m  CC̄=0.0   max=0.0 
   SourceType                                                0m  CC̄=0.0   max=0.0 
   NLQueryRequest                                            0m  CC̄=0.0   max=0.0 
   NLQueryResponse                                           0m  CC̄=0.0   max=0.0 
   FilesSearchRequest                                        0m  CC̄=0.0   max=0.0 
 
 D:
-  fraq/formats.py:
-    e: FormatRegistry,_to_json,_to_jsonl,_to_csv,_to_yaml,_to_binary,_to_msgpack_lite,_prepare,_simple_yaml,_encode_value,_mp_encode
-    FormatRegistry  # Registry of serialisation backends....
-      register(2)  CC=2.0
-    _to_json(data)
-    _to_jsonl(data)
-    _to_csv(data)
-    _to_yaml(data)
-    _to_binary(data)
-    _to_msgpack_lite(data)
-    _prepare(obj)
-    _simple_yaml(obj,indent)
-    _encode_value(v)
-    _mp_encode(obj)
-  fraq/__init__.py:
-    e: generate,stream,quick_schema,__getattr__
-    generate(fields,count,seed)
-    stream(fields,count,interval)
-    quick_schema()
-    __getattr__(name)
+  fraq/inference.py:
+    e: FractalDimension,PatternSignature,FractalAnalyzer,InferredSchema,infer_fractal
+    FractalDimension  # Fractal dimension analysis result....
+    PatternSignature  # Detected pattern in data column....
+    FractalAnalyzer  # Analyze data for fractal properties....
+      __init__(2)  CC=1.0
+    InferredSchema  # Schema inferred from real data with fractal properties....
+      __init__(3)  CC=1.0
+        → _build_ifs(0)  CC=4.0
+    infer_fractal(data,min_depth,max_depth)
+  fraq/benchmarks.py:
+    e: BenchmarkResult,SpeedBenchmark,MemoryBenchmark,StructuralBenchmark,run_all_benchmarks,print_summary
+    BenchmarkResult  # Single benchmark result....
+    SpeedBenchmark  # Benchmark generation speed....
+      fraq_generate(0)  CC=2.0
+    MemoryBenchmark  # Benchmark memory usage - fraq's zero-storage advantage....
+      measure_memory_usage(1)  CC=1.0
+    StructuralBenchmark  # Benchmark fractal self-similarity vs random data....
+      test_self_similarity(1)  CC=5.0
+    run_all_benchmarks(speed_count,memory_count)
+    print_summary(results)
   fraq/text2fraq/file_search_parser.py:
     e: FileSearchText2Fraq
     FileSearchText2Fraq  # Natural language to file search converter....
       __init__(1)  CC=1.0
+  fraq/formats/binary.py:
+    e: to_binary,to_msgpack_lite,mp_encode
+    to_binary(data)
+    to_msgpack_lite(data)
+    mp_encode(obj)
+  fraq/api.py:
+    e: _fields_to_schema,_parse_transform,_generate_records,generate,stream,quick_schema
+    _fields_to_schema(fields,seed)
+    _parse_transform(name,type_spec)
+    _generate_records(schema,count)
+    generate(fields,count,seed)
+    stream(fields,count,interval)
+    quick_schema()
   fraq/adapters/web_crawler.py:
     e: WebCrawlerAdapter
     WebCrawlerAdapter  # Async adapter for crawling websites and extracting links/con...
       __init__(5)  CC=2.0
-  examples/text2fraq/text2fraq_files.py:
-    e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
-    example_pdf_search_rule_based()
-    example_pdf_search_with_llm()
-    example_convenience_function()
-    example_file_search_adapter_direct()
-    example_llm_file_intent()
   fraq/query.py:
     e: SourceType,FraqFilter,FraqQuery,FraqExecutor,query
     SourceType  # Known data source families....
@@ -167,12 +214,19 @@ Parameters
 The executor build...
       __init__(2)  CC=3.0
     query(depth,direction,fields,format,limit,dims,seed)
+  examples/text2fraq/text2fraq_files.py:
+    e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
+    example_pdf_search_rule_based()
+    example_pdf_search_with_llm()
+    example_convenience_function()
+    example_file_search_adapter_direct()
+    example_llm_file_intent()
   fraq/text2fraq/router.py:
     e: ModelRouter
     ModelRouter  # Route queries to the best model based on complexity....
       __post_init__(0)  CC=2.0
   fraq/cli.py:
-    e: _make_root,cmd_explore,cmd_stream,cmd_schema,cmd_files_search,cmd_files_list,_collect_file_stat,_print_stat,cmd_files_stat,cmd_nl,_is_file_query,_run_nl_file_query,_run_nl_fraq_query,cmd_network_scan,cmd_web_crawl,_parse_args,_dispatch_command,main
+    e: _make_root,cmd_explore,cmd_stream,cmd_schema,cmd_files_search,cmd_files_list,_collect_file_stat,_print_stat,cmd_files_stat,cmd_nl,_is_file_query,_run_nl_file_query,_run_nl_fraq_query,cmd_network_scan,cmd_web_crawl,_parse_args,_build_parser,_get_shared_parser,_build_core_parsers,_build_files_parsers,_build_network_parsers,_build_web_parsers,_dispatch_command,main
     _make_root(dims,seed)
     cmd_explore(args)
     cmd_stream(args)
@@ -189,6 +243,12 @@ The executor build...
     cmd_network_scan(args)
     cmd_web_crawl(args)
     _parse_args(argv)
+    _build_parser()
+    _get_shared_parser()
+    _build_core_parsers(sub)
+    _build_files_parsers(sub)
+    _build_network_parsers(sub)
+    _build_web_parsers(sub)
     _dispatch_command(args)
     main(argv)
   fraq/core.py:
@@ -211,14 +271,14 @@ The cursor remembers the...
     _vec_scale(v,s)
     _vec_norm(v)
     _vec_hash(v,seed)
+  fraq/formats/prepare.py:
+    e: prepare,encode_value
+    prepare(obj)
+    encode_value(v)
   fraq/adapters/hybrid_adapter.py:
     e: HybridAdapter
     HybridAdapter  # Combine roots from several adapters into one fractal....
       __init__(0)  CC=1.0
-  fraq/adapters/file_search.py:
-    e: FileSearchAdapter
-    FileSearchAdapter  # Adapter for searching files on disk using fractal patterns....
-      __init__(3)  CC=1.0
   fraq/server.py:
     e: NLQueryRequest,NLQueryResponse,FilesSearchRequest,natural_language,files_search,files_search_post,files_nl,ws_stream,health_check,clear_session
     NLQueryRequest  # Natural language query request....
@@ -231,6 +291,27 @@ The cursor remembers the...
     ws_stream(websocket)
     health_check()
     clear_session(session_id)
+  fraq/ifs.py:
+    e: AffineTransform,ValueMapper,IFSGenerator,OrganizationalMapper,NetworkMapper,create_ifs
+    AffineTransform  # Affine transformation for IFS.
+
+Transforms a point in fracta...
+      apply(1)  CC=3.0
+    ValueMapper  # Protocol for mapping fractal coordinates to data values....
+      map_value(2)  CC=1.0
+    IFSGenerator  # Iterated Function System generator.
+
+Generates data with str...
+      __init__(3)  CC=3.0
+    OrganizationalMapper  # Mapper for organizational hierarchy data.
+
+Maps fractal coor...
+      __init__(2)  CC=2.0
+    NetworkMapper  # Mapper for network topology data.
+
+Maps fractal coordinates ...
+      map_value(2)  CC=4.0
+    create_ifs(pattern,seed)
   examples/websocket-docker/main.py:
     e: ws_stream,ws_files,health
     ws_stream(websocket)
@@ -251,6 +332,23 @@ The cursor remembers the...
     natural_language(query,path,format)
     ws_stream(websocket)
     ws_files(websocket)
+  fraq/formats/text.py:
+    e: to_json,to_jsonl,to_csv,to_yaml,simple_yaml
+    to_json(data)
+    to_jsonl(data)
+    to_csv(data)
+    to_yaml(data)
+    simple_yaml(obj,indent)
+  fraq/adapters/file_search.py:
+    e: FileSystemPort,RealFileSystem,FileSearchAdapter
+    FileSystemPort  # Port for filesystem I/O operations....
+      stat(1)  CC=1.0
+    RealFileSystem  # Real filesystem implementation of FileSystemPort....
+      stat(1)  CC=2.0
+        → stat(1)  CC=2.0
+    FileSearchAdapter  # Adapter for searching files on disk using fractal patterns.
+...
+      __init__(4)  CC=2.0
   fraq/text2fraq/parser_rules.py:
     e: Text2FraqSimple,_word_match,_detect_format,_detect_depth,_detect_limit
     Text2FraqSimple  # Rule-based text2fraq without LLM (fallback for offline use)....
@@ -265,6 +363,16 @@ The cursor remembers the...
     e: FraqSession
     FraqSession  # Multi-turn conversation with context memory....
       __post_init__(0)  CC=2.0
+  fraq/providers/faker_provider.py:
+    e: ValueProvider,FakerProvider,ProviderRegistry,get_provider_registry,generate_with_faker
+    ValueProvider  # Protocol for value providers....
+      supports(1)  CC=1.0
+    FakerProvider  # Faker-based value provider for realistic data generation....
+      __init__(1)  CC=1.0
+    ProviderRegistry  # Registry of value providers....
+      __init__(0)  CC=1.0
+    get_provider_registry()
+    generate_with_faker(type_spec,seed)
   fraq/adapters/sql_adapter.py:
     e: SQLAdapter
     SQLAdapter  # Map fractal nodes to/from relational tables....
@@ -315,6 +423,12 @@ The cursor remembers the...
     e: NetworkAdapter
     NetworkAdapter  # Async adapter for scanning local network devices and service...
       __init__(4)  CC=2.0
+  fraq/dataframes.py:
+    e: to_polars,to_pandas,to_arrow,generate_df
+    to_polars(fields,count,seed)
+    to_pandas(fields,count,seed)
+    to_arrow(fields,count,seed)
+    generate_df(fields,count,seed,output)
   examples/ai_ml/training_data.py:
     e: example_1_classification,example_2_regression,example_3_timeseries
     example_1_classification()
@@ -330,19 +444,6 @@ The cursor remembers the...
       __init__(5)  CC=3.0
     async_query(query,root,dims)
     async_stream(root,count,interval,direction,dims)
-  examples/text2fraq/text2fraq_examples.py:
-    e: _print_header,_print_parsed_query,_print_file_params,example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_file_search_direct,example_env_config,example_full_pipeline
-    _print_header(title)
-    _print_parsed_query(query,parsed)
-    _print_file_params(query,params)
-    example_simple_parser()
-    example_qwen25()
-    example_llama32()
-    example_phi3()
-    example_convenience_functions()
-    example_file_search_direct()
-    example_env_config()
-    example_full_pipeline()
   examples/text2fraq/nlp2cmd_integration.py:
     e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi,example_grpc_proto,example_json_schema,example_full_nlp2cmd_workflow
     build_sensor_schema()
@@ -370,6 +471,19 @@ The cursor remembers the...
     example_1_sensors()
     example_2_mqtt()
     example_3_streaming()
+  examples/text2fraq/text2fraq_examples.py:
+    e: _print_header,_print_parsed_query,_print_file_params,example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_file_search_direct,example_env_config,example_full_pipeline
+    _print_header(title)
+    _print_parsed_query(query,parsed)
+    _print_file_params(query,params)
+    example_simple_parser()
+    example_qwen25()
+    example_llama32()
+    example_phi3()
+    example_convenience_functions()
+    example_file_search_direct()
+    example_env_config()
+    example_full_pipeline()
   examples/database/sqlite_examples.py:
     e: example_1_sqlite,example_2_hybrid,example_3_schema_save
     example_1_sqlite()
@@ -391,6 +505,9 @@ The cursor remembers the...
     e: SensorAdapter
     SensorAdapter  # Simulate or consume live sensor data as fractal streams....
       __init__(4)  CC=1.0
+  fraq/__init__.py:
+    e: __getattr__
+    __getattr__(name)
   fraq/generators.py:
     e: HashGenerator,FibonacciGenerator,PerlinGenerator,SensorStreamGenerator
     HashGenerator  # Deterministic pseudo-random values via SHA-256.
@@ -438,6 +555,16 @@ Produces dict paylo...
     text2filesearch(text,base_path,fmt)
     text2query(text,config)
     text2fraq(text,config,root)
+  fraq/formats/registry.py:
+    e: FormatRegistry
+    FormatRegistry  # Registry of serialisation backends....
+      register(2)  CC=2.0
+  examples/v028/new_features.py:
+    e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
+    example_model_router()
+    example_fraq_session()
+    example_fastapi_server()
+    example_combined_usage()
   examples/basic/app_integrations.py:
     e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook,example_celery_task
     example_fastapi_app()
@@ -463,12 +590,7 @@ Produces dict paylo...
     e: BaseAdapter
     BaseAdapter  # Interface every data-source adapter must implement....
       load_root(1)  CC=1.0
-  examples/v028/new_features.py:
-    e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
-    example_model_router()
-    example_fraq_session()
-    example_fastapi_server()
-    example_combined_usage()
+  fraq/formats/__init__.py:
   fraq/types.py:
   examples/websocket-docker/run.sh:
   examples/cli-docker/run.sh:
@@ -476,6 +598,7 @@ Produces dict paylo...
   examples/fastapi-docker/run.sh:
   examples/fullstack-docker/frontend/app.py:
   fraq/text2fraq/__init__.py:
+  fraq/providers/__init__.py:
   fraq/adapters/__init__.py:
   project.sh:
   examples/nlp_examples.sh:

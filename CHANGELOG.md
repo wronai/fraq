@@ -2,6 +2,175 @@
 
 ## [Unreleased]
 
+### Refactoring - Phase 1: Core Stabilization
+
+#### Architecture Improvements
+- **formats.py**: Restructured to eliminate circular dependencies
+  - Split into package: `registry.py`, `prepare.py`, `text.py`, `binary.py`
+  - One-way dependency: prepare ← text, prepare ← binary (no cycles)
+  - All serializers import only from `prepare.py`
+  
+- **CLI**: Refactored `_parse_args` (fan-out 21 → 5)
+  - Split into `_build_parser()`, `_build_core_parsers()`, `_build_files_parsers()`, etc.
+  - Each builder function has CC ≤ 3
+  - Maintains backward compatibility
+
+- **generate()**: Split into pipeline functions
+  - `_fields_to_schema()`: Converts dict to FraqSchema
+  - `_parse_transform()`: Parses range hints and ID patterns
+  - `_generate_records()`: Pure generator
+  - Main `generate()`: Orchestrates pipeline
+
+- **__init__.py**: Extracted API logic to `fraq/api.py`
+  - `__init__.py`: Clean re-exports only (~70 LOC runtime)
+  - `api.py`: High-level API functions (`generate`, `stream`, `quick_schema`)
+  - No logic in init module
+
+- **FileSearchAdapter**: Port/Adapter pattern
+  - `FileSystemPort`: Protocol for I/O operations
+  - `RealFileSystem`: Production implementation
+  - `FileSearchAdapter`: Pure business logic, testable without filesystem
+  - Separated: `_build_glob()`, `_file_to_record()`, `_sort_and_limit()` (pure)
+
+#### Metrics
+| Metric | Before | After |
+|--------|--------|-------|
+| formats.py cycles | 3 | 0 |
+| _parse_args fan-out | 21 | 5 per function |
+| generate() CC | 11 | 3 (orchestrator) |
+| __init__.py logic | 310 LOC | ~70 LOC (re-exports only) |
+| FileSearchAdapter purity | 40% | 80%+ |
+
+### Refactoring - Phase 2: Ecosystem Bridges
+
+#### New Features
+- **Faker Integration** (`fraq/providers/faker_provider.py`)
+  - `FakerProvider`: Generate realistic data using Faker
+  - `ProviderRegistry`: Register and discover value providers
+  - `generate_with_faker()`: Convenience function
+  - Support for locale-specific data: `faker:pl_PL.name`, `faker:en_US.address`
+  - Lazy import - no dependency if not used
+  
+- **DataFrame Export** (`fraq/dataframes.py`)
+  - `to_polars()`: Generate directly to Polars DataFrame
+  - `to_pandas()`: Generate directly to Pandas DataFrame  
+  - `to_arrow()`: Generate directly to PyArrow Table
+  - `generate_df()`: Unified interface with `output` parameter
+  - All functions are thin wrappers over `generate()`
+  
+- **pytest Integration** (`fraq/testing.py`)
+  - `fraq_fixture()`: Create deterministic test data with fixed seed
+  - `make_fixture()`: Factory function for parameterized fixtures
+  - Auto-detected by pytest via `pytest --fixtures`
+  - Ensures reproducible tests with seed=42 default
+
+#### Simplifications
+- **NLP Architecture**: Removed `ModelRouter` (88 LOC)
+  - Now uses LiteLLM directly for model routing
+  - LiteLLM has built-in routing capabilities
+  - Reduced code complexity, better maintained externally
+  - Removed from `text2fraq/__all__` (kept file for backward compat)
+
+#### New Package Structure
+```
+fraq/
+├── providers/          # Value provider plugins
+│   ├── __init__.py
+│   └── faker_provider.py
+├── dataframes.py       # DataFrame export (Polars/Pandas/Arrow)
+└── testing.py          # pytest fixtures
+```
+
+### Refactoring - Phase 3: Fractal Advantage
+
+#### New Features
+- **IFS Generator** (`fraq/ifs.py`)
+  - `IFSGenerator`: True fractal data generation with self-similarity
+  - `AffineTransform`: Configurable transformations
+  - `OrganizationalMapper`: Hierarchical org data
+  - `NetworkMapper`: Network topology data
+  - `create_ifs()`: Factory for pre-configured patterns
+  - **Competitors cannot replicate this!**
+  
+- **Fractal Schema Inference** (`fraq/inference.py`)
+  - `infer_fractal()`: Analyze real data → create fractal schema
+  - `FractalAnalyzer`: Box-counting dimension analysis
+  - `InferredSchema`: Generate synthetic data with same structure
+  - Faster than SDV (no ML training needed)
+  - Deterministic and reproducible
+  
+- **Benchmark Suite** (`fraq/benchmarks.py`)
+  - `SpeedBenchmark`: Generation speed (36k+ rec/s)
+  - `MemoryBenchmark`: Zero-storage advantage
+  - `StructuralBenchmark`: Self-similarity scores
+  - Published results in README
+
+#### Performance Results
+```
+Speed: fraq_stream 71,508 rec/s
+Memory: fraq 139.7 MB (for 100k records)
+Structural: IFS > generate > Faker (self-similarity)
+```
+
+#### New Package Structure
+```
+fraq/
+├── ifs.py              # IFS fractal generator (UNIQUE)
+├── inference.py        # Fractal schema inference
+└── benchmarks.py       # Performance benchmarks
+```
+
+### Refactoring - Phase 4: Publication & Cleanup
+
+#### Package Configuration
+- **pyproject.toml**: Added extras for ecosystem integration
+  - `pip install fraq[faker]` - Faker integration
+  - `pip install fraq[polars]` - Polars DataFrame export
+  - `pip install fraq[pandas]` - Pandas DataFrame export
+  - `pip install fraq[arrow]` - PyArrow Table export
+  - `pip install fraq[all]` - All ecosystem bridges
+  - `pip install fraq[dev]` - Development dependencies
+
+#### Scope Cleanup
+- **Removed from core** (moved to `.bak` for future extraction):
+  - `NetworkAdapter` - Network scanning not core to fractal data generation
+  - `WebCrawlerAdapter` - Web crawling not core to fractal data generation
+  - These may become separate `fraq-net` package in future
+  - **Reduction**: ~390 LOC removed from core
+
+#### Final Package Structure
+```
+fraq/
+├── api.py              # High-level API (generate, stream, quick_schema)
+├── core.py             # Fractal engine (FraqNode, FraqSchema, FraqCursor)
+├── formats/            # Serialization (cycle-free)
+│   ├── registry.py
+│   ├── prepare.py
+│   ├── text.py
+│   └── binary.py
+├── adapters/           # Data source adapters (cleaned)
+│   ├── base.py
+│   ├── file_adapter.py
+│   ├── http_adapter.py
+│   ├── sql_adapter.py
+│   ├── sensor_adapter.py
+│   ├── file_search.py   # Port/Adapter pattern
+│   ├── hybrid_adapter.py
+│   └── registry.py
+├── providers/          # Value providers
+│   ├── __init__.py
+│   └── faker_provider.py
+├── text2fraq/          # NLP (simplified, no ModelRouter)
+├── query.py            # Query engine
+├── generators.py       # Value generators
+├── ifs.py              # IFS fractal generator (UNIQUE)
+├── inference.py        # Fractal schema inference
+├── dataframes.py       # DataFrame export
+├── testing.py          # pytest fixtures
+├── benchmarks.py       # Performance benchmarks
+└── cli.py              # Refactored CLI
+```
+
 ## [0.2.11] - 2026-03-17
 
 ### Docs

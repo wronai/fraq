@@ -302,100 +302,118 @@ WEB_COMMANDS = {
 
 
 def _parse_args(argv: List[str] | None) -> argparse.Namespace:
-    """Parse command line arguments."""
-    # Shared arguments via parent parser
-    shared = argparse.ArgumentParser(add_help=False)
-    shared.add_argument("--format", "-f", default="json", choices=[*FormatRegistry.available(), "table"])
-    shared.add_argument("--dims", "-d", type=int, default=3, help="Hyperspace dimensions")
-    shared.add_argument("--seed", "-s", type=int, default=0, help="Root seed")
+    """Parse command line arguments - orchestrator only."""
+    parser = _build_parser()
+    return parser.parse_args(argv)
 
+
+def _build_parser() -> argparse.ArgumentParser:
+    """Build main parser with all subcommands."""
     parser = argparse.ArgumentParser(prog="fraq", description="Fractal Query Data Library CLI")
     sub = parser.add_subparsers(dest="command")
+    
+    # Build all subcommand parsers
+    _build_core_parsers(sub)
+    _build_files_parsers(sub)
+    _build_network_parsers(sub)
+    _build_web_parsers(sub)
+    
+    return parser
 
-    p_explore = sub.add_parser("explore", parents=[shared], help="Zoom into the fractal")
-    p_explore.add_argument("--depth", type=int, default=3)
 
-    p_stream = sub.add_parser("stream", parents=[shared], help="Stream cursor records")
-    p_stream.add_argument("--count", "-n", type=int, default=10)
+def _get_shared_parser() -> argparse.ArgumentParser:
+    """Shared arguments for core commands."""
+    shared = argparse.ArgumentParser(add_help=False)
+    shared.add_argument("--format", "-f", default="json", 
+                       choices=[*FormatRegistry.available(), "table"])
+    shared.add_argument("--dims", "-d", type=int, default=3, help="Hyperspace dimensions")
+    shared.add_argument("--seed", "-s", type=int, default=0, help="Root seed")
+    return shared
 
-    p_schema = sub.add_parser("schema", parents=[shared], help="Generate typed records")
-    p_schema.add_argument("--fields", required=True, help="Comma-separated name:type pairs")
-    p_schema.add_argument("--depth", type=int, default=1)
-    p_schema.add_argument("--branching", type=int, default=4)
 
-    # Natural language command
-    p_nl = sub.add_parser("nl", parents=[shared], help="Natural language query")
-    p_nl.add_argument("query", help="Natural language query string")
-    p_nl.add_argument("--path", "-p", default=".", help="Base path for file searches")
+def _build_core_parsers(sub: argparse._SubParsersAction) -> None:
+    """Build core command parsers (explore, stream, schema, nl)."""
+    shared = _get_shared_parser()
+    
+    # explore
+    p = sub.add_parser("explore", parents=[shared], help="Zoom into the fractal")
+    p.add_argument("--depth", type=int, default=3)
+    
+    # stream
+    p = sub.add_parser("stream", parents=[shared], help="Stream cursor records")
+    p.add_argument("--count", "-n", type=int, default=10)
+    
+    # schema
+    p = sub.add_parser("schema", parents=[shared], help="Generate typed records")
+    p.add_argument("--fields", required=True, help="Comma-separated name:type pairs")
+    p.add_argument("--depth", type=int, default=1)
+    p.add_argument("--branching", type=int, default=4)
+    
+    # nl
+    p = sub.add_parser("nl", parents=[shared], help="Natural language query")
+    p.add_argument("query", help="Natural language query string")
+    p.add_argument("--path", "-p", default=".", help="Base path for file searches")
 
-    # Files subcommand
+
+def _build_files_parsers(sub: argparse._SubParsersAction) -> None:
+    """Build files subcommand parsers."""
+    shared = _get_shared_parser()
+    
     p_files = sub.add_parser("files", help="File system operations via fractal queries")
     files_sub = p_files.add_subparsers(dest="files_command")
-
+    
     # files search
-    p_files_search = files_sub.add_parser("search", parents=[shared], help="Search files")
-    p_files_search.add_argument("path", nargs="?", default=".", help="Directory to search")
-    p_files_search.add_argument("--ext", "-e", help="File extension (pdf, txt, py...)")
-    p_files_search.add_argument("--pattern", "-p", help="Glob pattern (*.pdf, data*)")
-    p_files_search.add_argument("--limit", "-n", type=int, default=10, help="Max results")
-    p_files_search.add_argument("--sort", default="mtime",
-                                choices=["name", "mtime", "size"],
-                                help="Sort order")
-    p_files_search.add_argument("--no-recursive", action="store_true",
-                                help="Don't search subdirectories")
-
+    p = files_sub.add_parser("search", parents=[shared], help="Search files")
+    p.add_argument("path", nargs="?", default=".", help="Directory to search")
+    p.add_argument("--ext", "-e", help="File extension (pdf, txt, py...)")
+    p.add_argument("--pattern", "-p", help="Glob pattern (*.pdf, data*)")
+    p.add_argument("--limit", "-n", type=int, default=10, help="Max results")
+    p.add_argument("--sort", default="mtime", choices=["name", "mtime", "size"])
+    p.add_argument("--no-recursive", action="store_true", help="Don't search subdirectories")
+    
     # files list
-    p_files_list = files_sub.add_parser("list", help="List files (ls-style)")
-    p_files_list.add_argument("path", nargs="?", default=".", help="Directory to list")
-    p_files_list.add_argument("--ext", "-e", help="Filter by extension")
-    p_files_list.add_argument("--pattern", "-p", help="Glob pattern")
-    p_files_list.add_argument("--limit", "-n", type=int, default=50)
-    p_files_list.add_argument("--sort", "-s", default="name", choices=["name", "mtime", "size"])
-    p_files_list.add_argument("--recursive", "-r", action="store_true", help="List recursively")
-    p_files_list.add_argument("--long", "-l", action="store_true", help="Long format")
-    p_files_list.add_argument("--format", "-f", default="text",
-                              choices=["text", "json", "csv", "yaml"])
-
+    p = files_sub.add_parser("list", help="List files (ls-style)")
+    p.add_argument("path", nargs="?", default=".", help="Directory to list")
+    p.add_argument("--ext", "-e", help="Filter by extension")
+    p.add_argument("--pattern", "-p", help="Glob pattern")
+    p.add_argument("--limit", "-n", type=int, default=50)
+    p.add_argument("--sort", "-s", default="name", choices=["name", "mtime", "size"])
+    p.add_argument("--recursive", "-r", action="store_true", help="List recursively")
+    p.add_argument("--long", "-l", action="store_true", help="Long format")
+    p.add_argument("--format", "-f", default="text", choices=["text", "json", "csv", "yaml"])
+    
     # files stat
-    p_files_stat = files_sub.add_parser("stat", help="Show file statistics")
-    p_files_stat.add_argument("file", help="File path")
-    p_files_stat.add_argument("--format", "-f", default="human",
-                               choices=["human", "json"])
+    p = files_sub.add_parser("stat", help="Show file statistics")
+    p.add_argument("file", help="File path")
+    p.add_argument("--format", "-f", default="human", choices=["human", "json"])
 
-    # Network subcommand
+
+def _build_network_parsers(sub: argparse._SubParsersAction) -> None:
+    """Build network subcommand parsers."""
     p_network = sub.add_parser("network", help="Network scanning operations")
     network_sub = p_network.add_subparsers(dest="network_command")
-
+    
     # network scan
-    p_network_scan = network_sub.add_parser("scan", help="Scan network for devices")
-    p_network_scan.add_argument("--network", "-n", default="192.168.1.0/24",
-                                help="Network CIDR (e.g., 192.168.1.0/24)")
-    p_network_scan.add_argument("--ports", "-p", default="80,443,22",
-                                help="Comma-separated ports to scan")
-    p_network_scan.add_argument("--timeout", "-t", type=float, default=1.0,
-                                help="Connection timeout in seconds")
-    p_network_scan.add_argument("--limit", "-l", type=int, default=100,
-                                help="Max hosts to scan")
-    p_network_scan.add_argument("--format", "-f", default="table",
-                                choices=["table", "json", "csv"])
+    p = network_sub.add_parser("scan", help="Scan network for devices")
+    p.add_argument("--network", "-n", default="192.168.1.0/24", help="Network CIDR")
+    p.add_argument("--ports", "-p", default="80,443,22", help="Comma-separated ports")
+    p.add_argument("--timeout", "-t", type=float, default=1.0, help="Connection timeout")
+    p.add_argument("--limit", "-l", type=int, default=100, help="Max hosts")
+    p.add_argument("--format", "-f", default="table", choices=["table", "json", "csv"])
 
-    # Web subcommand
+
+def _build_web_parsers(sub: argparse._SubParsersAction) -> None:
+    """Build web subcommand parsers."""
     p_web = sub.add_parser("web", help="Web crawling operations")
     web_sub = p_web.add_subparsers(dest="web_command")
-
+    
     # web crawl
-    p_web_crawl = web_sub.add_parser("crawl", help="Crawl website")
-    p_web_crawl.add_argument("url", help="Base URL to crawl")
-    p_web_crawl.add_argument("--depth", "-d", type=int, default=2,
-                             help="Max crawl depth")
-    p_web_crawl.add_argument("--max-pages", "-n", type=int, default=50,
-                             help="Max pages to crawl")
-    p_web_crawl.add_argument("--timeout", "-t", type=float, default=10.0,
-                             help="Request timeout")
-    p_web_crawl.add_argument("--format", "-f", default="table",
-                             choices=["table", "json", "csv"])
-
-    return parser.parse_args(argv)
+    p = web_sub.add_parser("crawl", help="Crawl website")
+    p.add_argument("url", help="Base URL to crawl")
+    p.add_argument("--depth", "-d", type=int, default=2, help="Max crawl depth")
+    p.add_argument("--max-pages", "-n", type=int, default=50, help="Max pages")
+    p.add_argument("--timeout", "-t", type=float, default=10.0, help="Request timeout")
+    p.add_argument("--format", "-f", default="table", choices=["table", "json", "csv"])
 
 
 def _dispatch_command(args: argparse.Namespace) -> None:

@@ -1,6 +1,6 @@
-# fraq | 60f 8546L | python:52,shell:8
+# fraq | 71f 10086L | python:63,shell:8
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[60]:
+M[71]:
   examples/ai_ml/training_data.py,79
   examples/bash_examples.sh,193
   examples/basic/app_integrations.py,566
@@ -28,11 +28,11 @@ M[60]:
   examples/v028/new_features.py,144
   examples/websocket-docker/main.py,104
   examples/websocket-docker/run.sh,62
-  fraq/__init__.py,310
+  fraq/__init__.py,155
   fraq/adapters/__init__.py,25
   fraq/adapters/base.py,32
   fraq/adapters/file_adapter.py,47
-  fraq/adapters/file_search.py,165
+  fraq/adapters/file_search.py,268
   fraq/adapters/http_adapter.py,46
   fraq/adapters/hybrid_adapter.py,51
   fraq/adapters/network.py,186
@@ -40,15 +40,26 @@ M[60]:
   fraq/adapters/sensor_adapter.py,61
   fraq/adapters/sql_adapter.py,64
   fraq/adapters/web_crawler.py,204
-  fraq/cli.py,449
+  fraq/api.py,189
+  fraq/benchmarks.py,263
+  fraq/cli.py,467
   fraq/core.py,412
-  fraq/formats.py,196
+  fraq/dataframes.py,173
+  fraq/formats/__init__.py,74
+  fraq/formats/binary.py,62
+  fraq/formats/prepare.py,47
+  fraq/formats/registry.py,40
+  fraq/formats/text.py,71
   fraq/generators.py,117
+  fraq/ifs.py,288
+  fraq/inference.py,347
+  fraq/providers/__init__.py,35
+  fraq/providers/faker_provider.py,177
   fraq/query.py,220
   fraq/schema_export.py,476
   fraq/server.py,217
   fraq/streaming.py,93
-  fraq/text2fraq/__init__.py,27
+  fraq/text2fraq/__init__.py,31
   fraq/text2fraq/config.py,42
   fraq/text2fraq/file_search_parser.py,200
   fraq/text2fraq/llm_client.py,35
@@ -62,38 +73,40 @@ M[60]:
   main_websocket.py,52
   project.sh,14
 D:
-  fraq/formats.py:
-    e: FormatRegistry,_to_json,_to_jsonl,_to_csv,_to_yaml,_to_binary,_to_msgpack_lite,_prepare,_simple_yaml,_encode_value,_mp_encode
-    FormatRegistry: register(2),get(1),available(0),serialize(2)  # Registry of serialisation backends...
-    _to_json(data)
-    _to_jsonl(data)
-    _to_csv(data)
-    _to_yaml(data)
-    _to_binary(data)
-    _to_msgpack_lite(data)
-    _prepare(obj)
-    _simple_yaml(obj;indent)
-    _encode_value(v)
-    _mp_encode(obj)
-  fraq/__init__.py:
-    e: generate,stream,quick_schema,__getattr__
-    generate(fields;count;seed)
-    stream(fields;count;interval)
-    quick_schema()
-    __getattr__(name)
+  fraq/inference.py:
+    e: FractalDimension,PatternSignature,FractalAnalyzer,InferredSchema,infer_fractal
+    FractalDimension:  # Fractal dimension analysis result...
+    PatternSignature:  # Detected pattern in data column...
+    FractalAnalyzer: __init__(2),box_counting_dimension(3),detect_hierarchy(2),analyze_correlations(1)  # Analyze data for fractal properties...
+    InferredSchema: __init__(3),_build_ifs(0),generate(2),_generate_value(2),to_dict(0)  # Schema inferred from real data with fractal properties...
+    infer_fractal(data;min_depth;max_depth)
+  fraq/benchmarks.py:
+    e: BenchmarkResult,SpeedBenchmark,MemoryBenchmark,StructuralBenchmark,run_all_benchmarks,print_summary
+    BenchmarkResult:  # Single benchmark result...
+    SpeedBenchmark: fraq_generate(0),fraq_stream(0)  # Benchmark generation speed...
+    MemoryBenchmark: measure_memory_usage(1),compare_memory(0)  # Benchmark memory usage - fraq's zero-storage advantage...
+    StructuralBenchmark: test_self_similarity(1),compare_structures(-1)  # Benchmark fractal self-similarity vs random data...
+    run_all_benchmarks(speed_count;memory_count)
+    print_summary(results)
   fraq/text2fraq/file_search_parser.py:
     e: FileSearchText2Fraq
     FileSearchText2Fraq: __init__(1),_detect_path(1),_should_exclude(1),_collect_files_filtered(5),parse(1),_detect_extension(1),_detect_limit(1),_detect_newer_than(1),_detect_sort_by(1),search(1),format_results(3)  # Natural language to file search converter...
+  fraq/formats/binary.py:
+    e: to_binary,to_msgpack_lite,mp_encode
+    to_binary(data)
+    to_msgpack_lite(data)
+    mp_encode(obj)
+  fraq/api.py:
+    e: _fields_to_schema,_parse_transform,_generate_records,generate,stream,quick_schema
+    _fields_to_schema(fields;seed)
+    _parse_transform(name;type_spec)
+    _generate_records(schema;count)
+    generate(fields;count;seed)
+    stream(fields;count;interval)
+    quick_schema()
   fraq/adapters/web_crawler.py:
     e: WebCrawlerAdapter
     WebCrawlerAdapter(BaseAdapter): __init__(5),_get_session(0),load_root(1),_parse_page(3),_plan_next_links(2),_process_url(2),crawl_async(0),_extract_links(2),stream_pages(0),search(0),stream(1),save(3)  # Async adapter for crawling websites and extracting links/con...
-  examples/text2fraq/text2fraq_files.py:
-    e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
-    example_pdf_search_rule_based()
-    example_pdf_search_with_llm()
-    example_convenience_function()
-    example_file_search_adapter_direct()
-    example_llm_file_intent()
   fraq/query.py:
     e: SourceType,FraqFilter,FraqQuery,FraqExecutor,query
     SourceType(str,Enum):  # Known data source families...
@@ -106,11 +119,18 @@ Parameters
 
 The executor build...
     query(depth;direction;fields;format;limit;dims;seed)
+  examples/text2fraq/text2fraq_files.py:
+    e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
+    example_pdf_search_rule_based()
+    example_pdf_search_with_llm()
+    example_convenience_function()
+    example_file_search_adapter_direct()
+    example_llm_file_intent()
   fraq/text2fraq/router.py:
     e: ModelRouter
     ModelRouter: __post_init__(0),route(1),_estimate_complexity(1),get_config_for_model(1)  # Route queries to the best model based on complexity...
   fraq/cli.py:
-    e: _make_root,cmd_explore,cmd_stream,cmd_schema,cmd_files_search,cmd_files_list,_collect_file_stat,_print_stat,cmd_files_stat,cmd_nl,_is_file_query,_run_nl_file_query,_run_nl_fraq_query,cmd_network_scan,cmd_web_crawl,_parse_args,_dispatch_command,main
+    e: _make_root,cmd_explore,cmd_stream,cmd_schema,cmd_files_search,cmd_files_list,_collect_file_stat,_print_stat,cmd_files_stat,cmd_nl,_is_file_query,_run_nl_file_query,_run_nl_fraq_query,cmd_network_scan,cmd_web_crawl,_parse_args,_build_parser,_get_shared_parser,_build_core_parsers,_build_files_parsers,_build_network_parsers,_build_web_parsers,_dispatch_command,main
     _make_root(dims;seed)
     cmd_explore(args)
     cmd_stream(args)
@@ -127,6 +147,12 @@ The executor build...
     cmd_network_scan(args)
     cmd_web_crawl(args)
     _parse_args(argv)
+    _build_parser()
+    _get_shared_parser()
+    _build_core_parsers(sub)
+    _build_files_parsers(sub)
+    _build_network_parsers(sub)
+    _build_web_parsers(sub)
     _dispatch_command(args)
     main(argv)
   fraq/core.py:
@@ -145,12 +171,13 @@ The cursor remembers the...
     _vec_scale(v;s)
     _vec_norm(v)
     _vec_hash(v;seed)
+  fraq/formats/prepare.py:
+    e: prepare,encode_value
+    prepare(obj)
+    encode_value(v)
   fraq/adapters/hybrid_adapter.py:
     e: HybridAdapter
     HybridAdapter(BaseAdapter): __init__(0),add(2),load_root(1),save(3)  # Combine roots from several adapters into one fractal...
-  fraq/adapters/file_search.py:
-    e: FileSearchAdapter
-    FileSearchAdapter(BaseAdapter): __init__(3),load_root(1),_build_glob(2),_collect_files(2),_sort_and_limit(3),search(5),save(3),stream(3)  # Adapter for searching files on disk using fractal patterns...
   fraq/server.py:
     e: NLQueryRequest,NLQueryResponse,FilesSearchRequest,natural_language,files_search,files_search_post,files_nl,ws_stream,health_check,clear_session
     NLQueryRequest(BaseModel):  # Natural language query request...
@@ -163,6 +190,22 @@ The cursor remembers the...
     ws_stream(websocket)
     health_check()
     clear_session(session_id)
+  fraq/ifs.py:
+    e: AffineTransform,ValueMapper,IFSGenerator,OrganizationalMapper,NetworkMapper,create_ifs
+    AffineTransform: apply(1)  # Affine transformation for IFS.
+
+Transforms a point in fracta...
+    ValueMapper(Protocol): map_value(2)  # Protocol for mapping fractal coordinates to data values...
+    IFSGenerator: __init__(3),_select_transform(0),generate_coordinate(2),generate(3),generate_hierarchy(3)  # Iterated Function System generator.
+
+Generates data with str...
+    OrganizationalMapper(ValueMapper): __init__(2),map_value(2)  # Mapper for organizational hierarchy data.
+
+Maps fractal coor...
+    NetworkMapper(ValueMapper): map_value(2)  # Mapper for network topology data.
+
+Maps fractal coordinates ...
+    create_ifs(pattern;seed)
   examples/websocket-docker/main.py:
     e: ws_stream,ws_files,health
     ws_stream(websocket)
@@ -183,6 +226,19 @@ The cursor remembers the...
     natural_language(query;path;format)
     ws_stream(websocket)
     ws_files(websocket)
+  fraq/formats/text.py:
+    e: to_json,to_jsonl,to_csv,to_yaml,simple_yaml
+    to_json(data)
+    to_jsonl(data)
+    to_csv(data)
+    to_yaml(data)
+    simple_yaml(obj;indent)
+  fraq/adapters/file_search.py:
+    e: FileSystemPort,RealFileSystem,FileSearchAdapter
+    FileSystemPort(Protocol): stat(1),list_files(3),is_file(1),write_bytes(2)  # Port for filesystem I/O operations...
+    RealFileSystem(FileSystemPort): stat(1),list_files(3),is_file(1),write_bytes(2)  # Real filesystem implementation of FileSystemPort...
+    FileSearchAdapter(BaseAdapter): __init__(4),load_root(1),_build_glob(2),_file_to_record(2),_sort_and_limit(3),_filter_by_time(2),_collect_files(2),search(5),save(3),stream(3)  # Adapter for searching files on disk using fractal patterns.
+...
   fraq/text2fraq/parser_rules.py:
     e: Text2FraqSimple,_word_match,_detect_format,_detect_depth,_detect_limit
     Text2FraqSimple: parse(1),_detect_fields(1),_matches_pattern(1),execute(2)  # Rule-based text2fraq without LLM (fallback for offline use)...
@@ -193,6 +249,13 @@ The cursor remembers the...
   fraq/text2fraq/session.py:
     e: FraqSession
     FraqSession: __post_init__(0),ask(1),_is_followup(1),_modify_last(1),_detect_new_fields(1),_update_context(1),get_context_summary(0),clear(0)  # Multi-turn conversation with context memory...
+  fraq/providers/faker_provider.py:
+    e: ValueProvider,FakerProvider,ProviderRegistry,get_provider_registry,generate_with_faker
+    ValueProvider(Protocol): supports(1),generate(2)  # Protocol for value providers...
+    FakerProvider: __init__(1),_get_faker(0),supports(1),generate(2)  # Faker-based value provider for realistic data generation...
+    ProviderRegistry: __init__(0),register(1),get_faker_provider(1),find_provider(1),generate(2)  # Registry of value providers...
+    get_provider_registry()
+    generate_with_faker(type_spec;seed)
   fraq/adapters/sql_adapter.py:
     e: SQLAdapter
     SQLAdapter(BaseAdapter): __init__(2),load_root(1),save(3),generate_sql_function(1),_default_row_to_node(0)  # Map fractal nodes to/from relational tables...
@@ -238,6 +301,12 @@ The cursor remembers the...
   fraq/adapters/network.py:
     e: NetworkAdapter
     NetworkAdapter(BaseAdapter): __init__(4),load_root(1),scan_async(2),_plan_scan(2),_parse_result(5),_check_port_io(2),_identify_service(1),stream_devices(1),search(0),stream(1),save(3)  # Async adapter for scanning local network devices and service...
+  fraq/dataframes.py:
+    e: to_polars,to_pandas,to_arrow,generate_df
+    to_polars(fields;count;seed)
+    to_pandas(fields;count;seed)
+    to_arrow(fields;count;seed)
+    generate_df(fields;count;seed;output)
   examples/ai_ml/training_data.py:
     e: example_1_classification,example_2_regression,example_3_timeseries
     example_1_classification()
@@ -251,19 +320,6 @@ The cursor remembers the...
     AsyncFraqStream: __init__(5),__aiter__(0),stop(0)  # Async generator that yields fractal records at a controlled ...
     async_query(query;root;dims)
     async_stream(root;count;interval;direction;dims)
-  examples/text2fraq/text2fraq_examples.py:
-    e: _print_header,_print_parsed_query,_print_file_params,example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_file_search_direct,example_env_config,example_full_pipeline
-    _print_header(title)
-    _print_parsed_query(query;parsed)
-    _print_file_params(query;params)
-    example_simple_parser()
-    example_qwen25()
-    example_llama32()
-    example_phi3()
-    example_convenience_functions()
-    example_file_search_direct()
-    example_env_config()
-    example_full_pipeline()
   examples/text2fraq/nlp2cmd_integration.py:
     e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi,example_grpc_proto,example_json_schema,example_full_nlp2cmd_workflow
     build_sensor_schema()
@@ -291,6 +347,19 @@ The cursor remembers the...
     example_1_sensors()
     example_2_mqtt()
     example_3_streaming()
+  examples/text2fraq/text2fraq_examples.py:
+    e: _print_header,_print_parsed_query,_print_file_params,example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_file_search_direct,example_env_config,example_full_pipeline
+    _print_header(title)
+    _print_parsed_query(query;parsed)
+    _print_file_params(query;params)
+    example_simple_parser()
+    example_qwen25()
+    example_llama32()
+    example_phi3()
+    example_convenience_functions()
+    example_file_search_direct()
+    example_env_config()
+    example_full_pipeline()
   examples/database/sqlite_examples.py:
     e: example_1_sqlite,example_2_hybrid,example_3_schema_save
     example_1_sqlite()
@@ -308,6 +377,9 @@ The cursor remembers the...
   fraq/adapters/sensor_adapter.py:
     e: SensorAdapter
     SensorAdapter(BaseAdapter): __init__(4),load_root(1),save(3),stream(3)  # Simulate or consume live sensor data as fractal streams...
+  fraq/__init__.py:
+    e: __getattr__
+    __getattr__(name)
   fraq/generators.py:
     e: HashGenerator,FibonacciGenerator,PerlinGenerator,SensorStreamGenerator
     HashGenerator: __init__(3),__call__(1)  # Deterministic pseudo-random values via SHA-256.
@@ -351,6 +423,15 @@ Produces dict paylo...
     text2filesearch(text;base_path;fmt)
     text2query(text;config)
     text2fraq(text;config;root)
+  fraq/formats/registry.py:
+    e: FormatRegistry
+    FormatRegistry: register(2),get(1),available(0),serialize(2)  # Registry of serialisation backends...
+  examples/v028/new_features.py:
+    e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
+    example_model_router()
+    example_fraq_session()
+    example_fastapi_server()
+    example_combined_usage()
   examples/basic/app_integrations.py:
     e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook,example_celery_task
     example_fastapi_app()
@@ -374,12 +455,7 @@ Produces dict paylo...
   fraq/adapters/base.py:
     e: BaseAdapter
     BaseAdapter(ABC): load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter must implement...
-  examples/v028/new_features.py:
-    e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
-    example_model_router()
-    example_fraq_session()
-    example_fastapi_server()
-    example_combined_usage()
+  fraq/formats/__init__.py:
   fraq/types.py:
   examples/websocket-docker/run.sh:
   examples/cli-docker/run.sh:
@@ -387,6 +463,7 @@ Produces dict paylo...
   examples/fastapi-docker/run.sh:
   examples/fullstack-docker/frontend/app.py:
   fraq/text2fraq/__init__.py:
+  fraq/providers/__init__.py:
   fraq/adapters/__init__.py:
   project.sh:
   examples/nlp_examples.sh:

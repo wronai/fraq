@@ -213,6 +213,45 @@ to_json_schema(schema) # JSON Schema for validation
 | `NetworkAdapter` | LAN scanning | Async device/port discovery |
 | `WebCrawlerAdapter` | Website crawling | Async page extraction |
 
+## Architecture
+
+fraq uses clean architecture principles with separated concerns:
+
+### Code Organization
+
+```
+fraq/
+├── core.py          # Fractal engine: FraqNode, FraqSchema, FraqCursor
+├── api.py           # High-level API: generate(), stream(), quick_schema()
+├── formats/         # Serialization (cycle-free structure)
+│   ├── registry.py  # FormatRegistry
+│   ├── prepare.py   # Data preparation (shared)
+│   ├── text.py      # JSON, CSV, YAML
+│   └── binary.py    # Binary, msgpack_lite
+├── adapters/        # Data source adapters
+│   ├── base.py      # BaseAdapter
+│   └── file_search.py  # Port/Adapter pattern example
+└── cli.py           # Command dispatcher (refactored subparsers)
+```
+
+### Design Patterns
+
+| Pattern | Where | Benefit |
+|---------|-------|---------|
+| **Port/Adapter** | `FileSearchAdapter` | I/O separated from business logic, 80%+ pure functions |
+| **Pipeline** | `generate()` | 3 steps: `_fields_to_schema` → `_parse_transform` → `_generate_records` |
+| **Registry** | `formats/` | Dynamic format registration, no cycles |
+| **Command** | `cli.py` | Subparsers split by domain (core, files, network, web) |
+
+### Metrics
+
+| Metric | Target | Status |
+|--------|--------|--------|
+| Cyclomatic Complexity (avg) | ≤ 2.5 | In progress |
+| Circular dependencies | 0 | ✅ Achieved (formats/) |
+| Pure functions in adapters | ≥ 80% | ✅ Achieved (FileSearchAdapter) |
+| Test coverage | ≥ 95% | ✅ 96% (159 tests) |
+
 ## text2fraq — Natural Language to Fractal Query
 
 Convert natural language to fractal queries using LLM (LiteLLM) or rule-based fallback.

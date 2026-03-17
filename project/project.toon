@@ -1,6 +1,6 @@
-# fraq | 68f 9372L | python:71
+# fraq | 81f 11127L | python:81
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[68]:
+M[81]:
   examples/ai_ml/training_data.py,56
   examples/basic/app_integrations.py,458
   examples/basic/applications.py,95
@@ -26,11 +26,11 @@ M[68]:
   examples/v028/new_features.py,79
   examples/websocket-docker/main.py,78
   examples/websocket-docker/run.py,65
-  fraq/__init__.py,247
+  fraq/__init__.py,128
   fraq/adapters/__init__.py,23
   fraq/adapters/base.py,22
   fraq/adapters/file_adapter.py,37
-  fraq/adapters/file_search.py,146
+  fraq/adapters/file_search.py,216
   fraq/adapters/http_adapter.py,38
   fraq/adapters/hybrid_adapter.py,37
   fraq/adapters/network.py,161
@@ -38,15 +38,28 @@ M[68]:
   fraq/adapters/sensor_adapter.py,51
   fraq/adapters/sql_adapter.py,53
   fraq/adapters/web_crawler.py,176
-  fraq/cli.py,343
+  fraq/api.py,143
+  fraq/benchmarks.py,185
+  fraq/cli.py,351
   fraq/core.py,319
-  fraq/formats.py,152
+  fraq/dataframes.py,132
+  fraq/formats.py,55
+  fraq/formats/__init__.py,53
+  fraq/formats/binary.py,50
+  fraq/formats/prepare.py,37
+  fraq/formats/registry.py,29
+  fraq/formats/text.py,57
   fraq/generators.py,91
+  fraq/ifs.py,222
+  fraq/inference.py,243
+  fraq/providers/__init__.py,29
+  fraq/providers/faker_provider.py,128
   fraq/query.py,167
   fraq/schema_export.py,399
   fraq/server.py,169
   fraq/streaming.py,77
-  fraq/text2fraq/__init__.py,25
+  fraq/testing.py,104
+  fraq/text2fraq/__init__.py,27
   fraq/text2fraq/config.py,34
   fraq/text2fraq/file_search_parser.py,168
   fraq/text2fraq/llm_client.py,28
@@ -258,11 +271,8 @@ D:
     test_websocket()
     main()
   fraq/__init__.py:
-    i: fraq.core.{FraqCursor,FraqNode,FraqSchema},fraq.formats.FormatRegistry,typing
-    e: generate,stream,quick_schema,_LAZY_IMPORTS
-    generate(fields:Dict[str;str];count:int=10;seed:Optional[int]=None)->List[Dict[str, Any]]
-    stream(fields:Optional[Dict[str;str]]=None;count:Optional[int]=None;interval:float=0.0)->Iterator[Dict[str, Any]]
-    quick_schema()->FraqSchema
+    i: fraq.core.{FraqCursor,FraqNode,FraqSchema},fraq.formats.FormatRegistry,fraq.generators.{FibonacciGenerator,HashGenerator,PerlinGenerator,SensorStreamGenerator},fraq.query.FraqQuery,typing.TYPE_CHECKING
+    e: _LAZY_IMPORTS
     __getattr__(name:str)->object
   fraq/adapters/base.py:
     i: abc.{ABC,abstractmethod},fraq.core.FraqNode,fraq.query.{FraqExecutor,FraqQuery,SourceType},typing.{Any,Dict,Iterator}
@@ -273,9 +283,11 @@ D:
     e: FileAdapter
     FileAdapter: load_root(1),save(3),_dict_to_node(1)  # Read/write fractal state from local f...
   fraq/adapters/file_search.py:
-    i: fraq.adapters.base.BaseAdapter,fraq.core.FraqNode,fraq.formats.FormatRegistry,fraq.query.SourceType,pathlib.Path,typing.{Any,Dict,Iterator,List,Optional}
-    e: FileSearchAdapter
-    FileSearchAdapter: __init__(3),load_root(1),_build_glob(2),_collect_files(2),_sort_and_limit(3)  # Adapter for searching files on disk u...
+    i: fraq.core.FraqNode,fraq.formats.FormatRegistry,pathlib.Path,typing
+    e: FileSystemPort,RealFileSystem,FileSearchAdapter
+    FileSystemPort: stat(1),list_files(3),is_file(1),write_bytes(2)  # Port for filesystem I/O operations.
+    RealFileSystem: stat(1),list_files(3),is_file(1),write_bytes(2)  # Real filesystem implementation of Fil...
+    FileSearchAdapter: __init__(4),load_root(1),_build_glob(2),_file_to_record(2),_sort_and_limit(3)  # Adapter for searching files on disk u...
   fraq/adapters/http_adapter.py:
     i: hashlib,fraq.adapters.base.BaseAdapter,fraq.adapters.file_adapter.FileAdapter,fraq.core.FraqNode,fraq.formats.FormatRegistry,fraq.query.SourceType,typing.Any
     e: HTTPAdapter
@@ -304,6 +316,24 @@ D:
     i: asyncio,collections.deque,pathlib.Path,typing,urllib.parse
     e: WebCrawlerAdapter
     WebCrawlerAdapter: __init__(5),_get_session(0),load_root(1),_parse_page(3),_plan_next_links(2)  # Async adapter for crawling websites a...
+  fraq/api.py:
+    i: time,fraq.core.{FraqCursor,FraqNode,FraqSchema},typing
+    e: generate,stream,quick_schema
+    _fields_to_schema(fields:Dict[str;str];seed:Optional[int]=None)->FraqSchema
+    _parse_transform(name:str;type_spec:str)->Optional[Callable[[Any], Any]]
+    _generate_records(schema:FraqSchema;count:int)->Iterator[Dict[str, Any]]
+    generate(fields:Dict[str;str];count:int=10;seed:Optional[int]=None)->List[Dict[str, Any]]
+    stream(fields:Optional[Dict[str;str]]=None;count:Optional[int]=None;interval:float=0.0)->Iterator[Dict[str, Any]]
+    quick_schema()->FraqSchema
+  fraq/benchmarks.py:
+    i: gc,time,tracemalloc,dataclasses.dataclass,typing.{Any,Callable,Dict,List,Optional}
+    e: BenchmarkResult,SpeedBenchmark,MemoryBenchmark,StructuralBenchmark,run_all_benchmarks,print_summary
+    BenchmarkResult:   # Single benchmark result.
+    SpeedBenchmark: fraq_generate(1),fraq_stream(1)  # Benchmark generation speed.
+    MemoryBenchmark: measure_memory_usage(2),compare_memory(1)  # Benchmark memory usage - fraq's zero-...
+    StructuralBenchmark: test_self_similarity(2),compare_structures(0)  # Benchmark fractal self-similarity vs...
+    run_all_benchmarks(speed_count:int=10000;memory_count:int=100000)->Dict[str, Any]
+    print_summary(results:Dict[str;Any])->None
   fraq/cli.py:
     i: argparse,sys,datetime,fraq.core.{FraqCursor,FraqNode,FraqSchema},fraq.formats.FormatRegistry,fraq.generators.HashGenerator,pathlib.Path,typing.List
     e: cmd_explore,cmd_stream,cmd_schema,cmd_files_search,cmd_files_list,cmd_files_stat,cmd_nl,cmd_network_scan
@@ -326,18 +356,36 @@ D:
     _vec_scale(v:Vector;s:float)->Vector
     _vec_norm(v:Vector)->float
     _vec_hash(v:Vector;seed:int=0)->int
-  fraq/formats.py:
-    i: csv,io,json,struct,typing
+  fraq/dataframes.py:
+    i: typing.{Any,Dict,Optional,TYPE_CHECKING}
+    e: to_polars,to_pandas,to_arrow,generate_df
+    to_polars(fields:Dict[str;str];count:int=100;seed:Optional[int]=None)->"pl.DataFrame"
+    to_pandas(fields:Dict[str;str];count:int=100;seed:Optional[int]=None)->"pd.DataFrame"
+    to_arrow(fields:Dict[str;str];count:int=100;seed:Optional[int]=None)->"pa.Table"
+    generate_df(fields:Dict[str;str];count:int=100;seed:Optional[int]=None;output:str='polars')->Any
+  fraq/formats/binary.py:
+    i: struct,fraq.formats.prepare,typing.Any
+    e: to_binary,to_msgpack_lite,mp_encode
+    to_binary(data:Any)->bytes
+    to_msgpack_lite(data:Any)->bytes
+    mp_encode(obj:Any)->bytes
+  fraq/formats/prepare.py:
+    i: struct,typing.{Any,Iterator}
+    e: prepare,encode_value
+    prepare(obj:Any)->Any
+    encode_value(v:Any)->bytes
+  fraq/formats/registry.py:
+    i: typing.{Any,Callable,Dict,List,Optional}
     e: FormatRegistry
     FormatRegistry: register(2),get(1),available(0),serialize(2)  # Registry of serialisation backends.
-    _to_json(data:Any)->str
-    _to_jsonl(data:Any)->str
-    _to_csv(data:Any)->str
-    _to_yaml(data:Any)->str
-    _to_binary(data:Any)->bytes
-    _to_msgpack_lite(data:Any)->bytes
-    _prepare(obj:Any)->Any
-    _simple_yaml(obj:Any;indent:int=0)->str
+  fraq/formats/text.py:
+    i: csv,io,json,fraq.formats.prepare,typing.Any
+    e: to_json,to_jsonl,to_csv,to_yaml,simple_yaml
+    to_json(data:Any)->str
+    to_jsonl(data:Any)->str
+    to_csv(data:Any)->str
+    to_yaml(data:Any)->str
+    simple_yaml(obj:Any;indent:int=0)->str
   fraq/generators.py:
     i: hashlib,math,struct,fraq.core.{FraqNode,_vec_hash},typing.Any
     e: HashGenerator,FibonacciGenerator,PerlinGenerator,SensorStreamGenerator
@@ -345,6 +393,31 @@ D:
     FibonacciGenerator: __init__(2),_fib(1),__call__(1)  # Value based on generalised Fibonacci...
     PerlinGenerator: __init__(2),__call__(1)  # Simplified 1-D Perlin-ish noise from...
     SensorStreamGenerator: __init__(3),__call__(1)  # Simulate an infinite IoT sensor stream.
+  fraq/ifs.py:
+    i: random,dataclasses.dataclass,typing
+    e: AffineTransform,ValueMapper,IFSGenerator,OrganizationalMapper,NetworkMapper,create_ifs
+    AffineTransform: apply(1)  # Affine transformation for IFS.
+    ValueMapper: map_value(2)  # Protocol for mapping fractal coordina...
+    IFSGenerator: __init__(3),_select_transform(0),generate_coordinate(2),generate(3),generate_hierarchy(3)  # Iterated Function System generator.
+    OrganizationalMapper: __init__(2),map_value(2)  # Mapper for organizational hierarchy d...
+    NetworkMapper: map_value(2)  # Mapper for network topology data.
+    create_ifs(pattern:str='organizational';seed:Optional[int]=None)->IFSGenerator
+  fraq/inference.py:
+    i: math,numpy,dataclasses.dataclass,typing.{Any,Dict,List,Optional,Tuple}
+    e: FractalDimension,PatternSignature,FractalAnalyzer,infer_fractal,InferredSchema
+    FractalDimension:   # Fractal dimension analysis result.
+    PatternSignature:   # Detected pattern in data column.
+    FractalAnalyzer: __init__(2),box_counting_dimension(3),detect_hierarchy(2),analyze_correlations(1)  # Analyze data for fractal properties.
+    InferredSchema: __init__(3),_build_ifs(0),generate(2),_generate_value(2),to_dict(0)  # Schema inferred from real data with f...
+    infer_fractal(data:List[Dict[str;Any]];min_depth:int=2;max_depth:int=6)->'InferredSchema'
+  fraq/providers/faker_provider.py:
+    i: typing
+    e: ValueProvider,FakerProvider,ProviderRegistry,get_provider_registry,generate_with_faker
+    ValueProvider: supports(1),generate(2)  # Protocol for value providers.
+    FakerProvider: __init__(1),_get_faker(0),supports(1),generate(2)  # Faker-based value provider for realis...
+    ProviderRegistry: __init__(0),register(1),get_faker_provider(1),find_provider(1),generate(2)  # Registry of value providers.
+    get_provider_registry()->ProviderRegistry
+    generate_with_faker(type_spec:str;seed:Optional[int]=None)->Any
   fraq/query.py:
     i: json,dataclasses.{dataclass,field},enum.Enum,typing
     e: SourceType,FraqFilter,FraqQuery,FraqExecutor,query
@@ -382,6 +455,11 @@ D:
     AsyncFraqStream: __init__(5),__aiter__(0),stop(0),depth(0)  # Async generator that yields fractal r...
     async_query(query:FraqQuery;root:Optional[FraqNode]=None;dims:int=3)->list[Dict[str, Any]]
     async_stream(root:Optional[FraqNode]=None;count:int=10;interval:float=0.1;direction:Optional[Vector]=None;dims:int=3)->AsyncIterator[Dict[str, Any]]
+  fraq/testing.py:
+    i: pytest,typing.{Any,Callable,Dict,List,Optional}
+    e: fraq_fixture,make_fixture
+    fraq_fixture(fields:Dict[str;str];count:int=100;seed:int=42;name:Optional[str]=None)->List[Dict[str, Any]]
+    make_fixture(fields:Dict[str;str];count:int=100;seed:int=42)->Callable[[], List[Dict[str, Any]]]
   fraq/text2fraq/config.py:
     i: os,dataclasses.dataclass,dotenv.load_dotenv
     e: Text2FraqConfig

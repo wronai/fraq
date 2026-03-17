@@ -1,6 +1,36 @@
-# fraq/flow | 320 func | 12 pipelines | 6 hub-types | 2026-03-17
+# fraq/flow | 385 func | 12 pipelines | 8 hub-types | 2026-03-17
 
-PIPELINES[12] (Core:2, Export:1, IO:3, NLP:3, Unknown:3):
+PIPELINES[12] (IO:5, NLP:1, Unknown:6):
+  Fraq [Unknown]: Dict[str, str] → ProviderRegistry
+              → generate_df(fields:Dict[str, str], count:int, seed:Optional[int], output:str) → Any CC=4    pure ▶
+              → to_arrow(fields:Dict[str, str], count:int, seed:Optional[int]) → pa.Table CC=2    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 6/7 pure  BOTTLENECK: _parse_transform(CC=10)
+
+  Fraq [Unknown]: int → ProviderRegistry
+              → run_all_benchmarks(speed_count:int, memory_count:int) → Dict[str, Any] CC=5    IO ▶
+              → compare_structures() → Dict[str, float] CC=3    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 5/7 pure  BOTTLENECK: _parse_transform(CC=10)
+
+  Fraq [Unknown]: ? → ProviderRegistry
+              → main()                                  CC=1    IO ▶
+              → example_3_kafka()                       CC=2    IO
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 4/7 pure  BOTTLENECK: _parse_transform(CC=10)
+
   Fraq [NLP]: str → bool
               → execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]] CC=2    IO ▶
               → parse(text:str) → ParsedQuery           CC=1    pure
@@ -11,101 +41,190 @@ PIPELINES[12] (Core:2, Export:1, IO:3, NLP:3, Unknown:3):
               → _word_match(text:str, pattern:str) → bool CC=1    pure ■
               PURITY: 4/7 pure  BOTTLENECK: _fallback_fields(CC=5)
 
-  Fraq [NLP]: str → bool
-              → execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]] CC=2    IO ▶
-              → parse(text:str) → ParsedQuery           CC=1    pure
-              → _detect_fields(text:str) → list[str]    CC=5    mutation
-              → _matches_pattern(text:str, pattern:str) → bool CC=1    pure
-              → _word_match(text:str, pattern:str) → bool CC=1    pure ■
-              PURITY: 3/5 pure  BOTTLENECK: _detect_fields(CC=5)
-
-  Fraq [Unknown]: Any → List[str]
-              → search(**opts:Any) → List[Dict[str, Any]] CC=1    pure ▶
-              → crawl_async() → List[Dict[str, Any]]    CC=10   IO
-              → _process_url(url:str, depth:int) → Optional[Dict[str, Any]] CC=3    IO
-              → _parse_page(html:str, url:str, depth:int) → Dict[str, Any] CC=2    pure
-              → _extract_links(soup:BeautifulSoup, base_url:str) → List[str] CC=5    mutation ■
-              PURITY: 2/5 pure  BOTTLENECK: crawl_async(CC=10)
-
-  Fraq [Unknown]: int → List[str]
-              → stream(count:int, **opts:Any) → Iterator[Dict[str, Any]] CC=1    mutation ▶
-              → stream_pages() → AsyncIterator[Dict[str, Any]] CC=10   IO
-              → _process_url(url:str, depth:int) → Optional[Dict[str, Any]] CC=3    IO
-              → _parse_page(html:str, url:str, depth:int) → Dict[str, Any] CC=2    pure
-              → _extract_links(soup:BeautifulSoup, base_url:str) → List[str] CC=5    mutation ■
-              PURITY: 1/5 pure  BOTTLENECK: stream_pages(CC=10)
-
-  Fraq [IO]: Any → str
-              → search(**opts:Any) → List[Dict[str, Any]] CC=1    pure ▶
-              → scan_async(ports:Optional[List[int]], limit:int) → List[Dict[str, Any]] CC=5    mutation
-              → _check_port_io(ip:str, port:int) → Dict[str, Any] CC=4    IO
-              → _parse_result(ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]) → Dict[str, Any] CC=5    pure
-              → _identify_service(port:int) → str       CC=1    pure ■
-              PURITY: 3/5 pure  BOTTLENECK: scan_async(CC=5)
-
-  Fraq [IO]: int → str
-              → stream(count:int, **opts:Any) → Iterator[Dict[str, Any]] CC=1    mutation ▶
-              → stream_devices(ports:Optional[List[int]]) → AsyncIterator[Dict[str, Any]] CC=3    mutation
-              → _check_port_io(ip:str, port:int) → Dict[str, Any] CC=4    IO
-              → _parse_result(ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]) → Dict[str, Any] CC=5    pure
-              → _identify_service(port:int) → str       CC=1    pure ■
-              PURITY: 2/5 pure  BOTTLENECK: _parse_result(CC=5)
-
-  Fraq [NLP]: argparse.Namespace → Any
-              → cmd_nl(args:argparse.Namespace) → None  CC=3    pure ▶
-              → _run_nl_fraq_query(query:str, fmt:str) → None CC=2    IO
-              → serialize(cls, name:str, data:Any, **kwargs) → Any CC=1    pure ■
-              PURITY: 2/3 pure  BOTTLENECK: cmd_nl(CC=3)
-
-  Fraq [Export]: List[str] | None → List[str]
+  Fraq [IO]: List[str] | None → List[str]
               → main(argv:List[str] | None) → None      CC=1    pure ▶
               → _parse_args(argv:List[str] | None) → argparse.Namespace CC=1    pure
+              → _build_parser() → argparse.ArgumentParser CC=1    pure
+              → _build_files_parsers(sub:argparse._SubParsersAction) → None CC=1    pure
+              → _get_shared_parser() → argparse.ArgumentParser CC=1    pure
               → available(cls) → List[str]              CC=1    pure ■
-              PURITY: 3/3 pure  BOTTLENECK: main(CC=1)
+              PURITY: 6/6 pure  BOTTLENECK: main(CC=1)
 
-  Fraq [Core]: Optional[Sequence[Vector]] → Vector
-              → children(directions:Optional[Sequence[Vector]]) → List[FraqNode] CC=5    mutation ▶
-              → _child(direction:Vector) → FraqNode     CC=2    pure
-              → _vec_scale(v:Vector, s:float) → Vector  CC=2    pure ■
-              PURITY: 2/3 pure  BOTTLENECK: children(CC=5)
+  Fraq [IO]: ? → ProviderRegistry
+              → example_1_sensors()                     CC=3    IO ▶
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
 
-  Fraq [Core]: Optional[int] → Any
-              → records(depth:Optional[int], branching:int, count:Optional[int], node:Optional[FraqNode]) → Iterator[Dict[str, Any]] CC=8    pure ▶
-              → record(node:Optional[FraqNode]) → Dict[str, Any] CC=4    pure
-              → _cast(val:Any, type_name:str) → Any     CC=7    pure ■
-              PURITY: 3/3 pure  BOTTLENECK: records(CC=8)
+  Fraq [IO]: ? → ProviderRegistry
+              → example_2_mqtt()                        CC=3    IO ▶
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
 
-  Examples [Unknown]: ? → List[Dict[str, Any]]
-              → main()                                  CC=1    IO ▶
-              → example_3_kafka()                       CC=2    IO
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=11   pure ■
-              PURITY: 1/3 pure  BOTTLENECK: generate(CC=11)
+  Fraq [Unknown]: ? → ProviderRegistry
+              → example_1_sse()                         CC=2    IO ▶
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
 
-  Fraq [IO]: str → bool
-              → search(text:str) → List[dict[str, Any]] CC=2    pure ▶
-              → _collect_files_filtered(base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]) → List[dict[str, Any]] CC=11   mutation
-              → _should_exclude(path:Path) → bool       CC=6    pure ■
-              PURITY: 2/3 pure  BOTTLENECK: _collect_files_filtered(CC=11)
+  Fraq [Unknown]: ? → ProviderRegistry
+              → example_4_kafka()                       CC=2    IO ▶
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
+
+  Fraq [IO]: ? → ProviderRegistry
+              → example_1_classification()              CC=4    IO ▶
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
+
+  Fraq [IO]: ? → ProviderRegistry
+              → example_2_regression()                  CC=3    IO ▶
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
+
+  Fraq [Unknown]: ? → ProviderRegistry
+              → example_1_extract()                     CC=4    IO ▶
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
 
 
 TRANSFORMS (fan-out ≥10):
-  _parse_args(argv:List[str] | None) → argparse.Namespace fan=21   !! side-effects
   query_data(fields:str, depth:int, format:str, limit:int, dims:int) fan=18   fan=18
-  generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] fan=16   fan=16
   ws_files(websocket:WebSocket)                           fan=16   fan=16
   schema_records(fields:str, depth:int, branching:int, format:str, dims:int) fan=16   fan=16
   _collect_files_filtered(base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]) → List[dict[str, Any]] fan=16   PIPELINE:FileSearchText2Fraq.entry
+  detect_hierarchy(data:List[Dict[str, Any]], parent_column:Optional[str]) → Dict[str, PatternSignature] fan=14   PIPELINE:FractalAnalyzer.entry
   ws_stream(websocket:WebSocket)                          fan=14   fan=14
   stream(count:int, dims:int, format:str)                 fan=14   fan=14
   files_stat(file_path:str)                               fan=14   fan=14
   ws_files(websocket:WebSocket)                           fan=14   fan=14
-  example_full_pipeline() → None                          fan=13   fan=13
+  box_counting_dimension(values:List[float], min_box_size:float, max_box_size:float) → FractalDimension fan=13   PIPELINE:FractalAnalyzer.entry
   example_1_sse()                                         fan=13   fan=13
+  example_full_pipeline() → None                          fan=13   fan=13
   load_root(uri:str, **opts:Any) → FraqNode               fan=13   PIPELINE:FileAdapter.entry
   ws_stream(websocket:WebSocket)                          fan=13   fan=13
-  example_pdf_search_with_llm()                           fan=12   fan=12
+  _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] fan=12   fan=12
 
 CONTRACTS:
+  Pipeline: Fraq
+    generate_df(fields:Dict[str, str], count:int, seed:Optional[int], output:str) → Any
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:str
+      OUT: Any
+
+    to_arrow(fields:Dict[str, str], count:int, seed:Optional[int]) → pa.Table
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: pa.Table
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: List[Dict[str, Any]]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
+  Pipeline: Fraq
+    run_all_benchmarks(speed_count:int, memory_count:int) → Dict[str, Any]
+      IN:  speed_count:int, memory_count:int
+      OUT: Dict[str, Any]
+      SIDE-EFFECT: IO(print, print, print)
+
+    compare_structures() → Dict[str, float]
+      IN:  ()
+      OUT: Dict[str, float]
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: List[Dict[str, Any]]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
+  Pipeline: Fraq
+    main()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    example_3_kafka()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: List[Dict[str, Any]]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
   Pipeline: Fraq
     execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]]
       IN:  text:str, root:FraqNode | None
@@ -139,141 +258,6 @@ CONTRACTS:
       OUT: bool
 
   Pipeline: Fraq
-    execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]]
-      IN:  text:str, root:FraqNode | None
-      OUT: str | list[dict[str, Any]]
-      SIDE-EFFECT: IO(execute)
-
-    parse(text:str) → ParsedQuery
-      IN:  text:str
-      OUT: ParsedQuery
-
-    _detect_fields(text:str) → list[str]
-      IN:  text:str
-      OUT: list[str]
-      SIDE-EFFECT: pure
-
-    _matches_pattern(text:str, pattern:str) → bool
-      IN:  text:str, pattern:str
-      OUT: bool
-
-    _word_match(text:str, pattern:str) → bool
-      IN:  text:str, pattern:str
-      OUT: bool
-
-  Pipeline: Fraq
-    search(**opts:Any) → List[Dict[str, Any]]
-      IN:  **opts:Any
-      OUT: List[Dict[str, Any]]
-
-    crawl_async() → List[Dict[str, Any]]
-      IN:  ()
-      OUT: List[Dict[str, Any]]
-      SIDE-EFFECT: IO(self._session.close)
-
-    _process_url(url:str, depth:int) → Optional[Dict[str, Any]]
-      IN:  url:str, depth:int
-      OUT: Optional[Dict[str, Any]]
-      SIDE-EFFECT: IO(session.get)
-
-    _parse_page(html:str, url:str, depth:int) → Dict[str, Any]
-      IN:  html:str, url:str, depth:int
-      OUT: Dict[str, Any]
-
-    _extract_links(soup:BeautifulSoup, base_url:str) → List[str]
-      IN:  soup:BeautifulSoup, base_url:str
-      OUT: List[str]
-      SIDE-EFFECT: pure
-
-  Pipeline: Fraq
-    stream(count:int, **opts:Any) → Iterator[Dict[str, Any]]
-      IN:  count:int, **opts:Any
-      OUT: Iterator[Dict[str, Any]]
-      SIDE-EFFECT: pure
-
-    stream_pages() → AsyncIterator[Dict[str, Any]]
-      IN:  ()
-      OUT: AsyncIterator[Dict[str, Any]]
-      SIDE-EFFECT: IO(self._session.close); generator
-
-    _process_url(url:str, depth:int) → Optional[Dict[str, Any]]
-      IN:  url:str, depth:int
-      OUT: Optional[Dict[str, Any]]
-      SIDE-EFFECT: IO(session.get)
-
-    _parse_page(html:str, url:str, depth:int) → Dict[str, Any]
-      IN:  html:str, url:str, depth:int
-      OUT: Dict[str, Any]
-
-    _extract_links(soup:BeautifulSoup, base_url:str) → List[str]
-      IN:  soup:BeautifulSoup, base_url:str
-      OUT: List[str]
-      SIDE-EFFECT: pure
-
-  Pipeline: Fraq
-    search(**opts:Any) → List[Dict[str, Any]]
-      IN:  **opts:Any
-      OUT: List[Dict[str, Any]]
-
-    scan_async(ports:Optional[List[int]], limit:int) → List[Dict[str, Any]]
-      IN:  ports:Optional[List[int]], limit:int
-      OUT: List[Dict[str, Any]]
-      SIDE-EFFECT: mutates self._semaphore
-
-    _check_port_io(ip:str, port:int) → Dict[str, Any]
-      IN:  ip:str, port:int
-      OUT: Dict[str, Any]
-      SIDE-EFFECT: IO(writer.close); mutates self._semaphore
-      INVARIANT: raises on invalid input
-
-    _parse_result(ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]) → Dict[str, Any]
-      IN:  ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]
-      OUT: Dict[str, Any]
-
-    _identify_service(port:int) → str
-      IN:  port:int
-      OUT: str
-
-  Pipeline: Fraq
-    stream(count:int, **opts:Any) → Iterator[Dict[str, Any]]
-      IN:  count:int, **opts:Any
-      OUT: Iterator[Dict[str, Any]]
-      SIDE-EFFECT: pure
-
-    stream_devices(ports:Optional[List[int]]) → AsyncIterator[Dict[str, Any]]
-      IN:  ports:Optional[List[int]]
-      OUT: AsyncIterator[Dict[str, Any]]
-      SIDE-EFFECT: mutates self._semaphore; generator
-
-    _check_port_io(ip:str, port:int) → Dict[str, Any]
-      IN:  ip:str, port:int
-      OUT: Dict[str, Any]
-      SIDE-EFFECT: IO(writer.close); mutates self._semaphore
-      INVARIANT: raises on invalid input
-
-    _parse_result(ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]) → Dict[str, Any]
-      IN:  ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]
-      OUT: Dict[str, Any]
-
-    _identify_service(port:int) → str
-      IN:  port:int
-      OUT: str
-
-  Pipeline: Fraq
-    cmd_nl(args:argparse.Namespace) → None
-      IN:  args:argparse.Namespace
-      OUT: None
-
-    _run_nl_fraq_query(query:str, fmt:str) → None
-      IN:  query:str, fmt:str
-      OUT: None
-      SIDE-EFFECT: IO(execute, print, print)
-
-    serialize(cls, name:str, data:Any, **kwargs) → Any
-      IN:  cls, name:str, data:Any, **kwargs
-      OUT: Any
-
-  Pipeline: Fraq
     main(argv:List[str] | None) → None
       IN:  argv:List[str] | None
       OUT: None
@@ -282,44 +266,24 @@ CONTRACTS:
       IN:  argv:List[str] | None
       OUT: argparse.Namespace
 
+    _build_parser() → argparse.ArgumentParser
+      IN:  ()
+      OUT: argparse.ArgumentParser
+
+    _build_files_parsers(sub:argparse._SubParsersAction) → None
+      IN:  sub:argparse._SubParsersAction
+      OUT: None
+
+    _get_shared_parser() → argparse.ArgumentParser
+      IN:  ()
+      OUT: argparse.ArgumentParser
+
     available(cls) → List[str]
       IN:  cls
       OUT: List[str]
 
   Pipeline: Fraq
-    children(directions:Optional[Sequence[Vector]]) → List[FraqNode]
-      IN:  directions:Optional[Sequence[Vector]]
-      OUT: List[FraqNode]
-      SIDE-EFFECT: pure
-
-    _child(direction:Vector) → FraqNode
-      IN:  direction:Vector
-      OUT: FraqNode
-
-    _vec_scale(v:Vector, s:float) → Vector
-      IN:  v:Vector, s:float
-      OUT: Vector
-
-  Pipeline: Fraq
-    records(depth:Optional[int], branching:int, count:Optional[int], node:Optional[FraqNode]) → Iterator[Dict[str, Any]]
-      IN:  depth:Optional[int], branching:int, count:Optional[int], node:Optional[FraqNode]
-      OUT: Iterator[Dict[str, Any]]
-
-    record(node:Optional[FraqNode]) → Dict[str, Any]
-      IN:  node:Optional[FraqNode]
-      OUT: Dict[str, Any]
-
-    _cast(val:Any, type_name:str) → Any
-      IN:  val:Any, type_name:str
-      OUT: Any
-
-  Pipeline: Examples
-    main()
-      IN:  ()
-      OUT: None
-      SIDE-EFFECT: IO(print, print, print)
-
-    example_3_kafka()
+    example_1_sensors()
       IN:  ()
       OUT: None
       SIDE-EFFECT: IO(print, print, print)
@@ -328,73 +292,241 @@ CONTRACTS:
       IN:  fields:Dict[str, str], count:int, seed:Optional[int]
       OUT: List[Dict[str, Any]]
 
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
   Pipeline: Fraq
-    search(text:str) → List[dict[str, Any]]
-      IN:  text:str
-      OUT: List[dict[str, Any]]
+    example_2_mqtt()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
 
-    _collect_files_filtered(base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]) → List[dict[str, Any]]
-      IN:  base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]
-      OUT: List[dict[str, Any]]
-      SIDE-EFFECT: pure
-      INVARIANT: len(output) <= len(input)
+    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: List[Dict[str, Any]]
 
-    _should_exclude(path:Path) → bool
-      IN:  path:Path
-      OUT: bool
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
+  Pipeline: Fraq
+    example_1_sse()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print); generator
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: List[Dict[str, Any]]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
+  Pipeline: Fraq
+    example_4_kafka()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: List[Dict[str, Any]]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
+  Pipeline: Fraq
+    example_1_classification()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: List[Dict[str, Any]]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
+  Pipeline: Fraq
+    example_2_regression()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: List[Dict[str, Any]]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
+  Pipeline: Fraq
+    example_1_extract()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: List[Dict[str, Any]]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
 
 
-DATA_TYPES (by cross-function usage) [226 annotated, 0 inferred / 320 functions]:
-  str                  consumed:160 produced:33   !! HUB-TYPE → split interface
-  int                  consumed:68  produced:4    !! HUB-TYPE → split interface
+DATA_TYPES (by cross-function usage) [290 annotated, 0 inferred / 385 functions]:
+  str                  consumed:178 produced:33   !! HUB-TYPE → split interface
+  int                  consumed:104 produced:5    !! HUB-TYPE → split interface
+  str, Any             consumed:13  produced:31   !! HUB-TYPE → split interface
   FraqNode             consumed:20  produced:18   !! HUB-TYPE → split interface
-  float                consumed:21  produced:6    !! HUB-TYPE → split interface
-  str, Any             consumed:4   produced:20 
-  Vector               consumed:14  produced:2    !! HUB-TYPE → split interface
+  float                consumed:26  produced:7    !! HUB-TYPE → split interface
+  Vector               consumed:19  produced:4    !! HUB-TYPE → split interface
+  bool                 consumed:7   produced:10 
+  FraqSchema           consumed:9   produced:5  
   FraqQuery            consumed:6   produced:7  
-  FraqSchema           consumed:8   produced:4  
-  bool                 consumed:5   produced:6  
+  Path                 consumed:11  produced:0    !! HUB-TYPE → split interface
   argparse.Namespace   consumed:10  produced:1    !! HUB-TYPE → split interface
-  WebSocket            consumed:9   produced:0    input-heavy (read-only flow)
-  Iterator[Dict[str, Any]] consumed:0   produced:9    output-heavy
+  Iterator[Dict[str, Any]] consumed:0   produced:10   output-heavy
   dict[str, Any]       consumed:2   produced:7  
+  WebSocket            consumed:9   produced:0    input-heavy (read-only flow)
+  str, str             consumed:7   produced:0    input-heavy (read-only flow)
   ParsedQuery          consumed:1   produced:5    output-heavy
+  bytes                consumed:2   produced:4  
   dict                 consumed:0   produced:6    output-heavy
   str | None           consumed:5   produced:0    input-heavy (read-only flow)
-  str | list[dict[str, Any]] consumed:0   produced:4    narrow scope
-  bytes                consumed:0   produced:4    narrow scope
   AsyncIterator[Dict[str, Any]] consumed:0   produced:4    narrow scope
-  Text2FraqConfig      consumed:2   produced:1    narrow scope
 
   HUB TYPES (consumed ≥10):
-    str → 160 consumers → split into:
+    str → 178 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    int → 68 consumers → split into:
+    int → 104 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    str, Any → 13 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
     FraqNode → 20 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    float → 21 consumers → split into:
+    float → 26 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    Vector → 14 consumers → split into:
+    Vector → 19 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    Path → 11 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
     argparse.Namespace → 10 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
 
 SIDE_EFFECTS:
-  IO:        ws_stream, ws_files, _to_json, _to_jsonl, cmd_explore, cmd_stream, cmd_schema, cmd_files_search, cmd_files_list, _print_stat
-  Mutation:  AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, _to_binary, _simple_yaml, _mp_encode, HashGenerator.__init__, FibonacciGenerator.__init__, PerlinGenerator.__init__, SensorStreamGenerator.__init__
-  Pure:      health, async_query, async_stream, FormatRegistry.register, FormatRegistry.get, FormatRegistry.available, FormatRegistry.serialize, _to_csv, _to_yaml, _to_msgpack_lite
+  IO:        ws_stream, ws_files, cmd_explore, cmd_stream, cmd_schema, cmd_files_search, cmd_files_list, _print_stat, cmd_files_stat, _run_nl_file_query
+  Mutation:  AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, SpeedBenchmark.fraq_stream, HashGenerator.__init__, FibonacciGenerator.__init__, PerlinGenerator.__init__, SensorStreamGenerator.__init__, AffineTransform.apply, IFSGenerator.__init__
+  Pure:      health, async_query, async_stream, to_polars, to_pandas, to_arrow, generate_df, _make_root, _collect_file_stat, cmd_nl
 
   PIPELINE PURITY:
+    Fraq            ███░ 85% pure
+    Fraq            ██░░ 71% pure
     Fraq            ██░░ 57% pure
-    Fraq            ██░░ 60% pure
-    Fraq            █░░░ 40% pure
-    Fraq            ░░░░ 20% pure
-    Fraq            ██░░ 60% pure
-    Fraq            █░░░ 40% pure
-    Fraq            ██░░ 66% pure
+    Fraq            ██░░ 57% pure
     Fraq            ████ 100% pure
     Fraq            ██░░ 66% pure
-    Fraq            ████ 100% pure
-    Examples        █░░░ 33% pure
+    Fraq            ██░░ 66% pure
+    Fraq            ██░░ 66% pure
+    Fraq            ██░░ 66% pure
+    Fraq            ██░░ 66% pure
+    Fraq            ██░░ 66% pure
     Fraq            ██░░ 66% pure

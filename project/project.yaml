@@ -3,35 +3,50 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T21:43:36Z'
+  analyzed_at: '2026-03-17T22:01:26Z'
   tool: code2llm
   stats:
-    files: 29
-    lines: 5691
-    functions: 196
-    classes: 35
+    files: 38
+    lines: 7433
+    functions: 261
+    classes: 53
 health:
   cc_avg: 3.1
-  critical_count: 6
+  critical_count: 10
   critical_limit: 10
   duplicates: 0
   cycles: 3
   alerts:
   - type: high_fan_out
-    target: _parse_args
-    value: 21
-    limit: 10
-    severity: critical
-  - type: high_fan_out
-    target: generate
-    value: 16
-    limit: 10
-    severity: error
-  - type: high_fan_out
     target: FileSearchText2Fraq._collect_files_filtered
     value: 16
     limit: 10
     severity: error
+  - type: cc_exceeded
+    target: FractalAnalyzer.box_counting_dimension
+    value: 16
+    limit: 15
+    severity: warning
+  - type: cc_exceeded
+    target: FractalAnalyzer.detect_hierarchy
+    value: 15
+    limit: 15
+    severity: warning
+  - type: cc_exceeded
+    target: FractalAnalyzer.analyze_correlations
+    value: 15
+    limit: 15
+    severity: warning
+  - type: high_fan_out
+    target: FractalAnalyzer.detect_hierarchy
+    value: 14
+    limit: 10
+    severity: warning
+  - type: high_fan_out
+    target: FractalAnalyzer.box_counting_dimension
+    value: 13
+    limit: 10
+    severity: warning
   - type: high_fan_out
     target: FileAdapter.load_root
     value: 13
@@ -43,12 +58,12 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: WebCrawlerAdapter.crawl_async
+    target: _parse_transform
     value: 12
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: FileSearchAdapter._collect_files
+    target: WebCrawlerAdapter.crawl_async
     value: 12
     limit: 10
     severity: warning
@@ -63,12 +78,7 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: FileSearchAdapter.load_root
-    value: 11
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: _to_csv
+    target: _dispatch_command
     value: 10
     limit: 10
     severity: warning
@@ -78,7 +88,7 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: _dispatch_command
+    target: FractalAnalyzer.analyze_correlations
     value: 10
     limit: 10
     severity: warning
@@ -93,39 +103,92 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
+    target: FileSearchAdapter.load_root
+    value: 10
+    limit: 10
+    severity: warning
+  - type: high_fan_out
     target: natural_language
     value: 10
     limit: 10
     severity: warning
 modules:
-- path: fraq/__init__.py
-  lines: 310
-  classes: 0
-  methods: 4
-  cc_max: 11
-  inbound_deps: 8
+- path: fraq/inference.py
+  lines: 347
+  classes: 4
+  methods: 10
+  cc_max: 16
+  inbound_deps: 0
   exports:
-  - name: generate
+  - name: FractalDimension
+    type: class
+    cc_avg: 0.0
+  - name: PatternSignature
+    type: class
+    cc_avg: 0.0
+  - name: FractalAnalyzer
+    type: class
+    cc_avg: 11.8
+    methods:
+    - name: box_counting_dimension
+      cc: 16
+      flag: split
+      fan_out: 13
+    - name: detect_hierarchy
+      cc: 15
+      flag: split
+      fan_out: 14
+    - name: analyze_correlations
+      cc: 15
+      flag: split
+      fan_out: 10
+  - name: InferredSchema
+    type: class
+    cc_avg: 3.4
+  - name: infer_fractal
     type: function
-    cc: 11
-    fan_out: 16
-  - name: stream
-    type: function
-    cc: 10
-    fan_out: 10
-  - name: quick_schema
-    type: function
-    cc: 6
-- path: fraq/formats.py
-  lines: 196
-  classes: 1
-  methods: 14
+    cc: 2
+- path: fraq/benchmarks.py
+  lines: 263
+  classes: 4
+  methods: 8
   cc_max: 11
   inbound_deps: 0
   exports:
-  - name: FormatRegistry
+  - name: BenchmarkResult
     type: class
-    cc_avg: 1.5
+    cc_avg: 0.0
+  - name: SpeedBenchmark
+    type: class
+    cc_avg: 2.5
+  - name: MemoryBenchmark
+    type: class
+    cc_avg: 2.0
+  - name: StructuralBenchmark
+    type: class
+    cc_avg: 4.0
+  - name: run_all_benchmarks
+    type: function
+    cc: 5
+  - name: print_summary
+    type: function
+    cc: 11
+- path: fraq/formats/binary.py
+  lines: 62
+  classes: 0
+  methods: 3
+  cc_max: 11
+  inbound_deps: 0
+  exports:
+  - name: to_binary
+    type: function
+    cc: 3
+  - name: to_msgpack_lite
+    type: function
+    cc: 1
+  - name: mp_encode
+    type: function
+    cc: 11
 - path: fraq/text2fraq/file_search_parser.py
   lines: 200
   classes: 1
@@ -156,6 +219,23 @@ modules:
       fan_out: 12
     - name: stream_pages
       cc: 10
+- path: fraq/api.py
+  lines: 189
+  classes: 0
+  methods: 6
+  cc_max: 10
+  inbound_deps: 10
+  exports:
+  - name: generate
+    type: function
+    cc: 1
+  - name: stream
+    type: function
+    cc: 10
+    fan_out: 10
+  - name: quick_schema
+    type: function
+    cc: 6
 - path: fraq/query.py
   lines: 220
   classes: 4
@@ -188,23 +268,6 @@ modules:
   - name: ModelRouter
     type: class
     cc_avg: 3.8
-- path: fraq/adapters/file_search.py
-  lines: 165
-  classes: 1
-  methods: 8
-  cc_max: 8
-  inbound_deps: 0
-  exports:
-  - name: FileSearchAdapter
-    type: class
-    cc_avg: 4.0
-    methods:
-    - name: load_root
-      cc: 5
-      fan_out: 11
-    - name: _collect_files
-      cc: 7
-      fan_out: 12
 - path: fraq/adapters/hybrid_adapter.py
   lines: 51
   classes: 1
@@ -216,9 +279,9 @@ modules:
     type: class
     cc_avg: 3.2
 - path: fraq/cli.py
-  lines: 449
+  lines: 467
   classes: 0
-  methods: 18
+  methods: 24
   cc_max: 8
   inbound_deps: 0
   exports:
@@ -272,6 +335,19 @@ modules:
   - name: FraqCursor
     type: class
     cc_avg: 2.2
+- path: fraq/formats/prepare.py
+  lines: 47
+  classes: 0
+  methods: 2
+  cc_max: 8
+  inbound_deps: 2
+  exports:
+  - name: prepare
+    type: function
+    cc: 8
+  - name: encode_value
+    type: function
+    cc: 6
 - path: fraq/server.py
   lines: 217
   classes: 3
@@ -311,6 +387,73 @@ modules:
   - name: clear_session
     type: function
     cc: 2
+- path: fraq/adapters/file_search.py
+  lines: 268
+  classes: 3
+  methods: 18
+  cc_max: 7
+  inbound_deps: 0
+  exports:
+  - name: FileSystemPort
+    type: class
+    cc_avg: 1.0
+  - name: RealFileSystem
+    type: class
+    cc_avg: 1.8
+  - name: FileSearchAdapter
+    type: class
+    cc_avg: 3.6
+    methods:
+    - name: load_root
+      cc: 5
+      fan_out: 10
+- path: fraq/formats/text.py
+  lines: 71
+  classes: 0
+  methods: 5
+  cc_max: 7
+  inbound_deps: 0
+  exports:
+  - name: to_json
+    type: function
+    cc: 1
+  - name: to_jsonl
+    type: function
+    cc: 3
+  - name: to_csv
+    type: function
+    cc: 4
+  - name: to_yaml
+    type: function
+    cc: 1
+  - name: simple_yaml
+    type: function
+    cc: 7
+- path: fraq/ifs.py
+  lines: 288
+  classes: 5
+  methods: 11
+  cc_max: 7
+  inbound_deps: 1
+  exports:
+  - name: AffineTransform
+    type: class
+    cc_avg: 3.0
+  - name: ValueMapper
+    type: class
+    cc_avg: 1.0
+  - name: IFSGenerator
+    type: class
+    cc_avg: 3.8
+  - name: OrganizationalMapper
+    type: class
+    cc_avg: 2.0
+  - name: NetworkMapper
+    type: class
+    cc_avg: 4.0
+  - name: create_ifs
+    type: function
+    cc: 3
 - path: fraq/adapters/sql_adapter.py
   lines: 64
   classes: 1
@@ -325,6 +468,28 @@ modules:
     - name: load_root
       cc: 4
       fan_out: 10
+- path: fraq/providers/faker_provider.py
+  lines: 177
+  classes: 3
+  methods: 13
+  cc_max: 6
+  inbound_deps: 1
+  exports:
+  - name: ValueProvider
+    type: class
+    cc_avg: 1.0
+  - name: FakerProvider
+    type: class
+    cc_avg: 2.8
+  - name: ProviderRegistry
+    type: class
+    cc_avg: 2.2
+  - name: get_provider_registry
+    type: function
+    cc: 2
+  - name: generate_with_faker
+    type: function
+    cc: 1
 - path: fraq/text2fraq/parser_rules.py
   lines: 93
   classes: 1
@@ -423,6 +588,25 @@ modules:
   - name: health
     type: function
     cc: 1
+- path: fraq/dataframes.py
+  lines: 173
+  classes: 0
+  methods: 4
+  cc_max: 4
+  inbound_deps: 0
+  exports:
+  - name: to_polars
+    type: function
+    cc: 2
+  - name: to_pandas
+    type: function
+    cc: 2
+  - name: to_arrow
+    type: function
+    cc: 2
+  - name: generate_df
+    type: function
+    cc: 4
 - path: fraq/text2fraq/llm_client.py
   lines: 35
   classes: 1
@@ -497,6 +681,22 @@ modules:
   - name: async_stream
     type: function
     cc: 3
+- path: fraq/__init__.py
+  lines: 155
+  classes: 0
+  methods: 1
+  cc_max: 2
+  inbound_deps: 0
+- path: fraq/formats/registry.py
+  lines: 40
+  classes: 1
+  methods: 4
+  cc_max: 2
+  inbound_deps: 0
+  exports:
+  - name: FormatRegistry
+    type: class
+    cc_avg: 1.5
 - path: fraq/generators.py
   lines: 117
   classes: 4
@@ -558,8 +758,20 @@ modules:
   methods: 0
   cc_max: 0
   inbound_deps: 0
+- path: fraq/formats/__init__.py
+  lines: 74
+  classes: 0
+  methods: 0
+  cc_max: 0
+  inbound_deps: 0
+- path: fraq/providers/__init__.py
+  lines: 35
+  classes: 0
+  methods: 0
+  cc_max: 0
+  inbound_deps: 0
 - path: fraq/text2fraq/__init__.py
-  lines: 27
+  lines: 31
   classes: 0
   methods: 0
   cc_max: 0
@@ -577,56 +789,68 @@ modules:
   cc_max: 0
   inbound_deps: 0
 hotspots:
-- name: _parse_args
-  fan_out: 21
-  note: Parse command line arguments.
-- name: generate
-  fan_out: 16
-  note: 'Generate records with simple field specification.
-
-
-    This is the EASIEST way to cr'
 - name: FileSearchText2Fraq._collect_files_filtered
   fan_out: 16
   note: Collect files with exclusion filtering.
+- name: FractalAnalyzer.detect_hierarchy
+  fan_out: 14
+  note: 'Detect hierarchical structure in data.
+
+
+    Analyzes parent-child relationships to f'
+- name: FractalAnalyzer.box_counting_dimension
+  fan_out: 13
+  note: 'Calculate box-counting dimension of value distribution.
+
+
+    True fractals have non-'
 - name: FileAdapter.load_root
   fan_out: 13
   note: Orchestrates 13 calls
 - name: ws_stream
   fan_out: 13
   note: WebSocket endpoint for streaming fractal data.
+- name: _parse_transform
+  fan_out: 12
+  note: 'Parse type specification and return transform function.
+
+
+    Handles: range hints (f'
 - name: WebCrawlerAdapter.crawl_async
   fan_out: 12
   note: Crawl website and return all pages.
-- name: FileSearchAdapter._collect_files
-  fan_out: 12
-  note: Iterate filesystem and collect matching files.
 - name: ws_stream
   fan_out: 11
   note: Orchestrates 11 calls
 - name: cmd_schema
   fan_out: 11
   note: Orchestrates 11 calls
-- name: FileSearchAdapter.load_root
-  fan_out: 11
-  note: Orchestrates 11 calls
+- name: _dispatch_command
+  fan_out: 10
+  note: 10-way dispatch
 refactoring:
   priorities:
-  - action: 'Break circular dependency: fraq.formats._prepare'
+  - action: Split FractalAnalyzer.box_counting_dimension (CC=16 → target CC<10)
     impact: medium
     effort: low
-  - action: 'Break circular dependency: fraq.formats._simple_yaml'
+    module: inference.py
+  - action: Split FractalAnalyzer.detect_hierarchy (CC=15 → target CC<10)
     impact: medium
     effort: low
-  - action: 'Break circular dependency: fraq.formats._mp_encode'
+    module: inference.py
+  - action: Split FractalAnalyzer.analyze_correlations (CC=15 → target CC<10)
     impact: medium
     effort: low
-  - action: Reduce _parse_args fan-out (currently 21)
+    module: inference.py
+  - action: 'Break circular dependency: fraq.formats.prepare.prepare'
     impact: medium
-    effort: medium
-  - action: Reduce generate fan-out (currently 16)
+    effort: low
+  - action: 'Break circular dependency: fraq.formats.binary.mp_encode'
     impact: medium
-    effort: medium
+    effort: low
+  - action: 'Break circular dependency: fraq.formats.text.simple_yaml'
+    impact: medium
+    effort: low
   - action: Reduce FileSearchText2Fraq._collect_files_filtered fan-out (currently
       16)
     impact: medium
@@ -634,6 +858,6 @@ refactoring:
 evolution:
 - date: '2026-03-17'
   cc_avg: 3.1
-  critical: 6
-  lines: 5691
+  critical: 10
+  lines: 7433
   note: Automated analysis
