@@ -47,7 +47,7 @@ else:
     app = FastAPI(
         title="fraq API",
         description="Fractal Query Data Library - Natural Language to Structured Data",
-        version="0.3.0",
+        version="0.2.8",
     )
 
     # In-memory session store (use Redis in production)
@@ -198,7 +198,7 @@ async def health_check() -> dict:
     """Health check endpoint."""
     return {
         "status": "healthy",
-        "version": "0.3.0",
+        "version": "0.2.8",
         "sessions_active": len(sessions),
     }
 

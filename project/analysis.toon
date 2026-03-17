@@ -435,16 +435,16 @@ Produces dict paylo...
     e: Text2FraqConfig
     Text2FraqConfig  # Configuration for text2fraq....
       from_env(0)  CC=1.0
+  fraq/adapters/base.py:
+    e: BaseAdapter
+    BaseAdapter  # Interface every data-source adapter must implement....
+      load_root(1)  CC=1.0
   examples/v030/new_features_v030.py:
     e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
     example_model_router()
     example_fraq_session()
     example_fastapi_server()
     example_combined_usage()
-  fraq/adapters/base.py:
-    e: BaseAdapter
-    BaseAdapter  # Interface every data-source adapter must implement....
-      load_root(1)  CC=1.0
   fraq/types.py:
   examples/websocket-docker/run.sh:
   examples/cli-docker/run.sh:

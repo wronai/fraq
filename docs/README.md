@@ -151,7 +151,7 @@ Content outside the markers is preserved when regenerating. Enable this with `sy
 
 ```
 fraq/
-├── main_websocket    ├── streaming    ├── formats├── fraq/    ├── types    ├── cli    ├── generators    ├── schema_export        ├── text2fraq_examples        ├── nlp2cmd_integration        ├── text2fraq_files        ├── run        ├── main        ├── run        ├── network_web_examples    ├── core        ├── run        ├── run        ├── main        ├── api_server        ├── applications        ├── async_streaming        ├── query_examples    ├── query        ├── app_integrations            ├── app            ├── main            ├── main        ├── config        ├── parser_rules    ├── text2fraq/        ├── file_search_parser        ├── session        ├── router        ├── parser_llm        ├── models        ├── shortcuts        ├── base        ├── registry        ├── file_adapter    ├── adapters/        ├── web_crawler        ├── http_adapter        ├── new_features_v030        ├── sql_adapter        ├── sensor_adapter        ├── hybrid_adapter        ├── file_search├── project        ├── bash_examples        ├── network    ├── server        ├── llm_client```
+├── main_websocket    ├── streaming    ├── formats├── fraq/    ├── types    ├── generators    ├── cli    ├── schema_export        ├── text2fraq_examples        ├── nlp2cmd_integration        ├── text2fraq_files        ├── run        ├── main        ├── run        ├── network_web_examples    ├── core        ├── run        ├── run        ├── main    ├── query        ├── api_server        ├── applications        ├── async_streaming        ├── app_integrations            ├── app        ├── query_examples            ├── main            ├── main        ├── config        ├── file_search_parser        ├── parser_rules    ├── text2fraq/        ├── session        ├── router        ├── parser_llm        ├── models        ├── shortcuts        ├── base        ├── registry        ├── file_adapter    ├── adapters/        ├── web_crawler        ├── http_adapter        ├── sql_adapter        ├── new_features_v030        ├── sensor_adapter        ├── hybrid_adapter        ├── file_search├── project        ├── bash_examples        ├── network    ├── server        ├── llm_client```
 
 ## API Overview
 
@@ -172,8 +172,8 @@ fraq/
 - **`FraqQuery`** — Declarative query against fractal data.
 - **`FraqExecutor`** — Execute a FraqQuery against a root node.
 - **`Text2FraqConfig`** — Configuration for text2fraq.
-- **`Text2FraqSimple`** — Rule-based text2fraq without LLM (fallback for offline use).
 - **`FileSearchText2Fraq`** — Natural language to file search converter.
+- **`Text2FraqSimple`** — Rule-based text2fraq without LLM (fallback for offline use).
 - **`FraqSession`** — Multi-turn conversation with context memory.
 - **`ModelRouter`** — Route queries to the best model based on complexity.
 - **`Text2Fraq`** — Natural language to fractal query converter (LLM-based).
@@ -273,6 +273,7 @@ fraq/
 - `explore(depth, dims, format)` — Explore fractal structure
 - `files_search(path, ext, limit, sort)` — Search files with fractal metadata
 - `files_stat(file_path)` — Get file statistics with fractal coordinates
+- `query(depth, direction, fields, format)` — One-shot fractal query.
 - `lifespan(app)` — App lifespan manager.
 - `root()` — API info.
 - `health()` — Health check.
@@ -299,6 +300,15 @@ fraq/
 - `example_fastapi_sse_pattern()` — Wzorzec dla FastAPI SSE endpoint:
 - `example_kafka_producer_pattern()` — Wzorzec dla Kafka / NATS producer:
 - `main()` — —
+- `example_fastapi_app()` — FastAPI application with fraq endpoints.
+- `example_streamlit_app()` — Streamlit dashboard for fraq visualization.
+- `example_flask_app()` — Flask application with fraq blueprints.
+- `example_cli_chat()` — Interactive CLI chatbot with fraq + text2fraq.
+- `example_websocket_server()` — WebSocket server for real-time fraq streaming.
+- `example_kafka_producer()` — Kafka producer/consumer with fraq streams.
+- `example_grpc_service()` — gRPC service definition and implementation.
+- `example_jupyter_notebook()` — Jupyter notebook cells for interactive exploration.
+- `example_celery_task()` — Celery background tasks for fraq processing.
 - `example_disk_json()` — Query na lokalnym pliku JSON.
 - `example_disk_csv()` — Eksport do CSV — dla ERP / accounting workflows.
 - `example_disk_yaml()` — YAML output — dla Kubernetes configs / IoT dashboards.
@@ -309,16 +319,6 @@ fraq/
 - `example_sensor_to_formats()` — Sensor data → różne formaty eksportu.
 - `example_hybrid_merge()` — Merge wielu źródeł w jeden fractal.
 - `example_oneliners()` — Szybkie query bez budowania obiektów.
-- `query(depth, direction, fields, format)` — One-shot fractal query.
-- `example_fastapi_app()` — FastAPI application with fraq endpoints.
-- `example_streamlit_app()` — Streamlit dashboard for fraq visualization.
-- `example_flask_app()` — Flask application with fraq blueprints.
-- `example_cli_chat()` — Interactive CLI chatbot with fraq + text2fraq.
-- `example_websocket_server()` — WebSocket server for real-time fraq streaming.
-- `example_kafka_producer()` — Kafka producer/consumer with fraq streams.
-- `example_grpc_service()` — gRPC service definition and implementation.
-- `example_jupyter_notebook()` — Jupyter notebook cells for interactive exploration.
-- `example_celery_task()` — Celery background tasks for fraq processing.
 - `root()` — —
 - `health()` — —
 - `explore(depth)` — —

@@ -96,10 +96,10 @@ TRANSFORMS (fan-out ≥10):
   _collect_files_filtered(base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]) → List[dict[str, Any]] fan=16   PIPELINE:FileSearchText2Fraq.entry
   example_hybrid_merge()                                  fan=15   fan=15
   ws_stream(websocket:WebSocket)                          fan=14   fan=14
-  example_ai_training_data()                              fan=14   fan=14
   stream(count:int, dims:int, format:str)                 fan=14   fan=14
   files_stat(file_path:str)                               fan=14   fan=14
   ws_files(websocket:WebSocket)                           fan=14   fan=14
+  example_ai_training_data()                              fan=14   fan=14
   example_full_pipeline() → None                          fan=13   fan=13
   example_disk_json()                                     fan=13   fan=13
   load_root(uri:str, **opts:Any) → FraqNode               fan=13   PIPELINE:FileAdapter.entry
@@ -352,17 +352,17 @@ DATA_TYPES (by cross-function usage) [223 annotated, 0 inferred / 308 functions]
   Vector               consumed:14  produced:2    !! HUB-TYPE → split interface
   FraqQuery            consumed:6   produced:7  
   FraqSchema           consumed:8   produced:3  
-  bool                 consumed:5   produced:6  
   argparse.Namespace   consumed:10  produced:1    !! HUB-TYPE → split interface
-  WebSocket            consumed:9   produced:0    input-heavy (read-only flow)
+  bool                 consumed:5   produced:6  
   dict[str, Any]       consumed:2   produced:7  
+  WebSocket            consumed:9   produced:0    input-heavy (read-only flow)
   Iterator[Dict[str, Any]] consumed:0   produced:8    output-heavy
-  ParsedQuery          consumed:1   produced:5    output-heavy
   dict                 consumed:0   produced:6    output-heavy
+  ParsedQuery          consumed:1   produced:5    output-heavy
   str | None           consumed:5   produced:0    input-heavy (read-only flow)
-  str | list[dict[str, Any]] consumed:0   produced:4    narrow scope
-  AsyncIterator[Dict[str, Any]] consumed:0   produced:4    narrow scope
   bytes                consumed:0   produced:4    narrow scope
+  AsyncIterator[Dict[str, Any]] consumed:0   produced:4    narrow scope
+  str | list[dict[str, Any]] consumed:0   produced:4    narrow scope
   Text2FraqConfig      consumed:2   produced:1    narrow scope
 
   HUB TYPES (consumed ≥10):

@@ -2,24 +2,46 @@
 
 ## [Unreleased]
 
-## [0.2.8] - 2026-03-17
+## [0.2.9] - 2026-03-17
 
 ### Docs
+- Update CHANGELOG.md
 - Update README.md
 - Update docs/README.md
 
 ### Other
+- Update examples/v028/new_features_v030.py
+- Update fraq/server.py
 - Update project/analysis.toon
 - Update project/calls.mmd
 - Update project/compact_flow.mmd
-- Update project/compact_flow.png
 - Update project/dashboard.html
-- Update project/evolution.toon
 - Update project/flow.mmd
 - Update project/flow.png
 - Update project/flow.toon
 - Update project/map.toon
-- ... and 3 more files
+- ... and 1 more files
+
+## [0.2.8] - 2026-03-17
+
+### Added
+- **ModelRouter** - Intelligent model selection based on query complexity (`fraq.text2fraq.router`)
+- **FraqSession** - Multi-turn conversations with context memory (`fraq.text2fraq.session`)
+- **FastAPI Server** - Production-ready API with WebSocket streaming (`fraq.server`)
+- **Hub Types** - NewType aliases for type clarity (`fraq.types`)
+- **Examples v028** - New features demonstration
+
+### Changed
+- **CLI Refactoring** - Reduced CC in main() from 13 to 4 using Command Registry pattern
+- **Adapters Refactoring** - Extracted pure functions from FileSearchAdapter, WebCrawlerAdapter, NetworkAdapter
+- **Fan-out Reduction** - cmd_files_stat() split into _collect_file_stat() and _print_stat()
+- **Lazy Loading** - Circular dependencies broken via __getattr__ in __init__.py
+
+### Removed
+- **11 Duplicate Classes** - Removed fraq/adapters.py and fraq/text2fraq.py monoliths
+
+### Fixed
+- **Bug** - FileSearchText2Fraq.search() now properly uses injected adapter
 
 ## [0.2.7] - 2026-03-17
 

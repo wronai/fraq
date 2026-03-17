@@ -103,7 +103,7 @@ async for record in async_stream(count=1000, interval=0.1):
 
 ## NLP2CMD Integration
 
-## New in v0.3.0 — Multi-Model Router & Session Memory
+## New in v0.2.8 — Multi-Model Router & Session Memory
 
 ```python
 from fraq.text2fraq import ModelRouter, FraqSession
@@ -120,7 +120,7 @@ session.ask("show as csv")        # follow-up: format changed
 session.ask("add 20 more")          # follow-up: limit increased
 ```
 
-See `examples/v030/` for detailed examples.
+See `examples/v028/` for detailed examples.
 
 ## NLP2CMD Integration
 
