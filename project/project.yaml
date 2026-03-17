@@ -3,7 +3,7 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T19:09:18Z'
+  analyzed_at: '2026-03-17T19:11:25Z'
   tool: code2llm
   stats:
     files: 29

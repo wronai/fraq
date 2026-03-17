@@ -1,7 +1,7 @@
 <!-- code2docs:start --># fraq
 
 ![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.10-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-324-green)
-> **324** functions | **35** classes | **62** files | CC̄ = 2.8
+> **324** functions | **35** classes | **63** files | CC̄ = 2.8
 
 > Auto-generated project documentation from source code analysis.
 
@@ -151,14 +151,14 @@ Content outside the markers is preserved when regenerating. Enable this with `sy
 
 ```
 fraq/
-├── main_websocket    ├── streaming    ├── formats├── fraq/    ├── types    ├── cli    ├── generators    ├── schema_export        ├── text2fraq_examples        ├── nlp2cmd_integration        ├── text2fraq_files        ├── run        ├── main        ├── run        ├── network_web_examples    ├── core        ├── sensor_examples    ├── query        ├── sse_examples        ├── training_data        ├── run        ├── run        ├── pipeline_examples        ├── main        ├── sqlite_examples        ├── applications        ├── api_server        ├── async_streaming        ├── app_integrations        ├── query_examples            ├── main            ├── app            ├── main        ├── config        ├── parser_rules    ├── text2fraq/        ├── file_search_parser        ├── session        ├── router        ├── parser_llm        ├── models        ├── shortcuts        ├── base        ├── registry        ├── new_features_v030    ├── adapters/        ├── file_adapter        ├── http_adapter        ├── sql_adapter        ├── sensor_adapter        ├── web_crawler        ├── hybrid_adapter        ├── file_search├── project        ├── bash_examples        ├── network    ├── server        ├── llm_client```
+├── main_websocket    ├── formats    ├── streaming├── fraq/    ├── types    ├── generators    ├── cli    ├── schema_export        ├── text2fraq_examples        ├── nlp2cmd_integration        ├── text2fraq_files        ├── run        ├── main        ├── run        ├── network_web_examples    ├── core        ├── sensor_examples        ├── sse_examples    ├── query        ├── run        ├── training_data        ├── run        ├── pipeline_examples        ├── main        ├── sqlite_examples        ├── api_server        ├── applications        ├── async_streaming        ├── app_integrations        ├── query_examples            ├── app            ├── main            ├── main        ├── config        ├── parser_rules    ├── text2fraq/        ├── file_search_parser        ├── session        ├── router        ├── parser_llm        ├── models        ├── shortcuts        ├── base        ├── new_features        ├── registry    ├── adapters/        ├── file_adapter        ├── http_adapter        ├── sql_adapter        ├── web_crawler        ├── sensor_adapter        ├── hybrid_adapter        ├── file_search├── project    ├── bash_examples        ├── bash_examples        ├── network    ├── server        ├── llm_client```
 
 ## API Overview
 
 ### Classes
 
-- **`AsyncFraqStream`** — Async generator that yields fractal records at a controlled rate.
 - **`FormatRegistry`** — Registry of serialisation backends.
+- **`AsyncFraqStream`** — Async generator that yields fractal records at a controlled rate.
 - **`HashGenerator`** — Deterministic pseudo-random values via SHA-256.
 - **`FibonacciGenerator`** — Value based on generalised Fibonacci sequence at the node's depth.
 - **`PerlinGenerator`** — Simplified 1-D Perlin-ish noise from the L2 norm of position.
@@ -183,8 +183,8 @@ fraq/
 - **`FileAdapter`** — Read/write fractal state from local files.
 - **`HTTPAdapter`** — Fetch fractal roots from remote HTTP APIs.
 - **`SQLAdapter`** — Map fractal nodes to/from relational tables.
-- **`SensorAdapter`** — Simulate or consume live sensor data as fractal streams.
 - **`WebCrawlerAdapter`** — Async adapter for crawling websites and extracting links/content.
+- **`SensorAdapter`** — Simulate or consume live sensor data as fractal streams.
 - **`HybridAdapter`** — Combine roots from several adapters into one fractal.
 - **`FileSearchAdapter`** — Adapter for searching files on disk using fractal patterns.
 - **`NetworkAdapter`** — Async adapter for scanning local network devices and services.
@@ -262,17 +262,17 @@ fraq/
 - `example_1_sensor_readings()` — Generate realistic IoT sensor readings.
 - `example_2_mqtt_payloads()` — Generate MQTT-compatible message payloads.
 - `example_3_device_health()` — Simulate IoT device registry with health status.
-- `query(depth, direction, fields, format)` — One-shot fractal query.
 - `example_1_sse_generator()` — Generate SSE-formatted events.
 - `example_2_websocket_template()` — WebSocket client example template.
 - `example_3_async_stream()` — Use fraq async_stream utility.
-- `example_1_classification()` — Generate binary classification dataset.
-- `example_2_regression()` — Generate regression training data.
-- `example_3_time_series()` — Generate time-series data for forecasting.
+- `query(depth, direction, fields, format)` — One-shot fractal query.
 - `run_docker()` — Uruchom przez Docker Compose
 - `stop_docker()` — Zatrzymaj stack
 - `test_stack()` — Przetestuj stack
 - `main()` — —
+- `example_1_classification()` — Generate binary classification dataset.
+- `example_2_regression()` — Generate regression training data.
+- `example_3_time_series()` — Generate time-series data for forecasting.
 - `run_local()` — Uruchom serwer lokalnie (bez Docker)
 - `run_docker()` — Uruchom przez Docker
 - `stop_docker()` — Zatrzymaj Docker
@@ -290,13 +290,6 @@ fraq/
 - `example_1_generate_to_sqlite()` — Generate fractal sensor data and store in SQLite.
 - `example_2_sql_adapter()` — Use SQL adapter to work with database.
 - `example_3_hybrid_data()` — Combine real DB data with fractal-generated data.
-- `example_iot_sensor_network()` — Symulacja 10k sensorów bez storage'u — dla firmware dev na RPi/ESP32.
-- `example_erp_invoices()` — Dynamiczne faktury z nieskończonymi detalami.
-- `example_ai_training_data()` — Nieskończone datasety treningowe — zero disk, perfect dla federated learning.
-- `example_devops_load_test()` — Generuj test payloads dla K8s load testing.
-- `example_finance_leasing()` — Nieskończone warianty leasingu + modyfikacje camper van.
-- `example_legal_clauses()` — Nieskończone klauzule umów — każdy zoom = nowy poziom detali.
-- `example_perlin_organic()` — Smooth data z PerlinGenerator — organic sensor patterns.
 - `lifespan(app)` — App lifespan manager.
 - `root()` — API info.
 - `health()` — Health check.
@@ -310,6 +303,13 @@ fraq/
 - `natural_language(query, path, format)` — Process natural language query (requires LLM).
 - `ws_stream(websocket)` — WebSocket streaming of fractal data.
 - `ws_files(websocket)` — WebSocket for file search streaming.
+- `example_iot_sensor_network()` — Symulacja 10k sensorów bez storage'u — dla firmware dev na RPi/ESP32.
+- `example_erp_invoices()` — Dynamiczne faktury z nieskończonymi detalami.
+- `example_ai_training_data()` — Nieskończone datasety treningowe — zero disk, perfect dla federated learning.
+- `example_devops_load_test()` — Generuj test payloads dla K8s load testing.
+- `example_finance_leasing()` — Nieskończone warianty leasingu + modyfikacje camper van.
+- `example_legal_clauses()` — Nieskończone klauzule umów — każdy zoom = nowy poziom detali.
+- `example_perlin_organic()` — Smooth data z PerlinGenerator — organic sensor patterns.
 - `example_basic_stream()` — Prosty async stream — 10 rekordów.
 - `example_typed_stream()` — Stream z typowanym schematem.
 - `example_async_query()` — Async query — offloaded do thread pool.
@@ -345,11 +345,11 @@ fraq/
 - `text2filesearch(text, base_path, fmt)` — One-liner to search files via natural language.
 - `text2query(text, config)` — Convert text to ParsedQuery.
 - `text2fraq(text, config, root)` — Convert text and execute query.
-- `get_adapter(source)` — Factory: return the right adapter for a source type.
 - `example_model_router()` — Example: ModelRouter routes queries to optimal models.
 - `example_fraq_session()` — Example: FraqSession for multi-turn conversations.
 - `example_fastapi_server()` — Example: Running FastAPI server.
 - `example_combined_usage()` — Example: Combining all features.
+- `get_adapter(source)` — Factory: return the right adapter for a source type.
 - `natural_language(query)` — Natural language → fraq result with session support.
 - `files_search(ext, pattern, limit, sort_by)` — Search files with fractal coordinates.
 - `files_search_post(request)` — Search files with POST request.
@@ -362,6 +362,7 @@ fraq/
 ## Project Structure
 
 📄 `examples.ai_ml.training_data` (3 functions)
+📄 `examples.bash_examples`
 📄 `examples.basic.app_integrations` (9 functions)
 📄 `examples.basic.applications` (7 functions)
 📄 `examples.basic.async_streaming` (6 functions)
@@ -383,7 +384,7 @@ fraq/
 📄 `examples.text2fraq.nlp2cmd_integration` (11 functions)
 📄 `examples.text2fraq.text2fraq_examples` (11 functions)
 📄 `examples.text2fraq.text2fraq_files` (5 functions)
-📄 `examples.v028.new_features_v030` (4 functions)
+📄 `examples.v028.new_features` (4 functions)
 📄 `examples.websocket-docker.main` (3 functions)
 📄 `examples.websocket-docker.run`
 📦 `fraq` (1 functions)

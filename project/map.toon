@@ -1,7 +1,8 @@
-# fraq | 58f 8263L | python:52,shell:6
+# fraq | 59f 8456L | python:52,shell:7
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[58]:
+M[59]:
   examples/ai_ml/training_data.py,122
+  examples/bash_examples.sh,193
   examples/basic/app_integrations.py,566
   examples/basic/applications.py,191
   examples/basic/async_streaming.py,103
@@ -23,7 +24,7 @@ M[58]:
   examples/text2fraq/nlp2cmd_integration.py,223
   examples/text2fraq/text2fraq_examples.py,258
   examples/text2fraq/text2fraq_files.py,275
-  examples/v028/new_features_v030.py,144
+  examples/v028/new_features.py,144
   examples/websocket-docker/main.py,104
   examples/websocket-docker/run.sh,62
   fraq/__init__.py,149
@@ -373,15 +374,15 @@ Produces dict paylo...
   fraq/text2fraq/config.py:
     e: Text2FraqConfig
     Text2FraqConfig: from_env(0)  # Configuration for text2fraq...
-  fraq/adapters/base.py:
-    e: BaseAdapter
-    BaseAdapter(ABC): load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter must implement...
-  examples/v028/new_features_v030.py:
+  examples/v028/new_features.py:
     e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
     example_model_router()
     example_fraq_session()
     example_fastapi_server()
     example_combined_usage()
+  fraq/adapters/base.py:
+    e: BaseAdapter
+    BaseAdapter(ABC): load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter must implement...
   fraq/types.py:
   examples/websocket-docker/run.sh:
   examples/cli-docker/run.sh:
@@ -391,4 +392,5 @@ Produces dict paylo...
   fraq/text2fraq/__init__.py:
   fraq/adapters/__init__.py:
   project.sh:
+  examples/bash_examples.sh:
   examples/cli-docker/bash_examples.sh:
