@@ -1,0 +1,187 @@
+# fraq/flow | 126 func | 6 pipelines | 5 hub-types | 2026-03-17
+
+PIPELINES[6] (Core:2, Export:1, NLP:1, Unknown:2):
+  Fraq [Export]: List[str] | None → Any
+              → main(argv:List[str] | None) → None      CC=4    pure ▶
+              → cmd_schema(args:argparse.Namespace) → None CC=3    IO
+              → serialize(cls, name:str, data:Any, **kwargs) → Any CC=1    pure ■
+              PURITY: 2/3 pure  BOTTLENECK: main(CC=4)
+
+  Examples [Unknown]: ? → AsyncIterator[Dict[str, Any]]
+              → main()                                  CC=1    pure ▶
+              → example_kafka_producer_pattern()        CC=2    IO
+              → async_stream(root:Optional[FraqNode], count:int, interval:float, direction:Optional[Vector], dims:int) → AsyncIterator[Dict[str, Any]] CC=3    pure ■
+              PURITY: 2/3 pure  BOTTLENECK: async_stream(CC=3)
+
+  Fraq [Core]: Optional[Sequence[Vector]] → Vector
+              → children(directions:Optional[Sequence[Vector]]) → List[FraqNode] CC=5    mutation ▶
+              → _child(direction:Vector) → FraqNode     CC=2    pure
+              → _vec_scale(v:Vector, s:float) → Vector  CC=2    pure ■
+              PURITY: 2/3 pure  BOTTLENECK: children(CC=5)
+
+  Fraq [Core]: int → Any
+              → records(depth:int, branching:int, node:Optional[FraqNode]) → Iterator[Dict[str, Any]] CC=4    pure ▶
+              → record(node:Optional[FraqNode]) → Dict[str, Any] CC=4    pure
+              → _cast(val:Any, type_name:str) → Any     CC=5    pure ■
+              PURITY: 3/3 pure  BOTTLENECK: _cast(CC=5)
+
+  Examples [NLP]: ? → list[Dict[str, Any]]
+              → main()                                  CC=1    pure ▶
+              → example_async_query()                   CC=2    IO
+              → async_query(query:FraqQuery, root:Optional[FraqNode], dims:int) → list[Dict[str, Any]] CC=1    pure ■
+              PURITY: 2/3 pure  BOTTLENECK: example_async_query(CC=2)
+
+  Fraq [Unknown]: List[str] | None → FraqNode
+              → main(argv:List[str] | None) → None      CC=4    pure ▶
+              → cmd_explore(args:argparse.Namespace) → None CC=1    IO
+              → _make_root(dims:int, seed:int) → FraqNode CC=2    pure ■
+              PURITY: 2/3 pure  BOTTLENECK: main(CC=4)
+
+
+TRANSFORMS (fan-out ≥10):
+  example_hybrid_merge()                                  fan=15   fan=15
+  main(argv:List[str] | None) → None                      fan=14   !! script-in-disguise
+  example_ai_training_data()                              fan=14   fan=14
+  load_root(uri:str, **opts:Any) → FraqNode               fan=13   PIPELINE:FileAdapter.entry
+  example_disk_json()                                     fan=13   fan=13
+  example_sql_custom_mapping()                            fan=12   fan=12
+  cmd_schema(args:argparse.Namespace) → None              fan=11   fan=11
+  example_sql_query()                                     fan=11   fan=11
+  example_full_nlp2cmd_workflow()                         fan=11   fan=11
+  _to_csv(data:Any, **kw) → str                           fan=10   fan=10
+  load_root(uri:str, **opts:Any) → FraqNode               fan=10   PIPELINE:HTTPAdapter.entry
+  load_root(uri:str, **opts:Any) → FraqNode               fan=10   PIPELINE:SQLAdapter.entry
+  example_devops_load_test()                              fan=10   fan=10
+  example_http_api()                                      fan=10   fan=10
+
+CONTRACTS:
+  Pipeline: Fraq
+    main(argv:List[str] | None) → None
+      IN:  argv:List[str] | None
+      OUT: None
+
+    cmd_schema(args:argparse.Namespace) → None
+      IN:  args:argparse.Namespace
+      OUT: None
+      SIDE-EFFECT: IO(print)
+
+    serialize(cls, name:str, data:Any, **kwargs) → Any
+      IN:  cls, name:str, data:Any, **kwargs
+      OUT: Any
+
+  Pipeline: Examples
+    main()
+      IN:  ()
+      OUT: None
+
+    example_kafka_producer_pattern()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, dumps)
+
+    async_stream(root:Optional[FraqNode], count:int, interval:float, direction:Optional[Vector], dims:int) → AsyncIterator[Dict[str, Any]]
+      IN:  root:Optional[FraqNode], count:int, interval:float, direction:Optional[Vector], dims:int
+      OUT: AsyncIterator[Dict[str, Any]]
+
+  Pipeline: Fraq
+    children(directions:Optional[Sequence[Vector]]) → List[FraqNode]
+      IN:  directions:Optional[Sequence[Vector]]
+      OUT: List[FraqNode]
+      SIDE-EFFECT: pure
+
+    _child(direction:Vector) → FraqNode
+      IN:  direction:Vector
+      OUT: FraqNode
+
+    _vec_scale(v:Vector, s:float) → Vector
+      IN:  v:Vector, s:float
+      OUT: Vector
+
+  Pipeline: Fraq
+    records(depth:int, branching:int, node:Optional[FraqNode]) → Iterator[Dict[str, Any]]
+      IN:  depth:int, branching:int, node:Optional[FraqNode]
+      OUT: Iterator[Dict[str, Any]]
+
+    record(node:Optional[FraqNode]) → Dict[str, Any]
+      IN:  node:Optional[FraqNode]
+      OUT: Dict[str, Any]
+
+    _cast(val:Any, type_name:str) → Any
+      IN:  val:Any, type_name:str
+      OUT: Any
+
+  Pipeline: Examples
+    main()
+      IN:  ()
+      OUT: None
+
+    example_async_query()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    async_query(query:FraqQuery, root:Optional[FraqNode], dims:int) → list[Dict[str, Any]]
+      IN:  query:FraqQuery, root:Optional[FraqNode], dims:int
+      OUT: list[Dict[str, Any]]
+
+  Pipeline: Fraq
+    main(argv:List[str] | None) → None
+      IN:  argv:List[str] | None
+      OUT: None
+
+    cmd_explore(args:argparse.Namespace) → None
+      IN:  args:argparse.Namespace
+      OUT: None
+      SIDE-EFFECT: IO(print)
+
+    _make_root(dims:int, seed:int) → FraqNode
+      IN:  dims:int, seed:int
+      OUT: FraqNode
+
+
+DATA_TYPES (by cross-function usage) [94 annotated, 0 inferred / 126 functions]:
+  str                  consumed:46  produced:17   !! HUB-TYPE → split interface
+  FraqNode             consumed:16  produced:15   !! HUB-TYPE → split interface
+  int                  consumed:24  produced:2    !! HUB-TYPE → split interface
+  float                consumed:14  produced:4    !! HUB-TYPE → split interface
+  Vector               consumed:14  produced:2    !! HUB-TYPE → split interface
+  FraqQuery            consumed:6   produced:6  
+  FraqSchema           consumed:8   produced:3  
+  str, Any             consumed:3   produced:8  
+  Iterator[Dict[str, Any]] consumed:0   produced:5    output-heavy
+  bytes                consumed:0   produced:4    narrow scope
+  argparse.Namespace   consumed:3   produced:0    narrow scope
+  Callable             consumed:1   produced:1    narrow scope
+  AsyncIterator[Dict[str, Any]] consumed:0   produced:2    narrow scope
+  BaseAdapter          consumed:1   produced:1    narrow scope
+  SourceType           consumed:2   produced:0    narrow scope
+  dict[str, Any]       consumed:0   produced:1    narrow scope
+  bool                 consumed:0   produced:1    narrow scope
+  List[str] | None     consumed:1   produced:0    narrow scope
+  list[Dict[str, Any]] consumed:0   produced:1    narrow scope
+  Sequence[Vector]     consumed:1   produced:0    narrow scope
+
+  HUB TYPES (consumed ≥10):
+    str → 46 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    FraqNode → 16 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    int → 24 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    float → 14 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    Vector → 14 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+
+SIDE_EFFECTS:
+  IO:        cmd_explore, cmd_stream, cmd_schema, _to_json, _to_jsonl, BaseAdapter.execute, FileAdapter.load_root, FileAdapter.save, HTTPAdapter.save, SensorAdapter.save
+  Mutation:  AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, _to_binary, _simple_yaml, _mp_encode, HashGenerator.__init__, FibonacciGenerator.__init__, PerlinGenerator.__init__, SensorStreamGenerator.__init__
+  Pure:      async_query, async_stream, _make_root, main, FormatRegistry.register, FormatRegistry.get, FormatRegistry.available, FormatRegistry.serialize, _to_csv, _to_yaml
+
+  PIPELINE PURITY:
+    Fraq            ██░░ 66% pure
+    Examples        ██░░ 66% pure
+    Fraq            ██░░ 66% pure
+    Fraq            ████ 100% pure
+    Examples        ██░░ 66% pure
+    Fraq            ██░░ 66% pure

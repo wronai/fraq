@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fraq — Health Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --border: #334155;
+    --text: #e2e8f0; --muted: #94a3b8;
+    --green: #22c55e; --yellow: #eab308; --red: #ef4444; --blue: #3b82f6;
+    --orange: #f97316;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f8fafc; --surface: #ffffff; --border: #e2e8f0;
+      --text: #1e293b; --muted: #64748b;
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); padding:2rem; }
+  h1 { font-size:1.5rem; margin-bottom:.5rem; }
+  h2 { font-size:1.1rem; color:var(--muted); margin:1.5rem 0 .75rem; border-bottom:1px solid var(--border); padding-bottom:.25rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin:1rem 0; }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:.5rem; padding:1rem; }
+  .card .value { font-size:1.8rem; font-weight:700; }
+  .card .label { color:var(--muted); font-size:.8rem; text-transform:uppercase; }
+  .chart-container { background:var(--surface); border:1px solid var(--border); border-radius:.5rem; padding:1rem; margin:1rem 0; }
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:.85rem; }
+  th { text-align:left; color:var(--muted); padding:.5rem; border-bottom:1px solid var(--border); white-space:nowrap; }
+  td { padding:.5rem; border-bottom:1px solid var(--border); }
+  .badge { padding:.15rem .5rem; border-radius:.25rem; font-size:.75rem; font-weight:600; }
+  .badge.critical { background:var(--red); color:#fff; }
+  .badge.error { background:var(--orange); color:#fff; }
+  .badge.warning { background:var(--yellow); color:#000; }
+  .badge.high { background:var(--red); color:#fff; }
+  .badge.medium { background:var(--yellow); color:#000; }
+  .badge.low { background:var(--green); color:#fff; }
+  tr.critical td { background:rgba(239,68,68,.08); }
+  tr.error td { background:rgba(249,115,22,.06); }
+  tr.warning td { background:rgba(234,179,8,.05); }
+  .health-indicator { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:.5rem; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+  .evo-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:.75rem; }
+  .evo-cards .card { text-align:center; }
+  .trend { font-size:.75rem; color:var(--muted); }
+  .lang-tag { display:inline-block; padding:.1rem .4rem; border-radius:.2rem; font-size:.7rem; font-weight:600; margin-right:.25rem; color:#fff; }
+  @media (max-width:768px) { .two-col,.three-col { grid-template-columns:1fr; } }
+  footer { margin-top:2rem; color:var(--muted); font-size:.75rem; text-align:center; }
+</style>
+</head>
+<body>
+<h1>
+  <span class="health-indicator" style="background:#22c55e"></span>
+  fraq — Good
+</h1>
+<p style="color:var(--muted);font-size:.85rem;">
+  Analyzed 2026-03-17 by code2llm
+  &nbsp;·&nbsp; Primary language: <strong>python</strong>
+  &nbsp;·&nbsp; Python: 9, Shell: 1
+</p>
+
+<div class="grid">
+  <div class="card"><div class="value">92</div><div class="label">Functions</div></div>
+  <div class="card"><div class="value">20</div><div class="label">Classes</div></div>
+  <div class="card"><div class="value">8</div><div class="label">Files</div></div>
+  <div class="card"><div class="value">3,078</div><div class="label">Lines</div></div>
+  <div class="card"><div class="value">2</div><div class="label">Languages</div></div>
+  <div class="card"><div class="value">2.7</div><div class="label">Avg CC</div></div>
+  <div class="card"><div class="value">1</div><div class="label">Critical (CC≥10)</div></div>
+  <div class="card"><div class="value">0</div><div class="label">Duplicates</div></div>
+  <div class="card"><div class="value">3</div><div class="label">Cycles</div></div>
+</div>
+
+<div class="three-col">
+  <div class="chart-container">
+    <h2 style="border:none;margin:0 0 .5rem;">Language Distribution</h2>
+    <canvas id="langChart" height="200"></canvas>
+  </div>
+  <div class="chart-container">
+    <h2 style="border:none;margin:0 0 .5rem;">Largest Modules (lines)</h2>
+    <canvas id="modLinesChart" height="200"></canvas>
+  </div>
+  <div class="chart-container">
+    <h2 style="border:none;margin:0 0 .5rem;">Most Complex Modules (functions)</h2>
+    <canvas id="modFuncsChart" height="200"></canvas>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="chart-container">
+    <h2 style="border:none;margin:0 0 .5rem;">Evolution (2026-03-17)</h2>
+    <div class="evo-cards">
+      <div class="card"><div class="value">2.7</div><div class="label">CC̄ →</div></div>
+      <div class="card"><div class="value">1</div><div class="label">Critical →</div></div>
+      <div class="card"><div class="value">3078</div><div class="label">Lines</div></div>
+    </div>
+    <p class="trend" style="margin-top:.5rem;">Run analysis multiple times to build a trend chart (≥3 data points needed).</p>
+  </div>
+  <div>
+    <h2>Top Modules (10)</h2>
+    <div class="card"><div class="table-wrap">
+    <table>
+      <thead><tr><th>Module</th><th>Path</th><th style="text-align:right">Lines</th><th style="text-align:right">Funcs</th><th style="text-align:right">Classes</th><th style="text-align:right">CC max</th></tr></thead>
+      <tbody>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>schema_export.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">476</td>
+                <td style="text-align:right">7</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">5</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>adapters.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">394</td>
+                <td style="text-align:right">23</td>
+                <td style="text-align:right">6</td>
+                <td style="text-align:right">8</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>core.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">360</td>
+                <td style="text-align:right">17</td>
+                <td style="text-align:right">4</td>
+                <td style="text-align:right">5</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>query.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">219</td>
+                <td style="text-align:right">12</td>
+                <td style="text-align:right">4</td>
+                <td style="text-align:right">9</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>formats.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">196</td>
+                <td style="text-align:right">14</td>
+                <td style="text-align:right">1</td>
+                <td style="text-align:right">11</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>generators.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">117</td>
+                <td style="text-align:right">9</td>
+                <td style="text-align:right">4</td>
+                <td style="text-align:right">2</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>streaming.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">93</td>
+                <td style="text-align:right">5</td>
+                <td style="text-align:right">1</td>
+                <td style="text-align:right">3</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>cli.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">88</td>
+                <td style="text-align:right">5</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">4</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>__init__.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">46</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">0</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#89e051;margin-right:6px"></span>project.sh</td>
+                <td style="color:var(--muted);font-size:.75rem">.</td>
+                <td style="text-align:right">14</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">0</td>
+            </tr></tbody>
+    </table>
+    </div></div>
+  </div>
+</div>
+
+<h2>Alerts (6)</h2>
+<div class="card"><div class="table-wrap">
+<table>
+  <thead><tr><th>Severity</th><th>Target</th><th>Type</th><th>Value</th><th>Limit</th></tr></thead>
+  <tbody>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>main</td>
+                <td>high_fan_out</td>
+                <td>14</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>FileAdapter.load_root</td>
+                <td>high_fan_out</td>
+                <td>13</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>cmd_schema</td>
+                <td>high_fan_out</td>
+                <td>11</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>_to_csv</td>
+                <td>high_fan_out</td>
+                <td>10</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>HTTPAdapter.load_root</td>
+                <td>high_fan_out</td>
+                <td>10</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>SQLAdapter.load_root</td>
+                <td>high_fan_out</td>
+                <td>10</td>
+                <td>10</td>
+            </tr></tbody>
+</table>
+</div></div>
+
+<div class="two-col">
+<div>
+<h2>Hotspots (6)</h2>
+<div class="card"><div class="table-wrap">
+<table>
+  <thead><tr><th>Function</th><th>Fan-out</th><th>Note</th></tr></thead>
+  <tbody>
+            <tr>
+                <td><strong>main</strong></td>
+                <td>14</td>
+                <td>Orchestrates 14 calls</td>
+            </tr>
+            <tr>
+                <td><strong>FileAdapter.load_root</strong></td>
+                <td>13</td>
+                <td>Orchestrates 13 calls</td>
+            </tr>
+            <tr>
+                <td><strong>cmd_schema</strong></td>
+                <td>11</td>
+                <td>Orchestrates 11 calls</td>
+            </tr>
+            <tr>
+                <td><strong>_to_csv</strong></td>
+                <td>10</td>
+                <td>Serialise list of flat dicts to CSV.</td>
+            </tr>
+            <tr>
+                <td><strong>HTTPAdapter.load_root</strong></td>
+                <td>10</td>
+                <td>Orchestrates 10 calls</td>
+            </tr>
+            <tr>
+                <td><strong>SQLAdapter.load_root</strong></td>
+                <td>10</td>
+                <td>Orchestrates 10 calls</td>
+            </tr></tbody>
+</table>
+</div></div>
+</div>
+
+<div>
+<h2>Refactoring Priorities (3)</h2>
+<div class="card"><div class="table-wrap">
+<table>
+  <thead><tr><th>#</th><th>Action</th><th>Impact</th><th>Effort</th></tr></thead>
+  <tbody>
+            <tr>
+                <td>1</td>
+                <td>Break circular dependency: fraq.formats._prepare</td>
+                <td><span class="badge medium">medium</span></td>
+                <td>low</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Break circular dependency: fraq.formats._simple_yaml</td>
+                <td><span class="badge medium">medium</span></td>
+                <td>low</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Break circular dependency: fraq.formats._mp_encode</td>
+                <td><span class="badge medium">medium</span></td>
+                <td>low</td>
+            </tr></tbody>
+</table>
+</div></div>
+</div>
+</div>
+
+<footer>Generated by code2llm on 2026-03-17 12:18</footer>
+
+<script>
+// Evolution chart disabled — fewer than 3 data points
+
+// Language distribution pie chart
+const langCtx = document.getElementById('langChart').getContext('2d');
+new Chart(langCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Python', 'Shell'],
+    datasets: [{
+      data: [9, 1],
+      backgroundColor: ['#3572A5', '#89e051'],
+      borderColor: 'var(--border)', borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'right', labels: { color: '#e2e8f0', font: {size: 11} } }
+    }
+  }
+});
+
+// Module lines bar chart
+const modLinesCtx = document.getElementById('modLinesChart').getContext('2d');
+new Chart(modLinesCtx, {
+  type: 'bar',
+  data: {
+    labels: ['schema_export.py', 'adapters.py', 'core.py', 'query.py', 'formats.py', 'generators.py', 'streaming.py', 'cli.py', '__init__.py', 'project.sh'],
+    datasets: [{ label: 'Lines', data: [476, 394, 360, 219, 196, 117, 93, 88, 46, 14],
+      backgroundColor: '#3b82f6'
+    }]
+  },
+  options: {
+    responsive: true, indexAxis: 'y',
+    scales: {
+      x: { grid:{color:'#334155'}, ticks:{color:'#94a3b8'} },
+      y: { grid:{color:'#334155'}, ticks:{color:'#94a3b8',font:{size:10}} }
+    },
+    plugins: { legend: { display:false } }
+  }
+});
+
+// Module functions bar chart
+const modFuncsCtx = document.getElementById('modFuncsChart').getContext('2d');
+new Chart(modFuncsCtx, {
+  type: 'bar',
+  data: {
+    labels: ['adapters.py', 'core.py', 'formats.py', 'query.py', 'generators.py', 'schema_export.py', 'cli.py', 'streaming.py', '__init__.py', 'project.sh'],
+    datasets: [{ label: 'Functions', data: [23, 17, 14, 12, 9, 7, 5, 5, 0, 0],
+      backgroundColor: '#22c55e'
+    }]
+  },
+  options: {
+    responsive: true, indexAxis: 'y',
+    scales: {
+      x: { grid:{color:'#334155'}, ticks:{color:'#94a3b8'} },
+      y: { grid:{color:'#334155'}, ticks:{color:'#94a3b8',font:{size:10}} }
+    },
+    plugins: { legend: { display:false } }
+  }
+});
+</script>
+</body>
+</html>

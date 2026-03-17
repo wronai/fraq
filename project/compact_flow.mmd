@@ -1,0 +1,23 @@
+flowchart TD
+    examples_applications["examples.applications<br/>7 funcs"]
+    examples_async_streaming["examples.async_streaming<br/>6 funcs"]
+    examples_nlp2cmd_integration["examples.nlp2cmd_integration<br/>11 funcs"]
+    examples_query_examples["examples.query_examples<br/>10 funcs"]
+    fraq_adapters["fraq.adapters<br/>23 funcs"]
+    fraq_cli["fraq.cli<br/>5 funcs"]
+    fraq_core["fraq.core<br/>17 funcs"]
+    fraq_formats["fraq.formats<br/>14 funcs"]
+    fraq_generators["fraq.generators<br/>9 funcs"]
+    fraq_query["fraq.query<br/>12 funcs"]
+    fraq_schema_export["fraq.schema_export<br/>7 funcs"]
+    fraq_streaming["fraq.streaming<br/>5 funcs"]
+    examples_nlp2cmd_integration ==>|10| fraq_schema_export
+    fraq_cli ==>|4| fraq_formats
+    examples_async_streaming ==>|4| fraq_streaming
+    examples_query_examples ==>|4| fraq_query
+    fraq_adapters -->|3| fraq_formats
+    examples_applications -->|2| fraq_schema_export
+    fraq_generators -->|1| fraq_core
+    examples_applications -->|1| fraq_formats
+    examples_query_examples -->|1| fraq_formats
+    fraq_query -->|1| fraq_formats

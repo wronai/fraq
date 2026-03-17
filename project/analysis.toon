@@ -1,0 +1,224 @@
+# code2llm | 10f 2003L | python:9,shell:1 | 2026-03-17
+# CC̄=2.7 | critical:1/126 | dups:0 | cycles:3
+
+HEALTH[0]: ok
+
+REFACTOR[1]:
+  1. break 3 circular dependencies
+
+COUPLING: no cross-package imports detected
+
+LAYERS:
+  fraq/                           CC̄=2.7    ←in:0  →out:0
+  │ schema_export              476L  0C    7m  CC=5      ←2
+  │ adapters                   394L  6C   23m  CC=8      ←0
+  │ core                       360L  4C   17m  CC=5      ←1
+  │ query                      219L  4C   12m  CC=9      ←1
+  │ !  formats                    196L  1C   14m  CC=11     ←5
+  │ generators                 117L  4C    9m  CC=2      ←0
+  │ streaming                   93L  1C    5m  CC=3      ←1
+  │ cli                         88L  0C    5m  CC=4      ←0
+  │ __init__                    46L  0C    0m  CC=0.0    ←0
+  │
+  ./                              CC̄=0.0    ←in:0  →out:0
+  │ project.sh                  14L  0C    0m  CC=0.0    ←0
+  │
+
+DUPLICATES[0]: none
+
+FUNCTIONS (CC≥10, 1 of 92):
+   11.0  _mp_encode                                 26n   9exit  loops+cond+ret
+
+  summary:
+    critical(≥10): 1 | high(5-10): 13 | medium(2-5): 45 | low(<2): 33
+    1% CC≥10  15% CC≥5
+
+HOTSPOTS:
+  #1  main                                 fan=14   "calls 14 functions"
+  #2  FileAdapter.load_root                fan=13   "FileAdapter method, fan-out=13"
+  #3  cmd_schema                           fan=11   "calls 11 functions"
+  #4  _to_csv                              fan=10   "calls 10 functions"
+  #5  HTTPAdapter.load_root                fan=10   "HTTPAdapter method, fan-out=10"
+  #6  SQLAdapter.load_root                 fan=10   "SQLAdapter method, fan-out=10"
+  #7  _mp_encode                           fan=9    "calls 9 functions"
+  #8  FileAdapter.save                     fan=9    "FileAdapter method, fan-out=9"
+  #9  query                                fan=9    "calls 9 functions"
+  #10 cmd_stream                           fan=8    "calls 8 functions"
+
+CLASSES:
+  FraqQuery                      ████████████████████████   6m  CC̄=1.5   max=3   
+  SQLAdapter                     ████████████████████       5m  CC̄=3.0   max=6   
+  FraqNode                       ████████████████████       5m  CC̄=3.6   max=5   
+  FormatRegistry                 ████████████████           4m  CC̄=1.5   max=2   
+  BaseAdapter                    ████████████████           4m  CC̄=1.0   max=1   
+  SensorAdapter                  ████████████████           4m  CC̄=1.8   max=3   
+  HybridAdapter                  ████████████████           4m  CC̄=3.2   max=8   
+  FraqSchema                     ████████████████           4m  CC̄=4.2   max=5   
+  FraqCursor                     ████████████████           4m  CC̄=2.2   max=4   
+  FraqExecutor                   ████████████████           4m  CC̄=3.8   max=9   
+  AsyncFraqStream                ████████████               3m  CC̄=2.3   max=3   
+  FibonacciGenerator             ████████████               3m  CC̄=1.3   max=2   
+  FileAdapter                    ████████████               3m  CC̄=2.0   max=3   
+  HashGenerator                  ████████                   2m  CC̄=1.0   max=1   
+  PerlinGenerator                ████████                   2m  CC̄=1.5   max=2   
+  SensorStreamGenerator          ████████                   2m  CC̄=1.0   max=1   
+  HTTPAdapter                    ████████                   2m  CC̄=2.5   max=3   
+  FraqFilter                     ████                       1m  CC̄=9.0   max=9   
+  FieldDef                                                  0m  CC̄=0.0   max=0.0 
+  SourceType                                                0m  CC̄=0.0   max=0.0 
+
+D:
+  fraq/formats.py:
+    e: FormatRegistry,_to_json,_to_jsonl,_to_csv,_to_yaml,_to_binary,_to_msgpack_lite,_prepare,_simple_yaml,_encode_value,_mp_encode
+    FormatRegistry  # Registry of serialisation backends....
+      register(2)  CC=2.0
+    _to_json(data)
+    _to_jsonl(data)
+    _to_csv(data)
+    _to_yaml(data)
+    _to_binary(data)
+    _to_msgpack_lite(data)
+    _prepare(obj)
+    _simple_yaml(obj,indent)
+    _encode_value(v)
+    _mp_encode(obj)
+  fraq/query.py:
+    e: SourceType,FraqFilter,FraqQuery,FraqExecutor,query
+    SourceType  # Known data source families....
+    FraqFilter  # Post-zoom predicate on a record field....
+      matches(1)  CC=9.0
+    FraqQuery  # Declarative query against fractal data.
+
+Parameters
+--------...
+      zoom(2)  CC=2.0
+    FraqExecutor  # Execute a FraqQuery against a root node.
+
+The executor build...
+      __init__(2)  CC=3.0
+    query(depth,direction,fields,format,limit,dims,seed)
+  fraq/adapters.py:
+    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,HybridAdapter,get_adapter
+    BaseAdapter  # Interface every data-source adapter must implement....
+      load_root(1)  CC=1.0
+    FileAdapter  # Read/write fractal state from local files.
+
+Supported format...
+      load_root(1)  CC=3.0
+        → _dict_to_node(0)  CC=1.0
+    HTTPAdapter  # Fetch fractal roots from remote HTTP APIs and push results b...
+      load_root(1)  CC=3.0
+    SQLAdapter  # Map fractal nodes to/from relational tables.
+
+Instead of req...
+      __init__(2)  CC=2.0
+    SensorAdapter  # Simulate or consume live sensor data as fractal streams.
+
+In...
+      __init__(4)  CC=1.0
+    HybridAdapter  # Combine roots from several adapters into one fractal.
+
+The m...
+      __init__(0)  CC=1.0
+    get_adapter(source)
+  fraq/schema_export.py:
+    e: to_nlp2cmd_schema,to_nlp2cmd_actions,to_openapi,to_graphql,to_asyncapi,to_proto,to_json_schema
+    to_nlp2cmd_schema(schema,command_name,version,category)
+    to_nlp2cmd_actions(schema)
+    to_openapi(schema,title,version,base_path)
+    to_graphql(schema,type_name)
+    to_asyncapi(schema,title,version)
+    to_proto(schema,package,message_name)
+    to_json_schema(schema,title)
+  fraq/core.py:
+    e: FraqNode,FieldDef,FraqSchema,FraqCursor,_vec_add,_vec_scale,_vec_norm,_vec_hash
+    FraqNode  # A single point in the infinite fractal data space.
+
+Paramete...
+      zoom(1)  CC=5.0
+        → _child(1)  CC=2.0
+    FieldDef  # One field in a FraqSchema....
+    FraqSchema  # Typed projection of a fractal into structured records.
+
+A sc...
+      add_field(4)  CC=4.0
+    FraqCursor  # Stateful walk through the fractal.
+
+The cursor remembers the...
+      advance(1)  CC=4.0
+    _vec_add(a,b)
+    _vec_scale(v,s)
+    _vec_norm(v)
+    _vec_hash(v,seed)
+  fraq/cli.py:
+    e: _make_root,cmd_explore,cmd_stream,cmd_schema,main
+    _make_root(dims,seed)
+    cmd_explore(args)
+    cmd_stream(args)
+    cmd_schema(args)
+    main(argv)
+  examples/async_streaming.py:
+    e: example_basic_stream,example_typed_stream,example_async_query,example_fastapi_sse_pattern,example_kafka_producer_pattern,main
+    example_basic_stream()
+    example_typed_stream()
+    example_async_query()
+    example_fastapi_sse_pattern()
+    example_kafka_producer_pattern()
+    main()
+  fraq/streaming.py:
+    e: AsyncFraqStream,async_query,async_stream
+    AsyncFraqStream  # Async generator that yields fractal records at a controlled ...
+      __init__(5)  CC=3.0
+    async_query(query,root,dims)
+    async_stream(root,count,interval,direction,dims)
+  examples/applications.py:
+    e: example_iot_sensor_network,example_erp_invoices,example_ai_training_data,example_devops_load_test,example_finance_leasing,example_legal_clauses,example_perlin_organic
+    example_iot_sensor_network()
+    example_erp_invoices()
+    example_ai_training_data()
+    example_devops_load_test()
+    example_finance_leasing()
+    example_legal_clauses()
+    example_perlin_organic()
+  examples/nlp2cmd_integration.py:
+    e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi,example_grpc_proto,example_json_schema,example_full_nlp2cmd_workflow
+    build_sensor_schema()
+    build_erp_schema()
+    example_nlp2cmd_command_schema()
+    example_nlp2cmd_actions()
+    example_nlp2cmd_erp()
+    example_openapi()
+    example_graphql()
+    example_asyncapi()
+    example_grpc_proto()
+    example_json_schema()
+    example_full_nlp2cmd_workflow()
+  fraq/generators.py:
+    e: HashGenerator,FibonacciGenerator,PerlinGenerator,SensorStreamGenerator
+    HashGenerator  # Deterministic pseudo-random values via SHA-256.
+
+Parameters
+...
+      __init__(3)  CC=1.0
+    FibonacciGenerator  # Value based on generalised Fibonacci sequence at the node's ...
+      __init__(2)  CC=1.0
+    PerlinGenerator  # Simplified 1-D Perlin-ish noise from the L2 norm of position...
+      __init__(2)  CC=1.0
+    SensorStreamGenerator  # Simulate an infinite IoT sensor stream.
+
+Produces dict paylo...
+      __init__(3)  CC=1.0
+  examples/query_examples.py:
+    e: example_disk_json,example_disk_csv,example_disk_yaml,example_http_api,example_sql_query,example_sql_custom_mapping,example_sensor_stream,example_sensor_to_formats,example_hybrid_merge,example_oneliners
+    example_disk_json()
+    example_disk_csv()
+    example_disk_yaml()
+    example_http_api()
+    example_sql_query()
+    example_sql_custom_mapping()
+    example_sensor_stream()
+    example_sensor_to_formats()
+    example_hybrid_merge()
+    example_oneliners()
+  fraq/__init__.py:
+  project.sh:

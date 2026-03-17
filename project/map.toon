@@ -1,0 +1,152 @@
+# fraq | 14f 2756L | python:13,shell:1
+# Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
+M[14]:
+  examples/applications.py,191
+  examples/async_streaming.py,103
+  examples/nlp2cmd_integration.py,223
+  examples/query_examples.py,236
+  fraq/__init__.py,46
+  fraq/adapters.py,394
+  fraq/cli.py,88
+  fraq/core.py,360
+  fraq/formats.py,196
+  fraq/generators.py,117
+  fraq/query.py,219
+  fraq/schema_export.py,476
+  fraq/streaming.py,93
+  project.sh,14
+D:
+  fraq/formats.py:
+    e: FormatRegistry,_to_json,_to_jsonl,_to_csv,_to_yaml,_to_binary,_to_msgpack_lite,_prepare,_simple_yaml,_encode_value,_mp_encode
+    FormatRegistry: register(2),get(1),available(0),serialize(2)  # Registry of serialisation backends...
+    _to_json(data)
+    _to_jsonl(data)
+    _to_csv(data)
+    _to_yaml(data)
+    _to_binary(data)
+    _to_msgpack_lite(data)
+    _prepare(obj)
+    _simple_yaml(obj;indent)
+    _encode_value(v)
+    _mp_encode(obj)
+  fraq/query.py:
+    e: SourceType,FraqFilter,FraqQuery,FraqExecutor,query
+    SourceType(str,Enum):  # Known data source families...
+    FraqFilter: matches(1)  # Post-zoom predicate on a record field...
+    FraqQuery: zoom(2),select(0),where(3),output(1),take(1),from_source(2)  # Declarative query against fractal data.
+
+Parameters
+--------...
+    FraqExecutor: __init__(2),execute(1),execute_iter(1),_iter_records(1)  # Execute a FraqQuery against a root node.
+
+The executor build...
+    query(depth;direction;fields;format;limit;dims;seed)
+  fraq/adapters.py:
+    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,HybridAdapter,get_adapter
+    BaseAdapter(ABC): load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter must implement...
+    FileAdapter(BaseAdapter): load_root(1),save(3),_dict_to_node(0)  # Read/write fractal state from local files.
+
+Supported format...
+    HTTPAdapter(BaseAdapter): load_root(1),save(3)  # Fetch fractal roots from remote HTTP APIs and push results b...
+    SQLAdapter(BaseAdapter): __init__(2),load_root(1),save(3),generate_sql_function(1),_default_row_to_node(0)  # Map fractal nodes to/from relational tables.
+
+Instead of req...
+    SensorAdapter(BaseAdapter): __init__(4),load_root(1),save(3),stream(3)  # Simulate or consume live sensor data as fractal streams.
+
+In...
+    HybridAdapter(BaseAdapter): __init__(0),add(2),load_root(1),save(3)  # Combine roots from several adapters into one fractal.
+
+The m...
+    get_adapter(source)
+  fraq/schema_export.py:
+    e: to_nlp2cmd_schema,to_nlp2cmd_actions,to_openapi,to_graphql,to_asyncapi,to_proto,to_json_schema
+    to_nlp2cmd_schema(schema;command_name;version;category)
+    to_nlp2cmd_actions(schema)
+    to_openapi(schema;title;version;base_path)
+    to_graphql(schema;type_name)
+    to_asyncapi(schema;title;version)
+    to_proto(schema;package;message_name)
+    to_json_schema(schema;title)
+  fraq/core.py:
+    e: FraqNode,FieldDef,FraqSchema,FraqCursor,_vec_add,_vec_scale,_vec_norm,_vec_hash
+    FraqNode: zoom(1),children(1),_child(1),to_dict(1),__repr__(0)  # A single point in the infinite fractal data space.
+
+Paramete...
+    FieldDef:  # One field in a FraqSchema...
+    FraqSchema: add_field(4),record(1),records(3),_cast(1)  # Typed projection of a fractal into structured records.
+
+A sc...
+    FraqCursor: advance(1),back(0),reset(0),snapshot(0)  # Stateful walk through the fractal.
+
+The cursor remembers the...
+    _vec_add(a;b)
+    _vec_scale(v;s)
+    _vec_norm(v)
+    _vec_hash(v;seed)
+  fraq/cli.py:
+    e: _make_root,cmd_explore,cmd_stream,cmd_schema,main
+    _make_root(dims;seed)
+    cmd_explore(args)
+    cmd_stream(args)
+    cmd_schema(args)
+    main(argv)
+  examples/async_streaming.py:
+    e: example_basic_stream,example_typed_stream,example_async_query,example_fastapi_sse_pattern,example_kafka_producer_pattern,main
+    example_basic_stream()
+    example_typed_stream()
+    example_async_query()
+    example_fastapi_sse_pattern()
+    example_kafka_producer_pattern()
+    main()
+  fraq/streaming.py:
+    e: AsyncFraqStream,async_query,async_stream
+    AsyncFraqStream: __init__(5),__aiter__(0),stop(0)  # Async generator that yields fractal records at a controlled ...
+    async_query(query;root;dims)
+    async_stream(root;count;interval;direction;dims)
+  examples/applications.py:
+    e: example_iot_sensor_network,example_erp_invoices,example_ai_training_data,example_devops_load_test,example_finance_leasing,example_legal_clauses,example_perlin_organic
+    example_iot_sensor_network()
+    example_erp_invoices()
+    example_ai_training_data()
+    example_devops_load_test()
+    example_finance_leasing()
+    example_legal_clauses()
+    example_perlin_organic()
+  examples/nlp2cmd_integration.py:
+    e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi,example_grpc_proto,example_json_schema,example_full_nlp2cmd_workflow
+    build_sensor_schema()
+    build_erp_schema()
+    example_nlp2cmd_command_schema()
+    example_nlp2cmd_actions()
+    example_nlp2cmd_erp()
+    example_openapi()
+    example_graphql()
+    example_asyncapi()
+    example_grpc_proto()
+    example_json_schema()
+    example_full_nlp2cmd_workflow()
+  fraq/generators.py:
+    e: HashGenerator,FibonacciGenerator,PerlinGenerator,SensorStreamGenerator
+    HashGenerator: __init__(3),__call__(1)  # Deterministic pseudo-random values via SHA-256.
+
+Parameters
+...
+    FibonacciGenerator: __init__(2),_fib(1),__call__(1)  # Value based on generalised Fibonacci sequence at the node's ...
+    PerlinGenerator: __init__(2),__call__(1)  # Simplified 1-D Perlin-ish noise from the L2 norm of position...
+    SensorStreamGenerator: __init__(3),__call__(1)  # Simulate an infinite IoT sensor stream.
+
+Produces dict paylo...
+  examples/query_examples.py:
+    e: example_disk_json,example_disk_csv,example_disk_yaml,example_http_api,example_sql_query,example_sql_custom_mapping,example_sensor_stream,example_sensor_to_formats,example_hybrid_merge,example_oneliners
+    example_disk_json()
+    example_disk_csv()
+    example_disk_yaml()
+    example_http_api()
+    example_sql_query()
+    example_sql_custom_mapping()
+    example_sensor_stream()
+    example_sensor_to_formats()
+    example_hybrid_merge()
+    example_oneliners()
+  fraq/__init__.py:
+  project.sh:
