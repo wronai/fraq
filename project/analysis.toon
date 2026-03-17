@@ -137,6 +137,13 @@ D:
     e: WebCrawlerAdapter
     WebCrawlerAdapter  # Async adapter for crawling websites and extracting links/con...
       __init__(5)  CC=2.0
+  examples/text2fraq/text2fraq_files.py:
+    e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
+    example_pdf_search_rule_based()
+    example_pdf_search_with_llm()
+    example_convenience_function()
+    example_file_search_adapter_direct()
+    example_llm_file_intent()
   fraq/query.py:
     e: SourceType,FraqFilter,FraqQuery,FraqExecutor,query
     SourceType  # Known data source families....
@@ -152,13 +159,6 @@ Parameters
 The executor build...
       __init__(2)  CC=3.0
     query(depth,direction,fields,format,limit,dims,seed)
-  examples/text2fraq_files.py:
-    e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
-    example_pdf_search_rule_based()
-    example_pdf_search_with_llm()
-    example_convenience_function()
-    example_file_search_adapter_direct()
-    example_llm_file_intent()
   fraq/text2fraq/router.py:
     e: ModelRouter
     ModelRouter  # Route queries to the best model based on complexity....
@@ -203,7 +203,12 @@ The executor build...
     ws_stream(websocket)
     health_check()
     clear_session(session_id)
-  examples/api_server.py:
+  examples/websocket-docker/main.py:
+    e: ws_stream,ws_files,health
+    ws_stream(websocket)
+    ws_files(websocket)
+    health()
+  examples/fastapi-docker/api_server.py:
     e: lifespan,root,health,explore,stream,query_data,schema_records,files_search,files_list,files_stat,natural_language,ws_stream,ws_files
     lifespan(app)
     root()
@@ -218,11 +223,6 @@ The executor build...
     natural_language(query,path,format)
     ws_stream(websocket)
     ws_files(websocket)
-  examples/websocket-docker/main.py:
-    e: ws_stream,ws_files,health
-    ws_stream(websocket)
-    ws_files(websocket)
-    health()
   fraq/text2fraq/parser_rules.py:
     e: Text2FraqSimple,_word_match,_detect_format,_detect_depth,_detect_limit
     Text2FraqSimple  # Rule-based text2fraq without LLM (fallback for offline use)....
@@ -294,7 +294,7 @@ The cursor remembers the...
     e: NetworkAdapter
     NetworkAdapter  # Async adapter for scanning local network devices and service...
       __init__(4)  CC=2.0
-  examples/async_streaming.py:
+  examples/basic/async_streaming.py:
     e: example_basic_stream,example_typed_stream,example_async_query,example_fastapi_sse_pattern,example_kafka_producer_pattern,main
     example_basic_stream()
     example_typed_stream()
@@ -312,38 +312,7 @@ The cursor remembers the...
       __init__(5)  CC=3.0
     async_query(query,root,dims)
     async_stream(root,count,interval,direction,dims)
-  examples/applications.py:
-    e: example_iot_sensor_network,example_erp_invoices,example_ai_training_data,example_devops_load_test,example_finance_leasing,example_legal_clauses,example_perlin_organic
-    example_iot_sensor_network()
-    example_erp_invoices()
-    example_ai_training_data()
-    example_devops_load_test()
-    example_finance_leasing()
-    example_legal_clauses()
-    example_perlin_organic()
-  examples/network_web_examples.py:
-    e: example_network_scan_sync,example_network_scan_async,example_web_crawl_sync,example_web_crawl_async,example_fractal_coordinates,example_streaming_comparison,main
-    example_network_scan_sync()
-    example_network_scan_async()
-    example_web_crawl_sync()
-    example_web_crawl_async()
-    example_fractal_coordinates()
-    example_streaming_comparison()
-    main()
-  examples/nlp2cmd_integration.py:
-    e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi,example_grpc_proto,example_json_schema,example_full_nlp2cmd_workflow
-    build_sensor_schema()
-    build_erp_schema()
-    example_nlp2cmd_command_schema()
-    example_nlp2cmd_actions()
-    example_nlp2cmd_erp()
-    example_openapi()
-    example_graphql()
-    example_asyncapi()
-    example_grpc_proto()
-    example_json_schema()
-    example_full_nlp2cmd_workflow()
-  examples/text2fraq_examples.py:
+  examples/text2fraq/text2fraq_examples.py:
     e: _print_header,_print_parsed_query,_print_file_params,example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_file_search_direct,example_env_config,example_full_pipeline
     _print_header(title)
     _print_parsed_query(query,parsed)
@@ -356,6 +325,37 @@ The cursor remembers the...
     example_file_search_direct()
     example_env_config()
     example_full_pipeline()
+  examples/text2fraq/nlp2cmd_integration.py:
+    e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi,example_grpc_proto,example_json_schema,example_full_nlp2cmd_workflow
+    build_sensor_schema()
+    build_erp_schema()
+    example_nlp2cmd_command_schema()
+    example_nlp2cmd_actions()
+    example_nlp2cmd_erp()
+    example_openapi()
+    example_graphql()
+    example_asyncapi()
+    example_grpc_proto()
+    example_json_schema()
+    example_full_nlp2cmd_workflow()
+  examples/network/network_web_examples.py:
+    e: example_network_scan_sync,example_network_scan_async,example_web_crawl_sync,example_web_crawl_async,example_fractal_coordinates,example_streaming_comparison,main
+    example_network_scan_sync()
+    example_network_scan_async()
+    example_web_crawl_sync()
+    example_web_crawl_async()
+    example_fractal_coordinates()
+    example_streaming_comparison()
+    main()
+  examples/basic/applications.py:
+    e: example_iot_sensor_network,example_erp_invoices,example_ai_training_data,example_devops_load_test,example_finance_leasing,example_legal_clauses,example_perlin_organic
+    example_iot_sensor_network()
+    example_erp_invoices()
+    example_ai_training_data()
+    example_devops_load_test()
+    example_finance_leasing()
+    example_legal_clauses()
+    example_perlin_organic()
   fraq/adapters/registry.py:
     e: get_adapter
     get_adapter(source)
@@ -390,7 +390,14 @@ Parameters
 
 Produces dict paylo...
       __init__(3)  CC=1.0
-  examples/query_examples.py:
+  examples/fastapi-docker/main.py:
+    e: root,health,explore,files_search,files_stat
+    root()
+    health()
+    explore(depth,dims,format)
+    files_search(path,ext,limit,sort)
+    files_stat(file_path)
+  examples/basic/query_examples.py:
     e: example_disk_json,example_disk_csv,example_disk_yaml,example_http_api,example_sql_query,example_sql_custom_mapping,example_sensor_stream,example_sensor_to_formats,example_hybrid_merge,example_oneliners
     example_disk_json()
     example_disk_csv()
@@ -402,19 +409,12 @@ Produces dict paylo...
     example_sensor_to_formats()
     example_hybrid_merge()
     example_oneliners()
-  examples/fastapi-docker/main.py:
-    e: root,health,explore,files_search,files_stat
-    root()
-    health()
-    explore(depth,dims,format)
-    files_search(path,ext,limit,sort)
-    files_stat(file_path)
   fraq/text2fraq/shortcuts.py:
     e: text2filesearch,text2query,text2fraq
     text2filesearch(text,base_path,fmt)
     text2query(text,config)
     text2fraq(text,config,root)
-  examples/app_integrations.py:
+  examples/basic/app_integrations.py:
     e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook,example_celery_task
     example_fastapi_app()
     example_streamlit_app()
@@ -425,12 +425,6 @@ Produces dict paylo...
     example_grpc_service()
     example_jupyter_notebook()
     example_celery_task()
-  examples/new_features_v030.py:
-    e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
-    example_model_router()
-    example_fraq_session()
-    example_fastapi_server()
-    example_combined_usage()
   examples/fullstack-docker/api/main.py:
     e: root,health,explore,files_search
     root()
@@ -441,6 +435,12 @@ Produces dict paylo...
     e: Text2FraqConfig
     Text2FraqConfig  # Configuration for text2fraq....
       from_env(0)  CC=1.0
+  examples/v030/new_features_v030.py:
+    e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
+    example_model_router()
+    example_fraq_session()
+    example_fastapi_server()
+    example_combined_usage()
   fraq/adapters/base.py:
     e: BaseAdapter
     BaseAdapter  # Interface every data-source adapter must implement....
@@ -454,4 +454,4 @@ Produces dict paylo...
   fraq/text2fraq/__init__.py:
   fraq/adapters/__init__.py:
   project.sh:
-  examples/bash_examples.sh:
+  examples/cli-docker/bash_examples.sh:

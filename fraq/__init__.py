@@ -21,7 +21,7 @@ from fraq.generators import (
 )
 from fraq.query import FraqQuery, FraqExecutor, FraqFilter, SourceType, query
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 # Public API list - used for lazy loading and IDE support
 __all__ = [

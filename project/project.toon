@@ -1,23 +1,23 @@
 # fraq | 62f 8784L | python:62
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
 M[62]:
-  examples/api_server.py,312
-  examples/app_integrations.py,458
-  examples/applications.py,126
-  examples/async_streaming.py,81
+  examples/basic/app_integrations.py,458
+  examples/basic/applications.py,126
+  examples/basic/async_streaming.py,81
+  examples/basic/query_examples.py,160
   examples/cli-docker/run.py,41
+  examples/fastapi-docker/api_server.py,312
   examples/fastapi-docker/main.py,67
   examples/fastapi-docker/run.py,73
   examples/fullstack-docker/api/main.py,28
   examples/fullstack-docker/frontend/app.py,50
   examples/fullstack-docker/run.py,56
   examples/fullstack-docker/websocket/main.py,44
-  examples/network_web_examples.py,143
-  examples/new_features_v030.py,79
-  examples/nlp2cmd_integration.py,165
-  examples/query_examples.py,160
-  examples/text2fraq_examples.py,208
-  examples/text2fraq_files.py,202
+  examples/network/network_web_examples.py,143
+  examples/text2fraq/nlp2cmd_integration.py,165
+  examples/text2fraq/text2fraq_examples.py,208
+  examples/text2fraq/text2fraq_files.py,202
+  examples/v030/new_features_v030.py,79
   examples/websocket-docker/main.py,78
   examples/websocket-docker/run.py,65
   fraq/__init__.py,126
@@ -64,18 +64,7 @@ M[62]:
   tests/test_streaming.py,73
   tests/test_text2fraq.py,122
 D:
-  examples/api_server.py:
-    i: asyncio,json,datetime,contextlib.asynccontextmanager,fastapi.{FastAPI,HTTPException,Query},pathlib.Path,typing.{Any,AsyncIterator}
-    e: lifespan,root,health,explore,stream,query_data,schema_records,files_search
-    lifespan(app:FastAPI)
-    root()
-    health()
-    explore(depth:int=Query(3; ge=1; le=20);dims:int=Query(3; ge=1; le=10);seed:int=Query(0);format:str=Query('json'; regex='^(json|yaml|csv)$'))
-    stream(count:int=Query(10; ge=1; le=10000);dims:int=Query(3; ge=1; le=10);format:str=Query('jsonl'; regex='^(json|jsonl|csv)$'))
-    query_data(fields:str=Query('value:float');depth:int=Query(3; ge=1; le=20);format:str=Query('json'; regex='^(json|csv|yaml|jsonl)$');limit:int=Query(100; ge=1; le=10000);dims:int=Query(3; ge=1; le=10))
-    schema_records(fields:str=Query(...; description='Comma-separated name:type');depth:int=Query(2; ge=1; le=10);branching:int=Query(3; ge=1; le=10);format:str=Query('json');dims:int=Query(3))
-    files_search(path:str=Query('.'; description='Base directory path');ext:Any=Query(None; description='File extension (pdf; txt; py...)');pattern:Any=Query(None; description='Glob pattern (*.pdf)');limit:int=Query(10; ge=1; le=1000);sort:str=Query('mtime'; regex='^(name|mtime|size)$');recursive:bool=Query(True);...+1)
-  examples/app_integrations.py:
+  examples/basic/app_integrations.py:
     i: json,dataclasses.dataclass
     e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook
     example_fastapi_app()
@@ -86,7 +75,7 @@ D:
     example_kafka_producer()
     example_grpc_service()
     example_jupyter_notebook()
-  examples/applications.py:
+  examples/basic/applications.py:
     i: fraq
     e: example_iot_sensor_network,example_erp_invoices,example_ai_training_data,example_devops_load_test,example_finance_leasing,example_legal_clauses,example_perlin_organic
     example_iot_sensor_network()
@@ -96,7 +85,7 @@ D:
     example_finance_leasing()
     example_legal_clauses()
     example_perlin_organic()
-  examples/async_streaming.py:
+  examples/basic/async_streaming.py:
     i: asyncio,fraq.{FraqNode,FraqSchema},fraq.query.FraqQuery,fraq.streaming.{AsyncFraqStream,async_query,async_stream}
     e: example_basic_stream,example_typed_stream,example_async_query,example_fastapi_sse_pattern,example_kafka_producer_pattern,main
     example_basic_stream()
@@ -105,12 +94,34 @@ D:
     example_fastapi_sse_pattern()
     example_kafka_producer_pattern()
     main()
+  examples/basic/query_examples.py:
+    i: fraq
+    e: example_disk_json,example_disk_csv,example_disk_yaml,example_http_api,example_sql_query,example_sql_custom_mapping,example_sensor_stream,example_sensor_to_formats
+    example_disk_json()
+    example_disk_csv()
+    example_disk_yaml()
+    example_http_api()
+    example_sql_query()
+    example_sql_custom_mapping()
+    example_sensor_stream()
+    example_sensor_to_formats()
   examples/cli-docker/run.py:
     i: argparse,subprocess,sys,os
     e: run_in_docker,run_local,main
     run_in_docker(args_list)
     run_local(args_list)
     main()
+  examples/fastapi-docker/api_server.py:
+    i: asyncio,json,datetime,contextlib.asynccontextmanager,fastapi.{FastAPI,HTTPException,Query},pathlib.Path,typing.{Any,AsyncIterator}
+    e: lifespan,root,health,explore,stream,query_data,schema_records,files_search
+    lifespan(app:FastAPI)
+    root()
+    health()
+    explore(depth:int=Query(3; ge=1; le=20);dims:int=Query(3; ge=1; le=10);seed:int=Query(0);format:str=Query('json'; regex='^(json|yaml|csv)$'))
+    stream(count:int=Query(10; ge=1; le=10000);dims:int=Query(3; ge=1; le=10);format:str=Query('jsonl'; regex='^(json|jsonl|csv)$'))
+    query_data(fields:str=Query('value:float');depth:int=Query(3; ge=1; le=20);format:str=Query('json'; regex='^(json|csv|yaml|jsonl)$');limit:int=Query(100; ge=1; le=10000);dims:int=Query(3; ge=1; le=10))
+    schema_records(fields:str=Query(...; description='Comma-separated name:type');depth:int=Query(2; ge=1; le=10);branching:int=Query(3; ge=1; le=10);format:str=Query('json');dims:int=Query(3))
+    files_search(path:str=Query('.'; description='Base directory path');ext:Any=Query(None; description='File extension (pdf; txt; py...)');pattern:Any=Query(None; description='Glob pattern (*.pdf)');limit:int=Query(10; ge=1; le=1000);sort:str=Query('mtime'; regex='^(name|mtime|size)$');recursive:bool=Query(True);...+1)
   examples/fastapi-docker/main.py:
     i: os,fastapi.{FastAPI,Query},fastapi.responses.JSONResponse,fraq.{FileSearchAdapter,FraqExecutor,FraqNode,FraqQuery},fraq.formats.FormatRegistry,fraq.generators.HashGenerator
     e: FRAQ_DIMS,FRAQ_SEED,root,health,explore,files_search,files_stat
@@ -147,7 +158,7 @@ D:
     ws_stream(websocket:WebSocket)
     ws_files(websocket:WebSocket)
     health()
-  examples/network_web_examples.py:
+  examples/network/network_web_examples.py:
     i: asyncio,fraq.{NetworkAdapter,WebCrawlerAdapter}
     e: example_network_scan_sync,example_network_scan_async,example_web_crawl_sync,example_web_crawl_async,example_fractal_coordinates,example_streaming_comparison,main
     example_network_scan_sync()
@@ -157,13 +168,7 @@ D:
     example_fractal_coordinates()
     example_streaming_comparison()
     main()
-  examples/new_features_v030.py:
-    e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
-    example_model_router()
-    example_fraq_session()
-    example_fastapi_server()
-    example_combined_usage()
-  examples/nlp2cmd_integration.py:
+  examples/text2fraq/nlp2cmd_integration.py:
     i: json,fraq
     e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi
     build_sensor_schema()->FraqSchema
@@ -174,18 +179,7 @@ D:
     example_openapi()
     example_graphql()
     example_asyncapi()
-  examples/query_examples.py:
-    i: fraq
-    e: example_disk_json,example_disk_csv,example_disk_yaml,example_http_api,example_sql_query,example_sql_custom_mapping,example_sensor_stream,example_sensor_to_formats
-    example_disk_json()
-    example_disk_csv()
-    example_disk_yaml()
-    example_http_api()
-    example_sql_query()
-    example_sql_custom_mapping()
-    example_sensor_stream()
-    example_sensor_to_formats()
-  examples/text2fraq_examples.py:
+  examples/text2fraq/text2fraq_examples.py:
     i: sys,dotenv.load_dotenv,fraq,pathlib.Path
     e: ROOT,example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_file_search_direct,example_env_config
     _print_header(title:str)->None
@@ -196,7 +190,7 @@ D:
     example_llama32()->None
     example_phi3()->None
     example_convenience_functions()->None
-  examples/text2fraq_files.py:
+  examples/text2fraq/text2fraq_files.py:
     i: os,sys,datetime,dotenv.load_dotenv,fraq.{FileSearchAdapter,FileSearchText2Fraq,Text2Fraq,Text2FraqConfig,text2filesearch}
     e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
     example_pdf_search_rule_based()
@@ -204,6 +198,12 @@ D:
     example_convenience_function()
     example_file_search_adapter_direct()
     example_llm_file_intent()
+  examples/v030/new_features_v030.py:
+    e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
+    example_model_router()
+    example_fraq_session()
+    example_fastapi_server()
+    example_combined_usage()
   examples/websocket-docker/main.py:
     i: asyncio,json,fastapi.{FastAPI,WebSocket,WebSocketDisconnect},fraq.{FileSearchAdapter,FraqNode},fraq.generators.HashGenerator
     e: ws_stream,ws_files,health

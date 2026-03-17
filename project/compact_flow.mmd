@@ -1,12 +1,8 @@
 flowchart TD
-    examples_api_server["examples.api_server<br/>13 funcs"]
-    examples_applications["examples.applications<br/>7 funcs"]
-    examples_async_streaming["examples.async_streaming<br/>6 funcs"]
-    examples_new_features_v030["examples.new_features_v030<br/>4 funcs"]
-    examples_nlp2cmd_integration["examples.nlp2cmd_integration<br/>11 funcs"]
-    examples_query_examples["examples.query_examples<br/>10 funcs"]
-    examples_text2fraq_examples["examples.text2fraq_examples<br/>11 funcs"]
-    examples_text2fraq_files["examples.text2fraq_files<br/>5 funcs"]
+    examples_basic["examples.basic<br/>32 funcs"]
+    examples_fastapi_docker["examples.fastapi-docker<br/>23 funcs"]
+    examples_text2fraq["examples.text2fraq<br/>27 funcs"]
+    examples_v030["examples.v030<br/>4 funcs"]
     fraq_adapters["fraq.adapters<br/>54 funcs"]
     fraq_cli["fraq.cli<br/>18 funcs"]
     fraq_core["fraq.core<br/>17 funcs"]
@@ -17,22 +13,20 @@ flowchart TD
     fraq_server["fraq.server<br/>7 funcs"]
     fraq_streaming["fraq.streaming<br/>5 funcs"]
     fraq_text2fraq["fraq.text2fraq<br/>46 funcs"]
-    examples_nlp2cmd_integration ==>|10| fraq_schema_export
+    examples_text2fraq ==>|10| fraq_schema_export
+    examples_text2fraq ==>|7| fraq_text2fraq
     fraq_cli ==>|6| fraq_formats
-    examples_text2fraq_examples ==>|6| fraq_text2fraq
     fraq_adapters ==>|6| fraq_formats
-    examples_async_streaming ==>|4| fraq_streaming
-    examples_query_examples ==>|4| fraq_query
-    examples_api_server ==>|4| fraq_formats
-    examples_applications -->|2| fraq_schema_export
+    examples_basic ==>|4| fraq_streaming
+    examples_fastapi_docker ==>|4| fraq_formats
+    examples_basic ==>|4| fraq_query
+    examples_basic -->|2| fraq_schema_export
+    examples_basic -->|2| fraq_formats
     fraq_generators -->|1| fraq_core
     fraq_cli -->|1| fraq_text2fraq
-    examples_applications -->|1| fraq_formats
-    examples_query_examples -->|1| fraq_formats
     fraq_query -->|1| fraq_formats
-    examples_new_features_v030 -->|1| fraq_text2fraq
-    examples_api_server -->|1| fraq_text2fraq
-    examples_api_server -->|1| fraq_streaming
-    examples_text2fraq_files -->|1| fraq_text2fraq
+    examples_fastapi_docker -->|1| fraq_text2fraq
+    examples_fastapi_docker -->|1| fraq_streaming
     fraq_text2fraq -->|1| fraq_formats
+    examples_v030 -->|1| fraq_text2fraq
     fraq_server -->|1| fraq_text2fraq

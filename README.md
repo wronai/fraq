@@ -103,6 +103,27 @@ async for record in async_stream(count=1000, interval=0.1):
 
 ## NLP2CMD Integration
 
+## New in v0.3.0 — Multi-Model Router & Session Memory
+
+```python
+from fraq.text2fraq import ModelRouter, FraqSession
+
+# Route queries to optimal model based on complexity
+router = ModelRouter()
+model = router.route("find pdf files")          # → 0.5b (fast)
+model = router.route("generate complex schema")   # → 7b (accurate)
+
+# Multi-turn conversations with context
+session = FraqSession()
+session.ask("find 10 pdf files")
+session.ask("show as csv")        # follow-up: format changed
+session.ask("add 20 more")          # follow-up: limit increased
+```
+
+See `examples/v030/` for detailed examples.
+
+## NLP2CMD Integration
+
 Export FraqSchema to NLP2CMD's SchemaRegistry for natural language → command transformation:
 
 ```python
@@ -153,6 +174,9 @@ to_json_schema(schema) # JSON Schema for validation
 | `SQLAdapter` | PostgreSQL/SQLite | Row mapping, SQL function generation |
 | `SensorAdapter` | IoT streams (RPi/ESP32) | Infinite deterministic readings |
 | `HybridAdapter` | Multiple sources merged | Mean position, XOR seeds |
+| `FileSearchAdapter` | Local filesystem | Fractal file coordinates |
+| `NetworkAdapter` | LAN scanning | Async device/port discovery |
+| `WebCrawlerAdapter` | Website crawling | Async page extraction |
 
 ## text2fraq — Natural Language to Fractal Query
 
@@ -219,7 +243,7 @@ See `examples/app_integrations.py` for templates:
 ## Testing
 
 ```bash
-pytest -v --cov=fraq    # 132 tests, 96% coverage
+pytest -v --cov=fraq    # 159 tests, 96% coverage
 ```
 
 ## Project Structure
@@ -232,23 +256,38 @@ fraq/
 │   ├── formats.py           # FormatRegistry + 6 built-in serialisers
 │   ├── generators.py        # Hash, Fibonacci, Perlin, SensorStream
 │   ├── query.py             # FraqQuery, FraqExecutor, FraqFilter
-│   ├── adapters.py          # File, HTTP, SQL, Sensor, Hybrid adapters
+│   ├── adapters/            # File, HTTP, SQL, Sensor, Hybrid, Network, WebCrawler
+│   │   ├── base.py
+│   │   ├── file_adapter.py
+│   │   ├── http_adapter.py
+│   │   ├── sql_adapter.py
+│   │   ├── sensor_adapter.py
+│   │   ├── hybrid_adapter.py
+│   │   ├── file_search.py
+│   │   ├── network.py
+│   │   ├── web_crawler.py
+│   │   └── registry.py
+│   ├── text2fraq/           # Natural language processing
+│   │   ├── config.py
+│   │   ├── models.py
+│   │   ├── llm_client.py
+│   │   ├── parser_rules.py
+│   │   ├── parser_llm.py
+│   │   ├── router.py        # v0.3.0: ModelRouter
+│   │   ├── session.py       # v0.3.0: FraqSession
+│   │   └── shortcuts.py
 │   ├── schema_export.py     # NLP2CMD, OpenAPI, GraphQL, AsyncAPI, Proto, JSON Schema
 │   ├── streaming.py         # AsyncFraqStream, async_query, async_stream
+│   ├── server.py            # v0.3.0: FastAPI production server
 │   └── cli.py               # CLI entry point
-├── tests/                   # test suite
+├── tests/                   # 159 test suite
 ├── examples/
-│   ├── query_examples.py    # All data sources (disk, HTTP, SQL, sensor, hybrid)
-│   ├── nlp2cmd_integration.py  # NLP2CMD schema workflow
-│   ├── applications.py      # IoT, ERP, AI/ML, DevOps, Finance, Legal
-│   ├── app_integrations.py  # FastAPI, Flask, Streamlit, Kafka, gRPC, Celery
-│   ├── text2fraq_examples.py # LiteLLM + Ollama + small local model examples
-│   └── async_streaming.py   # FastAPI SSE, Kafka patterns
-├── .env.example             # LiteLLM and text2fraq configuration template
-├── Dockerfile
-├── docker-compose.yml
-├── pyproject.toml
-└── README.md
+│   ├── basic/               # Core examples
+│   ├── text2fraq/           # NLP examples
+│   ├── network/             # Network & web crawling
+│   ├── v030/                # v0.3.0 new features
+│   └── *-docker/            # Docker compositions
+└── .github/workflows/       # CI/CD
 ```
 
 ## License

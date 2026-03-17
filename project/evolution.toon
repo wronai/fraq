@@ -1,13 +1,13 @@
 # code2llm/evolution | 308 func | 47f | 2026-03-17
 
 NEXT[1] (ranked by impact):
-  [1] !! SPLIT           examples/app_integrations.py
+  [1] !! SPLIT           examples/basic/app_integrations.py
       WHY: 566L, 0 classes, max CC=1
       EFFORT: ~4h  IMPACT: 566
 
 
 RISKS[1]:
-  ⚠ Splitting examples/app_integrations.py may break 9 import paths
+  ⚠ Splitting examples/basic/app_integrations.py may break 9 import paths
 
 METRICS-TARGET:
   CC̄:          2.7 → ≤1.9
