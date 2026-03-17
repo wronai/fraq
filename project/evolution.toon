@@ -1,4 +1,4 @@
-# code2llm/evolution | 308 func | 47f | 2026-03-17
+# code2llm/evolution | 327 func | 51f | 2026-03-17
 
 NEXT[1] (ranked by impact):
   [1] !! SPLIT           examples/basic/app_integrations.py
@@ -10,11 +10,11 @@ RISKS[1]:
   ⚠ Splitting examples/basic/app_integrations.py may break 9 import paths
 
 METRICS-TARGET:
-  CC̄:          2.7 → ≤1.9
+  CC̄:          2.8 → ≤2.0
   max-CC:      11 → ≤5
   god-modules: 1 → 0
   high-CC(≥15): 0 → ≤0
   hub-types:   0 → ≤0
 
 HISTORY:
-  prev CC̄=2.7 → now CC̄=2.7
+  prev CC̄=2.7 → now CC̄=2.8
