@@ -2,6 +2,29 @@
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-03-17
+
+### Docs
+- Update docs/README.md
+- Update examples/cli-docker/README.md
+- Update examples/fastapi-docker/README.md
+- Update examples/fullstack-docker/README.md
+- Update examples/websocket-docker/README.md
+- Update project/context.md
+
+### Other
+- Update Dockerfile.cli
+- Update Dockerfile.websocket
+- Update examples/cli-docker/Dockerfile
+- Update examples/cli-docker/docker-compose.yml
+- Update examples/cli-docker/run.sh
+- Update examples/fastapi-docker/Dockerfile
+- Update examples/fastapi-docker/docker-compose.yml
+- Update examples/fastapi-docker/main.py
+- Update examples/fastapi-docker/run.py
+- Update examples/fastapi-docker/run.sh
+- ... and 21 more files
+
 ## [0.2.2] - 2026-03-17
 
 ### Docs

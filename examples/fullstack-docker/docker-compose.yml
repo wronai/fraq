@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # REST API
+  api:
+    build:
+      context: ./api
+    ports:
+      - "8000:8000"
+    environment:
+      - FRAQ_DIMS=3
+      - FRAQ_SEED=0
+    volumes:
+      - /home:/data:ro
+    restart: unless-stopped
+
+  # WebSocket server
+  websocket:
+    build:
+      context: ./websocket
+    ports:
+      - "8001:8001"
+    environment:
+      - FRAQ_DIMS=3
+    volumes:
+      - /home:/data:ro
+    restart: unless-stopped
+
+  # Frontend (Streamlit)
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000
+      - WS_URL=ws://websocket:8001
+    depends_on:
+      - api
+      - websocket
+    restart: unless-stopped

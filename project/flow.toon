@@ -199,18 +199,18 @@ DATA_TYPES (by cross-function usage) [134 annotated, 0 inferred / 190 functions]
   FraqQuery            consumed:6   produced:7  
   FraqSchema           consumed:8   produced:3  
   str, Any             consumed:3   produced:8  
-  str | None           consumed:7   produced:0    input-heavy (read-only flow)
   argparse.Namespace   consumed:7   produced:0    input-heavy (read-only flow)
-  Iterator[Dict[str, Any]] consumed:0   produced:5    output-heavy
+  str | None           consumed:7   produced:0    input-heavy (read-only flow)
   bool                 consumed:3   produced:2  
-  ParsedQuery          consumed:0   produced:4    narrow scope
-  bytes                consumed:0   produced:4    narrow scope
-  Text2FraqConfig | None consumed:4   produced:0    narrow scope
+  Iterator[Dict[str, Any]] consumed:0   produced:5    output-heavy
   str | list[dict[str, Any]] consumed:0   produced:4    narrow scope
+  bytes                consumed:0   produced:4    narrow scope
+  ParsedQuery          consumed:0   produced:4    narrow scope
+  Text2FraqConfig | None consumed:4   produced:0    narrow scope
+  FraqNode | None      consumed:3   produced:0    narrow scope
   dict[str, Any]       consumed:0   produced:3    narrow scope
   list[dict[str, Any]] consumed:1   produced:2    narrow scope
-  FraqNode | None      consumed:3   produced:0    narrow scope
-  AnalysisResult       consumed:0   produced:2    narrow scope
+  BaseAdapter          consumed:1   produced:1    narrow scope
 
   HUB TYPES (consumed ≥10):
     str → 86 consumers → split into:

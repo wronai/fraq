@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  fraq-cli:
+    build: .
+    # Default shows help, override with command
+    command: ["fraq", "--help"]
+    volumes:
+      # Mount host directories for file search
+      - /home:/data:ro
+      - .:/workspace:rw
+    environment:
+      - LITELLM_PROVIDER=ollama
+      - LITELLM_MODEL=qwen2.5:3b
+      - LITELLM_BASE_URL=http://host.docker.internal:11434
+    # Enable access to host network for Ollama
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

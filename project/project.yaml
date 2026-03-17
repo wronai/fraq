@@ -3,11 +3,11 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T16:13:31Z'
+  analyzed_at: '2026-03-17T17:12:59Z'
   tool: code2llm
   stats:
     files: 9
-    lines: 4057
+    lines: 4063
     functions: 121
     classes: 28
 health:
@@ -193,7 +193,7 @@ modules:
     type: class
     cc_avg: 1.5
 - path: fraq/cli.py
-  lines: 268
+  lines: 274
   classes: 0
   methods: 9
   cc_max: 9
@@ -413,5 +413,5 @@ evolution:
 - date: '2026-03-17'
   cc_avg: 3.2
   critical: 5
-  lines: 4057
+  lines: 4063
   note: Automated analysis

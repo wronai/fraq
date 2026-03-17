@@ -151,7 +151,7 @@ Content outside the markers is preserved when regenerating. Enable this with `sy
 
 ```
 fraq/
-    ├── streaming    ├── formats├── fraq/    ├── cli    ├── generators    ├── schema_export    ├── adapters    ├── applications    ├── async_streaming    ├── query_examples    ├── app_integrations    ├── text2fraq_examples    ├── nlp2cmd_integration    ├── api_server    ├── text2fraq_files├── project    ├── bash_examples    ├── core    ├── query    ├── text2fraq```
+    ├── streaming    ├── cli├── fraq/    ├── formats    ├── generators    ├── adapters    ├── schema_export    ├── applications    ├── async_streaming    ├── query_examples    ├── app_integrations    ├── text2fraq_examples    ├── nlp2cmd_integration    ├── api_server    ├── text2fraq_files├── project    ├── bash_examples    ├── core    ├── query    ├── text2fraq```
 
 ## API Overview
 
@@ -198,6 +198,7 @@ fraq/
 - `cmd_files_stat(args)` — Show file statistics with fractal coordinates.
 - `cmd_nl(args)` — Natural language query (requires LLM).
 - `main(argv)` — —
+- `get_adapter(source)` — Factory: return the right adapter for a source type.
 - `to_nlp2cmd_schema(schema, command_name, version, category)` — Export a FraqSchema as an NLP2CMD command schema.
 - `to_nlp2cmd_actions(schema)` — Export fraq operations as NLP2CMD ActionRegistry entries.
 - `to_openapi(schema, title, version, base_path)` — Generate an OpenAPI 3.0 specification.
@@ -205,7 +206,6 @@ fraq/
 - `to_asyncapi(schema, title, version)` — Generate an AsyncAPI 3.0 specification for streaming channels.
 - `to_proto(schema, package, message_name)` — Generate a .proto file.
 - `to_json_schema(schema, title)` — Generate a JSON Schema for validation.
-- `get_adapter(source)` — Factory: return the right adapter for a source type.
 - `example_iot_sensor_network()` — Symulacja 10k sensorów bez storage'u — dla firmware dev na RPi/ESP32.
 - `example_erp_invoices()` — Dynamiczne faktury z nieskończonymi detalami.
 - `example_ai_training_data()` — Nieskończone datasety treningowe — zero disk, perfect dla federated learning.

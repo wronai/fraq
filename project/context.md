@@ -5,7 +5,7 @@
 - **Project**: fraq
 - **Language**: python
 - **Files**: 9
-- **Lines**: 4057
+- **Lines**: 4063
 - **Functions**: 121
 - **Classes**: 28
 - **Avg CC**: 3.2
@@ -13,12 +13,12 @@
 
 ## Architecture
 
-### fraq/ (10 files, 2883L, 121 functions)
+### fraq/ (10 files, 2889L, 121 functions)
 
 - `text2fraq.py` — 518L, 20 methods, CC↑18
 - `adapters.py` — 577L, 28 methods, CC↑12
 - `formats.py` — 196L, 14 methods, CC↑11
-- `cli.py` — 268L, 9 methods, CC↑9
+- `cli.py` — 274L, 9 methods, CC↑9
 - `query.py` — 219L, 12 methods, CC↑9
 - _5 more files_
 

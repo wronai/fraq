@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  fraq-websocket:
+    build: .
+    ports:
+      - "8001:8001"
+    environment:
+      - FRAQ_DIMS=3
+    volumes:
+      - /home:/data:ro
+    restart: unless-stopped

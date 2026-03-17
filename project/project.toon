@@ -1,4 +1,4 @@
-# fraq | 28f 6442L | python:28
+# fraq | 28f 6448L | python:28
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
 M[28]:
   examples/api_server.py,312
@@ -11,7 +11,7 @@ M[28]:
   examples/text2fraq_files.py,202
   fraq/__init__.py,56
   fraq/adapters.py,434
-  fraq/cli.py,206
+  fraq/cli.py,210
   fraq/core.py,277
   fraq/formats.py,152
   fraq/generators.py,91

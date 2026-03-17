@@ -1,39 +1,39 @@
 flowchart LR
     subgraph examples_api_server
         examples__api_server__natural_language["natural_language"]
-        examples__api_server__stream["stream"]
-        examples__api_server__ws_stream["ws_stream"]
         examples__api_server__explore["explore"]
+        examples__api_server__ws_stream["ws_stream"]
+        examples__api_server__stream["stream"]
     end
     subgraph examples_applications
-        examples__applications__example_iot_sensor_network["example_iot_sensor_network"]
         examples__applications__example_devops_load_test["example_devops_load_test"]
+        examples__applications__example_iot_sensor_network["example_iot_sensor_network"]
     end
     subgraph examples_async_streaming
-        examples__async_streaming__main["main"]
-        examples__async_streaming__example_typed_stream["example_typed_stream"]
-        examples__async_streaming__example_async_query["example_async_query"]
-        examples__example_kafka_producer_pattern["example_kafka_producer_pattern"]
-        examples__example_fastapi_sse_pattern["example_fastapi_sse_pattern"]
         examples__async_streaming__example_basic_stream["example_basic_stream"]
+        examples__async_streaming__example_async_query["example_async_query"]
+        examples__async_streaming__example_typed_stream["example_typed_stream"]
+        examples__example_kafka_producer_pattern["example_kafka_producer_pattern"]
+        examples__async_streaming__main["main"]
+        examples__example_fastapi_sse_pattern["example_fastapi_sse_pattern"]
     end
     subgraph examples_nlp2cmd_integration
-        examples__nlp2cmd_integration__example_graphql["example_graphql"]
-        examples__nlp2cmd_integration__example_asyncapi["example_asyncapi"]
-        examples__nlp2cmd_integration__build_erp_schema["build_erp_schema"]
         examples__nlp2cmd_integration__build_sensor_schema["build_sensor_schema"]
-        examples__nlp2cmd_integration__example_nlp2cmd_erp["example_nlp2cmd_erp"]
-        examples__example_full_nlp2cmd_workflow["example_full_nlp2cmd_workflow"]
-        examples__example_nlp2cmd_actions["example_nlp2cmd_actions"]
+        examples__nlp2cmd_integration__build_erp_schema["build_erp_schema"]
         examples__nlp2cmd_integration__example_openapi["example_openapi"]
-        examples__nlp2cmd_integration__example_json_schema["example_json_schema"]
         examples__nlp2cmd_integration__example_grpc_proto["example_grpc_proto"]
         examples__example_nlp2cmd_command_schema["example_nlp2cmd_command_schema"]
+        examples__nlp2cmd_integration__example_asyncapi["example_asyncapi"]
+        examples__example_nlp2cmd_actions["example_nlp2cmd_actions"]
+        examples__nlp2cmd_integration__example_json_schema["example_json_schema"]
+        examples__example_full_nlp2cmd_workflow["example_full_nlp2cmd_workflow"]
+        examples__nlp2cmd_integration__example_nlp2cmd_erp["example_nlp2cmd_erp"]
+        examples__nlp2cmd_integration__example_graphql["example_graphql"]
     end
     subgraph examples_query_examples
+        examples__query_examples__example_disk_yaml["example_disk_yaml"]
         examples__query_examples__example_oneliners["example_oneliners"]
         examples__example_sensor_to_formats["example_sensor_to_formats"]
-        examples__query_examples__example_disk_yaml["example_disk_yaml"]
     end
     subgraph examples_text2fraq_examples
         examples__text2fraq_examples__example_env_config["example_env_config"]
@@ -43,69 +43,69 @@ flowchart LR
         examples__example_convenience_function["example_convenience_function"]
     end
     subgraph fraq_adapters
-        fraq__adapters__FileSearchAdapter__save["save"]
+        fraq__adapters__SensorAdapter__save["save"]
         fraq__adapters__FileAdapter___dict_to_node["_dict_to_node"]
         fraq__adapters__HTTPAdapter__save["save"]
-        fraq__adapters__FileAdapter__save["save"]
         fraq__adapters__HTTPAdapter__load_root["load_root"]
-        fraq__adapters__SensorAdapter__save["save"]
+        fraq__adapters__FileAdapter__save["save"]
+        fraq__adapters__FileSearchAdapter__save["save"]
     end
     subgraph fraq_cli
-        fraq__cli__cmd_schema["cmd_schema"]
-        fraq__cli__cmd_stream["cmd_stream"]
-        fraq__cli___make_root["_make_root"]
         fraq__cli__cmd_files_search["cmd_files_search"]
-        fraq__cli__cmd_nl["cmd_nl"]
+        fraq__cli__cmd_schema["cmd_schema"]
+        fraq__cli___make_root["_make_root"]
         fraq__cli__cmd_explore["cmd_explore"]
+        fraq__cli__cmd_nl["cmd_nl"]
+        fraq__cli__cmd_stream["cmd_stream"]
     end
     subgraph fraq_core
-        fraq__core__FraqNode___child["_child"]
-        fraq__core___vec_add["_vec_add"]
         fraq__core___vec_scale["_vec_scale"]
         fraq__core___vec_hash["_vec_hash"]
+        fraq__core__FraqNode___child["_child"]
+        fraq__core___vec_add["_vec_add"]
     end
     subgraph fraq_formats
-        fraq__formats___encode_value["_encode_value"]
-        fraq__formats___to_yaml["_to_yaml"]
-        fraq__formats__FormatRegistry__serialize["serialize"]
         fraq__formats___to_json["_to_json"]
-        fraq__formats___to_jsonl["_to_jsonl"]
-        fraq__formats___to_binary["_to_binary"]
-        fraq__formats___prepare["_prepare"]
-        fraq__formats___to_msgpack_lite["_to_msgpack_lite"]
         fraq__formats___simple_yaml["_simple_yaml"]
-        fraq__formats__FormatRegistry__register["register"]
-        fraq__formats___to_csv["_to_csv"]
         fraq__formats___mp_encode["_mp_encode"]
+        fraq__formats___prepare["_prepare"]
+        fraq__formats___to_binary["_to_binary"]
+        fraq__formats___encode_value["_encode_value"]
+        fraq__formats__FormatRegistry__serialize["serialize"]
+        fraq__formats___to_yaml["_to_yaml"]
+        fraq__formats___to_jsonl["_to_jsonl"]
+        fraq__formats__FormatRegistry__register["register"]
+        fraq__formats___to_msgpack_lite["_to_msgpack_lite"]
+        fraq__formats___to_csv["_to_csv"]
     end
     subgraph fraq_generators
         fraq__generators__SensorStreamGenerator____call__["__call__"]
     end
     subgraph fraq_query
-        fraq__query__query["query"]
         fraq__query__FraqExecutor__execute["execute"]
+        fraq__query__query["query"]
     end
     subgraph fraq_schema_export
-        fraq__schema_export__to_openapi["to_openapi"]
-        fraq__schema_export__to_json_schema["to_json_schema"]
-        fraq__schema_export__to_asyncapi["to_asyncapi"]
-        fraq__schema_export__to_proto["to_proto"]
-        fraq__schema_export__to_graphql["to_graphql"]
         fraq__schema_export__to_nlp2cmd_schema["to_nlp2cmd_schema"]
         fraq__schema_export__to_nlp2cmd_actions["to_nlp2cmd_actions"]
+        fraq__schema_export__to_graphql["to_graphql"]
+        fraq__schema_export__to_proto["to_proto"]
+        fraq__schema_export__to_json_schema["to_json_schema"]
+        fraq__schema_export__to_openapi["to_openapi"]
+        fraq__schema_export__to_asyncapi["to_asyncapi"]
     end
     subgraph fraq_streaming
-        fraq__streaming__async_stream["async_stream"]
         fraq__streaming__async_query["async_query"]
+        fraq__streaming__async_stream["async_stream"]
     end
     subgraph fraq_text2fraq
-        fraq__text2fraq__text2filesearch["text2filesearch"]
-        fraq__format_results["format_results"]
         fraq__text2fraq__LiteLLMClient____init__["__init__"]
-        fraq__text2fraq__text2query["text2query"]
-        fraq__text2fraq__text2fraq["text2fraq"]
         fraq__text2fraq__Text2FraqConfig__from_env["from_env"]
+        fraq__text2fraq__text2filesearch["text2filesearch"]
+        fraq__text2fraq__text2fraq["text2fraq"]
         fraq__text2fraq__Text2Fraq____init__["__init__"]
+        fraq__text2fraq__text2query["text2query"]
+        fraq__format_results["format_results"]
     end
     fraq__formats___to_json --> fraq__formats__FormatRegistry__register
     fraq__formats___to_json --> fraq__formats___prepare

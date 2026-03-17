@@ -1,0 +1,72 @@
+version: '3.8'
+
+# Fraq Docker Compose - All Services
+# 
+# Usage:
+#   docker-compose up -d          # Start all services
+#   docker-compose up api           # Start only API
+#   docker-compose ps               # Check status
+#   docker-compose logs -f          # View logs
+#   docker-compose down             # Stop all
+
+services:
+  # REST API Server
+  fraq-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - FRAQ_DIMS=3
+      - FRAQ_SEED=0
+    volumes:
+      # Mount host filesystem for file search
+      - /home:/host/home:ro
+      - /tmp:/host/tmp:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # WebSocket Server
+  fraq-websocket:
+    build:
+      context: .
+      dockerfile: Dockerfile.websocket
+    ports:
+      - "8001:8001"
+    environment:
+      - FRAQ_DIMS=3
+    volumes:
+      - /home:/data:ro
+    restart: unless-stopped
+    depends_on:
+      - fraq-api
+
+  # CLI Tool (run on demand)
+  fraq-cli:
+    build:
+      context: .
+      dockerfile: Dockerfile.cli
+    entrypoint: ["fraq"]
+    volumes:
+      - /home:/data:ro
+      - .:/workspace:rw
+    profiles:
+      - cli  # docker-compose --profile cli run fraq-cli files search /data
+
+  # Optional: Ollama for LLM (if running locally)
+  # Uncomment if you want Ollama in Docker
+  # ollama:
+  #   image: ollama/ollama
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama-data:/root/.ollama
+  #   restart: unless-stopped
+
+# volumes:
+#   ollama-data:
