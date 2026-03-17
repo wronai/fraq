@@ -232,12 +232,15 @@ fraq/
 │   ├── schema_export.py     # NLP2CMD, OpenAPI, GraphQL, AsyncAPI, Proto, JSON Schema
 │   ├── streaming.py         # AsyncFraqStream, async_query, async_stream
 │   └── cli.py               # CLI entry point
-├── tests/                   # 132 tests, 96% coverage
+├── tests/                   # test suite
 ├── examples/
 │   ├── query_examples.py    # All data sources (disk, HTTP, SQL, sensor, hybrid)
 │   ├── nlp2cmd_integration.py  # NLP2CMD schema workflow
 │   ├── applications.py      # IoT, ERP, AI/ML, DevOps, Finance, Legal
+│   ├── app_integrations.py  # FastAPI, Flask, Streamlit, Kafka, gRPC, Celery
+│   ├── text2fraq_examples.py # LiteLLM + Ollama + small local model examples
 │   └── async_streaming.py   # FastAPI SSE, Kafka patterns
+├── .env.example             # LiteLLM and text2fraq configuration template
 ├── Dockerfile
 ├── docker-compose.yml
 ├── pyproject.toml

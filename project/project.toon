@@ -1,22 +1,24 @@
-# fraq | 25f 5130L | python:25
+# fraq | 28f 6442L | python:28
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[25]:
+M[28]:
+  examples/api_server.py,312
   examples/app_integrations.py,458
   examples/applications.py,126
   examples/async_streaming.py,81
   examples/nlp2cmd_integration.py,165
   examples/query_examples.py,160
   examples/text2fraq_examples.py,261
-  fraq/__init__.py,52
-  fraq/adapters.py,286
-  fraq/cli.py,65
+  examples/text2fraq_files.py,202
+  fraq/__init__.py,56
+  fraq/adapters.py,434
+  fraq/cli.py,206
   fraq/core.py,277
   fraq/formats.py,152
   fraq/generators.py,91
   fraq/query.py,166
   fraq/schema_export.py,399
   fraq/streaming.py,77
-  fraq/text2fraq.py,278
+  fraq/text2fraq.py,420
   tests/__init__.py,0
   tests/test_adapters.py,136
   tests/test_cli.py,37
@@ -26,7 +28,19 @@ M[25]:
   tests/test_query.py,101
   tests/test_schema_export.py,158
   tests/test_streaming.py,73
+  tests/test_text2fraq.py,64
 D:
+  examples/api_server.py:
+    i: asyncio,json,datetime,contextlib.asynccontextmanager,fastapi.{FastAPI,HTTPException,Query},pathlib.Path,typing.{Any,AsyncIterator}
+    e: lifespan,root,health,explore,stream,query_data,schema_records,files_search
+    lifespan(app:FastAPI)
+    root()
+    health()
+    explore(depth:int=Query(3; ge=1; le=20);dims:int=Query(3; ge=1; le=10);seed:int=Query(0);format:str=Query('json'; regex='^(json|yaml|csv)$'))
+    stream(count:int=Query(10; ge=1; le=10000);dims:int=Query(3; ge=1; le=10);format:str=Query('jsonl'; regex='^(json|jsonl|csv)$'))
+    query_data(fields:str=Query('value:float');depth:int=Query(3; ge=1; le=20);format:str=Query('json'; regex='^(json|csv|yaml|jsonl)$');limit:int=Query(100; ge=1; le=10000);dims:int=Query(3; ge=1; le=10))
+    schema_records(fields:str=Query(...; description='Comma-separated name:type');depth:int=Query(2; ge=1; le=10);branching:int=Query(3; ge=1; le=10);format:str=Query('json');dims:int=Query(3))
+    files_search(path:str=Query('.'; description='Base directory path');ext:Any=Query(None; description='File extension (pdf; txt; py...)');pattern:Any=Query(None; description='Glob pattern (*.pdf)');limit:int=Query(10; ge=1; le=1000);sort:str=Query('mtime'; regex='^(name|mtime|size)$');recursive:bool=Query(True);...+1)
   examples/app_integrations.py:
     i: json,dataclasses.dataclass
     e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook
@@ -90,9 +104,17 @@ D:
     example_env_config()
     example_benchmark()
     example_custom_schema()
+  examples/text2fraq_files.py:
+    i: os,sys,datetime,dotenv.load_dotenv,fraq.{FileSearchAdapter,FileSearchText2Fraq,Text2Fraq,Text2FraqConfig,text2filesearch}
+    e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
+    example_pdf_search_rule_based()
+    example_pdf_search_with_llm()
+    example_convenience_function()
+    example_file_search_adapter_direct()
+    example_llm_file_intent()
   fraq/adapters.py:
     i: json,hashlib,abc.{ABC,abstractmethod},dataclasses.{dataclass,field},pathlib.Path,typing.{Any,Dict,Iterator}
-    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,HybridAdapter,_ADAPTERS,get_adapter
+    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,FileSearchAdapter,HybridAdapter,_ADAPTERS
     BaseAdapter: load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter m...
     FileAdapter: load_root(1),save(3),_dict_to_node(1)  # Read/write fractal state from local f...
     HTTPAdapter: load_root(1),save(3)  # Fetch fractal roots from remote HTTP...
@@ -100,13 +122,16 @@ D:
     SensorAdapter: __init__(4),load_root(1),save(3),stream(3)  # Simulate or consume live sensor data...
     get_adapter(source:SourceType)->BaseAdapter
   fraq/cli.py:
-    i: argparse,sys,fraq.core.{FraqCursor,FraqNode,FraqSchema},fraq.formats.FormatRegistry,fraq.generators.HashGenerator,typing.List
-    e: cmd_explore,cmd_stream,cmd_schema,main
+    i: argparse,sys,datetime,fraq.core.{FraqCursor,FraqNode,FraqSchema},fraq.formats.FormatRegistry,fraq.generators.HashGenerator,pathlib.Path,typing.List
+    e: cmd_explore,cmd_stream,cmd_schema,cmd_files_search,cmd_files_list,cmd_files_stat,cmd_nl,main
     _make_root(dims:int;seed:int=0)->FraqNode
     cmd_explore(args:Any)->None
     cmd_stream(args:Any)->None
     cmd_schema(args:Any)->None
-    main(argv:Any=None)->None
+    cmd_files_search(args:Any)->None
+    cmd_files_list(args:Any)->None
+    cmd_files_stat(args:Any)->None
+    cmd_nl(args:Any)->None
   fraq/core.py:
     i: hashlib,math,struct,dataclasses.{dataclass,field},typing.{Any,Callable,Dict,Iterator,List}
     e: FraqNode,FieldDef,FraqSchema,FraqCursor
@@ -162,13 +187,14 @@ D:
     async_query(query:FraqQuery;root:Optional[FraqNode]=None;dims:int=3)->list[Dict[str, Any]]
     async_stream(root:Optional[FraqNode]=None;count:int=10;interval:float=0.1;direction:Optional[Vector]=None;dims:int=3)->AsyncIterator[Dict[str, Any]]
   fraq/text2fraq.py:
-    i: json,os,re,litellm,dataclasses.{dataclass,field},dotenv.load_dotenv,fraq.FraqQuery,typing.{Any,Protocol}
-    e: Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,Text2Fraq,Text2FraqSimple,text2query,text2fraq
+    i: json,os,re,litellm,dataclasses.{dataclass,field},dotenv.load_dotenv,fraq.core.FraqNode,typing.{Any,Protocol}
+    e: FileSearchText2Fraq,text2filesearch,Text2FraqSimple,Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,Text2Fraq
+    FileSearchText2Fraq: __init__(1),parse(1),search(1),format_results(3)  # Natural language to file search conve...
+    Text2FraqSimple:   # Rule-based text2fraq without LLM (fal...
     Text2FraqConfig: from_env(0)  # Configuration for text2fraq.
     ParsedQuery: to_fraq_query(0)  # Parsed natural language query.
     LLMClient: complete(1)  # Protocol for LLM clients.
-    LiteLLMClient: __init__(1),complete(1)  # LiteLLM client for text completion.
-    Text2Fraq: __init__(2),parse(1),_parse_response(1),_fallback_parse(1),execute(2)  # Natural language to fractal query con...
+    text2filesearch(text:str;base_path:str='.';fmt:str='json')->str | list[dict[str, Any]]
     text2query(text:str;config:Any=None)->ParsedQuery
     text2fraq(text:str;config:Any=None;root:Any=None)->str | list[dict[str, Any]]
   tests/test_adapters.py:
@@ -230,3 +256,11 @@ D:
     TestAsyncQuery: test_basic_query(0)
     TestAsyncStreamFunction: test_stream_count(0)
     event_loop()
+  tests/test_text2fraq.py:
+    i: fraq.query.FraqQuery,fraq.text2fraq.{ParsedQuery,Text2Fraq,Text2FraqConfig,Text2FraqSimple,text2query}
+    e: StubClient,TestParsedQuery,TestText2Fraq,TestText2FraqSimple,TestConvenienceFunctions
+    StubClient: __init__(1),complete(1)
+    TestParsedQuery: test_to_fraq_query_maps_filters_direction_and_limit(0)
+    TestText2Fraq: test_parse_json_response(0),test_parse_falls_back_when_response_is_not_json(0)
+    TestText2FraqSimple: test_rule_based_parse_detects_fields_format_and_limit(0)
+    TestConvenienceFunctions: test_text2query_uses_simple_parser_without_litellm(0)

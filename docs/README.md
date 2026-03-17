@@ -1,12 +1,12 @@
 <!-- code2docs:start --># fraq
 
-![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.10-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-157-green)
-> **157** functions | **26** classes | **17** files | CC̄ = 2.5
+![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.10-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-190-green)
+> **190** functions | **28** classes | **20** files | CC̄ = 2.9
 
 > Auto-generated project documentation from source code analysis.
 
 **Author:** Softreck / Prototypowanie.pl  
-**License:** MIT[(LICENSE)](./LICENSE)  
+**License:** Apache-2.0[(LICENSE)](./LICENSE)  
 **Repository:** [https://github.com/wronai/fraq](https://github.com/wronai/fraq)
 
 ## Installation
@@ -151,7 +151,7 @@ Content outside the markers is preserved when regenerating. Enable this with `sy
 
 ```
 fraq/
-    ├── streaming    ├── cli├── fraq/    ├── formats    ├── generators    ├── schema_export    ├── adapters    ├── applications    ├── async_streaming    ├── query_examples    ├── app_integrations    ├── text2fraq_examples    ├── nlp2cmd_integration├── project    ├── core    ├── text2fraq    ├── query```
+    ├── streaming    ├── formats├── fraq/    ├── cli    ├── generators    ├── schema_export    ├── adapters    ├── applications    ├── async_streaming    ├── query_examples    ├── app_integrations    ├── text2fraq_examples    ├── nlp2cmd_integration    ├── api_server    ├── text2fraq_files├── project    ├── bash_examples    ├── core    ├── query    ├── text2fraq```
 
 ## API Overview
 
@@ -168,21 +168,23 @@ fraq/
 - **`HTTPAdapter`** — Fetch fractal roots from remote HTTP APIs and push results back.
 - **`SQLAdapter`** — Map fractal nodes to/from relational tables.
 - **`SensorAdapter`** — Simulate or consume live sensor data as fractal streams.
+- **`FileSearchAdapter`** — Adapter for searching files on disk using fractal patterns.
 - **`HybridAdapter`** — Combine roots from several adapters into one fractal.
 - **`FraqNode`** — A single point in the infinite fractal data space.
 - **`FieldDef`** — One field in a FraqSchema.
 - **`FraqSchema`** — Typed projection of a fractal into structured records.
 - **`FraqCursor`** — Stateful walk through the fractal.
+- **`SourceType`** — Known data source families.
+- **`FraqFilter`** — Post-zoom predicate on a record field.
+- **`FraqQuery`** — Declarative query against fractal data.
+- **`FraqExecutor`** — Execute a FraqQuery against a root node.
+- **`FileSearchText2Fraq`** — Natural language to file search converter.
+- **`Text2FraqSimple`** — Rule-based text2fraq without LLM (fallback for offline use).
 - **`Text2FraqConfig`** — Configuration for text2fraq.
 - **`ParsedQuery`** — Parsed natural language query.
 - **`LLMClient`** — Protocol for LLM clients.
 - **`LiteLLMClient`** — LiteLLM client for text completion.
 - **`Text2Fraq`** — Natural language to fractal query converter.
-- **`Text2FraqSimple`** — Rule-based text2fraq without LLM (fallback for offline use).
-- **`SourceType`** — Known data source families.
-- **`FraqFilter`** — Post-zoom predicate on a record field.
-- **`FraqQuery`** — Declarative query against fractal data.
-- **`FraqExecutor`** — Execute a FraqQuery against a root node.
 
 ### Functions
 
@@ -191,6 +193,10 @@ fraq/
 - `cmd_explore(args)` — —
 - `cmd_stream(args)` — —
 - `cmd_schema(args)` — —
+- `cmd_files_search(args)` — Search files with natural language or explicit parameters.
+- `cmd_files_list(args)` — List files in directory (ls-like).
+- `cmd_files_stat(args)` — Show file statistics with fractal coordinates.
+- `cmd_nl(args)` — Natural language query (requires LLM).
 - `main(argv)` — —
 - `to_nlp2cmd_schema(schema, command_name, version, category)` — Export a FraqSchema as an NLP2CMD command schema.
 - `to_nlp2cmd_actions(schema)` — Export fraq operations as NLP2CMD ActionRegistry entries.
@@ -251,29 +257,51 @@ fraq/
 - `example_grpc_proto()` — gRPC / Protobuf — high-performance dla edge computing.
 - `example_json_schema()` — JSON Schema — walidacja rekordów.
 - `example_full_nlp2cmd_workflow()` — Pełny workflow: FraqSchema → NLP2CMD SchemaRegistry → Natural Language → Command.
+- `lifespan(app)` — App lifespan manager.
+- `root()` — API info.
+- `health()` — Health check.
+- `explore(depth, dims, seed, format)` — Zoom into fractal at given depth.
+- `stream(count, dims, format)` — Stream cursor records.
+- `query_data(fields, depth, format, limit)` — Execute fractal query with typed fields.
+- `schema_records(fields, depth, branching, format)` — Generate typed schema records.
+- `files_search(path, ext, pattern, limit)` — Search files with fractal metadata.
+- `files_list(path, ext, limit, sort)` — List files (ls-style).
+- `files_stat(file_path)` — Get file statistics with fractal coordinates.
+- `natural_language(query, path, format)` — Process natural language query (requires LLM).
+- `ws_stream(websocket)` — WebSocket streaming of fractal data.
+- `ws_files(websocket)` — WebSocket for file search streaming.
+- `example_pdf_search_rule_based()` — Wyszukiwanie PDF bez LLM - rule based.
+- `example_pdf_search_with_llm()` — Wyszukiwanie PDF z użyciem LLM (qwen2.5).
+- `example_convenience_function()` — Użycie funkcji text2filesearch.
+- `example_file_search_adapter_direct()` — Bezpośrednie użycie FileSearchAdapter.
+- `example_llm_file_intent()` — Rozpoznawanie intencji plikowych przez LLM.
+- `query(depth, direction, fields, format)` — One-shot fractal query.
+- `text2filesearch(text, base_path, fmt)` — One-liner to search files via natural language.
 - `text2query(text, config)` — Convert text to ParsedQuery.
 - `text2fraq(text, config, root)` — Convert text and execute query.
-- `query(depth, direction, fields, format)` — One-shot fractal query.
 
 
 ## Project Structure
 
+📄 `examples.api_server` (13 functions)
 📄 `examples.app_integrations` (9 functions)
 📄 `examples.applications` (7 functions)
 📄 `examples.async_streaming` (6 functions)
+📄 `examples.bash_examples`
 📄 `examples.nlp2cmd_integration` (11 functions)
 📄 `examples.query_examples` (10 functions)
 📄 `examples.text2fraq_examples` (8 functions)
+📄 `examples.text2fraq_files` (5 functions)
 📦 `fraq`
-📄 `fraq.adapters` (23 functions, 6 classes)
-📄 `fraq.cli` (5 functions)
+📄 `fraq.adapters` (28 functions, 7 classes)
+📄 `fraq.cli` (9 functions)
 📄 `fraq.core` (17 functions, 4 classes)
 📄 `fraq.formats` (14 functions, 1 classes)
 📄 `fraq.generators` (9 functions, 4 classes)
 📄 `fraq.query` (12 functions, 4 classes)
 📄 `fraq.schema_export` (7 functions)
 📄 `fraq.streaming` (5 functions, 1 classes)
-📄 `fraq.text2fraq` (14 functions, 6 classes)
+📄 `fraq.text2fraq` (20 functions, 8 classes)
 📄 `project`
 
 ## Requirements
@@ -284,8 +312,7 @@ fraq/
 ## Contributing
 
 **Contributors:**
-- Tom Softreck <tom@sapletta.com>
-- Tom Sapletta <tom-sapletta-com@users.noreply.github.com>
+- Tom Sapletta
 
 We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 

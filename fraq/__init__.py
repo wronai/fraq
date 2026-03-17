@@ -21,6 +21,7 @@ from fraq.adapters import (
     SQLAdapter,
     SensorAdapter,
     HybridAdapter,
+    FileSearchAdapter,
     get_adapter,
 )
 from fraq.schema_export import (
@@ -39,17 +40,20 @@ from fraq.text2fraq import (
     ParsedQuery,
     text2query,
     text2fraq,
+    FileSearchText2Fraq,
+    text2filesearch,
 )
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __all__ = [
     "FraqNode", "FraqSchema", "FraqCursor",
     "FormatRegistry",
     "HashGenerator", "FibonacciGenerator", "PerlinGenerator", "SensorStreamGenerator",
     "FraqQuery", "FraqExecutor", "FraqFilter", "SourceType", "query",
-    "FileAdapter", "HTTPAdapter", "SQLAdapter", "SensorAdapter", "HybridAdapter",
+    "FileAdapter", "HTTPAdapter", "SQLAdapter", "SensorAdapter", "HybridAdapter", "FileSearchAdapter",
     "get_adapter",
     "to_nlp2cmd_schema", "to_nlp2cmd_actions",
     "to_openapi", "to_graphql", "to_asyncapi", "to_proto", "to_json_schema",
     "Text2Fraq", "Text2FraqSimple", "Text2FraqConfig", "ParsedQuery", "text2query", "text2fraq",
+    "FileSearchText2Fraq", "text2filesearch",
 ]

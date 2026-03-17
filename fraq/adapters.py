@@ -311,6 +311,189 @@ class SensorAdapter(BaseAdapter):
 
 
 # ---------------------------------------------------------------------------
+# File Search Adapter
+# ---------------------------------------------------------------------------
+
+
+class FileSearchAdapter(BaseAdapter):
+    """
+    Adapter for searching files on disk using fractal patterns.
+    
+    Maps file system searches to fractal coordinates:
+    - Position = file metadata (size, mtime, depth in hierarchy)
+    - Seed = hash of file path
+    - Children = files in subdirectories
+    
+    Example:
+        adapter = FileSearchAdapter("/home/user/docs", "*.pdf")
+        root = adapter.load_root("/home/user/docs")
+        # Query for recent PDFs
+        results = adapter.search(extension="pdf", limit=10, sort_by="mtime")
+    """
+
+    source_type = SourceType.FILE
+
+    def __init__(
+        self,
+        base_path: str = ".",
+        pattern: str = "*",
+        recursive: bool = True,
+    ):
+        self.base_path = Path(base_path).expanduser().resolve()
+        self.pattern = pattern
+        self.recursive = recursive
+
+    def load_root(self, uri: str = "", **opts: Any) -> FraqNode:
+        """
+        Create root node representing the search space.
+        URI can be path or empty (uses base_path).
+        """
+        path = Path(uri).expanduser().resolve() if uri else self.base_path
+        
+        # Use directory stats as position
+        try:
+            stat = path.stat()
+            position = (
+                float(stat.st_size) if path.is_file() else float(stat.st_nlink),
+                float(stat.st_mtime),
+                float(stat.st_ctime),
+            )
+            seed = int(stat.st_ino)
+        except (OSError, FileNotFoundError):
+            position = (0.0, 0.0, 0.0)
+            seed = hash(str(path)) % (2**32)
+
+        return FraqNode(
+            position=position,
+            seed=seed,
+            meta={
+                "path": str(path),
+                "type": "directory" if path.is_dir() else "file",
+            },
+        )
+
+    def search(
+        self,
+        extension: str | None = None,
+        pattern: str | None = None,
+        limit: int = 10,
+        sort_by: str = "name",  # name, mtime, size
+        newer_than: float | None = None,  # timestamp
+        **opts: Any,
+    ) -> list[dict[str, Any]]:
+        """
+        Search files and return as fractal records.
+        
+        Args:
+            extension: File extension (pdf, txt, etc.)
+            pattern: Glob pattern
+            limit: Max results
+            sort_by: Sort field (name, mtime, size)
+            newer_than: Only files newer than this timestamp
+        
+        Returns:
+            List of file records with fractal coordinates
+        """
+        search_pattern = pattern or self.pattern
+        if extension and not search_pattern.endswith(f".{extension}"):
+            search_pattern = f"*.{extension}"
+
+        # Collect files
+        files = []
+        if self.recursive:
+            iterator = self.base_path.rglob(search_pattern)
+        else:
+            iterator = self.base_path.glob(search_pattern)
+
+        for path in iterator:
+            if not path.is_file():
+                continue
+                
+            try:
+                stat = path.stat()
+                mtime = stat.st_mtime
+                
+                # Filter by time if specified
+                if newer_than and mtime <= newer_than:
+                    continue
+                
+                # Create fractal representation
+                record = {
+                    "filename": path.name,
+                    "path": str(path),
+                    "extension": path.suffix.lstrip(".").lower(),
+                    "size": stat.st_size,
+                    "mtime": mtime,
+                    "ctime": stat.st_ctime,
+                    "depth": len(path.relative_to(self.base_path).parts),
+                    # Fractal coordinates
+                    "fraq_position": (
+                        float(stat.st_size) / (1024 * 1024),  # MB
+                        float(mtime),
+                        float(stat.st_ctime),
+                    ),
+                    "fraq_seed": hash(str(path)) % (2**32),
+                    "fraq_value": hash(str(path)) / (2**32),  # 0-1
+                }
+                files.append(record)
+            except (OSError, PermissionError):
+                continue
+
+        # Sort
+        if sort_by == "mtime":
+            files.sort(key=lambda x: x["mtime"], reverse=True)
+        elif sort_by == "size":
+            files.sort(key=lambda x: x["size"], reverse=True)
+        else:  # name
+            files.sort(key=lambda x: x["filename"])
+
+        return files[:limit]
+
+    def save(self, node: FraqNode, uri: str, fmt: str = "json", **opts: Any) -> str:
+        """Save search results to file."""
+        if "files" in node.meta:
+            data = node.meta["files"]
+            output = FormatRegistry.serialize(fmt, data)
+            path = Path(uri)
+            path.write_bytes(output.encode() if isinstance(output, str) else output)
+            return str(path)
+        return ""
+
+    def stream(
+        self,
+        extension: str | None = None,
+        pattern: str | None = None,
+        count: int = 100,
+    ) -> Iterator[dict[str, Any]]:
+        """Stream file records one by one."""
+        search_pattern = pattern or self.pattern
+        if extension:
+            search_pattern = f"*.{extension}"
+
+        iterator = self.base_path.rglob(search_pattern) if self.recursive else self.base_path.glob(search_pattern)
+        
+        yielded = 0
+        for path in iterator:
+            if not path.is_file():
+                continue
+            try:
+                stat = path.stat()
+                yield {
+                    "filename": path.name,
+                    "path": str(path),
+                    "extension": path.suffix.lstrip(".").lower(),
+                    "size": stat.st_size,
+                    "mtime": stat.st_mtime,
+                    "fraq_value": hash(str(path)) / (2**32),
+                }
+                yielded += 1
+                if yielded >= count:
+                    break
+            except (OSError, PermissionError):
+                continue
+
+
+# ---------------------------------------------------------------------------
 # Hybrid adapter — merge multiple sources
 # ---------------------------------------------------------------------------
 

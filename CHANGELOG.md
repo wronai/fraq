@@ -2,6 +2,31 @@
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-03-17
+
+### Docs
+- Update README.md
+- Update docs/README.md
+- Update examples/CLI_CURL_GUIDE.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_text2fraq.py
+
+### Other
+- Update examples/api_server.py
+- Update examples/bash_examples.sh
+- Update examples/text2fraq_files.py
+- Update fraq/__init__.py
+- Update fraq/adapters.py
+- Update fraq/cli.py
+- Update fraq/text2fraq.py
+- Update project/analysis.toon
+- Update project/calls.mmd
+- Update project/calls.png
+- ... and 11 more files
+
 ## [0.2.1] - 2026-03-17
 
 ### Docs
