@@ -2,7 +2,23 @@
 
 REST API do obsługi zapytań fraktalnych i wyszukiwania plików.
 
-## Szybki start
+## Szybki start (skrypt)
+
+```bash
+cd examples/fastapi-docker
+
+# Uruchom serwer
+./run.sh up
+
+# Lub przez Python
+python run.py --docker
+
+# Testuj API
+./run.sh test
+python run.py --test
+```
+
+## Szybki start (docker-compose)
 
 ```bash
 cd examples/fastapi-docker
@@ -10,6 +26,16 @@ docker-compose up --build
 
 # API dostępne na http://localhost:8000
 ```
+
+## Uruchamialne pliki
+
+| Plik | Opis |
+|------|------|
+| `run.sh` | Bash script: `./run.sh {up\|down\|logs\|test\|bash}` |
+| `run.py` | Python script: `python run.py [--docker\|--local\|--test]` |
+| `main.py` | Aplikacja FastAPI |
+| `Dockerfile` | Obraz Docker |
+| `docker-compose.yml` | Konfiguracja Compose |
 
 ## Endpointy
 

@@ -42,6 +42,7 @@ pip install -e ".[dev]"
 fraq explore --dims 3 --depth 5 --format json
 fraq stream  --dims 2 --count 20 --format csv
 fraq schema  --fields "name:str,value:float,flag:bool" --depth 2
+fraq nl "show 10 pdf files created recently" --path .
 
 # Docker
 docker compose run test          # run full test suite
@@ -70,7 +71,7 @@ q = (
 result = FraqExecutor(dims=3).execute(q)
 
 # 3. Source adapters — same query, different sources
-from fraq import FileAdapter, SQLAdapter, SensorAdapter, HybridAdapter
+from fraq import FileAdapter, SQLAdapter, SensorAdapter, HybridAdapter, FileSearchAdapter
 
 # Disk
 adapter = FileAdapter()
@@ -90,6 +91,9 @@ hybrid = HybridAdapter()
 hybrid.add(FileAdapter(), "local_backup.json")
 hybrid.add(SensorAdapter(), "")
 merged = hybrid.load_root()
+
+# Files
+files = FileSearchAdapter(base_path=".").search(extension="py", limit=5, sort_by="mtime")
 
 # 4. Async streaming (FastAPI SSE, Kafka, NATS)
 from fraq.streaming import async_stream

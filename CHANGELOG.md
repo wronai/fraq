@@ -2,6 +2,34 @@
 
 ## [Unreleased]
 
+## [0.2.4] - 2026-03-17
+
+### Docs
+- Update README.md
+- Update docs/README.md
+- Update examples/README.md
+- Update examples/cli-docker/README.md
+- Update examples/fastapi-docker/README.md
+- Update examples/websocket-docker/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_text2fraq.py
+
+### Other
+- Update examples/cli-docker/run.py
+- Update examples/cli-docker/run.sh
+- Update examples/fastapi-docker/run.sh
+- Update examples/fullstack-docker/run.py
+- Update examples/fullstack-docker/run.sh
+- Update examples/websocket-docker/run.py
+- Update examples/websocket-docker/run.sh
+- Update fraq/cli.py
+- Update fraq/text2fraq.py
+- Update project/analysis.toon
+- ... and 11 more files
+
 ## [0.2.3] - 2026-03-17
 
 ### Docs

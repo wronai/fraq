@@ -1,26 +1,28 @@
-# code2llm | 11f 2903L | python:10,shell:1 | 2026-03-17
-# CC̄=3.2 | critical:5/190 | dups:0 | cycles:3
+# code2llm | 12f 2871L | python:11,shell:1 | 2026-03-17
+# CC̄=3.2 | critical:5/225 | dups:0 | cycles:3
 
-HEALTH[5]:
+HEALTH[4]:
   🔴 GOD   fraq/adapters.py = 577L, 7 classes, 28m, max CC=12
-  🔴 GOD   fraq/text2fraq.py = 518L, 7 classes, 20m, max CC=18
   🟡 CC    parse CC=17 (limit:15)
   🟡 CC    _fallback_parse CC=18 (limit:15)
   🟡 CC    parse CC=15 (limit:15)
 
-REFACTOR[4]:
+REFACTOR[3]:
   1. split fraq/adapters.py  (god module)
-  2. split fraq/text2fraq.py  (god module)
-  3. split 3 high-CC methods  (CC>15)
-  4. break 3 circular dependencies
+  2. split 3 high-CC methods  (CC>15)
+  3. break 3 circular dependencies
 
 COUPLING: no cross-package imports detected
 
 LAYERS:
+  ./                              CC̄=3.7    ←in:0  →out:0
+  │ main_websocket              52L  0C    3m  CC=5      ←0
+  │ project.sh                  14L  0C    0m  CC=0.0    ←0
+  │
   fraq/                           CC̄=3.2    ←in:0  →out:0
   │ !! adapters                   577L  7C   28m  CC=12     ←0
-  │ !! text2fraq                  518L  7C   20m  CC=18     ←4
   │ schema_export              476L  0C    7m  CC=5      ←2
+  │ !! text2fraq                  434L  7C   20m  CC=18     ←4
   │ core                       360L  4C   17m  CC=5      ←1
   │ cli                        274L  0C    9m  CC=9      ←0
   │ query                      219L  4C   12m  CC=9      ←1
@@ -29,13 +31,10 @@ LAYERS:
   │ streaming                   93L  1C    5m  CC=3      ←2
   │ __init__                    59L  0C    0m  CC=0.0    ←0
   │
-  ./                              CC̄=0.0    ←in:0  →out:0
-  │ project.sh                  14L  0C    0m  CC=0.0    ←0
-  │
 
 DUPLICATES[0]: none
 
-FUNCTIONS (CC≥10, 5 of 121):
+FUNCTIONS (CC≥10, 5 of 124):
    18.0  Text2Fraq._fallback_parse                  27n   2exit  cond+ret  !! split
    17.0  FileSearchText2Fraq.parse                  20n   2exit  loops+cond+ret  !! split
    15.0  Text2FraqSimple.parse                      20n   2exit  loops+cond+ret  !! split
@@ -43,20 +42,20 @@ FUNCTIONS (CC≥10, 5 of 121):
    11.0  _mp_encode                                 26n   9exit  loops+cond+ret
 
   summary:
-    critical(≥10): 5 | high(5-10): 22 | medium(2-5): 54 | low(<2): 40
-    4% CC≥10  22% CC≥5
+    critical(≥10): 5 | high(5-10): 24 | medium(2-5): 54 | low(<2): 41
+    4% CC≥10  23% CC≥5
 
 HOTSPOTS:
   #1  main                                 fan=25   "calls 25 functions"
   #2  cmd_files_stat                       fan=14   "calls 14 functions"
   #3  FileSearchAdapter.search             fan=14   "FileSearchAdapter method, fan-out=14"
   #4  FileAdapter.load_root                fan=13   "FileAdapter method, fan-out=13"
-  #5  cmd_schema                           fan=11   "calls 11 functions"
-  #6  cmd_nl                               fan=11   "calls 11 functions"
-  #7  FileSearchAdapter.load_root          fan=11   "FileSearchAdapter method, fan-out=11"
-  #8  _to_csv                              fan=10   "calls 10 functions"
-  #9  HTTPAdapter.load_root                fan=10   "HTTPAdapter method, fan-out=10"
-  #10 SQLAdapter.load_root                 fan=10   "SQLAdapter method, fan-out=10"
+  #5  ws_stream                            fan=11   "calls 11 functions"
+  #6  cmd_schema                           fan=11   "calls 11 functions"
+  #7  cmd_nl                               fan=11   "calls 11 functions"
+  #8  FileSearchAdapter.load_root          fan=11   "FileSearchAdapter method, fan-out=11"
+  #9  _to_csv                              fan=10   "calls 10 functions"
+  #10 HTTPAdapter.load_root                fan=10   "HTTPAdapter method, fan-out=10"
 
 CLASSES:
   FraqQuery                      ████████████████████████   6m  CC̄=1.5   max=3   
@@ -206,6 +205,11 @@ The executor build...
     natural_language(query,path,format)
     ws_stream(websocket)
     ws_files(websocket)
+  examples/websocket-docker/main.py:
+    e: ws_stream,ws_files,health
+    ws_stream(websocket)
+    ws_files(websocket)
+    health()
   examples/text2fraq_examples.py:
     e: example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_env_config,example_benchmark,example_custom_schema
     example_simple_parser()
@@ -216,6 +220,11 @@ The executor build...
     example_env_config()
     example_benchmark()
     example_custom_schema()
+  main_websocket.py:
+    e: ws_stream,ws_files,health
+    ws_stream(websocket)
+    ws_files(websocket)
+    health()
   fraq/schema_export.py:
     e: to_nlp2cmd_schema,to_nlp2cmd_actions,to_openapi,to_graphql,to_asyncapi,to_proto,to_json_schema
     to_nlp2cmd_schema(schema,command_name,version,category)
@@ -225,6 +234,11 @@ The executor build...
     to_asyncapi(schema,title,version)
     to_proto(schema,package,message_name)
     to_json_schema(schema,title)
+  examples/fullstack-docker/websocket/main.py:
+    e: ws_stream,ws_files,health
+    ws_stream(websocket)
+    ws_files(websocket)
+    health()
   fraq/core.py:
     e: FraqNode,FieldDef,FraqSchema,FraqCursor,_vec_add,_vec_scale,_vec_norm,_vec_hash
     FraqNode  # A single point in the infinite fractal data space.
@@ -308,6 +322,13 @@ Produces dict paylo...
     example_sensor_to_formats()
     example_hybrid_merge()
     example_oneliners()
+  examples/fastapi-docker/main.py:
+    e: root,health,explore,files_search,files_stat
+    root()
+    health()
+    explore(depth,dims,format)
+    files_search(path,ext,limit,sort)
+    files_stat(file_path)
   examples/app_integrations.py:
     e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook,example_celery_task
     example_fastapi_app()
@@ -319,6 +340,17 @@ Produces dict paylo...
     example_grpc_service()
     example_jupyter_notebook()
     example_celery_task()
+  examples/fullstack-docker/api/main.py:
+    e: root,health,explore,files_search
+    root()
+    health()
+    explore(depth)
+    files_search(path,ext,limit)
   fraq/__init__.py:
+  examples/websocket-docker/run.sh:
+  examples/cli-docker/run.sh:
+  examples/fullstack-docker/run.sh:
+  examples/fastapi-docker/run.sh:
+  examples/fullstack-docker/frontend/app.py:
   project.sh:
   examples/bash_examples.sh:

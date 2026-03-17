@@ -1,7 +1,20 @@
 """Tests for fraq.text2fraq."""
 
+import importlib
+
 from fraq.query import FraqQuery
-from fraq.text2fraq import ParsedQuery, Text2Fraq, Text2FraqConfig, Text2FraqSimple, text2query
+from fraq.text2fraq import (
+    FileSearchText2Fraq,
+    ParsedQuery,
+    Text2Fraq,
+    Text2FraqConfig,
+    Text2FraqSimple,
+    text2filesearch,
+    text2query,
+)
+
+# Import module with different name to avoid conflict with function
+text2fraq_mod = importlib.import_module("fraq.text2fraq")
 
 
 class StubClient:
@@ -83,3 +96,67 @@ class TestConvenienceFunctions:
 
         assert "pressure:float" in parsed.fields
         assert parsed.format == "yaml"
+
+
+class StubFileAdapter:
+    def __init__(self, results):
+        self.results = results
+        self.calls = []
+
+    def search(self, **kwargs):
+        self.calls.append(kwargs)
+        return self.results
+
+
+class TestFileSearchText2Fraq:
+    def test_parse_detects_extension_limit_sort_and_recent_filter(self):
+        searcher = FileSearchText2Fraq(".")
+
+        parsed = searcher.parse("list 7 pdf files created recently")
+
+        assert parsed["extension"] == "pdf"
+        assert parsed["limit"] == 7
+        assert parsed["sort_by"] == "mtime"
+        assert parsed["newer_than"] is not None
+
+    def test_search_uses_adapter_with_parsed_arguments(self):
+        adapter = StubFileAdapter([{"filename": "report.pdf", "size": 10}])
+        searcher = FileSearchText2Fraq(".")
+        searcher.adapter = adapter
+
+        results = searcher.search("list 3 pdf files")
+
+        assert results == [{"filename": "report.pdf", "size": 10}]
+        assert adapter.calls[0]["extension"] == "pdf"
+        assert adapter.calls[0]["limit"] == 3
+
+    def test_format_results_supports_field_projection(self):
+        searcher = FileSearchText2Fraq(".")
+
+        output = searcher.format_results(
+            [{"filename": "report.pdf", "size": 10, "path": "/tmp/report.pdf"}],
+            fmt="json",
+            fields=["filename", "size"],
+        )
+
+        assert '"filename": "report.pdf"' in output
+        assert '"size": 10' in output
+        assert '"path"' not in output
+
+
+class TestText2FileSearchFunction:
+    def test_text2filesearch_records_uses_file_searcher(self, monkeypatch):
+        adapter = StubFileAdapter([{"filename": "notes.md"}])
+        searcher = FileSearchText2Fraq(".")
+        searcher.adapter = adapter
+
+        # Patch the class in text2fraq module
+        monkeypatch.setattr(
+            text2fraq_mod,
+            "FileSearchText2Fraq",
+            lambda base_path=".": searcher,
+        )
+
+        result = text2filesearch("list 1 markdown file", fmt="records")
+
+        assert result == [{"filename": "notes.md"}]

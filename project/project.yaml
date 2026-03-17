@@ -3,12 +3,12 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T17:12:59Z'
+  analyzed_at: '2026-03-17T17:21:36Z'
   tool: code2llm
   stats:
-    files: 9
-    lines: 4063
-    functions: 121
+    files: 10
+    lines: 4031
+    functions: 124
     classes: 28
 health:
   cc_avg: 3.2
@@ -53,6 +53,11 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
+    target: ws_stream
+    value: 11
+    limit: 10
+    severity: warning
+  - type: high_fan_out
     target: cmd_schema
     value: 11
     limit: 10
@@ -84,7 +89,7 @@ health:
     severity: warning
 modules:
 - path: fraq/text2fraq.py
-  lines: 518
+  lines: 434
   classes: 7
   methods: 20
   cc_max: 18
@@ -296,6 +301,23 @@ modules:
   - name: to_json_schema
     type: function
     cc: 2
+- path: main_websocket.py
+  lines: 52
+  classes: 0
+  methods: 3
+  cc_max: 5
+  inbound_deps: 0
+  exports:
+  - name: ws_stream
+    type: function
+    cc: 5
+    fan_out: 11
+  - name: ws_files
+    type: function
+    cc: 5
+  - name: health
+    type: function
+    cc: 1
 - path: fraq/streaming.py
   lines: 93
   classes: 1
@@ -357,6 +379,9 @@ hotspots:
 - name: FileAdapter.load_root
   fan_out: 13
   note: Orchestrates 13 calls
+- name: ws_stream
+  fan_out: 11
+  note: Orchestrates 11 calls
 - name: cmd_schema
   fan_out: 11
   note: Orchestrates 11 calls
@@ -374,14 +399,8 @@ hotspots:
 - name: HTTPAdapter.load_root
   fan_out: 10
   note: Orchestrates 10 calls
-- name: SQLAdapter.load_root
-  fan_out: 10
-  note: Orchestrates 10 calls
 refactoring:
   priorities:
-  - action: Split god module fraq/text2fraq.py (518L, 7 classes)
-    impact: high
-    effort: high
   - action: Split god module fraq/adapters.py (577L, 7 classes)
     impact: high
     effort: high
@@ -413,5 +432,5 @@ evolution:
 - date: '2026-03-17'
   cc_avg: 3.2
   critical: 5
-  lines: 4063
+  lines: 4031
   note: Automated analysis

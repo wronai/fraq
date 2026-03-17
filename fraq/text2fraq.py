@@ -10,37 +10,155 @@ from __future__ import annotations
 import json
 import os
 import re
+from datetime import datetime, timedelta
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
-# Lazy import litellm to avoid hard dependency
 try:
     import litellm
+
     HAS_LITELLM = True
 except ImportError:
     HAS_LITELLM = False
 
 try:
     from dotenv import load_dotenv
+
     load_dotenv()
 except ImportError:
     pass
 
-from fraq.core import FraqNode
-from fraq.query import FraqExecutor, FraqQuery
 from fraq.adapters import FileSearchAdapter
+from fraq.core import FraqNode
+from fraq.formats import FormatRegistry
+from fraq.query import FraqExecutor, FraqQuery
+
+_LIMIT_PATTERN = re.compile(r"(\d+)\b(?:\W+\w+){0,5}?\W+(records?|rows?|items?|samples?)\b")
+_FILE_LIMIT_PATTERN = re.compile(r"(\d+)\s*(files?|documents?|items?)?")
 
 
-# ... (existing code remains)
+def _word_match(text: str, pattern: str) -> bool:
+    return re.search(rf"\b{re.escape(pattern)}\b", text) is not None
+
+
+def _detect_format(text: str, default: str = "json") -> str:
+    if "csv" in text or "table" in text:
+        return "csv"
+    if "yaml" in text:
+        return "yaml"
+    if "stream" in text or "jsonl" in text:
+        return "jsonl"
+    return default
+
+
+def _detect_depth(text: str, default: int = 3) -> int:
+    if "deep" in text or "many" in text:
+        return 5
+    if "shallow" in text or "simple" in text:
+        return 1
+    return default
+
+
+def _detect_limit(text: str) -> int | None:
+    match = _LIMIT_PATTERN.search(text)
+    return int(match.group(1)) if match else None
+
+
+@dataclass
+class Text2FraqConfig:
+    """Configuration for text2fraq."""
+
+    provider: str = "ollama"
+    model: str = "qwen2.5:3b"
+    api_key: str = ""
+    base_url: str = "http://localhost:11434"
+    temperature: float = 0.1
+    max_tokens: int = 512
+    timeout: int = 30
+    default_format: str = "json"
+    default_dims: int = 3
+    default_depth: int = 3
+
+    @classmethod
+    def from_env(cls) -> "Text2FraqConfig":
+        """Load config from environment variables."""
+        return cls(
+            provider=os.getenv("LITELLM_PROVIDER", "ollama"),
+            model=os.getenv("LITELLM_MODEL", "qwen2.5:3b"),
+            api_key=os.getenv("LITELLM_API_KEY", ""),
+            base_url=os.getenv("LITELLM_BASE_URL", "http://localhost:11434"),
+            temperature=float(os.getenv("LITELLM_TEMPERATURE", "0.1")),
+            max_tokens=int(os.getenv("LITELLM_MAX_TOKENS", "512")),
+            timeout=int(os.getenv("LITELLM_TIMEOUT", "30")),
+            default_format=os.getenv("TEXT2FRAQ_DEFAULT_FORMAT", "json"),
+            default_dims=int(os.getenv("TEXT2FRAQ_DEFAULT_DIMS", "3")),
+            default_depth=int(os.getenv("TEXT2FRAQ_DEFAULT_DEPTH", "3")),
+        )
+
+
+@dataclass
+class ParsedQuery:
+    """Parsed natural language query."""
+
+    fields: list[str]
+    depth: int
+    format: str
+    filters: dict[str, Any] = field(default_factory=dict)
+    dims: int = 3
+    direction: tuple[float, ...] | None = None
+    limit: int | None = None
+
+    def to_fraq_query(self) -> FraqQuery:
+        """Convert to FraqQuery object."""
+        query = FraqQuery().zoom(self.depth, direction=self.direction)
+        query = query.select(*self.fields).output(self.format)
+        for field_name, predicate in self.filters.items():
+            if isinstance(predicate, dict):
+                for op, value in predicate.items():
+                    query = query.where(field_name, op, value)
+            else:
+                query = query.where(field_name, "eq", predicate)
+        if self.limit:
+            query = query.take(self.limit)
+        return query
+
+
+class LLMClient(Protocol):
+    """Protocol for LLM clients."""
+
+    def complete(self, prompt: str) -> str: ...
+
+
+class LiteLLMClient:
+    """LiteLLM client for text completion."""
+
+    def __init__(self, config: Text2FraqConfig | None = None):
+        if not HAS_LITELLM:
+            raise ImportError("litellm is required. Install: pip install litellm")
+        self.config = config or Text2FraqConfig.from_env()
+        litellm.api_base = self.config.base_url
+        if self.config.api_key:
+            litellm.api_key = self.config.api_key
+
+    def complete(self, prompt: str) -> str:
+        """Send prompt to LLM and return completion."""
+        response = litellm.completion(
+            model=f"{self.config.provider}/{self.config.model}",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=self.config.temperature,
+            max_tokens=self.config.max_tokens,
+            timeout=self.config.timeout,
+        )
+        return response.choices[0].message.content
 
 
 class FileSearchText2Fraq:
     """
     Natural language to file search converter.
-    
+
     Converts queries like "list 10 PDF files created recently" to file searches.
     Works with Text2Fraq for combined queries.
-    
+
     Examples:
         >>> fs = FileSearchText2Fraq("/home/user/documents")
         >>> results = fs.search("show me 10 pdf files created last week")
@@ -73,52 +191,42 @@ class FileSearchText2Fraq:
     def parse(self, text: str) -> dict[str, Any]:
         """Parse natural language file query to search parameters."""
         text_lower = text.lower()
-
-        # Detect file extension
-        extension = None
-        for ext, patterns in self.FILE_PATTERNS.items():
-            if any(p in text_lower for p in patterns):
-                extension = ext
-                break
-
-        # Detect limit (number of files)
-        limit = 10  # default
-        num_match = re.search(r'(\d+)\s*(files?|documents?|items?)?', text_lower)
-        if num_match:
-            limit = int(num_match.group(1))
-
-        # Detect time constraints
-        newer_than = None
-        if "today" in text_lower or "recent" in text_lower:
-            from datetime import datetime, timedelta
-            newer_than = (datetime.now() - timedelta(days=1)).timestamp()
-        elif "week" in text_lower or "last week" in text_lower:
-            from datetime import datetime, timedelta
-            newer_than = (datetime.now() - timedelta(days=7)).timestamp()
-        elif "month" in text_lower:
-            from datetime import datetime, timedelta
-            newer_than = (datetime.now() - timedelta(days=30)).timestamp()
-
-        # Detect sort order
-        sort_by = "mtime"  # default to recent
-        if "name" in text_lower or "alphabetical" in text_lower:
-            sort_by = "name"
-        elif "size" in text_lower or "largest" in text_lower:
-            sort_by = "size"
-        elif "recent" in text_lower or "latest" in text_lower or "newest" in text_lower:
-            sort_by = "mtime"
-
         return {
-            "extension": extension,
-            "limit": limit,
-            "newer_than": newer_than,
-            "sort_by": sort_by,
+            "extension": self._detect_extension(text_lower),
+            "limit": self._detect_limit(text_lower),
+            "newer_than": self._detect_newer_than(text_lower),
+            "sort_by": self._detect_sort_by(text_lower),
         }
+
+    def _detect_extension(self, text: str) -> str | None:
+        for extension, patterns in self.FILE_PATTERNS.items():
+            if any(pattern in text for pattern in patterns):
+                return extension
+        return None
+
+    def _detect_limit(self, text: str) -> int:
+        match = _FILE_LIMIT_PATTERN.search(text)
+        return int(match.group(1)) if match else 10
+
+    def _detect_newer_than(self, text: str) -> float | None:
+        if "today" in text or "recent" in text:
+            return (datetime.now() - timedelta(days=1)).timestamp()
+        if "week" in text or "last week" in text:
+            return (datetime.now() - timedelta(days=7)).timestamp()
+        if "month" in text:
+            return (datetime.now() - timedelta(days=30)).timestamp()
+        return None
+
+    def _detect_sort_by(self, text: str) -> str:
+        if "name" in text or "alphabetical" in text:
+            return "name"
+        if "size" in text or "largest" in text:
+            return "size"
+        return "mtime"
 
     def search(self, text: str) -> list[dict[str, Any]]:
         """Parse query and execute file search."""
-        params = self.parse(text)
-        return self.adapter.search(**params)
+        return self.adapter.search(**self.parse(text))
 
     def format_results(
         self,
@@ -127,155 +235,9 @@ class FileSearchText2Fraq:
         fields: list[str] | None = None,
     ) -> str:
         """Format file search results to specified format."""
-        from fraq.formats import FormatRegistry
-
         if fields:
-            # Filter to requested fields
-            filtered = []
-            for r in results:
-                filtered.append({k: r.get(k) for k in fields if k in r})
-            results = filtered
-
+            results = [{key: record.get(key) for key in fields if key in record} for record in results]
         return FormatRegistry.serialize(fmt, results)
-
-
-def text2filesearch(
-    text: str,
-    base_path: str = ".",
-    fmt: str = "json",
-) -> str | list[dict[str, Any]]:
-    """
-    One-liner to search files via natural language.
-    
-    Examples:
-        >>> text2filesearch("list 10 pdf files")
-        >>> text2filesearch("show recent txt files in /home/user", "/home/user", "csv")
-    """
-    searcher = FileSearchText2Fraq(base_path)
-    results = searcher.search(text)
-    if fmt == "records":
-        return results
-    return searcher.format_results(results, fmt)
-
-
-# Update Text2FraqSimple to handle file queries
-class Text2FraqSimple:
-    """
-    Rule-based text2fraq without LLM (fallback for offline use).
-
-    Useful when LLM is unavailable or for deterministic parsing.
-    Now includes file search capabilities.
-    """
-
-    FIELD_PATTERNS: dict[str, list[str]] = {
-        "temperature:float": ["temperature", "temp"],
-        "humidity:float": ["humidity", "moisture"],
-        "pressure:float": ["pressure", "barometric"],
-        "sensor_id:str": ["sensor", "id", "device"],
-        "active:bool": ["active", "enabled", "on", "running"],
-        "value:float": ["value", "reading", "measurement"],
-        "timestamp:int": ["time", "timestamp", "date"],
-        "x:float": ["x", "horizontal"],
-        "y:float": ["y", "vertical"],
-        "z:float": ["z", "depth"],
-        # File fields
-        "filename:str": ["file", "filename", "name"],
-        "extension:str": ["extension", "type", "format"],
-        "size:int": ["size", "bytes"],
-        "mtime:float": ["modified", "mtime", "changed"],
-        "path:str": ["path", "location", "directory"],
-    }
-
-
-@dataclass
-class Text2FraqConfig:
-    """Configuration for text2fraq."""
-    provider: str = "ollama"
-    model: str = "qwen2.5:3b"
-    api_key: str = ""
-    base_url: str = "http://localhost:11434"
-    temperature: float = 0.1
-    max_tokens: int = 512
-    timeout: int = 30
-    default_format: str = "json"
-    default_dims: int = 3
-    default_depth: int = 3
-
-    @classmethod
-    def from_env(cls) -> Text2FraqConfig:
-        """Load config from environment variables."""
-        return cls(
-            provider=os.getenv("LITELLM_PROVIDER", "ollama"),
-            model=os.getenv("LITELLM_MODEL", "qwen2.5:3b"),
-            api_key=os.getenv("LITELLM_API_KEY", ""),
-            base_url=os.getenv("LITELLM_BASE_URL", "http://localhost:11434"),
-            temperature=float(os.getenv("LITELLM_TEMPERATURE", "0.1")),
-            max_tokens=int(os.getenv("LITELLM_MAX_TOKENS", "512")),
-            timeout=int(os.getenv("LITELLM_TIMEOUT", "30")),
-            default_format=os.getenv("TEXT2FRAQ_DEFAULT_FORMAT", "json"),
-            default_dims=int(os.getenv("TEXT2FRAQ_DEFAULT_DIMS", "3")),
-            default_depth=int(os.getenv("TEXT2FRAQ_DEFAULT_DEPTH", "3")),
-        )
-
-
-@dataclass
-class ParsedQuery:
-    """Parsed natural language query."""
-    fields: list[str]
-    depth: int
-    format: str
-    filters: dict[str, Any] = field(default_factory=dict)
-    dims: int = 3
-    direction: tuple[float, ...] | None = None
-    limit: int | None = None
-
-    def to_fraq_query(self) -> FraqQuery:
-        """Convert to FraqQuery object."""
-        q = FraqQuery()
-        if self.direction:
-            q = q.zoom(self.depth, direction=self.direction)
-        else:
-            q = q.zoom(self.depth)
-        q = q.select(*self.fields).output(self.format)
-        for field_name, predicate in self.filters.items():
-            if isinstance(predicate, dict):
-                for op, value in predicate.items():
-                    q = q.where(field_name, op, value)
-            else:
-                q = q.where(field_name, "eq", predicate)
-        if self.limit:
-            q = q.take(self.limit)
-        return q
-
-
-class LLMClient(Protocol):
-    """Protocol for LLM clients."""
-    def complete(self, prompt: str) -> str: ...
-
-
-class LiteLLMClient:
-    """LiteLLM client for text completion."""
-
-    def __init__(self, config: Text2FraqConfig | None = None):
-        if not HAS_LITELLM:
-            raise ImportError("litellm is required. Install: pip install litellm")
-        self.config = config or Text2FraqConfig.from_env()
-        # Configure litellm
-        litellm.api_base = self.config.base_url
-        if self.config.api_key:
-            litellm.api_key = self.config.api_key
-
-    def complete(self, prompt: str) -> str:
-        """Send prompt to LLM and return completion."""
-        messages = [{"role": "user", "content": prompt}]
-        response = litellm.completion(
-            model=f"{self.config.provider}/{self.config.model}",
-            messages=messages,
-            temperature=self.config.temperature,
-            max_tokens=self.config.max_tokens,
-            timeout=self.config.timeout,
-        )
-        return response.choices[0].message.content
 
 
 class Text2Fraq:
@@ -325,79 +287,49 @@ Output format:
 
     def _parse_response(self, response: str) -> ParsedQuery:
         """Parse LLM response to ParsedQuery."""
-        # Extract JSON from response
-        json_match = re.search(r'\{.*\}', response, re.DOTALL)
-        if json_match:
-            try:
-                data = json.loads(json_match.group())
-            except json.JSONDecodeError:
-                data = self._fallback_parse(response)
-        else:
-            data = self._fallback_parse(response)
-
+        data = self._extract_structured_response(response)
         direction = data.get("direction")
-        if isinstance(direction, list):
-            direction = tuple(float(value) for value in direction)
-        else:
-            direction = None
-
+        parsed_direction = (
+            tuple(float(value) for value in direction)
+            if isinstance(direction, list)
+            else None
+        )
         return ParsedQuery(
             fields=data.get("fields", ["value:float"]),
             depth=data.get("depth", self.config.default_depth),
             format=data.get("format", self.config.default_format),
             filters=data.get("filters", {}),
             dims=data.get("dims", self.config.default_dims),
-            direction=direction,
+            direction=parsed_direction,
             limit=data.get("limit"),
         )
 
+    def _extract_structured_response(self, response: str) -> dict[str, Any]:
+        json_match = re.search(r"\{.*\}", response, re.DOTALL)
+        if json_match:
+            try:
+                return json.loads(json_match.group())
+            except json.JSONDecodeError:
+                pass
+        return self._fallback_parse(response)
+
     def _fallback_parse(self, text: str) -> dict[str, Any]:
         """Fallback parsing when JSON extraction fails."""
-        # Simple regex-based extraction
-        fields = []
-        if "temperature" in text.lower():
-            fields.append("temperature:float")
-        if "humidity" in text.lower():
-            fields.append("humidity:float")
-        if "pressure" in text.lower():
-            fields.append("pressure:float")
-        if "sensor" in text.lower() or "id" in text.lower():
-            fields.append("sensor_id:str")
-        if "active" in text.lower():
-            fields.append("active:bool")
-
-        if not fields:
-            fields = ["value:float"]
-
-        # Detect format
-        fmt = "json"
-        if "csv" in text.lower() or "table" in text.lower():
-            fmt = "csv"
-        elif "yaml" in text.lower():
-            fmt = "yaml"
-        elif "stream" in text.lower() or "jsonl" in text.lower():
-            fmt = "jsonl"
-
-        # Detect depth from keywords
-        depth = self.config.default_depth
-        if "deep" in text.lower() or "many" in text.lower():
-            depth = 5
-        elif "simple" in text.lower() or "shallow" in text.lower():
-            depth = 1
-
-        # Detect limit
-        limit = None
-        num_match = re.search(r'(\d+)\s*(records?|rows?|items?|samples?)', text.lower())
-        if num_match:
-            limit = int(num_match.group(1))
-
+        text_lower = text.lower()
         return {
-            "fields": fields,
-            "depth": depth,
-            "format": fmt,
+            "fields": self._fallback_fields(text_lower),
+            "depth": _detect_depth(text_lower, self.config.default_depth),
+            "format": _detect_format(text_lower, self.config.default_format),
             "filters": {},
-            "limit": limit,
+            "limit": _detect_limit(text_lower),
         }
+
+    def _fallback_fields(self, text: str) -> list[str]:
+        detected = []
+        for field, patterns in Text2FraqSimple.FIELD_PATTERNS.items():
+            if any(_word_match(text, pattern) for pattern in patterns):
+                detected.append(field)
+        return detected or ["value:float"]
 
     def execute(
         self,
@@ -406,11 +338,8 @@ Output format:
     ) -> str | list[dict[str, Any]]:
         """Parse text and execute query immediately."""
         parsed = self.parse(text)
-        query = parsed.to_fraq_query()
-        executor = FraqExecutor(dims=parsed.dims)
-        if root:
-            executor = FraqExecutor(root)
-        return executor.execute(query)
+        executor = FraqExecutor(root) if root else FraqExecutor(dims=parsed.dims)
+        return executor.execute(parsed.to_fraq_query())
 
 
 class Text2FraqSimple:
@@ -431,55 +360,33 @@ class Text2FraqSimple:
         "x:float": ["x", "horizontal"],
         "y:float": ["y", "vertical"],
         "z:float": ["z", "depth"],
+        "filename:str": ["file", "filename", "name"],
+        "extension:str": ["extension", "type", "format"],
+        "size:int": ["size", "bytes"],
+        "mtime:float": ["modified", "mtime", "changed"],
+        "path:str": ["path", "location", "directory"],
     }
 
     def parse(self, text: str) -> ParsedQuery:
         """Parse using rule-based matching."""
         text_lower = text.lower()
+        return ParsedQuery(
+            fields=self._detect_fields(text_lower),
+            depth=_detect_depth(text_lower),
+            format=_detect_format(text_lower),
+            limit=_detect_limit(text_lower),
+        )
 
-        # Extract fields
+    def _detect_fields(self, text: str) -> list[str]:
         fields = []
         for field, patterns in self.FIELD_PATTERNS.items():
-            if any(self._matches_pattern(text_lower, p) for p in patterns):
+            if any(self._matches_pattern(text, pattern) for pattern in patterns):
                 fields.append(field)
-
-        if not fields:
-            fields = ["value:float"]
-
-        # Detect format
-        fmt = "json"
-        if "csv" in text_lower or "table" in text_lower:
-            fmt = "csv"
-        elif "yaml" in text_lower:
-            fmt = "yaml"
-        elif "stream" in text_lower or "jsonl" in text_lower:
-            fmt = "jsonl"
-
-        # Detect depth
-        depth = 3
-        if "deep" in text_lower or "many" in text_lower:
-            depth = 5
-        elif "shallow" in text_lower or "simple" in text_lower:
-            depth = 1
-
-        # Detect limit
-        limit = None
-        num_match = re.search(r'(\d+)\b(?:\W+\w+){0,5}?\W+(records?|rows?|items?|samples?)\b', text_lower)
-        if num_match:
-            limit = int(num_match.group(1))
-
-        return ParsedQuery(
-            fields=fields,
-            depth=depth,
-            format=fmt,
-            limit=limit,
-        )
+        return fields or ["value:float"]
 
     @staticmethod
     def _matches_pattern(text: str, pattern: str) -> bool:
-        if len(pattern) == 1:
-            return re.search(rf"\b{re.escape(pattern)}\b", text) is not None
-        return re.search(rf"\b{re.escape(pattern)}\b", text) is not None
+        return _word_match(text, pattern)
 
     def execute(
         self,
@@ -488,20 +395,32 @@ class Text2FraqSimple:
     ) -> str | list[dict[str, Any]]:
         """Parse and execute query."""
         parsed = self.parse(text)
-        query = parsed.to_fraq_query()
-        executor = FraqExecutor(dims=parsed.dims)
-        if root:
-            executor = FraqExecutor(root)
-        return executor.execute(query)
+        executor = FraqExecutor(root) if root else FraqExecutor(dims=parsed.dims)
+        return executor.execute(parsed.to_fraq_query())
 
 
-# Convenience functions
+def text2filesearch(
+    text: str,
+    base_path: str = ".",
+    fmt: str = "json",
+) -> str | list[dict[str, Any]]:
+    """
+    One-liner to search files via natural language.
+
+    Examples:
+        >>> text2filesearch("list 10 pdf files")
+        >>> text2filesearch("show recent txt files in /home/user", "/home/user", "csv")
+    """
+    searcher = FileSearchText2Fraq(base_path)
+    results = searcher.search(text)
+    if fmt == "records":
+        return results
+    return searcher.format_results(results, fmt)
+
+
 def text2query(text: str, config: Text2FraqConfig | None = None) -> ParsedQuery:
     """Convert text to ParsedQuery."""
-    if not HAS_LITELLM:
-        parser = Text2FraqSimple()
-    else:
-        parser = Text2Fraq(config)
+    parser = Text2Fraq(config) if HAS_LITELLM else Text2FraqSimple()
     return parser.parse(text)
 
 
@@ -511,8 +430,5 @@ def text2fraq(
     root: FraqNode | None = None,
 ) -> str | list[dict[str, Any]]:
     """Convert text and execute query."""
-    if not HAS_LITELLM:
-        parser = Text2FraqSimple()
-    else:
-        parser = Text2Fraq(config)
+    parser = Text2Fraq(config) if HAS_LITELLM else Text2FraqSimple()
     return parser.execute(text, root)

@@ -1,15 +1,24 @@
-# fraq | 20f 5588L | python:18,shell:2
+# fraq | 30f 6159L | python:24,shell:6
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[20]:
+M[30]:
   examples/api_server.py,405
   examples/app_integrations.py,566
   examples/applications.py,191
   examples/async_streaming.py,103
   examples/bash_examples.sh,314
+  examples/cli-docker/run.sh,36
+  examples/fastapi-docker/main.py,86
+  examples/fastapi-docker/run.sh,80
+  examples/fullstack-docker/api/main.py,38
+  examples/fullstack-docker/frontend/app.py,60
+  examples/fullstack-docker/run.sh,85
+  examples/fullstack-docker/websocket/main.py,52
   examples/nlp2cmd_integration.py,223
   examples/query_examples.py,236
   examples/text2fraq_examples.py,372
   examples/text2fraq_files.py,275
+  examples/websocket-docker/main.py,104
+  examples/websocket-docker/run.sh,62
   fraq/__init__.py,59
   fraq/adapters.py,577
   fraq/cli.py,274
@@ -19,7 +28,8 @@ M[20]:
   fraq/query.py,219
   fraq/schema_export.py,476
   fraq/streaming.py,93
-  fraq/text2fraq.py,518
+  fraq/text2fraq.py,434
+  main_websocket.py,52
   project.sh,14
 D:
   fraq/text2fraq.py:
@@ -117,6 +127,11 @@ The executor build...
     natural_language(query;path;format)
     ws_stream(websocket)
     ws_files(websocket)
+  examples/websocket-docker/main.py:
+    e: ws_stream,ws_files,health
+    ws_stream(websocket)
+    ws_files(websocket)
+    health()
   examples/text2fraq_examples.py:
     e: example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_env_config,example_benchmark,example_custom_schema
     example_simple_parser()
@@ -127,6 +142,11 @@ The executor build...
     example_env_config()
     example_benchmark()
     example_custom_schema()
+  main_websocket.py:
+    e: ws_stream,ws_files,health
+    ws_stream(websocket)
+    ws_files(websocket)
+    health()
   fraq/schema_export.py:
     e: to_nlp2cmd_schema,to_nlp2cmd_actions,to_openapi,to_graphql,to_asyncapi,to_proto,to_json_schema
     to_nlp2cmd_schema(schema;command_name;version;category)
@@ -136,6 +156,11 @@ The executor build...
     to_asyncapi(schema;title;version)
     to_proto(schema;package;message_name)
     to_json_schema(schema;title)
+  examples/fullstack-docker/websocket/main.py:
+    e: ws_stream,ws_files,health
+    ws_stream(websocket)
+    ws_files(websocket)
+    health()
   fraq/core.py:
     e: FraqNode,FieldDef,FraqSchema,FraqCursor,_vec_add,_vec_scale,_vec_norm,_vec_hash
     FraqNode: zoom(1),children(1),_child(1),to_dict(1),__repr__(0)  # A single point in the infinite fractal data space.
@@ -210,6 +235,13 @@ Produces dict paylo...
     example_sensor_to_formats()
     example_hybrid_merge()
     example_oneliners()
+  examples/fastapi-docker/main.py:
+    e: root,health,explore,files_search,files_stat
+    root()
+    health()
+    explore(depth;dims;format)
+    files_search(path;ext;limit;sort)
+    files_stat(file_path)
   examples/app_integrations.py:
     e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook,example_celery_task
     example_fastapi_app()
@@ -221,6 +253,17 @@ Produces dict paylo...
     example_grpc_service()
     example_jupyter_notebook()
     example_celery_task()
+  examples/fullstack-docker/api/main.py:
+    e: root,health,explore,files_search
+    root()
+    health()
+    explore(depth)
+    files_search(path;ext;limit)
   fraq/__init__.py:
+  examples/websocket-docker/run.sh:
+  examples/cli-docker/run.sh:
+  examples/fullstack-docker/run.sh:
+  examples/fastapi-docker/run.sh:
+  examples/fullstack-docker/frontend/app.py:
   project.sh:
   examples/bash_examples.sh:

@@ -60,14 +60,14 @@
 <p style="color:var(--muted);font-size:.85rem;">
   Analyzed 2026-03-17 by code2llm
   &nbsp;·&nbsp; Primary language: <strong>python</strong>
-  &nbsp;·&nbsp; Python: 10, Shell: 1
+  &nbsp;·&nbsp; Python: 11, Shell: 1
 </p>
 
 <div class="grid">
-  <div class="card"><div class="value">121</div><div class="label">Functions</div></div>
+  <div class="card"><div class="value">124</div><div class="label">Functions</div></div>
   <div class="card"><div class="value">28</div><div class="label">Classes</div></div>
-  <div class="card"><div class="value">9</div><div class="label">Files</div></div>
-  <div class="card"><div class="value">4,063</div><div class="label">Lines</div></div>
+  <div class="card"><div class="value">10</div><div class="label">Files</div></div>
+  <div class="card"><div class="value">4,031</div><div class="label">Lines</div></div>
   <div class="card"><div class="value">2</div><div class="label">Languages</div></div>
   <div class="card"><div class="value">3.2</div><div class="label">Avg CC</div></div>
   <div class="card"><div class="value">5</div><div class="label">Critical (CC≥10)</div></div>
@@ -96,12 +96,12 @@
     <div class="evo-cards">
       <div class="card"><div class="value">3.2</div><div class="label">CC̄ →</div></div>
       <div class="card"><div class="value">5</div><div class="label">Critical →</div></div>
-      <div class="card"><div class="value">4063</div><div class="label">Lines</div></div>
+      <div class="card"><div class="value">4031</div><div class="label">Lines</div></div>
     </div>
     <p class="trend" style="margin-top:.5rem;">Run analysis multiple times to build a trend chart (≥3 data points needed).</p>
   </div>
   <div>
-    <h2>Top Modules (11)</h2>
+    <h2>Top Modules (12)</h2>
     <div class="card"><div class="table-wrap">
     <table>
       <thead><tr><th>Module</th><th>Path</th><th style="text-align:right">Lines</th><th style="text-align:right">Funcs</th><th style="text-align:right">Classes</th><th style="text-align:right">CC max</th></tr></thead>
@@ -115,20 +115,20 @@
                 <td style="text-align:right">12</td>
             </tr>
             <tr>
-                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>text2fraq.py</td>
-                <td style="color:var(--muted);font-size:.75rem">fraq</td>
-                <td style="text-align:right">518</td>
-                <td style="text-align:right">20</td>
-                <td style="text-align:right">7</td>
-                <td style="text-align:right">18</td>
-            </tr>
-            <tr>
                 <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>schema_export.py</td>
                 <td style="color:var(--muted);font-size:.75rem">fraq</td>
                 <td style="text-align:right">476</td>
                 <td style="text-align:right">7</td>
                 <td style="text-align:right">0</td>
                 <td style="text-align:right">5</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>text2fraq.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">434</td>
+                <td style="text-align:right">20</td>
+                <td style="text-align:right">7</td>
+                <td style="text-align:right">18</td>
             </tr>
             <tr>
                 <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>core.py</td>
@@ -187,6 +187,14 @@
                 <td style="text-align:right">0</td>
             </tr>
             <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>main_websocket.py</td>
+                <td style="color:var(--muted);font-size:.75rem">.</td>
+                <td style="text-align:right">52</td>
+                <td style="text-align:right">3</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">5</td>
+            </tr>
+            <tr>
                 <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#89e051;margin-right:6px"></span>project.sh</td>
                 <td style="color:var(--muted);font-size:.75rem">.</td>
                 <td style="text-align:right">14</td>
@@ -199,7 +207,7 @@
   </div>
 </div>
 
-<h2>Alerts (13)</h2>
+<h2>Alerts (14)</h2>
 <div class="card"><div class="table-wrap">
 <table>
   <thead><tr><th>Severity</th><th>Target</th><th>Type</th><th>Value</th><th>Limit</th></tr></thead>
@@ -251,6 +259,13 @@
                 <td>FileAdapter.load_root</td>
                 <td>high_fan_out</td>
                 <td>13</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>ws_stream</td>
+                <td>high_fan_out</td>
+                <td>11</td>
                 <td>10</td>
             </tr>
             <tr class="warning">
@@ -329,6 +344,11 @@ Args:
                 <td>Orchestrates 13 calls</td>
             </tr>
             <tr>
+                <td><strong>ws_stream</strong></td>
+                <td>11</td>
+                <td>Orchestrates 11 calls</td>
+            </tr>
+            <tr>
                 <td><strong>cmd_schema</strong></td>
                 <td>11</td>
                 <td>Orchestrates 11 calls</td>
@@ -353,72 +373,61 @@ URI can be path or empty (uses b</td>
                 <td><strong>HTTPAdapter.load_root</strong></td>
                 <td>10</td>
                 <td>Orchestrates 10 calls</td>
-            </tr>
-            <tr>
-                <td><strong>SQLAdapter.load_root</strong></td>
-                <td>10</td>
-                <td>Orchestrates 10 calls</td>
             </tr></tbody>
 </table>
 </div></div>
 </div>
 
 <div>
-<h2>Refactoring Priorities (9)</h2>
+<h2>Refactoring Priorities (8)</h2>
 <div class="card"><div class="table-wrap">
 <table>
   <thead><tr><th>#</th><th>Action</th><th>Impact</th><th>Effort</th></tr></thead>
   <tbody>
             <tr>
                 <td>1</td>
-                <td>Split god module fraq/text2fraq.py (518L, 7 classes)</td>
-                <td><span class="badge high">high</span></td>
-                <td>high</td>
-            </tr>
-            <tr>
-                <td>2</td>
                 <td>Split god module fraq/adapters.py (577L, 7 classes)</td>
                 <td><span class="badge high">high</span></td>
                 <td>high</td>
             </tr>
             <tr>
-                <td>3</td>
+                <td>2</td>
                 <td>Split FileSearchText2Fraq.parse (CC=17 → target CC<10)</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>low</td>
             </tr>
             <tr>
-                <td>4</td>
+                <td>3</td>
                 <td>Split Text2Fraq._fallback_parse (CC=18 → target CC<10)</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>low</td>
             </tr>
             <tr>
-                <td>5</td>
+                <td>4</td>
                 <td>Split Text2FraqSimple.parse (CC=15 → target CC<10)</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>low</td>
             </tr>
             <tr>
-                <td>6</td>
+                <td>5</td>
                 <td>Break circular dependency: fraq.formats._prepare</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>low</td>
             </tr>
             <tr>
-                <td>7</td>
+                <td>6</td>
                 <td>Break circular dependency: fraq.formats._simple_yaml</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>low</td>
             </tr>
             <tr>
-                <td>8</td>
+                <td>7</td>
                 <td>Break circular dependency: fraq.formats._mp_encode</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>low</td>
             </tr>
             <tr>
-                <td>9</td>
+                <td>8</td>
                 <td>Reduce main fan-out (currently 25)</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>medium</td>
@@ -428,7 +437,7 @@ URI can be path or empty (uses b</td>
 </div>
 </div>
 
-<footer>Generated by code2llm on 2026-03-17 17:12</footer>
+<footer>Generated by code2llm on 2026-03-17 17:21</footer>
 
 <script>
 // Evolution chart disabled — fewer than 3 data points
@@ -440,7 +449,7 @@ new Chart(langCtx, {
   data: {
     labels: ['Python', 'Shell'],
     datasets: [{
-      data: [10, 1],
+      data: [11, 1],
       backgroundColor: ['#3572A5', '#89e051'],
       borderColor: 'var(--border)', borderWidth: 1
     }]
@@ -458,8 +467,8 @@ const modLinesCtx = document.getElementById('modLinesChart').getContext('2d');
 new Chart(modLinesCtx, {
   type: 'bar',
   data: {
-    labels: ['adapters.py', 'text2fraq.py', 'schema_export.py', 'core.py', 'cli.py', 'query.py', 'formats.py', 'generators.py', 'streaming.py', '__init__.py', 'project.sh'],
-    datasets: [{ label: 'Lines', data: [577, 518, 476, 360, 274, 219, 196, 117, 93, 59, 14],
+    labels: ['adapters.py', 'schema_export.py', 'text2fraq.py', 'core.py', 'cli.py', 'query.py', 'formats.py', 'generators.py', 'streaming.py', '__init__.py', 'main_websocket.py', 'project.sh'],
+    datasets: [{ label: 'Lines', data: [577, 476, 434, 360, 274, 219, 196, 117, 93, 59, 52, 14],
       backgroundColor: '#3b82f6'
     }]
   },
@@ -478,8 +487,8 @@ const modFuncsCtx = document.getElementById('modFuncsChart').getContext('2d');
 new Chart(modFuncsCtx, {
   type: 'bar',
   data: {
-    labels: ['adapters.py', 'text2fraq.py', 'core.py', 'formats.py', 'query.py', 'cli.py', 'generators.py', 'schema_export.py', 'streaming.py', '__init__.py', 'project.sh'],
-    datasets: [{ label: 'Functions', data: [28, 20, 17, 14, 12, 9, 9, 7, 5, 0, 0],
+    labels: ['adapters.py', 'text2fraq.py', 'core.py', 'formats.py', 'query.py', 'cli.py', 'generators.py', 'schema_export.py', 'streaming.py', 'main_websocket.py', '__init__.py', 'project.sh'],
+    datasets: [{ label: 'Functions', data: [28, 20, 17, 14, 12, 9, 9, 7, 5, 3, 0, 0],
       backgroundColor: '#22c55e'
     }]
   },

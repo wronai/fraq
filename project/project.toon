@@ -1,14 +1,23 @@
-# fraq | 28f 6448L | python:28
+# fraq | 38f 7091L | python:38
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[28]:
+M[38]:
   examples/api_server.py,312
   examples/app_integrations.py,458
   examples/applications.py,126
   examples/async_streaming.py,81
+  examples/cli-docker/run.py,41
+  examples/fastapi-docker/main.py,67
+  examples/fastapi-docker/run.py,73
+  examples/fullstack-docker/api/main.py,28
+  examples/fullstack-docker/frontend/app.py,50
+  examples/fullstack-docker/run.py,56
+  examples/fullstack-docker/websocket/main.py,44
   examples/nlp2cmd_integration.py,165
   examples/query_examples.py,160
   examples/text2fraq_examples.py,261
   examples/text2fraq_files.py,202
+  examples/websocket-docker/main.py,78
+  examples/websocket-docker/run.py,65
   fraq/__init__.py,56
   fraq/adapters.py,434
   fraq/cli.py,210
@@ -18,7 +27,8 @@ M[28]:
   fraq/query.py,166
   fraq/schema_export.py,399
   fraq/streaming.py,77
-  fraq/text2fraq.py,420
+  fraq/text2fraq.py,361
+  main_websocket.py,44
   tests/__init__.py,0
   tests/test_adapters.py,136
   tests/test_cli.py,37
@@ -71,6 +81,48 @@ D:
     example_fastapi_sse_pattern()
     example_kafka_producer_pattern()
     main()
+  examples/cli-docker/run.py:
+    i: argparse,subprocess,sys,os
+    e: run_in_docker,run_local,main
+    run_in_docker(args_list)
+    run_local(args_list)
+    main()
+  examples/fastapi-docker/main.py:
+    i: os,fastapi.{FastAPI,Query},fastapi.responses.JSONResponse,fraq.{FileSearchAdapter,FraqExecutor,FraqNode,FraqQuery},fraq.formats.FormatRegistry,fraq.generators.HashGenerator
+    e: FRAQ_DIMS,FRAQ_SEED,root,health,explore,files_search,files_stat
+    root()
+    health()
+    explore(depth:int=Query(3; ge=1; le=20);dims:int=Query(FRAQ_DIMS; ge=1; le=10);format:str=Query('json'))
+    files_search(path:str=Query('/host/home'; description='Directory to search');ext:Any=Query(None; description='File extension');limit:int=Query(10; ge=1; le=1000);sort:str=Query('mtime'; regex='^(name|mtime|size)$'))
+    files_stat(file_path:str)
+  examples/fastapi-docker/run.py:
+    i: argparse,subprocess,sys,os
+    e: run_local,run_docker,stop_docker,test_api,main
+    run_local()
+    run_docker()
+    stop_docker()
+    test_api()
+    main()
+  examples/fullstack-docker/api/main.py:
+    i: fastapi.{FastAPI,Query},fastapi.responses.JSONResponse,fraq.{FileSearchAdapter,FraqNode},fraq.generators.HashGenerator
+    e: root,health,explore,files_search
+    root()
+    health()
+    explore(depth:int=Query(3))
+    files_search(path:str=Query('/data');ext:Any=Query(None);limit:int=Query(10))
+  examples/fullstack-docker/run.py:
+    i: argparse,subprocess,sys,time
+    e: run_docker,stop_docker,test_stack,main
+    run_docker()
+    stop_docker()
+    test_stack()
+    main()
+  examples/fullstack-docker/websocket/main.py:
+    i: asyncio,fastapi.{FastAPI,WebSocket,WebSocketDisconnect},fraq.{FileSearchAdapter,FraqNode},fraq.generators.HashGenerator
+    e: ws_stream,ws_files,health
+    ws_stream(websocket:WebSocket)
+    ws_files(websocket:WebSocket)
+    health()
   examples/nlp2cmd_integration.py:
     i: json,fraq
     e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi
@@ -112,6 +164,20 @@ D:
     example_convenience_function()
     example_file_search_adapter_direct()
     example_llm_file_intent()
+  examples/websocket-docker/main.py:
+    i: asyncio,json,fastapi.{FastAPI,WebSocket,WebSocketDisconnect},fraq.{FileSearchAdapter,FraqNode},fraq.generators.HashGenerator
+    e: ws_stream,ws_files,health
+    ws_stream(websocket:WebSocket)
+    ws_files(websocket:WebSocket)
+    health()
+  examples/websocket-docker/run.py:
+    i: argparse,subprocess,sys,asyncio,websockets,json
+    e: run_docker,stop_docker,run_local,test_websocket,main
+    run_docker()
+    stop_docker()
+    run_local()
+    test_websocket()
+    main()
   fraq/adapters.py:
     i: json,hashlib,abc.{ABC,abstractmethod},dataclasses.{dataclass,field},pathlib.Path,typing.{Any,Dict,Iterator}
     e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,FileSearchAdapter,HybridAdapter,_ADAPTERS
@@ -187,16 +253,26 @@ D:
     async_query(query:FraqQuery;root:Optional[FraqNode]=None;dims:int=3)->list[Dict[str, Any]]
     async_stream(root:Optional[FraqNode]=None;count:int=10;interval:float=0.1;direction:Optional[Vector]=None;dims:int=3)->AsyncIterator[Dict[str, Any]]
   fraq/text2fraq.py:
-    i: json,os,re,litellm,dataclasses.{dataclass,field},dotenv.load_dotenv,fraq.core.FraqNode,typing.{Any,Protocol}
-    e: FileSearchText2Fraq,text2filesearch,Text2FraqSimple,Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,Text2Fraq
-    FileSearchText2Fraq: __init__(1),parse(1),search(1),format_results(3)  # Natural language to file search conve...
-    Text2FraqSimple:   # Rule-based text2fraq without LLM (fal...
+    i: json,os,re,datetime,litellm,dataclasses.{dataclass,field},datetime.timedelta,typing.{Any,Protocol}
+    e: _LIMIT_PATTERN,_FILE_LIMIT_PATTERN,Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,FileSearchText2Fraq,Text2Fraq
     Text2FraqConfig: from_env(0)  # Configuration for text2fraq.
     ParsedQuery: to_fraq_query(0)  # Parsed natural language query.
     LLMClient: complete(1)  # Protocol for LLM clients.
+    LiteLLMClient: __init__(1),complete(1)  # LiteLLM client for text completion.
+    FileSearchText2Fraq: __init__(1),parse(1),_detect_extension(1),_detect_limit(1),_detect_newer_than(1)  # Natural language to file search conve...
+    _word_match(text:str;pattern:str)->bool
+    _detect_format(text:str;default:str='json')->str
+    _detect_depth(text:str;default:int=3)->int
+    _detect_limit(text:str)->int | None
     text2filesearch(text:str;base_path:str='.';fmt:str='json')->str | list[dict[str, Any]]
     text2query(text:str;config:Any=None)->ParsedQuery
     text2fraq(text:str;config:Any=None;root:Any=None)->str | list[dict[str, Any]]
+  main_websocket.py:
+    i: asyncio,fastapi.{FastAPI,WebSocket,WebSocketDisconnect},fraq.{FileSearchAdapter,FraqNode},fraq.generators.HashGenerator
+    e: ws_stream,ws_files,health
+    ws_stream(websocket:WebSocket)
+    ws_files(websocket:WebSocket)
+    health()
   tests/test_adapters.py:
     i: json,pytest,fraq.adapters.{FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter},fraq.core.FraqNode,fraq.query.{FraqQuery,SourceType},pathlib.Path
     e: TestFileAdapter,TestHTTPAdapter,TestSQLAdapter,TestSensorAdapter,TestHybridAdapter,TestGetAdapter

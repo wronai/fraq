@@ -156,33 +156,39 @@ def cmd_files_stat(args: argparse.Namespace) -> None:
 
 def cmd_nl(args: argparse.Namespace) -> None:
     """Natural language query (requires LLM)."""
-    from fraq.text2fraq import Text2Fraq, Text2FraqConfig
-    
-    config = Text2FraqConfig.from_env()
-    t2f = Text2Fraq(config)
-    
-    # Check if it's a file query (English + Polish keywords)
+    if _is_file_query(args.query):
+        _run_nl_file_query(args.query, args.path or ".", args.format)
+        return
+    _run_nl_fraq_query(args.query, args.format)
+
+
+def _is_file_query(query: str) -> bool:
     file_keywords = [
-        # English
         "file", "files", "pdf", "txt", "document", "folder", "directory",
-        # Polish
         "plik", "pliki", "plików", "najnowszych", "dokument", "folder", "katalog",
         "pokaż", "znajdź", "lista", "wyświetl", "ostatnio", "utworzone",
     ]
-    is_file_query = any(kw in args.query.lower() for kw in file_keywords)
-    
-    if is_file_query:
-        from fraq.text2fraq import FileSearchText2Fraq
-        searcher = FileSearchText2Fraq(args.path or ".")
-        results = searcher.search(args.query)
-        print(searcher.format_results(results, args.format))
+    query_lower = query.lower()
+    return any(keyword in query_lower for keyword in file_keywords)
+
+
+def _run_nl_file_query(query: str, base_path: str, fmt: str) -> None:
+    from fraq.text2fraq import FileSearchText2Fraq
+
+    searcher = FileSearchText2Fraq(base_path)
+    results = searcher.search(query)
+    print(searcher.format_results(results, fmt))
+
+
+def _run_nl_fraq_query(query: str, fmt: str) -> None:
+    from fraq.text2fraq import Text2Fraq, Text2FraqConfig
+
+    config = Text2FraqConfig.from_env()
+    result = Text2Fraq(config).execute(query)
+    if isinstance(result, str):
+        print(result)
     else:
-        # Regular fraq query
-        result = t2f.execute(args.query)
-        if isinstance(result, str):
-            print(result)
-        else:
-            print(FormatRegistry.serialize(args.format, result))
+        print(FormatRegistry.serialize(fmt, result))
 
 
 def main(argv: List[str] | None = None) -> None:

@@ -44,7 +44,7 @@ from fraq.text2fraq import (
     text2filesearch,
 )
 
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 __all__ = [
     "FraqNode", "FraqSchema", "FraqCursor",
     "FormatRegistry",

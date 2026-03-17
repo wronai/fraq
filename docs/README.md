@@ -1,7 +1,7 @@
 <!-- code2docs:start --># fraq
 
-![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.10-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-190-green)
-> **190** functions | **28** classes | **20** files | CC̄ = 2.9
+![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.10-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-236-green)
+> **236** functions | **28** classes | **34** files | CC̄ = 2.7
 
 > Auto-generated project documentation from source code analysis.
 
@@ -151,7 +151,7 @@ Content outside the markers is preserved when regenerating. Enable this with `sy
 
 ```
 fraq/
-    ├── streaming    ├── cli├── fraq/    ├── formats    ├── generators    ├── adapters    ├── schema_export    ├── applications    ├── async_streaming    ├── query_examples    ├── app_integrations    ├── text2fraq_examples    ├── nlp2cmd_integration    ├── api_server    ├── text2fraq_files├── project    ├── bash_examples    ├── core    ├── query    ├── text2fraq```
+├── main_websocket    ├── streaming    ├── formats├── fraq/    ├── cli    ├── generators    ├── schema_export    ├── adapters    ├── applications    ├── async_streaming    ├── query_examples    ├── app_integrations    ├── text2fraq_examples    ├── nlp2cmd_integration    ├── api_server    ├── text2fraq_files        ├── run        ├── main        ├── run        ├── run        ├── run        ├── main            ├── app            ├── main            ├── main├── project    ├── bash_examples    ├── core    ├── query    ├── text2fraq```
 
 ## API Overview
 
@@ -178,16 +178,19 @@ fraq/
 - **`FraqFilter`** — Post-zoom predicate on a record field.
 - **`FraqQuery`** — Declarative query against fractal data.
 - **`FraqExecutor`** — Execute a FraqQuery against a root node.
-- **`FileSearchText2Fraq`** — Natural language to file search converter.
-- **`Text2FraqSimple`** — Rule-based text2fraq without LLM (fallback for offline use).
 - **`Text2FraqConfig`** — Configuration for text2fraq.
 - **`ParsedQuery`** — Parsed natural language query.
 - **`LLMClient`** — Protocol for LLM clients.
 - **`LiteLLMClient`** — LiteLLM client for text completion.
+- **`FileSearchText2Fraq`** — Natural language to file search converter.
 - **`Text2Fraq`** — Natural language to fractal query converter.
+- **`Text2FraqSimple`** — Rule-based text2fraq without LLM (fallback for offline use).
 
 ### Functions
 
+- `ws_stream(websocket)` — —
+- `ws_files(websocket)` — —
+- `health()` — —
 - `async_query(query, root, dims)` — Run a FraqQuery asynchronously (useful in async frameworks).
 - `async_stream(root, count, interval, direction)` — Convenience async generator with a count limit.
 - `cmd_explore(args)` — —
@@ -198,7 +201,6 @@ fraq/
 - `cmd_files_stat(args)` — Show file statistics with fractal coordinates.
 - `cmd_nl(args)` — Natural language query (requires LLM).
 - `main(argv)` — —
-- `get_adapter(source)` — Factory: return the right adapter for a source type.
 - `to_nlp2cmd_schema(schema, command_name, version, category)` — Export a FraqSchema as an NLP2CMD command schema.
 - `to_nlp2cmd_actions(schema)` — Export fraq operations as NLP2CMD ActionRegistry entries.
 - `to_openapi(schema, title, version, base_path)` — Generate an OpenAPI 3.0 specification.
@@ -206,6 +208,7 @@ fraq/
 - `to_asyncapi(schema, title, version)` — Generate an AsyncAPI 3.0 specification for streaming channels.
 - `to_proto(schema, package, message_name)` — Generate a .proto file.
 - `to_json_schema(schema, title)` — Generate a JSON Schema for validation.
+- `get_adapter(source)` — Factory: return the right adapter for a source type.
 - `example_iot_sensor_network()` — Symulacja 10k sensorów bez storage'u — dla firmware dev na RPi/ESP32.
 - `example_erp_invoices()` — Dynamiczne faktury z nieskończonymi detalami.
 - `example_ai_training_data()` — Nieskończone datasety treningowe — zero disk, perfect dla federated learning.
@@ -275,6 +278,38 @@ fraq/
 - `example_convenience_function()` — Użycie funkcji text2filesearch.
 - `example_file_search_adapter_direct()` — Bezpośrednie użycie FileSearchAdapter.
 - `example_llm_file_intent()` — Rozpoznawanie intencji plikowych przez LLM.
+- `run_docker()` — Uruchom przez Docker
+- `stop_docker()` — Zatrzymaj Docker
+- `run_local()` — Uruchom lokalnie
+- `test_websocket()` — Przetestuj WebSocket
+- `main()` — —
+- `ws_stream(websocket)` — Stream fractal data
+- `ws_files(websocket)` — Stream file search results
+- `health()` — —
+- `run_in_docker(args_list)` — Uruchom fraq CLI w Docker
+- `run_local(args_list)` — Uruchom fraq CLI lokalnie
+- `main()` — —
+- `run_docker()` — Uruchom przez Docker Compose
+- `stop_docker()` — Zatrzymaj stack
+- `test_stack()` — Przetestuj stack
+- `main()` — —
+- `run_local()` — Uruchom serwer lokalnie (bez Docker)
+- `run_docker()` — Uruchom przez Docker
+- `stop_docker()` — Zatrzymaj Docker
+- `test_api()` — Przetestuj API
+- `main()` — —
+- `root()` — —
+- `health()` — —
+- `explore(depth, dims, format)` — Explore fractal structure
+- `files_search(path, ext, limit, sort)` — Search files with fractal metadata
+- `files_stat(file_path)` — Get file statistics with fractal coordinates
+- `ws_stream(websocket)` — —
+- `ws_files(websocket)` — —
+- `health()` — —
+- `root()` — —
+- `health()` — —
+- `explore(depth)` — —
+- `files_search(path, ext, limit)` — —
 - `query(depth, direction, fields, format)` — One-shot fractal query.
 - `text2filesearch(text, base_path, fmt)` — One-liner to search files via natural language.
 - `text2query(text, config)` — Convert text to ParsedQuery.
@@ -288,10 +323,19 @@ fraq/
 📄 `examples.applications` (7 functions)
 📄 `examples.async_streaming` (6 functions)
 📄 `examples.bash_examples`
+📄 `examples.cli-docker.run`
+📄 `examples.fastapi-docker.main` (5 functions)
+📄 `examples.fastapi-docker.run`
+📄 `examples.fullstack-docker.api.main` (4 functions)
+📄 `examples.fullstack-docker.frontend.app`
+📄 `examples.fullstack-docker.run`
+📄 `examples.fullstack-docker.websocket.main` (3 functions)
 📄 `examples.nlp2cmd_integration` (11 functions)
 📄 `examples.query_examples` (10 functions)
 📄 `examples.text2fraq_examples` (8 functions)
 📄 `examples.text2fraq_files` (5 functions)
+📄 `examples.websocket-docker.main` (3 functions)
+📄 `examples.websocket-docker.run`
 📦 `fraq`
 📄 `fraq.adapters` (28 functions, 7 classes)
 📄 `fraq.cli` (9 functions)
@@ -301,7 +345,8 @@ fraq/
 📄 `fraq.query` (12 functions, 4 classes)
 📄 `fraq.schema_export` (7 functions)
 📄 `fraq.streaming` (5 functions, 1 classes)
-📄 `fraq.text2fraq` (20 functions, 8 classes)
+📄 `fraq.text2fraq` (31 functions, 7 classes)
+📄 `main_websocket` (3 functions)
 📄 `project`
 
 ## Requirements
