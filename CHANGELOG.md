@@ -2,6 +2,29 @@
 
 ## [Unreleased]
 
+## [0.2.7] - 2026-03-17
+
+### Docs
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_new_features.py
+
+### Other
+- Update examples/basic/app_integrations.py
+- Update examples/basic/applications.py
+- Update examples/basic/async_streaming.py
+- Update examples/basic/query_examples.py
+- Update examples/cli-docker/bash_examples.sh
+- Update examples/fastapi-docker/api_server.py
+- Update examples/network/network_web_examples.py
+- Update examples/text2fraq/nlp2cmd_integration.py
+- Update examples/text2fraq/text2fraq_examples.py
+- Update examples/text2fraq/text2fraq_files.py
+- ... and 19 more files
+
 ## [0.2.6] - 2026-03-17
 
 ### Docs

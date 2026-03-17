@@ -21,7 +21,7 @@ from fraq.generators import (
 )
 from fraq.query import FraqQuery, FraqExecutor, FraqFilter, SourceType, query
 
-__version__ = "0.2.6"
+__version__ = "0.2.7"
 
 # Public API list - used for lazy loading and IDE support
 __all__ = [
@@ -29,6 +29,13 @@ __all__ = [
     "FormatRegistry",
     "HashGenerator", "FibonacciGenerator", "PerlinGenerator", "SensorStreamGenerator",
     "FraqQuery", "FraqExecutor", "FraqFilter", "SourceType", "query",
+    # Lazy-loaded from types
+    "FilePath", "GlobPattern", "FileExtension",
+    "FormatName", "MimeType",
+    "NLQuery", "QueryFilter",
+    "ZoomDepth", "RecordLimit", "BranchingFactor", "Dimensions", "Seed",
+    "HostAddress", "PortNumber", "NetworkCidr", "TimeoutSeconds",
+    "FieldName", "SchemaVersion",
     # Lazy-loaded from adapters
     "FileAdapter", "HTTPAdapter", "SQLAdapter", "SensorAdapter", "HybridAdapter",
     "FileSearchAdapter", "NetworkAdapter", "WebCrawlerAdapter", "get_adapter",
@@ -42,6 +49,25 @@ __all__ = [
 
 # Lazy loading registry - maps names to their import paths
 _LAZY_IMPORTS: dict[str, str] = {
+    # types
+    "FilePath": "fraq.types",
+    "GlobPattern": "fraq.types",
+    "FileExtension": "fraq.types",
+    "FormatName": "fraq.types",
+    "MimeType": "fraq.types",
+    "NLQuery": "fraq.types",
+    "QueryFilter": "fraq.types",
+    "ZoomDepth": "fraq.types",
+    "RecordLimit": "fraq.types",
+    "BranchingFactor": "fraq.types",
+    "Dimensions": "fraq.types",
+    "Seed": "fraq.types",
+    "HostAddress": "fraq.types",
+    "PortNumber": "fraq.types",
+    "NetworkCidr": "fraq.types",
+    "TimeoutSeconds": "fraq.types",
+    "FieldName": "fraq.types",
+    "SchemaVersion": "fraq.types",
     # adapters
     "FileAdapter": "fraq.adapters",
     "HTTPAdapter": "fraq.adapters",
@@ -83,6 +109,14 @@ def __getattr__(name: str) -> object:
 
 # TYPE_CHECKING imports for IDE autocomplete
 if TYPE_CHECKING:
+    from fraq.types import (
+        FilePath, GlobPattern, FileExtension,
+        FormatName, MimeType,
+        NLQuery, QueryFilter,
+        ZoomDepth, RecordLimit, BranchingFactor, Dimensions, Seed,
+        HostAddress, PortNumber, NetworkCidr, TimeoutSeconds,
+        FieldName, SchemaVersion,
+    )
     from fraq.adapters import (
         FileAdapter,
         HTTPAdapter,

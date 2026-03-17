@@ -1,16 +1,6 @@
-# fraq/flow | 348 func | 12 pipelines | 5 hub-types | 2026-03-17
+# fraq/flow | 308 func | 12 pipelines | 6 hub-types | 2026-03-17
 
-PIPELINES[12] (NLP:5, Unknown:7):
-  Fraq [NLP]: str → bool
-              → execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]] CC=2    IO ▶
-              → parse(text:str) → ParsedQuery           CC=1    pure
-              → _parse_response(response:str) → ParsedQuery CC=3    pure
-              → _extract_structured_response(response:str) → dict[str, Any] CC=3    IO
-              → _fallback_parse(text:str) → dict[str, Any] CC=1    pure
-              → _fallback_fields(text:str) → list[str]  CC=5    mutation
-              → _word_match(text:str, pattern:str) → bool CC=1    pure ■
-              PURITY: 4/7 pure  BOTTLENECK: _fallback_fields(CC=5)
-
+PIPELINES[12] (Core:2, Export:1, IO:3, NLP:3, Unknown:3):
   Fraq [NLP]: str → bool
               → execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]] CC=2    IO ▶
               → parse(text:str) → ParsedQuery           CC=1    pure
@@ -28,88 +18,92 @@ PIPELINES[12] (NLP:5, Unknown:7):
               → _matches_pattern(text:str, pattern:str) → bool CC=1    pure
               → _word_match(text:str, pattern:str) → bool CC=1    pure ■
               PURITY: 3/5 pure  BOTTLENECK: _detect_fields(CC=5)
-
-  Fraq [NLP]: str → bool
-              → execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]] CC=2    IO ▶
-              → parse(text:str) → ParsedQuery           CC=1    pure
-              → _detect_fields(text:str) → list[str]    CC=5    mutation
-              → _matches_pattern(text:str, pattern:str) → bool CC=1    pure
-              → _word_match(text:str, pattern:str) → bool CC=1    pure ■
-              PURITY: 3/5 pure  BOTTLENECK: _detect_fields(CC=5)
-
-  Fraq [NLP]: List[str] | None → Any
-              → main(argv:List[str] | None) → None      CC=13   pure ▶
-              → cmd_nl(args:argparse.Namespace) → None  CC=3    pure
-              → _run_nl_fraq_query(query:str, fmt:str) → None CC=2    IO
-              → serialize(cls, name:str, data:Any, **kwargs) → Any CC=1    pure ■
-              PURITY: 3/4 pure  BOTTLENECK: main(CC=13)
-
-  Fraq [Unknown]: Any → str
-              → search(**opts:Any) → list[dict[str, Any]] CC=1    pure ▶
-              → scan_async(ports:list[int] | None, limit:int) → list[dict[str, Any]] CC=8    mutation
-              → _check_port(ip:str, port:int) → dict[str, Any] CC=3    IO
-              → _identify_service(port:int) → str       CC=1    pure ■
-              PURITY: 2/4 pure  BOTTLENECK: scan_async(CC=8)
-
-  Fraq [Unknown]: int → str
-              → stream(count:int, **opts:Any) → Iterator[dict[str, Any]] CC=1    mutation ▶
-              → stream_devices(ports:list[int] | None) → AsyncIterator[dict[str, Any]] CC=5    mutation
-              → _check_port(ip:str, port:int) → dict[str, Any] CC=3    IO
-              → _identify_service(port:int) → str       CC=1    pure ■
-              PURITY: 1/4 pure  BOTTLENECK: stream_devices(CC=5)
-
-  Fraq [Unknown]: Any → list[str]
-              → search(**opts:Any) → list[dict[str, Any]] CC=1    pure ▶
-              → crawl_async() → list[dict[str, Any]]    CC=10   IO
-              → _fetch_page(url:str, depth:int) → dict[str, Any] | None CC=4    IO
-              → _extract_links(soup:BeautifulSoup, base_url:str) → list[str] CC=5    mutation ■
-              PURITY: 1/4 pure  BOTTLENECK: crawl_async(CC=10)
-
-  Fraq [Unknown]: int → list[str]
-              → stream(count:int, **opts:Any) → Iterator[dict[str, Any]] CC=1    mutation ▶
-              → stream_pages() → AsyncIterator[dict[str, Any]] CC=11   IO
-              → _fetch_page(url:str, depth:int) → dict[str, Any] | None CC=4    IO
-              → _extract_links(soup:BeautifulSoup, base_url:str) → list[str] CC=5    mutation ■
-              PURITY: 0/4 pure  BOTTLENECK: stream_pages(CC=11)
 
   Fraq [Unknown]: Any → List[str]
               → search(**opts:Any) → List[Dict[str, Any]] CC=1    pure ▶
               → crawl_async() → List[Dict[str, Any]]    CC=10   IO
-              → _fetch_page(url:str, depth:int) → Optional[Dict[str, Any]] CC=4    IO
+              → _process_url(url:str, depth:int) → Optional[Dict[str, Any]] CC=3    IO
+              → _parse_page(html:str, url:str, depth:int) → Dict[str, Any] CC=2    pure
               → _extract_links(soup:BeautifulSoup, base_url:str) → List[str] CC=5    mutation ■
-              PURITY: 1/4 pure  BOTTLENECK: crawl_async(CC=10)
+              PURITY: 2/5 pure  BOTTLENECK: crawl_async(CC=10)
 
   Fraq [Unknown]: int → List[str]
               → stream(count:int, **opts:Any) → Iterator[Dict[str, Any]] CC=1    mutation ▶
-              → stream_pages() → AsyncIterator[Dict[str, Any]] CC=11   IO
-              → _fetch_page(url:str, depth:int) → Optional[Dict[str, Any]] CC=4    IO
+              → stream_pages() → AsyncIterator[Dict[str, Any]] CC=10   IO
+              → _process_url(url:str, depth:int) → Optional[Dict[str, Any]] CC=3    IO
+              → _parse_page(html:str, url:str, depth:int) → Dict[str, Any] CC=2    pure
               → _extract_links(soup:BeautifulSoup, base_url:str) → List[str] CC=5    mutation ■
-              PURITY: 0/4 pure  BOTTLENECK: stream_pages(CC=11)
+              PURITY: 1/5 pure  BOTTLENECK: stream_pages(CC=10)
 
-  Fraq [Unknown]: Any → str
+  Fraq [IO]: Any → str
               → search(**opts:Any) → List[Dict[str, Any]] CC=1    pure ▶
-              → scan_async(ports:Optional[List[int]], limit:int) → List[Dict[str, Any]] CC=8    mutation
-              → _check_port(ip:str, port:int) → Dict[str, Any] CC=4    IO
+              → scan_async(ports:Optional[List[int]], limit:int) → List[Dict[str, Any]] CC=5    mutation
+              → _check_port_io(ip:str, port:int) → Dict[str, Any] CC=4    IO
+              → _parse_result(ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]) → Dict[str, Any] CC=5    pure
               → _identify_service(port:int) → str       CC=1    pure ■
-              PURITY: 2/4 pure  BOTTLENECK: scan_async(CC=8)
+              PURITY: 3/5 pure  BOTTLENECK: scan_async(CC=5)
+
+  Fraq [IO]: int → str
+              → stream(count:int, **opts:Any) → Iterator[Dict[str, Any]] CC=1    mutation ▶
+              → stream_devices(ports:Optional[List[int]]) → AsyncIterator[Dict[str, Any]] CC=3    mutation
+              → _check_port_io(ip:str, port:int) → Dict[str, Any] CC=4    IO
+              → _parse_result(ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]) → Dict[str, Any] CC=5    pure
+              → _identify_service(port:int) → str       CC=1    pure ■
+              PURITY: 2/5 pure  BOTTLENECK: _parse_result(CC=5)
+
+  Fraq [NLP]: argparse.Namespace → Any
+              → cmd_nl(args:argparse.Namespace) → None  CC=3    pure ▶
+              → _run_nl_fraq_query(query:str, fmt:str) → None CC=2    IO
+              → serialize(cls, name:str, data:Any, **kwargs) → Any CC=1    pure ■
+              PURITY: 2/3 pure  BOTTLENECK: cmd_nl(CC=3)
+
+  Fraq [Export]: List[str] | None → List[str]
+              → main(argv:List[str] | None) → None      CC=1    pure ▶
+              → _parse_args(argv:List[str] | None) → argparse.Namespace CC=1    pure
+              → available(cls) → List[str]              CC=1    pure ■
+              PURITY: 3/3 pure  BOTTLENECK: main(CC=1)
+
+  Examples [Unknown]: ? → AsyncIterator[Dict[str, Any]]
+              → main()                                  CC=1    pure ▶
+              → example_kafka_producer_pattern()        CC=2    IO
+              → async_stream(root:Optional[FraqNode], count:int, interval:float, direction:Optional[Vector], dims:int) → AsyncIterator[Dict[str, Any]] CC=3    pure ■
+              PURITY: 2/3 pure  BOTTLENECK: async_stream(CC=3)
+
+  Fraq [Core]: Optional[Sequence[Vector]] → Vector
+              → children(directions:Optional[Sequence[Vector]]) → List[FraqNode] CC=5    mutation ▶
+              → _child(direction:Vector) → FraqNode     CC=2    pure
+              → _vec_scale(v:Vector, s:float) → Vector  CC=2    pure ■
+              PURITY: 2/3 pure  BOTTLENECK: children(CC=5)
+
+  Fraq [Core]: int → Any
+              → records(depth:int, branching:int, node:Optional[FraqNode]) → Iterator[Dict[str, Any]] CC=4    pure ▶
+              → record(node:Optional[FraqNode]) → Dict[str, Any] CC=4    pure
+              → _cast(val:Any, type_name:str) → Any     CC=5    pure ■
+              PURITY: 3/3 pure  BOTTLENECK: _cast(CC=5)
+
+  Fraq [IO]: str → bool
+              → search(text:str) → List[dict[str, Any]] CC=2    pure ▶
+              → _collect_files_filtered(base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]) → List[dict[str, Any]] CC=11   mutation
+              → _should_exclude(path:Path) → bool       CC=6    pure ■
+              PURITY: 2/3 pure  BOTTLENECK: _collect_files_filtered(CC=11)
 
 
 TRANSFORMS (fan-out ≥10):
-  main(argv:List[str] | None) → None                      fan=35   !! script-in-disguise
+  _parse_args(argv:List[str] | None) → argparse.Namespace fan=21   !! side-effects
   query_data(fields:str, depth:int, format:str, limit:int, dims:int) fan=18   fan=18
   schema_records(fields:str, depth:int, branching:int, format:str, dims:int) fan=16   fan=16
   ws_files(websocket:WebSocket)                           fan=16   fan=16
+  _collect_files_filtered(base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]) → List[dict[str, Any]] fan=16   PIPELINE:FileSearchText2Fraq.entry
   example_hybrid_merge()                                  fan=15   fan=15
-  cmd_files_stat(args:argparse.Namespace) → None          fan=14   fan=14
-  search(extension:str | None, pattern:str | None, limit:int, sort_by:str, newer_than:float | None, **opts:Any) → list[dict[str, Any]] fan=14   PIPELINE:FileSearchAdapter.entry
   example_ai_training_data()                              fan=14   fan=14
   stream(count:int, dims:int, format:str)                 fan=14   fan=14
   files_stat(file_path:str)                               fan=14   fan=14
   ws_files(websocket:WebSocket)                           fan=14   fan=14
   ws_stream(websocket:WebSocket)                          fan=14   fan=14
-  search(extension:Optional[str], pattern:Optional[str], limit:int, sort_by:str, newer_than:Optional[float], **opts:Any) → List[Dict[str, Any]] fan=14   PIPELINE:FileSearchAdapter.entry
-  _check_port(ip:str, port:int) → Dict[str, Any]          fan=14   PIPELINE:NetworkAdapter.entry
+  example_disk_json()                                     fan=13   fan=13
+  example_full_pipeline() → None                          fan=13   fan=13
   load_root(uri:str, **opts:Any) → FraqNode               fan=13   PIPELINE:FileAdapter.entry
+  ws_stream(websocket:WebSocket)                          fan=13   fan=13
 
 CONTRACTS:
   Pipeline: Fraq
@@ -154,38 +148,6 @@ CONTRACTS:
       IN:  text:str
       OUT: ParsedQuery
 
-    _parse_response(response:str) → ParsedQuery
-      IN:  response:str
-      OUT: ParsedQuery
-
-    _extract_structured_response(response:str) → dict[str, Any]
-      IN:  response:str
-      OUT: dict[str, Any]
-      SIDE-EFFECT: IO(loads)
-
-    _fallback_parse(text:str) → dict[str, Any]
-      IN:  text:str
-      OUT: dict[str, Any]
-
-    _fallback_fields(text:str) → list[str]
-      IN:  text:str
-      OUT: list[str]
-      SIDE-EFFECT: pure
-
-    _word_match(text:str, pattern:str) → bool
-      IN:  text:str, pattern:str
-      OUT: bool
-
-  Pipeline: Fraq
-    execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]]
-      IN:  text:str, root:FraqNode | None
-      OUT: str | list[dict[str, Any]]
-      SIDE-EFFECT: IO(execute)
-
-    parse(text:str) → ParsedQuery
-      IN:  text:str
-      OUT: ParsedQuery
-
     _detect_fields(text:str) → list[str]
       IN:  text:str
       OUT: list[str]
@@ -198,129 +160,6 @@ CONTRACTS:
     _word_match(text:str, pattern:str) → bool
       IN:  text:str, pattern:str
       OUT: bool
-
-  Pipeline: Fraq
-    execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]]
-      IN:  text:str, root:FraqNode | None
-      OUT: str | list[dict[str, Any]]
-      SIDE-EFFECT: IO(execute)
-
-    parse(text:str) → ParsedQuery
-      IN:  text:str
-      OUT: ParsedQuery
-
-    _detect_fields(text:str) → list[str]
-      IN:  text:str
-      OUT: list[str]
-      SIDE-EFFECT: pure
-
-    _matches_pattern(text:str, pattern:str) → bool
-      IN:  text:str, pattern:str
-      OUT: bool
-
-    _word_match(text:str, pattern:str) → bool
-      IN:  text:str, pattern:str
-      OUT: bool
-
-  Pipeline: Fraq
-    main(argv:List[str] | None) → None
-      IN:  argv:List[str] | None
-      OUT: None
-
-    cmd_nl(args:argparse.Namespace) → None
-      IN:  args:argparse.Namespace
-      OUT: None
-
-    _run_nl_fraq_query(query:str, fmt:str) → None
-      IN:  query:str, fmt:str
-      OUT: None
-      SIDE-EFFECT: IO(execute, print, print)
-
-    serialize(cls, name:str, data:Any, **kwargs) → Any
-      IN:  cls, name:str, data:Any, **kwargs
-      OUT: Any
-
-  Pipeline: Fraq
-    search(**opts:Any) → list[dict[str, Any]]
-      IN:  **opts:Any
-      OUT: list[dict[str, Any]]
-
-    scan_async(ports:list[int] | None, limit:int) → list[dict[str, Any]]
-      IN:  ports:list[int] | None, limit:int
-      OUT: list[dict[str, Any]]
-      SIDE-EFFECT: mutates self._semaphore
-
-    _check_port(ip:str, port:int) → dict[str, Any]
-      IN:  ip:str, port:int
-      OUT: dict[str, Any]
-      SIDE-EFFECT: IO(writer.close)
-      INVARIANT: raises on invalid input
-
-    _identify_service(port:int) → str
-      IN:  port:int
-      OUT: str
-
-  Pipeline: Fraq
-    stream(count:int, **opts:Any) → Iterator[dict[str, Any]]
-      IN:  count:int, **opts:Any
-      OUT: Iterator[dict[str, Any]]
-      SIDE-EFFECT: pure
-
-    stream_devices(ports:list[int] | None) → AsyncIterator[dict[str, Any]]
-      IN:  ports:list[int] | None
-      OUT: AsyncIterator[dict[str, Any]]
-      SIDE-EFFECT: mutates self._semaphore; generator
-
-    _check_port(ip:str, port:int) → dict[str, Any]
-      IN:  ip:str, port:int
-      OUT: dict[str, Any]
-      SIDE-EFFECT: IO(writer.close)
-      INVARIANT: raises on invalid input
-
-    _identify_service(port:int) → str
-      IN:  port:int
-      OUT: str
-
-  Pipeline: Fraq
-    search(**opts:Any) → list[dict[str, Any]]
-      IN:  **opts:Any
-      OUT: list[dict[str, Any]]
-
-    crawl_async() → list[dict[str, Any]]
-      IN:  ()
-      OUT: list[dict[str, Any]]
-      SIDE-EFFECT: IO(self._session.close)
-
-    _fetch_page(url:str, depth:int) → dict[str, Any] | None
-      IN:  url:str, depth:int
-      OUT: dict[str, Any] | None
-      SIDE-EFFECT: IO(session.get)
-
-    _extract_links(soup:BeautifulSoup, base_url:str) → list[str]
-      IN:  soup:BeautifulSoup, base_url:str
-      OUT: list[str]
-      SIDE-EFFECT: pure
-
-  Pipeline: Fraq
-    stream(count:int, **opts:Any) → Iterator[dict[str, Any]]
-      IN:  count:int, **opts:Any
-      OUT: Iterator[dict[str, Any]]
-      SIDE-EFFECT: pure
-
-    stream_pages() → AsyncIterator[dict[str, Any]]
-      IN:  ()
-      OUT: AsyncIterator[dict[str, Any]]
-      SIDE-EFFECT: IO(self._session.close); generator
-
-    _fetch_page(url:str, depth:int) → dict[str, Any] | None
-      IN:  url:str, depth:int
-      OUT: dict[str, Any] | None
-      SIDE-EFFECT: IO(session.get)
-
-    _extract_links(soup:BeautifulSoup, base_url:str) → list[str]
-      IN:  soup:BeautifulSoup, base_url:str
-      OUT: list[str]
-      SIDE-EFFECT: pure
 
   Pipeline: Fraq
     search(**opts:Any) → List[Dict[str, Any]]
@@ -332,10 +171,14 @@ CONTRACTS:
       OUT: List[Dict[str, Any]]
       SIDE-EFFECT: IO(self._session.close)
 
-    _fetch_page(url:str, depth:int) → Optional[Dict[str, Any]]
+    _process_url(url:str, depth:int) → Optional[Dict[str, Any]]
       IN:  url:str, depth:int
       OUT: Optional[Dict[str, Any]]
       SIDE-EFFECT: IO(session.get)
+
+    _parse_page(html:str, url:str, depth:int) → Dict[str, Any]
+      IN:  html:str, url:str, depth:int
+      OUT: Dict[str, Any]
 
     _extract_links(soup:BeautifulSoup, base_url:str) → List[str]
       IN:  soup:BeautifulSoup, base_url:str
@@ -353,10 +196,14 @@ CONTRACTS:
       OUT: AsyncIterator[Dict[str, Any]]
       SIDE-EFFECT: IO(self._session.close); generator
 
-    _fetch_page(url:str, depth:int) → Optional[Dict[str, Any]]
+    _process_url(url:str, depth:int) → Optional[Dict[str, Any]]
       IN:  url:str, depth:int
       OUT: Optional[Dict[str, Any]]
       SIDE-EFFECT: IO(session.get)
+
+    _parse_page(html:str, url:str, depth:int) → Dict[str, Any]
+      IN:  html:str, url:str, depth:int
+      OUT: Dict[str, Any]
 
     _extract_links(soup:BeautifulSoup, base_url:str) → List[str]
       IN:  soup:BeautifulSoup, base_url:str
@@ -373,66 +220,180 @@ CONTRACTS:
       OUT: List[Dict[str, Any]]
       SIDE-EFFECT: mutates self._semaphore
 
-    _check_port(ip:str, port:int) → Dict[str, Any]
+    _check_port_io(ip:str, port:int) → Dict[str, Any]
       IN:  ip:str, port:int
       OUT: Dict[str, Any]
       SIDE-EFFECT: IO(writer.close); mutates self._semaphore
       INVARIANT: raises on invalid input
 
+    _parse_result(ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]) → Dict[str, Any]
+      IN:  ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]
+      OUT: Dict[str, Any]
+
     _identify_service(port:int) → str
       IN:  port:int
       OUT: str
 
+  Pipeline: Fraq
+    stream(count:int, **opts:Any) → Iterator[Dict[str, Any]]
+      IN:  count:int, **opts:Any
+      OUT: Iterator[Dict[str, Any]]
+      SIDE-EFFECT: pure
 
-DATA_TYPES (by cross-function usage) [269 annotated, 0 inferred / 348 functions]:
-  str                  consumed:198 produced:44   !! HUB-TYPE → split interface
-  int                  consumed:72  produced:6    !! HUB-TYPE → split interface
-  FraqNode             consumed:29  produced:29   !! HUB-TYPE → split interface
-  float                consumed:23  produced:5    !! HUB-TYPE → split interface
-  str, Any             consumed:5   produced:15 
-  Vector               consumed:15  produced:2    !! HUB-TYPE → split interface
-  FraqQuery            consumed:8   produced:8  
-  bool                 consumed:6   produced:6  
+    stream_devices(ports:Optional[List[int]]) → AsyncIterator[Dict[str, Any]]
+      IN:  ports:Optional[List[int]]
+      OUT: AsyncIterator[Dict[str, Any]]
+      SIDE-EFFECT: mutates self._semaphore; generator
+
+    _check_port_io(ip:str, port:int) → Dict[str, Any]
+      IN:  ip:str, port:int
+      OUT: Dict[str, Any]
+      SIDE-EFFECT: IO(writer.close); mutates self._semaphore
+      INVARIANT: raises on invalid input
+
+    _parse_result(ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]) → Dict[str, Any]
+      IN:  ip:str, port:int, is_open:bool, latency_ms:Optional[float], error:Optional[str]
+      OUT: Dict[str, Any]
+
+    _identify_service(port:int) → str
+      IN:  port:int
+      OUT: str
+
+  Pipeline: Fraq
+    cmd_nl(args:argparse.Namespace) → None
+      IN:  args:argparse.Namespace
+      OUT: None
+
+    _run_nl_fraq_query(query:str, fmt:str) → None
+      IN:  query:str, fmt:str
+      OUT: None
+      SIDE-EFFECT: IO(execute, print, print)
+
+    serialize(cls, name:str, data:Any, **kwargs) → Any
+      IN:  cls, name:str, data:Any, **kwargs
+      OUT: Any
+
+  Pipeline: Fraq
+    main(argv:List[str] | None) → None
+      IN:  argv:List[str] | None
+      OUT: None
+
+    _parse_args(argv:List[str] | None) → argparse.Namespace
+      IN:  argv:List[str] | None
+      OUT: argparse.Namespace
+
+    available(cls) → List[str]
+      IN:  cls
+      OUT: List[str]
+
+  Pipeline: Examples
+    main()
+      IN:  ()
+      OUT: None
+
+    example_kafka_producer_pattern()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, dumps)
+
+    async_stream(root:Optional[FraqNode], count:int, interval:float, direction:Optional[Vector], dims:int) → AsyncIterator[Dict[str, Any]]
+      IN:  root:Optional[FraqNode], count:int, interval:float, direction:Optional[Vector], dims:int
+      OUT: AsyncIterator[Dict[str, Any]]
+
+  Pipeline: Fraq
+    children(directions:Optional[Sequence[Vector]]) → List[FraqNode]
+      IN:  directions:Optional[Sequence[Vector]]
+      OUT: List[FraqNode]
+      SIDE-EFFECT: pure
+
+    _child(direction:Vector) → FraqNode
+      IN:  direction:Vector
+      OUT: FraqNode
+
+    _vec_scale(v:Vector, s:float) → Vector
+      IN:  v:Vector, s:float
+      OUT: Vector
+
+  Pipeline: Fraq
+    records(depth:int, branching:int, node:Optional[FraqNode]) → Iterator[Dict[str, Any]]
+      IN:  depth:int, branching:int, node:Optional[FraqNode]
+      OUT: Iterator[Dict[str, Any]]
+
+    record(node:Optional[FraqNode]) → Dict[str, Any]
+      IN:  node:Optional[FraqNode]
+      OUT: Dict[str, Any]
+
+    _cast(val:Any, type_name:str) → Any
+      IN:  val:Any, type_name:str
+      OUT: Any
+
+  Pipeline: Fraq
+    search(text:str) → List[dict[str, Any]]
+      IN:  text:str
+      OUT: List[dict[str, Any]]
+
+    _collect_files_filtered(base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]) → List[dict[str, Any]]
+      IN:  base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]
+      OUT: List[dict[str, Any]]
+      SIDE-EFFECT: pure
+      INVARIANT: len(output) <= len(input)
+
+    _should_exclude(path:Path) → bool
+      IN:  path:Path
+      OUT: bool
+
+
+DATA_TYPES (by cross-function usage) [223 annotated, 0 inferred / 308 functions]:
+  str                  consumed:159 produced:34   !! HUB-TYPE → split interface
+  int                  consumed:64  produced:4    !! HUB-TYPE → split interface
+  FraqNode             consumed:20  produced:18   !! HUB-TYPE → split interface
+  float                consumed:20  produced:6    !! HUB-TYPE → split interface
+  str, Any             consumed:4   produced:19 
+  Vector               consumed:14  produced:2    !! HUB-TYPE → split interface
+  FraqQuery            consumed:6   produced:7  
+  argparse.Namespace   consumed:10  produced:1    !! HUB-TYPE → split interface
   FraqSchema           consumed:8   produced:3  
-  dict[str, Any]       consumed:1   produced:9    output-heavy
-  Iterator[Dict[str, Any]] consumed:0   produced:10   output-heavy
-  str | None           consumed:9   produced:1    input-heavy (read-only flow)
-  argparse.Namespace   consumed:9   produced:0    input-heavy (read-only flow)
-  ParsedQuery          consumed:0   produced:8    output-heavy
-  WebSocket            consumed:8   produced:0    input-heavy (read-only flow)
-  str | list[dict[str, Any]] consumed:0   produced:8    output-heavy
-  list[dict[str, Any]] consumed:1   produced:6    output-heavy
-  Text2FraqConfig | None consumed:6   produced:0    input-heavy (read-only flow)
-  FraqNode | None      consumed:5   produced:0    input-heavy (read-only flow)
-  list[str]            consumed:0   produced:5    output-heavy
+  bool                 consumed:5   produced:6  
+  WebSocket            consumed:9   produced:0    input-heavy (read-only flow)
+  dict[str, Any]       consumed:2   produced:7  
+  Iterator[Dict[str, Any]] consumed:0   produced:8    output-heavy
+  dict                 consumed:0   produced:6    output-heavy
+  ParsedQuery          consumed:1   produced:5    output-heavy
+  str | None           consumed:5   produced:0    input-heavy (read-only flow)
+  str | list[dict[str, Any]] consumed:0   produced:4    narrow scope
+  AsyncIterator[Dict[str, Any]] consumed:0   produced:4    narrow scope
+  bytes                consumed:0   produced:4    narrow scope
+  Text2FraqConfig      consumed:2   produced:1    narrow scope
 
   HUB TYPES (consumed ≥10):
-    str → 198 consumers → split into:
+    str → 159 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    int → 72 consumers → split into:
+    int → 64 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    FraqNode → 29 consumers → split into:
+    FraqNode → 20 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    float → 23 consumers → split into:
+    float → 20 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    Vector → 15 consumers → split into:
+    Vector → 14 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    argparse.Namespace → 10 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
 
 SIDE_EFFECTS:
-  IO:        ws_stream, ws_files, _to_json, _to_jsonl, cmd_explore, cmd_stream, cmd_schema, cmd_files_search, cmd_files_list, cmd_files_stat
-  Mutation:  AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, _to_binary, _simple_yaml, _mp_encode, HashGenerator.__init__, FibonacciGenerator.__init__, PerlinGenerator.__init__, SensorStreamGenerator.__init__
-  Pure:      health, async_query, async_stream, FormatRegistry.register, FormatRegistry.get, FormatRegistry.available, FormatRegistry.serialize, _to_csv, _to_yaml, _to_msgpack_lite
+  IO:        ws_stream, ws_files, _to_json, _to_jsonl, cmd_explore, cmd_stream, cmd_schema, cmd_files_search, cmd_files_list, _print_stat
+  Mutation:  _to_binary, _simple_yaml, _mp_encode, AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, HashGenerator.__init__, FibonacciGenerator.__init__, PerlinGenerator.__init__, SensorStreamGenerator.__init__
+  Pure:      health, FormatRegistry.register, FormatRegistry.get, FormatRegistry.available, FormatRegistry.serialize, _to_csv, _to_yaml, _to_msgpack_lite, _prepare, _encode_value
 
   PIPELINE PURITY:
     Fraq            ██░░ 57% pure
-    Fraq            ██░░ 57% pure
     Fraq            ██░░ 60% pure
+    Fraq            █░░░ 40% pure
+    Fraq            ░░░░ 20% pure
     Fraq            ██░░ 60% pure
-    Fraq            ███░ 75% pure
-    Fraq            ██░░ 50% pure
-    Fraq            █░░░ 25% pure
-    Fraq            █░░░ 25% pure
-    Fraq            ░░░░ 0% pure
-    Fraq            █░░░ 25% pure
-    Fraq            ░░░░ 0% pure
-    Fraq            ██░░ 50% pure
+    Fraq            █░░░ 40% pure
+    Fraq            ██░░ 66% pure
+    Fraq            ████ 100% pure
+    Examples        ██░░ 66% pure
+    Fraq            ██░░ 66% pure
+    Fraq            ████ 100% pure
+    Fraq            ██░░ 66% pure

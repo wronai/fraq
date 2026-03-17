@@ -52,10 +52,28 @@ class NetworkAdapter(BaseAdapter):
         ports: Optional[List[int]] = None,
         limit: int = 1000,
     ) -> List[Dict[str, Any]]:
-        ports = ports or self.ports
+        """Pure pipeline: plan → IO → parse."""
+        targets = self._plan_scan(ports, limit)
         self._semaphore = asyncio.Semaphore(self.max_concurrent)
 
-        tasks = []
+        tasks = [self._check_port_io(ip, port) for ip, port in targets]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        devices = [
+            r for r in results
+            if isinstance(r, dict) and r.get("open")
+        ]
+        devices.sort(key=lambda x: ipaddress.ip_address(x["ip"]))
+        return devices
+
+    def _plan_scan(
+        self,
+        ports: Optional[List[int]] = None,
+        limit: int = 1000,
+    ) -> List[tuple[str, int]]:
+        """Plan scan targets - pure function."""
+        ports = ports or self.ports
+        targets: List[tuple[str, int]] = []
         hosts_scanned = 0
 
         for host in self.network.hosts():
@@ -63,15 +81,46 @@ class NetworkAdapter(BaseAdapter):
                 break
             ip_str = str(host)
             for port in ports:
-                tasks.append(self._check_port(ip_str, port))
+                targets.append((ip_str, port))
             hosts_scanned += 1
 
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        devices = [r for r in results if isinstance(r, dict) and r.get("open")]
-        devices.sort(key=lambda x: ipaddress.ip_address(x["ip"]))
-        return devices
+        return targets
 
-    async def _check_port(self, ip: str, port: int) -> Dict[str, Any]:
+    def _parse_result(
+        self,
+        ip: str,
+        port: int,
+        is_open: bool,
+        latency_ms: Optional[float] = None,
+        error: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Parse scan result into structured data - pure function."""
+        base = {"ip": ip, "port": port, "open": is_open}
+
+        if not is_open:
+            if error:
+                base["error"] = error
+            return base
+
+        service = self._identify_service(port)
+        ip_obj = ipaddress.ip_address(ip)
+        ip_int = int(ip_obj)
+
+        return {
+            **base,
+            "service": service,
+            "latency_ms": round(latency_ms, 2) if latency_ms else 0.0,
+            "fraq_position": (
+                float(ip_int % 256) / 256,
+                (latency_ms or 0.0) / 1000,
+                float(port) / 65535,
+            ),
+            "fraq_seed": hash(f"{ip}:{port}") % (2**32),
+            "fraq_value": hash(f"{ip}:{port}") / (2**32),
+        }
+
+    async def _check_port_io(self, ip: str, port: int) -> Dict[str, Any]:
+        """Check if port is open - IO operation only."""
         if self._semaphore is None:
             self._semaphore = asyncio.Semaphore(self.max_concurrent)
         async with self._semaphore:
@@ -82,31 +131,13 @@ class NetworkAdapter(BaseAdapter):
                     timeout=self.timeout
                 )
                 latency = (asyncio.get_event_loop().time() - start_time) * 1000
-                service = self._identify_service(port)
                 writer.close()
                 await writer.wait_closed()
-
-                ip_obj = ipaddress.ip_address(ip)
-                ip_int = int(ip_obj)
-
-                return {
-                    "ip": ip,
-                    "port": port,
-                    "open": True,
-                    "service": service,
-                    "latency_ms": round(latency, 2),
-                    "fraq_position": (
-                        float(ip_int % 256) / 256,
-                        latency / 1000,
-                        float(port) / 65535,
-                    ),
-                    "fraq_seed": hash(f"{ip}:{port}") % (2**32),
-                    "fraq_value": hash(f"{ip}:{port}") / (2**32),
-                }
+                return self._parse_result(ip, port, True, latency_ms=latency)
             except (asyncio.TimeoutError, ConnectionRefusedError, OSError):
-                return {"ip": ip, "port": port, "open": False}
+                return self._parse_result(ip, port, False)
             except Exception as e:
-                return {"ip": ip, "port": port, "open": False, "error": str(e)}
+                return self._parse_result(ip, port, False, error=str(e))
 
     def _identify_service(self, port: int) -> str:
         services = {
@@ -122,15 +153,14 @@ class NetworkAdapter(BaseAdapter):
         self,
         ports: Optional[List[int]] = None,
     ) -> AsyncIterator[Dict[str, Any]]:
-        ports = ports or self.ports
+        """Stream devices with pure pipeline."""
+        targets = self._plan_scan(ports, limit=1000)
         self._semaphore = asyncio.Semaphore(self.max_concurrent)
 
-        for host in self.network.hosts():
-            ip_str = str(host)
-            for port in ports:
-                result = await self._check_port(ip_str, port)
-                if result.get("open"):
-                    yield result
+        for ip, port in targets:
+            result = await self._check_port_io(ip, port)
+            if result.get("open"):
+                yield result
 
     def search(self, **opts: Any) -> List[Dict[str, Any]]:
         return asyncio.run(self.scan_async(**opts))

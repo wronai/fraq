@@ -2,7 +2,7 @@
 
 from fraq.text2fraq.config import Text2FraqConfig
 from fraq.text2fraq.models import ParsedQuery, LLMClient
-from fraq.text2fraq.llm_client import LiteLLMClient
+from fraq.text2fraq.llm_client import LiteLLMClient, HAS_LITELLM
 from fraq.text2fraq.parser_rules import Text2FraqSimple
 from fraq.text2fraq.parser_llm import Text2Fraq
 from fraq.text2fraq.file_search_parser import FileSearchText2Fraq
@@ -15,6 +15,7 @@ __all__ = [
     "ParsedQuery",
     "LLMClient",
     "LiteLLMClient",
+    "HAS_LITELLM",
     "Text2FraqSimple",
     "Text2Fraq",
     "FileSearchText2Fraq",

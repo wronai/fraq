@@ -1,25 +1,20 @@
-# code2llm/evolution | 348 func | 44f | 2026-03-17
+# code2llm/evolution | 308 func | 47f | 2026-03-17
 
-NEXT[2] (ranked by impact):
-  [1] !! SPLIT           fraq/adapters.py
-      WHY: 970L, 9 classes, max CC=12
-      EFFORT: ~4h  IMPACT: 11640
-
-  [2] !! SPLIT           examples/app_integrations.py
+NEXT[1] (ranked by impact):
+  [1] !! SPLIT           examples/app_integrations.py
       WHY: 566L, 0 classes, max CC=1
       EFFORT: ~4h  IMPACT: 566
 
 
-RISKS[2]:
-  ⚠ Splitting fraq/adapters.py may break 47 import paths
+RISKS[1]:
   ⚠ Splitting examples/app_integrations.py may break 9 import paths
 
 METRICS-TARGET:
-  CC̄:          2.8 → ≤2.0
-  max-CC:      13 → ≤6
-  god-modules: 2 → 0
+  CC̄:          2.7 → ≤1.9
+  max-CC:      11 → ≤5
+  god-modules: 1 → 0
   high-CC(≥15): 0 → ≤0
   hub-types:   0 → ≤0
 
 HISTORY:
-  prev CC̄=2.8 → now CC̄=2.8
+  prev CC̄=2.7 → now CC̄=2.7

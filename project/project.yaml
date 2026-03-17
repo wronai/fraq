@@ -3,58 +3,48 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T18:18:23Z'
+  analyzed_at: '2026-03-17T18:31:44Z'
   tool: code2llm
   stats:
-    files: 27
-    lines: 5958
-    functions: 237
-    classes: 46
+    files: 29
+    lines: 5478
+    functions: 193
+    classes: 35
 health:
   cc_avg: 3.0
-  critical_count: 8
+  critical_count: 4
   critical_limit: 10
-  duplicates: 16
+  duplicates: 0
   cycles: 3
   alerts:
   - type: high_fan_out
-    target: main
-    value: 35
+    target: _parse_args
+    value: 21
     limit: 10
     severity: critical
   - type: high_fan_out
-    target: cmd_files_stat
-    value: 14
+    target: FileSearchText2Fraq._collect_files_filtered
+    value: 16
     limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: FileSearchAdapter.search
-    value: 14
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: FileSearchAdapter.search
-    value: 14
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: NetworkAdapter._check_port
-    value: 14
-    limit: 10
-    severity: warning
+    severity: error
   - type: high_fan_out
     target: FileAdapter.load_root
     value: 13
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: NetworkAdapter._check_port
+    target: ws_stream
     value: 13
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: FileAdapter.load_root
-    value: 13
+    target: WebCrawlerAdapter.crawl_async
+    value: 12
+    limit: 10
+    severity: warning
+  - type: high_fan_out
+    target: FileSearchAdapter._collect_files
+    value: 12
     limit: 10
     severity: warning
   - type: high_fan_out
@@ -73,22 +63,12 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: WebCrawlerAdapter.crawl_async
-    value: 11
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: WebCrawlerAdapter.crawl_async
-    value: 11
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: FileSearchAdapter.load_root
-    value: 11
-    limit: 10
-    severity: warning
-  - type: high_fan_out
     target: _to_csv
+    value: 10
+    limit: 10
+    severity: warning
+  - type: high_fan_out
+    target: _dispatch_command
     value: 10
     limit: 10
     severity: warning
@@ -103,169 +83,11 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: NetworkAdapter.scan_async
-    value: 10
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: WebCrawlerAdapter._fetch_page
-    value: 10
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: WebCrawlerAdapter._fetch_page
+    target: natural_language
     value: 10
     limit: 10
     severity: warning
 modules:
-- path: fraq/cli.py
-  lines: 405
-  classes: 0
-  methods: 14
-  cc_max: 13
-  inbound_deps: 0
-  exports:
-  - name: cmd_explore
-    type: function
-    cc: 1
-  - name: cmd_stream
-    type: function
-    cc: 2
-  - name: cmd_schema
-    type: function
-    cc: 3
-    fan_out: 11
-  - name: cmd_files_search
-    type: function
-    cc: 5
-  - name: cmd_files_list
-    type: function
-    cc: 5
-  - name: cmd_files_stat
-    type: function
-    cc: 4
-    fan_out: 14
-  - name: cmd_nl
-    type: function
-    cc: 3
-  - name: cmd_network_scan
-    type: function
-    cc: 8
-  - name: cmd_web_crawl
-    type: function
-    cc: 7
-  - name: main
-    type: function
-    cc: 13
-    fan_out: 35
-- path: fraq/adapters.py
-  lines: 970
-  classes: 9
-  methods: 47
-  cc_max: 12
-  inbound_deps: 0
-  exports:
-  - name: BaseAdapter
-    type: class
-    cc_avg: 1.0
-  - name: FileAdapter
-    type: class
-    cc_avg: 2.0
-    methods:
-    - name: load_root
-      cc: 3
-      fan_out: 13
-  - name: HTTPAdapter
-    type: class
-    cc_avg: 2.5
-    methods:
-    - name: load_root
-      cc: 3
-      fan_out: 10
-  - name: SQLAdapter
-    type: class
-    cc_avg: 3.0
-    methods:
-    - name: load_root
-      cc: 4
-      fan_out: 10
-  - name: SensorAdapter
-    type: class
-    cc_avg: 1.8
-  - name: FileSearchAdapter
-    type: class
-    cc_avg: 5.8
-    methods:
-    - name: load_root
-      cc: 5
-      fan_out: 11
-    - name: search
-      cc: 12
-      fan_out: 14
-  - name: NetworkAdapter
-    type: class
-    cc_avg: 2.8
-    methods:
-    - name: scan_async
-      cc: 8
-      fan_out: 10
-    - name: _check_port
-      cc: 3
-      fan_out: 13
-  - name: WebCrawlerAdapter
-    type: class
-    cc_avg: 4.0
-    methods:
-    - name: crawl_async
-      cc: 10
-      fan_out: 11
-    - name: _fetch_page
-      cc: 4
-      fan_out: 10
-    - name: stream_pages
-      cc: 11
-  - name: HybridAdapter
-    type: class
-    cc_avg: 3.2
-  - name: get_adapter
-    type: function
-    cc: 3
-- path: fraq/adapters/file_search.py
-  lines: 145
-  classes: 1
-  methods: 5
-  cc_max: 12
-  inbound_deps: 0
-  exports:
-  - name: FileSearchAdapter
-    type: class
-    cc_avg: 5.8
-    methods:
-    - name: load_root
-      cc: 5
-      fan_out: 11
-    - name: search
-      cc: 12
-      fan_out: 14
-- path: fraq/adapters/web_crawler.py
-  lines: 179
-  classes: 1
-  methods: 10
-  cc_max: 11
-  inbound_deps: 0
-  exports:
-  - name: WebCrawlerAdapter
-    type: class
-    cc_avg: 4.1
-    methods:
-    - name: crawl_async
-      cc: 10
-      fan_out: 11
-    - name: _fetch_page
-      cc: 4
-      fan_out: 10
-    - name: stream_pages
-      cc: 11
 - path: fraq/formats.py
   lines: 196
   classes: 1
@@ -276,6 +98,36 @@ modules:
   - name: FormatRegistry
     type: class
     cc_avg: 1.5
+- path: fraq/text2fraq/file_search_parser.py
+  lines: 200
+  classes: 1
+  methods: 11
+  cc_max: 11
+  inbound_deps: 0
+  exports:
+  - name: FileSearchText2Fraq
+    type: class
+    cc_avg: 4.2
+    methods:
+    - name: _collect_files_filtered
+      cc: 11
+      fan_out: 16
+- path: fraq/adapters/web_crawler.py
+  lines: 204
+  classes: 1
+  methods: 12
+  cc_max: 10
+  inbound_deps: 0
+  exports:
+  - name: WebCrawlerAdapter
+    type: class
+    cc_avg: 3.7
+    methods:
+    - name: crawl_async
+      cc: 10
+      fan_out: 12
+    - name: stream_pages
+      cc: 10
 - path: fraq/query.py
   lines: 220
   classes: 4
@@ -298,6 +150,33 @@ modules:
   - name: query
     type: function
     cc: 5
+- path: fraq/text2fraq/router.py
+  lines: 88
+  classes: 1
+  methods: 4
+  cc_max: 9
+  inbound_deps: 0
+  exports:
+  - name: ModelRouter
+    type: class
+    cc_avg: 3.8
+- path: fraq/adapters/file_search.py
+  lines: 165
+  classes: 1
+  methods: 8
+  cc_max: 8
+  inbound_deps: 0
+  exports:
+  - name: FileSearchAdapter
+    type: class
+    cc_avg: 4.0
+    methods:
+    - name: load_root
+      cc: 5
+      fan_out: 11
+    - name: _collect_files
+      cc: 7
+      fan_out: 12
 - path: fraq/adapters/hybrid_adapter.py
   lines: 51
   classes: 1
@@ -308,23 +187,83 @@ modules:
   - name: HybridAdapter
     type: class
     cc_avg: 3.2
-- path: fraq/adapters/network.py
-  lines: 156
-  classes: 1
-  methods: 9
+- path: fraq/cli.py
+  lines: 449
+  classes: 0
+  methods: 18
   cc_max: 8
   inbound_deps: 0
   exports:
-  - name: NetworkAdapter
+  - name: cmd_explore
+    type: function
+    cc: 1
+  - name: cmd_stream
+    type: function
+    cc: 2
+  - name: cmd_schema
+    type: function
+    cc: 3
+    fan_out: 11
+  - name: cmd_files_search
+    type: function
+    cc: 5
+  - name: cmd_files_list
+    type: function
+    cc: 5
+  - name: cmd_files_stat
+    type: function
+    cc: 2
+  - name: cmd_nl
+    type: function
+    cc: 3
+  - name: cmd_network_scan
+    type: function
+    cc: 8
+  - name: cmd_web_crawl
+    type: function
+    cc: 7
+  - name: main
+    type: function
+    cc: 1
+- path: fraq/server.py
+  lines: 217
+  classes: 3
+  methods: 7
+  cc_max: 8
+  inbound_deps: 0
+  exports:
+  - name: NLQueryRequest
     type: class
-    cc_avg: 2.9
-    methods:
-    - name: scan_async
-      cc: 8
-      fan_out: 10
-    - name: _check_port
-      cc: 4
-      fan_out: 14
+    cc_avg: 0.0
+  - name: NLQueryResponse
+    type: class
+    cc_avg: 0.0
+  - name: FilesSearchRequest
+    type: class
+    cc_avg: 0.0
+  - name: natural_language
+    type: function
+    cc: 4
+    fan_out: 10
+  - name: files_search
+    type: function
+    cc: 1
+  - name: files_search_post
+    type: function
+    cc: 1
+  - name: files_nl
+    type: function
+    cc: 1
+  - name: ws_stream
+    type: function
+    cc: 8
+    fan_out: 13
+  - name: health_check
+    type: function
+    cc: 1
+  - name: clear_session
+    type: function
+    cc: 2
 - path: fraq/adapters/sql_adapter.py
   lines: 64
   classes: 1
@@ -339,63 +278,36 @@ modules:
     - name: load_root
       cc: 4
       fan_out: 10
-- path: fraq/text2fraq.py
-  lines: 434
-  classes: 7
-  methods: 31
-  cc_max: 6
-  inbound_deps: 0
-  exports:
-  - name: Text2FraqConfig
-    type: class
-    cc_avg: 1.0
-  - name: ParsedQuery
-    type: class
-    cc_avg: 5.0
-  - name: LLMClient
-    type: class
-    cc_avg: 1.0
-  - name: LiteLLMClient
-    type: class
-    cc_avg: 2.5
-  - name: FileSearchText2Fraq
-    type: class
-    cc_avg: 3.1
-  - name: Text2Fraq
-    type: class
-    cc_avg: 2.6
-  - name: Text2FraqSimple
-    type: class
-    cc_avg: 2.2
-  - name: text2filesearch
-    type: function
-    cc: 2
-  - name: text2query
-    type: function
-    cc: 2
-  - name: text2fraq
-    type: function
-    cc: 2
-- path: fraq/text2fraq/file_search_parser.py
-  lines: 91
-  classes: 1
-  methods: 8
-  cc_max: 6
-  inbound_deps: 3
-  exports:
-  - name: FileSearchText2Fraq
-    type: class
-    cc_avg: 3.1
 - path: fraq/text2fraq/parser_rules.py
   lines: 93
   classes: 1
   methods: 8
   cc_max: 6
-  inbound_deps: 2
+  inbound_deps: 1
   exports:
   - name: Text2FraqSimple
     type: class
     cc_avg: 2.2
+- path: fraq/text2fraq/session.py
+  lines: 149
+  classes: 1
+  methods: 8
+  cc_max: 6
+  inbound_deps: 0
+  exports:
+  - name: FraqSession
+    type: class
+    cc_avg: 2.9
+- path: fraq/adapters/network.py
+  lines: 186
+  classes: 1
+  methods: 11
+  cc_max: 5
+  inbound_deps: 0
+  exports:
+  - name: NetworkAdapter
+    type: class
+    cc_avg: 2.8
 - path: fraq/core.py
   lines: 360
   classes: 4
@@ -557,6 +469,12 @@ modules:
   - name: async_stream
     type: function
     cc: 3
+- path: fraq/__init__.py
+  lines: 149
+  classes: 0
+  methods: 1
+  cc_max: 2
+  inbound_deps: 0
 - path: fraq/generators.py
   lines: 117
   classes: 4
@@ -612,14 +530,20 @@ modules:
   - name: Text2FraqConfig
     type: class
     cc_avg: 1.0
-- path: fraq/__init__.py
-  lines: 62
+- path: fraq/adapters/__init__.py
+  lines: 25
   classes: 0
   methods: 0
   cc_max: 0
   inbound_deps: 0
-- path: fraq/adapters/__init__.py
-  lines: 25
+- path: fraq/text2fraq/__init__.py
+  lines: 27
+  classes: 0
+  methods: 0
+  cc_max: 0
+  inbound_deps: 0
+- path: fraq/types.py
+  lines: 42
   classes: 0
   methods: 0
   cc_max: 0
@@ -631,42 +555,38 @@ modules:
   cc_max: 0
   inbound_deps: 0
 hotspots:
-- name: main
-  fan_out: 35
-  note: Orchestrates 35 calls
-- name: cmd_files_stat
-  fan_out: 14
-  note: Show file statistics with fractal coordinates.
-- name: FileSearchAdapter.search
-  fan_out: 14
-  note: "Search files and return as fractal records.\n\nArgs:\n    extension: File\
-    \ extension"
-- name: FileSearchAdapter.search
-  fan_out: 14
-  note: Orchestrates 14 calls
-- name: NetworkAdapter._check_port
-  fan_out: 14
-  note: Orchestrates 14 calls
+- name: _parse_args
+  fan_out: 21
+  note: Parse command line arguments.
+- name: FileSearchText2Fraq._collect_files_filtered
+  fan_out: 16
+  note: Collect files with exclusion filtering.
 - name: FileAdapter.load_root
   fan_out: 13
   note: Orchestrates 13 calls
-- name: NetworkAdapter._check_port
+- name: ws_stream
   fan_out: 13
-  note: Check if port is open on host.
-- name: FileAdapter.load_root
-  fan_out: 13
-  note: Orchestrates 13 calls
+  note: WebSocket endpoint for streaming fractal data.
+- name: WebCrawlerAdapter.crawl_async
+  fan_out: 12
+  note: Crawl website and return all pages.
+- name: FileSearchAdapter._collect_files
+  fan_out: 12
+  note: Iterate filesystem and collect matching files.
 - name: ws_stream
   fan_out: 11
   note: Orchestrates 11 calls
 - name: cmd_schema
   fan_out: 11
   note: Orchestrates 11 calls
+- name: FileSearchAdapter.load_root
+  fan_out: 11
+  note: Orchestrates 11 calls
+- name: _to_csv
+  fan_out: 10
+  note: Serialise list of flat dicts to CSV.
 refactoring:
   priorities:
-  - action: Split god module fraq/adapters.py (970L, 9 classes)
-    impact: high
-    effort: high
   - action: 'Break circular dependency: fraq.formats._prepare'
     impact: medium
     effort: low
@@ -676,12 +596,16 @@ refactoring:
   - action: 'Break circular dependency: fraq.formats._mp_encode'
     impact: medium
     effort: low
-  - action: Reduce main fan-out (currently 35)
+  - action: Reduce _parse_args fan-out (currently 21)
+    impact: medium
+    effort: medium
+  - action: Reduce FileSearchText2Fraq._collect_files_filtered fan-out (currently
+      16)
     impact: medium
     effort: medium
 evolution:
 - date: '2026-03-17'
   cc_avg: 3.0
-  critical: 8
-  lines: 5958
+  critical: 4
+  lines: 5478
   note: Automated analysis
