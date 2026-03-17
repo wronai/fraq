@@ -1,4 +1,4 @@
-# fraq | 30f 6159L | python:24,shell:6
+# fraq | 30f 6437L | python:24,shell:6
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
 M[30]:
   examples/api_server.py,405
@@ -15,43 +15,25 @@ M[30]:
   examples/fullstack-docker/websocket/main.py,52
   examples/nlp2cmd_integration.py,223
   examples/query_examples.py,236
-  examples/text2fraq_examples.py,372
+  examples/text2fraq_examples.py,251
   examples/text2fraq_files.py,275
   examples/websocket-docker/main.py,104
   examples/websocket-docker/run.sh,62
   fraq/__init__.py,59
-  fraq/adapters.py,577
-  fraq/cli.py,274
+  fraq/adapters.py,969
+  fraq/cli.py,280
   fraq/core.py,360
   fraq/formats.py,196
   fraq/generators.py,117
-  fraq/query.py,219
+  fraq/query.py,220
   fraq/schema_export.py,476
   fraq/streaming.py,93
   fraq/text2fraq.py,434
   main_websocket.py,52
   project.sh,14
 D:
-  fraq/text2fraq.py:
-    e: FileSearchText2Fraq,Text2FraqSimple,Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,Text2Fraq,Text2FraqSimple,text2filesearch,text2query,text2fraq
-    FileSearchText2Fraq: __init__(1),parse(1),search(1),format_results(3)  # Natural language to file search converter.
-
-Converts queries...
-    Text2FraqSimple: parse(1),_matches_pattern(1),execute(2)  # Rule-based text2fraq without LLM (fallback for offline use)...
-    Text2FraqConfig: from_env(0)  # Configuration for text2fraq...
-    ParsedQuery: to_fraq_query(0)  # Parsed natural language query...
-    LLMClient(Protocol): complete(1)  # Protocol for LLM clients...
-    LiteLLMClient: __init__(1),complete(1)  # LiteLLM client for text completion...
-    Text2Fraq: __init__(2),parse(1),_parse_response(1),_fallback_parse(1),execute(2)  # Natural language to fractal query converter.
-
-Examples:
-    ...
-    Text2FraqSimple: parse(1),_matches_pattern(1),execute(2)  # Rule-based text2fraq without LLM (fallback for offline use)...
-    text2filesearch(text;base_path;fmt)
-    text2query(text;config)
-    text2fraq(text;config;root)
   fraq/adapters.py:
-    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,FileSearchAdapter,HybridAdapter,get_adapter
+    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,FileSearchAdapter,NetworkAdapter,WebCrawlerAdapter,HybridAdapter,get_adapter
     BaseAdapter(ABC): load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter must implement...
     FileAdapter(BaseAdapter): load_root(1),save(3),_dict_to_node(0)  # Read/write fractal state from local files.
 
@@ -65,6 +47,8 @@ Instead of req...
 In...
     FileSearchAdapter(BaseAdapter): __init__(3),load_root(1),search(5),save(3),stream(3)  # Adapter for searching files on disk using fractal patterns.
 ...
+    NetworkAdapter(BaseAdapter): __init__(4),load_root(1),scan_async(2),_check_port(2),_identify_service(1),stream_devices(1),search(0),stream(1),save(3)  # Async adapter for scanning local network devices and service...
+    WebCrawlerAdapter(BaseAdapter): __init__(5),_get_session(0),load_root(1),crawl_async(0),_fetch_page(2),_extract_links(2),stream_pages(0),search(0),stream(1),save(3)  # Async adapter for crawling websites and extracting links/con...
     HybridAdapter(BaseAdapter): __init__(0),add(2),load_root(1),save(3)  # Combine roots from several adapters into one fractal.
 
 The m...
@@ -83,7 +67,7 @@ The m...
     _encode_value(v)
     _mp_encode(obj)
   fraq/cli.py:
-    e: _make_root,cmd_explore,cmd_stream,cmd_schema,cmd_files_search,cmd_files_list,cmd_files_stat,cmd_nl,main
+    e: _make_root,cmd_explore,cmd_stream,cmd_schema,cmd_files_search,cmd_files_list,cmd_files_stat,cmd_nl,_is_file_query,_run_nl_file_query,_run_nl_fraq_query,main
     _make_root(dims;seed)
     cmd_explore(args)
     cmd_stream(args)
@@ -92,6 +76,9 @@ The m...
     cmd_files_list(args)
     cmd_files_stat(args)
     cmd_nl(args)
+    _is_file_query(query)
+    _run_nl_file_query(query;base_path;fmt)
+    _run_nl_fraq_query(query;fmt)
     main(argv)
   examples/text2fraq_files.py:
     e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
@@ -132,16 +119,27 @@ The executor build...
     ws_stream(websocket)
     ws_files(websocket)
     health()
-  examples/text2fraq_examples.py:
-    e: example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_env_config,example_benchmark,example_custom_schema
-    example_simple_parser()
-    example_qwen25()
-    example_llama32()
-    example_phi3()
-    example_convenience_functions()
-    example_env_config()
-    example_benchmark()
-    example_custom_schema()
+  fraq/text2fraq.py:
+    e: Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,FileSearchText2Fraq,Text2Fraq,Text2FraqSimple,_word_match,_detect_format,_detect_depth,_detect_limit,text2filesearch,text2query,text2fraq
+    Text2FraqConfig: from_env(0)  # Configuration for text2fraq...
+    ParsedQuery: to_fraq_query(0)  # Parsed natural language query...
+    LLMClient(Protocol): complete(1)  # Protocol for LLM clients...
+    LiteLLMClient: __init__(1),complete(1)  # LiteLLM client for text completion...
+    FileSearchText2Fraq: __init__(1),parse(1),_detect_extension(1),_detect_limit(1),_detect_newer_than(1),_detect_sort_by(1),search(1),format_results(3)  # Natural language to file search converter.
+
+Converts queries...
+    Text2Fraq: __init__(2),parse(1),_parse_response(1),_extract_structured_response(1),_fallback_parse(1),_fallback_fields(1),execute(2)  # Natural language to fractal query converter.
+
+Examples:
+    ...
+    Text2FraqSimple: parse(1),_detect_fields(1),_matches_pattern(1),execute(2)  # Rule-based text2fraq without LLM (fallback for offline use)...
+    _word_match(text;pattern)
+    _detect_format(text;default)
+    _detect_depth(text;default)
+    _detect_limit(text)
+    text2filesearch(text;base_path;fmt)
+    text2query(text;config)
+    text2fraq(text;config;root)
   main_websocket.py:
     e: ws_stream,ws_files,health
     ws_stream(websocket)
@@ -199,6 +197,19 @@ The cursor remembers the...
     example_finance_leasing()
     example_legal_clauses()
     example_perlin_organic()
+  examples/text2fraq_examples.py:
+    e: _print_header,_print_parsed_query,_print_file_params,example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_file_search_direct,example_env_config,example_full_pipeline
+    _print_header(title)
+    _print_parsed_query(query;parsed)
+    _print_file_params(query;params)
+    example_simple_parser()
+    example_qwen25()
+    example_llama32()
+    example_phi3()
+    example_convenience_functions()
+    example_file_search_direct()
+    example_env_config()
+    example_full_pipeline()
   examples/nlp2cmd_integration.py:
     e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi,example_grpc_proto,example_json_schema,example_full_nlp2cmd_workflow
     build_sensor_schema()

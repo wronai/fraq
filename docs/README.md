@@ -1,7 +1,7 @@
 <!-- code2docs:start --># fraq
 
-![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.10-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-236-green)
-> **236** functions | **28** classes | **34** files | CC̄ = 2.7
+![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.10-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-261-green)
+> **261** functions | **30** classes | **34** files | CC̄ = 2.7
 
 > Auto-generated project documentation from source code analysis.
 
@@ -151,14 +151,14 @@ Content outside the markers is preserved when regenerating. Enable this with `sy
 
 ```
 fraq/
-├── main_websocket    ├── streaming    ├── formats├── fraq/    ├── cli    ├── generators    ├── schema_export    ├── adapters    ├── applications    ├── async_streaming    ├── query_examples    ├── app_integrations    ├── text2fraq_examples    ├── nlp2cmd_integration    ├── api_server    ├── text2fraq_files        ├── run        ├── main        ├── run        ├── run        ├── run        ├── main            ├── app            ├── main            ├── main├── project    ├── bash_examples    ├── core    ├── query    ├── text2fraq```
+├── main_websocket    ├── formats    ├── streaming├── fraq/    ├── cli    ├── generators    ├── schema_export    ├── adapters    ├── applications    ├── async_streaming    ├── query_examples    ├── app_integrations    ├── text2fraq_examples    ├── nlp2cmd_integration    ├── api_server    ├── text2fraq_files        ├── run        ├── main        ├── run        ├── run        ├── run        ├── main            ├── app            ├── main            ├── main├── project    ├── bash_examples    ├── core    ├── query    ├── text2fraq```
 
 ## API Overview
 
 ### Classes
 
-- **`AsyncFraqStream`** — Async generator that yields fractal records at a controlled rate.
 - **`FormatRegistry`** — Registry of serialisation backends.
+- **`AsyncFraqStream`** — Async generator that yields fractal records at a controlled rate.
 - **`HashGenerator`** — Deterministic pseudo-random values via SHA-256.
 - **`FibonacciGenerator`** — Value based on generalised Fibonacci sequence at the node's depth.
 - **`PerlinGenerator`** — Simplified 1-D Perlin-ish noise from the L2 norm of position.
@@ -169,6 +169,8 @@ fraq/
 - **`SQLAdapter`** — Map fractal nodes to/from relational tables.
 - **`SensorAdapter`** — Simulate or consume live sensor data as fractal streams.
 - **`FileSearchAdapter`** — Adapter for searching files on disk using fractal patterns.
+- **`NetworkAdapter`** — Async adapter for scanning local network devices and services.
+- **`WebCrawlerAdapter`** — Async adapter for crawling websites and extracting links/content.
 - **`HybridAdapter`** — Combine roots from several adapters into one fractal.
 - **`FraqNode`** — A single point in the infinite fractal data space.
 - **`FieldDef`** — One field in a FraqSchema.
@@ -241,14 +243,14 @@ fraq/
 - `example_grpc_service()` — gRPC service definition and implementation.
 - `example_jupyter_notebook()` — Jupyter notebook cells for interactive exploration.
 - `example_celery_task()` — Celery background tasks for fraq processing.
-- `example_simple_parser()` — Text2FraqSimple — deterministyczny parser bez LLM.
-- `example_qwen25()` — Qwen2.5 3B — szybki model zorientowany na instrukcje (CN/EN).
-- `example_llama32()` — Llama 3.2 3B — lekki, zbalansowany model multimedialny.
-- `example_phi3()` — Phi-3 3.8B — mocny w reasoning, lepszy w złożone logikę.
-- `example_convenience_functions()` — text2query() i text2fraq() — szybkie funkcje one-liner.
-- `example_env_config()` — Ładowanie konfiguracji z .env.
-- `example_benchmark()` — Porównanie wszystkich parserów na tych samych zapytaniach.
-- `example_custom_schema()` — Text2Fraq z custom FraqSchema (ERP, IoT, etc.).
+- `example_simple_parser()` — Rule-based parser — zero dependencies, works offline.
+- `example_qwen25()` — qwen2.5:3b — good balance for Polish/English prompts.
+- `example_llama32()` — llama3.2:3b — alternative lightweight model.
+- `example_phi3()` — phi3:3.8b — stronger reasoning-oriented option.
+- `example_convenience_functions()` — One-liner functions — simplest possible API.
+- `example_file_search_direct()` — FileSearchAdapter — search real files on disk.
+- `example_env_config()` — Load config from .env file.
+- `example_full_pipeline()` — Full pipeline NL → parse → execute / file search.
 - `build_sensor_schema()` — Schemat IoT sensorów — bazowy przykład.
 - `build_erp_schema()` — Schemat ERP / accounting.
 - `example_nlp2cmd_command_schema()` — Generuj NLP2CMD command schema → command_schemas/fraq_sensor.json
@@ -332,13 +334,13 @@ fraq/
 📄 `examples.fullstack-docker.websocket.main` (3 functions)
 📄 `examples.nlp2cmd_integration` (11 functions)
 📄 `examples.query_examples` (10 functions)
-📄 `examples.text2fraq_examples` (8 functions)
+📄 `examples.text2fraq_examples` (11 functions)
 📄 `examples.text2fraq_files` (5 functions)
 📄 `examples.websocket-docker.main` (3 functions)
 📄 `examples.websocket-docker.run`
 📦 `fraq`
-📄 `fraq.adapters` (28 functions, 7 classes)
-📄 `fraq.cli` (9 functions)
+📄 `fraq.adapters` (47 functions, 9 classes)
+📄 `fraq.cli` (12 functions)
 📄 `fraq.core` (17 functions, 4 classes)
 📄 `fraq.formats` (14 functions, 1 classes)
 📄 `fraq.generators` (9 functions, 4 classes)

@@ -35,6 +35,7 @@ class SourceType(str, Enum):
     SENSOR = "sensor"
     HYBRID = "hybrid"
     MEMORY = "memory"
+    NETWORK = "network"
 
 
 @dataclass

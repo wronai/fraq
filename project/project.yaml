@@ -3,16 +3,16 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T17:21:36Z'
+  analyzed_at: '2026-03-17T17:59:50Z'
   tool: code2llm
   stats:
     files: 10
-    lines: 4031
-    functions: 124
-    classes: 28
+    lines: 4507
+    functions: 157
+    classes: 30
 health:
-  cc_avg: 3.2
-  critical_count: 5
+  cc_avg: 2.9
+  critical_count: 4
   critical_limit: 10
   duplicates: 0
   cycles: 3
@@ -22,21 +22,6 @@ health:
     value: 25
     limit: 10
     severity: critical
-  - type: cc_exceeded
-    target: Text2Fraq._fallback_parse
-    value: 18
-    limit: 15
-    severity: warning
-  - type: cc_exceeded
-    target: FileSearchText2Fraq.parse
-    value: 17
-    limit: 15
-    severity: warning
-  - type: cc_exceeded
-    target: Text2FraqSimple.parse
-    value: 15
-    limit: 15
-    severity: warning
   - type: high_fan_out
     target: cmd_files_stat
     value: 14
@@ -53,6 +38,11 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
+    target: NetworkAdapter._check_port
+    value: 13
+    limit: 10
+    severity: warning
+  - type: high_fan_out
     target: ws_stream
     value: 11
     limit: 10
@@ -63,12 +53,12 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: cmd_nl
+    target: FileSearchAdapter.load_root
     value: 11
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: FileSearchAdapter.load_root
+    target: WebCrawlerAdapter.crawl_async
     value: 11
     limit: 10
     severity: warning
@@ -87,60 +77,21 @@ health:
     value: 10
     limit: 10
     severity: warning
+  - type: high_fan_out
+    target: NetworkAdapter.scan_async
+    value: 10
+    limit: 10
+    severity: warning
+  - type: high_fan_out
+    target: WebCrawlerAdapter._fetch_page
+    value: 10
+    limit: 10
+    severity: warning
 modules:
-- path: fraq/text2fraq.py
-  lines: 434
-  classes: 7
-  methods: 20
-  cc_max: 18
-  inbound_deps: 2
-  exports:
-  - name: FileSearchText2Fraq
-    type: class
-    cc_avg: 6.0
-    methods:
-    - name: parse
-      cc: 17
-      flag: split
-  - name: Text2FraqSimple
-    type: class
-    cc_avg: 6.3
-    methods:
-    - name: parse
-      cc: 15
-      flag: split
-  - name: Text2FraqConfig
-    type: class
-    cc_avg: 1.0
-  - name: ParsedQuery
-    type: class
-    cc_avg: 6.0
-  - name: LLMClient
-    type: class
-    cc_avg: 1.0
-  - name: LiteLLMClient
-    type: class
-    cc_avg: 2.5
-  - name: Text2Fraq
-    type: class
-    cc_avg: 5.8
-    methods:
-    - name: _fallback_parse
-      cc: 18
-      flag: split
-  - name: text2filesearch
-    type: function
-    cc: 2
-  - name: text2query
-    type: function
-    cc: 2
-  - name: text2fraq
-    type: function
-    cc: 2
 - path: fraq/adapters.py
-  lines: 577
-  classes: 7
-  methods: 28
+  lines: 969
+  classes: 9
+  methods: 47
   cc_max: 12
   inbound_deps: 0
   exports:
@@ -181,6 +132,28 @@ modules:
     - name: search
       cc: 12
       fan_out: 14
+  - name: NetworkAdapter
+    type: class
+    cc_avg: 2.8
+    methods:
+    - name: scan_async
+      cc: 8
+      fan_out: 10
+    - name: _check_port
+      cc: 3
+      fan_out: 13
+  - name: WebCrawlerAdapter
+    type: class
+    cc_avg: 4.0
+    methods:
+    - name: crawl_async
+      cc: 10
+      fan_out: 11
+    - name: _fetch_page
+      cc: 4
+      fan_out: 10
+    - name: stream_pages
+      cc: 11
   - name: HybridAdapter
     type: class
     cc_avg: 3.2
@@ -198,9 +171,9 @@ modules:
     type: class
     cc_avg: 1.5
 - path: fraq/cli.py
-  lines: 274
+  lines: 280
   classes: 0
-  methods: 9
+  methods: 12
   cc_max: 9
   inbound_deps: 0
   exports:
@@ -226,14 +199,13 @@ modules:
     fan_out: 14
   - name: cmd_nl
     type: function
-    cc: 5
-    fan_out: 11
+    cc: 3
   - name: main
     type: function
     cc: 9
     fan_out: 25
 - path: fraq/query.py
-  lines: 219
+  lines: 220
   classes: 4
   methods: 12
   cc_max: 9
@@ -254,6 +226,43 @@ modules:
   - name: query
     type: function
     cc: 5
+- path: fraq/text2fraq.py
+  lines: 434
+  classes: 7
+  methods: 31
+  cc_max: 6
+  inbound_deps: 2
+  exports:
+  - name: Text2FraqConfig
+    type: class
+    cc_avg: 1.0
+  - name: ParsedQuery
+    type: class
+    cc_avg: 5.0
+  - name: LLMClient
+    type: class
+    cc_avg: 1.0
+  - name: LiteLLMClient
+    type: class
+    cc_avg: 2.5
+  - name: FileSearchText2Fraq
+    type: class
+    cc_avg: 3.1
+  - name: Text2Fraq
+    type: class
+    cc_avg: 2.6
+  - name: Text2FraqSimple
+    type: class
+    cc_avg: 2.2
+  - name: text2filesearch
+    type: function
+    cc: 2
+  - name: text2query
+    type: function
+    cc: 2
+  - name: text2fraq
+    type: function
+    cc: 2
 - path: fraq/core.py
   lines: 360
   classes: 4
@@ -379,43 +388,31 @@ hotspots:
 - name: FileAdapter.load_root
   fan_out: 13
   note: Orchestrates 13 calls
+- name: NetworkAdapter._check_port
+  fan_out: 13
+  note: Check if port is open on host.
 - name: ws_stream
   fan_out: 11
   note: Orchestrates 11 calls
 - name: cmd_schema
   fan_out: 11
   note: Orchestrates 11 calls
-- name: cmd_nl
-  fan_out: 11
-  note: Natural language query (requires LLM).
 - name: FileSearchAdapter.load_root
   fan_out: 11
   note: 'Create root node representing the search space.
 
     URI can be path or empty (uses b'
+- name: WebCrawlerAdapter.crawl_async
+  fan_out: 11
+  note: Async crawl website starting from base_url.
 - name: _to_csv
   fan_out: 10
   note: Serialise list of flat dicts to CSV.
-- name: HTTPAdapter.load_root
-  fan_out: 10
-  note: Orchestrates 10 calls
 refactoring:
   priorities:
-  - action: Split god module fraq/adapters.py (577L, 7 classes)
+  - action: Split god module fraq/adapters.py (969L, 9 classes)
     impact: high
     effort: high
-  - action: Split FileSearchText2Fraq.parse (CC=17 → target CC<10)
-    impact: medium
-    effort: low
-    module: text2fraq.py
-  - action: Split Text2Fraq._fallback_parse (CC=18 → target CC<10)
-    impact: medium
-    effort: low
-    module: text2fraq.py
-  - action: Split Text2FraqSimple.parse (CC=15 → target CC<10)
-    impact: medium
-    effort: low
-    module: text2fraq.py
   - action: 'Break circular dependency: fraq.formats._prepare'
     impact: medium
     effort: low
@@ -430,7 +427,7 @@ refactoring:
     effort: medium
 evolution:
 - date: '2026-03-17'
-  cc_avg: 3.2
-  critical: 5
-  lines: 4031
+  cc_avg: 2.9
+  critical: 4
+  lines: 4507
   note: Automated analysis

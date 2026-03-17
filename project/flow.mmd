@@ -98,14 +98,17 @@ flowchart TD
         examples__query_examples__example_oneliners["example_oneliners"]
     end
     subgraph examples_text2fraq_examples
+        examples__text2fraq_examples___print_header["_print_header"]
+        examples__text2fraq_examples___print_parsed_query["_print_parsed_query"]
+        examples__text2fraq_examples___print_file_params["_print_file_params"]
         examples__example_simple_parser["example_simple_parser"]
         examples__text2fraq_examples__example_qwen25["example_qwen25"]
         examples__text2fraq_examples__example_llama32["example_llama32"]
         examples__text2fraq_examples__example_phi3["example_phi3"]
         examples__example_convenience_functions["example_convenience_functions"]
+        examples__example_file_search_direct["example_file_search_direct"]
         examples__text2fraq_examples__example_env_config["example_env_config"]
-        examples__text2fraq_examples__example_benchmark["example_benchmark"]
-        examples__example_custom_schema["example_custom_schema"]
+        examples__example_full_pipeline["example_full_pipeline"]
     end
     subgraph examples_text2fraq_files
         examples__example_pdf_search_rule_based["example_pdf_search_rule_based"]
@@ -148,6 +151,25 @@ flowchart TD
         fraq__adapters__FileSearchAdapter__search("search CC=12")
         fraq__adapters__FileSearchAdapter__save["save"]
         fraq__adapters__FileSearchAdapter__stream("stream CC=8")
+        fraq__adapters__NetworkAdapter____init__["__init__"]
+        fraq__adapters__NetworkAdapter__load_root["load_root"]
+        fraq__adapters__NetworkAdapter__scan_async("scan_async CC=8")
+        fraq__adapters__NetworkAdapter___check_port["_check_port"]
+        fraq__adapters__NetworkAdapter___identify_service["_identify_service"]
+        fraq__adapters__NetworkAdapter__stream_devices["stream_devices"]
+        fraq__adapters__NetworkAdapter__search["search"]
+        fraq__adapters__NetworkAdapter__stream["stream"]
+        fraq__adapters__NetworkAdapter__save["save"]
+        fraq__adapters__WebCrawlerAdapter____init__["__init__"]
+        fraq__adapters__WebCrawlerAdapter___get_session["_get_session"]
+        fraq__adapters__WebCrawlerAdapter__load_root["load_root"]
+        fraq__adapters__WebCrawlerAdapter__crawl_async("crawl_async CC=10")
+        fraq__adapters__WebCrawlerAdapter___fetch_page["_fetch_page"]
+        fraq__adapters__WebCrawlerAdapter___extract_links["_extract_links"]
+        fraq__adapters__WebCrawlerAdapter__stream_pages("stream_pages CC=11")
+        fraq__adapters__WebCrawlerAdapter__search["search"]
+        fraq__adapters__WebCrawlerAdapter__stream["stream"]
+        fraq__adapters__WebCrawlerAdapter__save["save"]
         fraq__adapters__HybridAdapter____init__["__init__"]
         fraq__adapters__HybridAdapter__add["add"]
         fraq__adapters__HybridAdapter__load_root("load_root CC=8")
@@ -163,6 +185,9 @@ flowchart TD
         fraq__cli__cmd_files_list["cmd_files_list"]
         fraq__cli__cmd_files_stat["cmd_files_stat"]
         fraq__cli__cmd_nl["cmd_nl"]
+        fraq__cli___is_file_query["_is_file_query"]
+        fraq__cli___run_nl_file_query["_run_nl_file_query"]
+        fraq__cli___run_nl_fraq_query["_run_nl_fraq_query"]
         fraq__cli__main("main CC=9")
     end
     subgraph fraq_core
@@ -242,24 +267,35 @@ flowchart TD
         fraq__streaming__async_stream["async_stream"]
     end
     subgraph fraq_text2fraq
-        fraq__text2fraq__FileSearchText2Fraq____init__["__init__"]
-        fraq__text2fraq__FileSearchText2Fraq__parse{{parse CC=17}}
-        fraq__text2fraq__FileSearchText2Fraq__search["search"]
-        fraq__format_results["format_results"]
-        fraq__text2fraq__text2filesearch["text2filesearch"]
+        fraq__text2fraq___word_match["_word_match"]
+        fraq__text2fraq___detect_format["_detect_format"]
+        fraq__text2fraq___detect_depth["_detect_depth"]
+        fraq__text2fraq___detect_limit["_detect_limit"]
         fraq__text2fraq__Text2FraqConfig__from_env["from_env"]
         fraq__text2fraq__ParsedQuery__to_fraq_query["to_fraq_query"]
         fraq__text2fraq__LLMClient__complete["complete"]
         fraq__text2fraq__LiteLLMClient____init__["__init__"]
         fraq__text2fraq__LiteLLMClient__complete["complete"]
+        fraq__text2fraq__FileSearchText2Fraq____init__["__init__"]
+        fraq__text2fraq__FileSearchText2Fraq__parse["parse"]
+        fraq___detect_extension["_detect_extension"]
+        fraq___detect_limit["_detect_limit"]
+        fraq___detect_newer_than["_detect_newer_than"]
+        fraq___detect_sort_by["_detect_sort_by"]
+        fraq__text2fraq__FileSearchText2Fraq__search["search"]
+        fraq__format_results["format_results"]
         fraq__text2fraq__Text2Fraq____init__["__init__"]
         fraq__text2fraq__Text2Fraq__parse["parse"]
         fraq__text2fraq__Text2Fraq___parse_response["_parse_response"]
-        fraq__text2fraq__Text2Fraq___fallback_parse{{_fallback_parse CC=18}}
+        fraq___extract_structured_response["_extract_structured_response"]
+        fraq__text2fraq__Text2Fraq___fallback_parse["_fallback_parse"]
+        fraq__text2fraq__Text2Fraq___fallback_fields["_fallback_fields"]
         fraq__text2fraq__Text2Fraq__execute["execute"]
-        fraq__text2fraq__Text2FraqSimple__parse{{parse CC=15}}
+        fraq__text2fraq__Text2FraqSimple__parse["parse"]
+        fraq__text2fraq__Text2FraqSimple___detect_fields["_detect_fields"]
         fraq__text2fraq__Text2FraqSimple___matches_pattern["_matches_pattern"]
         fraq__text2fraq__Text2FraqSimple__execute["execute"]
+        fraq__text2fraq__text2filesearch["text2filesearch"]
         fraq__text2fraq__text2query["text2query"]
         fraq__text2fraq__text2fraq["text2fraq"]
     end
@@ -268,6 +304,18 @@ flowchart TD
         main_websocket__ws_files["ws_files"]
         main_websocket__health["health"]
     end
+    fraq__cli__cmd_explore --> fraq__cli___make_root
+    fraq__cli__cmd_explore --> fraq__formats__FormatRegistry__serialize
+    fraq__cli__cmd_stream --> fraq__cli___make_root
+    fraq__cli__cmd_stream --> fraq__formats__FormatRegistry__serialize
+    fraq__cli__cmd_schema --> fraq__cli___make_root
+    fraq__cli__cmd_schema --> fraq__formats__FormatRegistry__serialize
+    fraq__cli__cmd_files_search --> fraq__formats__FormatRegistry__serialize
+    fraq__cli__cmd_nl --> fraq__cli___is_file_query
+    fraq__cli__cmd_nl --> fraq__cli___run_nl_fraq_query
+    fraq__cli__cmd_nl --> fraq__cli___run_nl_file_query
+    fraq__cli___run_nl_fraq_query --> fraq__text2fraq__Text2FraqConfig__from_env
+    fraq__cli___run_nl_fraq_query --> fraq__formats__FormatRegistry__serialize
     fraq__formats___to_json --> fraq__formats__FormatRegistry__register
     fraq__formats___to_json --> fraq__formats___prepare
     fraq__formats___to_jsonl --> fraq__formats__FormatRegistry__register
@@ -282,21 +330,14 @@ flowchart TD
     fraq__formats___to_msgpack_lite --> fraq__formats__FormatRegistry__register
     fraq__formats___to_msgpack_lite --> fraq__formats___mp_encode
     fraq__formats___to_msgpack_lite --> fraq__formats___prepare
-    fraq__cli__cmd_explore --> fraq__cli___make_root
-    fraq__cli__cmd_explore --> fraq__formats__FormatRegistry__serialize
-    fraq__cli__cmd_stream --> fraq__cli___make_root
-    fraq__cli__cmd_stream --> fraq__formats__FormatRegistry__serialize
-    fraq__cli__cmd_schema --> fraq__cli___make_root
-    fraq__cli__cmd_schema --> fraq__formats__FormatRegistry__serialize
-    fraq__cli__cmd_files_search --> fraq__formats__FormatRegistry__serialize
-    fraq__cli__cmd_nl --> fraq__text2fraq__Text2FraqConfig__from_env
-    fraq__cli__cmd_nl --> fraq__formats__FormatRegistry__serialize
     fraq__generators__SensorStreamGenerator____call__ --> fraq__core___vec_hash
     fraq__adapters__FileAdapter__save --> fraq__formats__FormatRegistry__serialize
     fraq__adapters__HTTPAdapter__load_root --> fraq__adapters__FileAdapter___dict_to_node
     fraq__adapters__HTTPAdapter__save --> fraq__formats__FormatRegistry__serialize
     fraq__adapters__SensorAdapter__save --> fraq__formats__FormatRegistry__serialize
     fraq__adapters__FileSearchAdapter__save --> fraq__formats__FormatRegistry__serialize
+    fraq__adapters__NetworkAdapter__save --> fraq__formats__FormatRegistry__serialize
+    fraq__adapters__WebCrawlerAdapter__save --> fraq__formats__FormatRegistry__serialize
     examples__applications__example_iot_sensor_network --> fraq__schema_export__to_proto
     examples__applications__example_ai_training_data --> fraq__formats__FormatRegistry__serialize
     examples__applications__example_devops_load_test --> fraq__schema_export__to_openapi
@@ -312,9 +353,27 @@ flowchart TD
     examples__query_examples__example_disk_yaml --> fraq__query__query
     examples__example_sensor_to_formats --> fraq__formats__FormatRegistry__serialize
     examples__query_examples__example_oneliners --> fraq__query__query
+    examples__example_simple_parser --> examples__text2fraq_examples___print_header
+    examples__example_simple_parser --> examples__text2fraq_examples___print_parsed_query
+    examples__example_simple_parser --> examples__text2fraq_examples___print_file_params
+    examples__text2fraq_examples__example_qwen25 --> examples__text2fraq_examples___print_header
+    examples__text2fraq_examples__example_qwen25 --> examples__text2fraq_examples___print_parsed_query
+    examples__text2fraq_examples__example_llama32 --> examples__text2fraq_examples___print_header
+    examples__text2fraq_examples__example_llama32 --> examples__text2fraq_examples___print_parsed_query
+    examples__text2fraq_examples__example_phi3 --> examples__text2fraq_examples___print_header
+    examples__text2fraq_examples__example_phi3 --> examples__text2fraq_examples___print_parsed_query
+    examples__example_convenience_functions --> examples__text2fraq_examples___print_header
     examples__example_convenience_functions --> fraq__text2fraq__text2query
+    examples__example_convenience_functions --> fraq__text2fraq__text2filesearch
     examples__example_convenience_functions --> fraq__text2fraq__text2fraq
+    examples__example_file_search_direct --> examples__text2fraq_examples___print_header
+    examples__example_file_search_direct --> fraq__text2fraq__text2filesearch
+    examples__text2fraq_examples__example_env_config --> examples__text2fraq_examples___print_header
     examples__text2fraq_examples__example_env_config --> fraq__text2fraq__Text2FraqConfig__from_env
+    examples__example_full_pipeline --> examples__text2fraq_examples___print_header
+    examples__example_full_pipeline --> examples__text2fraq_examples___print_parsed_query
+    examples__example_full_pipeline --> examples__text2fraq_examples___print_file_params
+    examples__example_full_pipeline --> fraq__text2fraq__text2fraq
     examples__example_nlp2cmd_command_schema --> examples__nlp2cmd_integration__build_sensor_schema
     examples__example_nlp2cmd_command_schema --> fraq__schema_export__to_nlp2cmd_schema
     examples__example_nlp2cmd_actions --> examples__nlp2cmd_integration__build_sensor_schema
@@ -358,11 +417,18 @@ flowchart TD
     fraq__core__FraqNode___child --> fraq__core___vec_add
     fraq__core__FraqNode___child --> fraq__core___vec_scale
     fraq__query__FraqExecutor__execute --> fraq__formats__FormatRegistry__serialize
-    fraq__format_results --> fraq__formats__FormatRegistry__serialize
     fraq__text2fraq__LiteLLMClient____init__ --> fraq__text2fraq__Text2FraqConfig__from_env
+    fraq__format_results --> fraq__formats__FormatRegistry__serialize
     fraq__text2fraq__Text2Fraq____init__ --> fraq__text2fraq__Text2FraqConfig__from_env
+    fraq__text2fraq__Text2Fraq___fallback_parse --> fraq__text2fraq___detect_depth
+    fraq__text2fraq__Text2Fraq___fallback_parse --> fraq__text2fraq___detect_format
+    fraq__text2fraq__Text2Fraq___fallback_parse --> fraq__text2fraq___detect_limit
+    fraq__text2fraq__Text2Fraq___fallback_fields --> fraq__text2fraq___word_match
+    fraq__text2fraq__Text2FraqSimple__parse --> fraq__text2fraq___detect_depth
+    fraq__text2fraq__Text2FraqSimple__parse --> fraq__text2fraq___detect_format
+    fraq__text2fraq__Text2FraqSimple__parse --> fraq__text2fraq___detect_limit
+    fraq__text2fraq__Text2FraqSimple___matches_pattern --> fraq__text2fraq___word_match
 
     classDef highCC fill:#ff6b6b,stroke:#c92a2a,color:#fff
     classDef medCC fill:#ffd43b,stroke:#f08c00,color:#000
-    class fraq__text2fraq__FileSearchText2Fraq__parse,fraq__text2fraq__Text2Fraq___fallback_parse,fraq__text2fraq__Text2FraqSimple__parse highCC
-    class fraq__formats___prepare,fraq__formats___mp_encode,fraq__cli__main,fraq__adapters__FileSearchAdapter__search,fraq__adapters__FileSearchAdapter__stream,fraq__adapters__HybridAdapter__load_root,examples__example_pdf_search_with_llm,fraq__query__FraqFilter__matches,fraq__query__FraqExecutor___iter_records medCC
+    class fraq__cli__main,fraq__formats___prepare,fraq__formats___mp_encode,fraq__adapters__FileSearchAdapter__search,fraq__adapters__FileSearchAdapter__stream,fraq__adapters__NetworkAdapter__scan_async,fraq__adapters__WebCrawlerAdapter__crawl_async,fraq__adapters__WebCrawlerAdapter__stream_pages,fraq__adapters__HybridAdapter__load_root,examples__example_pdf_search_with_llm,fraq__query__FraqFilter__matches,fraq__query__FraqExecutor___iter_records medCC

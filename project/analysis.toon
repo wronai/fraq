@@ -1,16 +1,12 @@
-# code2llm | 12f 2871L | python:11,shell:1 | 2026-03-17
-# CC̄=3.2 | critical:5/225 | dups:0 | cycles:3
+# code2llm | 12f 3270L | python:11,shell:1 | 2026-03-17
+# CC̄=2.9 | critical:4/261 | dups:0 | cycles:3
 
-HEALTH[4]:
-  🔴 GOD   fraq/adapters.py = 577L, 7 classes, 28m, max CC=12
-  🟡 CC    parse CC=17 (limit:15)
-  🟡 CC    _fallback_parse CC=18 (limit:15)
-  🟡 CC    parse CC=15 (limit:15)
+HEALTH[1]:
+  🔴 GOD   fraq/adapters.py = 969L, 9 classes, 47m, max CC=12
 
-REFACTOR[3]:
+REFACTOR[2]:
   1. split fraq/adapters.py  (god module)
-  2. split 3 high-CC methods  (CC>15)
-  3. break 3 circular dependencies
+  2. break 3 circular dependencies
 
 COUPLING: no cross-package imports detected
 
@@ -19,13 +15,13 @@ LAYERS:
   │ main_websocket              52L  0C    3m  CC=5      ←0
   │ project.sh                  14L  0C    0m  CC=0.0    ←0
   │
-  fraq/                           CC̄=3.2    ←in:0  →out:0
-  │ !! adapters                   577L  7C   28m  CC=12     ←0
+  fraq/                           CC̄=2.9    ←in:0  →out:0
+  │ !! adapters                   969L  9C   47m  CC=12     ←0
   │ schema_export              476L  0C    7m  CC=5      ←2
-  │ !! text2fraq                  434L  7C   20m  CC=18     ←4
+  │ text2fraq                  434L  7C   31m  CC=6      ←4
   │ core                       360L  4C   17m  CC=5      ←1
-  │ cli                        274L  0C    9m  CC=9      ←0
-  │ query                      219L  4C   12m  CC=9      ←1
+  │ cli                        280L  0C   12m  CC=9      ←0
+  │ query                      220L  4C   12m  CC=9      ←1
   │ !  formats                    196L  1C   14m  CC=11     ←7
   │ generators                 117L  4C    9m  CC=2      ←0
   │ streaming                   93L  1C    5m  CC=3      ←2
@@ -34,90 +30,63 @@ LAYERS:
 
 DUPLICATES[0]: none
 
-FUNCTIONS (CC≥10, 5 of 124):
-   18.0  Text2Fraq._fallback_parse                  27n   2exit  cond+ret  !! split
-   17.0  FileSearchText2Fraq.parse                  20n   2exit  loops+cond+ret  !! split
-   15.0  Text2FraqSimple.parse                      20n   2exit  loops+cond+ret  !! split
+FUNCTIONS (CC≥10, 4 of 157):
    12.0  FileSearchAdapter.search                   14n   2exit  loops+cond+ret
    11.0  _mp_encode                                 26n   9exit  loops+cond+ret
+   11.0  WebCrawlerAdapter.stream_pages             10n   1exit  loops+cond
+   10.0  WebCrawlerAdapter.crawl_async              11n   2exit  loops+cond+ret
 
   summary:
-    critical(≥10): 5 | high(5-10): 24 | medium(2-5): 54 | low(<2): 41
-    4% CC≥10  23% CC≥5
+    critical(≥10): 4 | high(5-10): 31 | medium(2-5): 67 | low(<2): 55
+    3% CC≥10  22% CC≥5
 
 HOTSPOTS:
   #1  main                                 fan=25   "calls 25 functions"
   #2  cmd_files_stat                       fan=14   "calls 14 functions"
   #3  FileSearchAdapter.search             fan=14   "FileSearchAdapter method, fan-out=14"
   #4  FileAdapter.load_root                fan=13   "FileAdapter method, fan-out=13"
-  #5  ws_stream                            fan=11   "calls 11 functions"
-  #6  cmd_schema                           fan=11   "calls 11 functions"
-  #7  cmd_nl                               fan=11   "calls 11 functions"
+  #5  NetworkAdapter._check_port           fan=13   "NetworkAdapter method, fan-out=13"
+  #6  ws_stream                            fan=11   "calls 11 functions"
+  #7  cmd_schema                           fan=11   "calls 11 functions"
   #8  FileSearchAdapter.load_root          fan=11   "FileSearchAdapter method, fan-out=11"
-  #9  _to_csv                              fan=10   "calls 10 functions"
-  #10 HTTPAdapter.load_root                fan=10   "HTTPAdapter method, fan-out=10"
+  #9  WebCrawlerAdapter.crawl_async        fan=11   "WebCrawlerAdapter method, fan-out=11"
+  #10 _to_csv                              fan=10   "calls 10 functions"
 
 CLASSES:
-  FraqQuery                      ████████████████████████   6m  CC̄=1.5   max=3   
-  SQLAdapter                     ████████████████████       5m  CC̄=3.0   max=6   
-  FileSearchAdapter              ████████████████████       5m  CC̄=5.8   max=12  
-  FraqNode                       ████████████████████       5m  CC̄=3.6   max=5   
-  Text2Fraq                      ████████████████████       5m  CC̄=5.8   max=18    !!
-  FormatRegistry                 ████████████████           4m  CC̄=1.5   max=2   
-  BaseAdapter                    ████████████████           4m  CC̄=1.0   max=1   
-  SensorAdapter                  ████████████████           4m  CC̄=1.8   max=3   
-  HybridAdapter                  ████████████████           4m  CC̄=3.2   max=8   
-  FraqSchema                     ████████████████           4m  CC̄=4.2   max=5   
-  FraqCursor                     ████████████████           4m  CC̄=2.2   max=4   
-  FraqExecutor                   ████████████████           4m  CC̄=3.8   max=9   
-  FileSearchText2Fraq            ████████████████           4m  CC̄=6.0   max=17    !!
-  AsyncFraqStream                ████████████               3m  CC̄=2.3   max=3   
-  FibonacciGenerator             ████████████               3m  CC̄=1.3   max=2   
-  FileAdapter                    ████████████               3m  CC̄=2.0   max=3   
-  Text2FraqSimple                ████████████               3m  CC̄=6.3   max=15    !!
-  HashGenerator                  ████████                   2m  CC̄=1.0   max=1   
-  PerlinGenerator                ████████                   2m  CC̄=1.5   max=2   
-  SensorStreamGenerator          ████████                   2m  CC̄=1.0   max=1   
-  HTTPAdapter                    ████████                   2m  CC̄=2.5   max=3   
-  LiteLLMClient                  ████████                   2m  CC̄=2.5   max=4   
-  FraqFilter                     ████                       1m  CC̄=9.0   max=9   
-  Text2FraqConfig                ████                       1m  CC̄=1.0   max=1   
-  ParsedQuery                    ████                       1m  CC̄=6.0   max=6   
-  LLMClient                      ████                       1m  CC̄=1.0   max=1   
+  WebCrawlerAdapter              ████████████████████████  10m  CC̄=4.0   max=11  
+  NetworkAdapter                 █████████████████████      9m  CC̄=2.8   max=8   
+  FileSearchText2Fraq            ███████████████████        8m  CC̄=3.1   max=6   
+  Text2Fraq                      ████████████████           7m  CC̄=2.6   max=5   
+  FraqQuery                      ██████████████             6m  CC̄=1.5   max=3   
+  SQLAdapter                     ████████████               5m  CC̄=3.0   max=6   
+  FileSearchAdapter              ████████████               5m  CC̄=5.8   max=12  
+  FraqNode                       ████████████               5m  CC̄=3.6   max=5   
+  FormatRegistry                 █████████                  4m  CC̄=1.5   max=2   
+  BaseAdapter                    █████████                  4m  CC̄=1.0   max=1   
+  SensorAdapter                  █████████                  4m  CC̄=1.8   max=3   
+  HybridAdapter                  █████████                  4m  CC̄=3.2   max=8   
+  FraqSchema                     █████████                  4m  CC̄=4.2   max=5   
+  FraqCursor                     █████████                  4m  CC̄=2.2   max=4   
+  FraqExecutor                   █████████                  4m  CC̄=3.8   max=9   
+  Text2FraqSimple                █████████                  4m  CC̄=2.2   max=5   
+  AsyncFraqStream                ███████                    3m  CC̄=2.3   max=3   
+  FibonacciGenerator             ███████                    3m  CC̄=1.3   max=2   
+  FileAdapter                    ███████                    3m  CC̄=2.0   max=3   
+  HashGenerator                  ████                       2m  CC̄=1.0   max=1   
+  PerlinGenerator                ████                       2m  CC̄=1.5   max=2   
+  SensorStreamGenerator          ████                       2m  CC̄=1.0   max=1   
+  HTTPAdapter                    ████                       2m  CC̄=2.5   max=3   
+  LiteLLMClient                  ████                       2m  CC̄=2.5   max=4   
+  FraqFilter                     ██                         1m  CC̄=9.0   max=9   
+  Text2FraqConfig                ██                         1m  CC̄=1.0   max=1   
+  ParsedQuery                    ██                         1m  CC̄=5.0   max=5   
+  LLMClient                      ██                         1m  CC̄=1.0   max=1   
   FieldDef                                                  0m  CC̄=0.0   max=0.0 
   SourceType                                                0m  CC̄=0.0   max=0.0 
 
 D:
-  fraq/text2fraq.py:
-    e: FileSearchText2Fraq,Text2FraqSimple,Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,Text2Fraq,Text2FraqSimple,text2filesearch,text2query,text2fraq
-    FileSearchText2Fraq  # Natural language to file search converter.
-
-Converts queries...
-      __init__(1)  CC=1.0
-    Text2FraqSimple  # Rule-based text2fraq without LLM (fallback for offline use)....
-      parse(1)  CC=15.0  !
-        → _matches_pattern(1)  CC=2.0
-    Text2FraqConfig  # Configuration for text2fraq....
-      from_env(0)  CC=1.0
-    ParsedQuery  # Parsed natural language query....
-      to_fraq_query(0)  CC=6.0
-    LLMClient  # Protocol for LLM clients....
-      complete(1)  CC=1.0
-    LiteLLMClient  # LiteLLM client for text completion....
-      __init__(1)  CC=4.0
-    Text2Fraq  # Natural language to fractal query converter.
-
-Examples:
-    ...
-      __init__(2)  CC=3.0
-    Text2FraqSimple  # Rule-based text2fraq without LLM (fallback for offline use)....
-      parse(1)  CC=15.0  !
-        → _matches_pattern(1)  CC=2.0
-    text2filesearch(text,base_path,fmt)
-    text2query(text,config)
-    text2fraq(text,config,root)
   fraq/adapters.py:
-    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,FileSearchAdapter,HybridAdapter,get_adapter
+    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,FileSearchAdapter,NetworkAdapter,WebCrawlerAdapter,HybridAdapter,get_adapter
     BaseAdapter  # Interface every data-source adapter must implement....
       load_root(1)  CC=1.0
     FileAdapter  # Read/write fractal state from local files.
@@ -138,6 +107,10 @@ In...
     FileSearchAdapter  # Adapter for searching files on disk using fractal patterns.
 ...
       __init__(3)  CC=1.0
+    NetworkAdapter  # Async adapter for scanning local network devices and service...
+      __init__(4)  CC=2.0
+    WebCrawlerAdapter  # Async adapter for crawling websites and extracting links/con...
+      __init__(5)  CC=1.0
     HybridAdapter  # Combine roots from several adapters into one fractal.
 
 The m...
@@ -158,7 +131,7 @@ The m...
     _encode_value(v)
     _mp_encode(obj)
   fraq/cli.py:
-    e: _make_root,cmd_explore,cmd_stream,cmd_schema,cmd_files_search,cmd_files_list,cmd_files_stat,cmd_nl,main
+    e: _make_root,cmd_explore,cmd_stream,cmd_schema,cmd_files_search,cmd_files_list,cmd_files_stat,cmd_nl,_is_file_query,_run_nl_file_query,_run_nl_fraq_query,main
     _make_root(dims,seed)
     cmd_explore(args)
     cmd_stream(args)
@@ -167,6 +140,9 @@ The m...
     cmd_files_list(args)
     cmd_files_stat(args)
     cmd_nl(args)
+    _is_file_query(query)
+    _run_nl_file_query(query,base_path,fmt)
+    _run_nl_fraq_query(query,fmt)
     main(argv)
   examples/text2fraq_files.py:
     e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
@@ -210,16 +186,36 @@ The executor build...
     ws_stream(websocket)
     ws_files(websocket)
     health()
-  examples/text2fraq_examples.py:
-    e: example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_env_config,example_benchmark,example_custom_schema
-    example_simple_parser()
-    example_qwen25()
-    example_llama32()
-    example_phi3()
-    example_convenience_functions()
-    example_env_config()
-    example_benchmark()
-    example_custom_schema()
+  fraq/text2fraq.py:
+    e: Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,FileSearchText2Fraq,Text2Fraq,Text2FraqSimple,_word_match,_detect_format,_detect_depth,_detect_limit,text2filesearch,text2query,text2fraq
+    Text2FraqConfig  # Configuration for text2fraq....
+      from_env(0)  CC=1.0
+    ParsedQuery  # Parsed natural language query....
+      to_fraq_query(0)  CC=5.0
+    LLMClient  # Protocol for LLM clients....
+      complete(1)  CC=1.0
+    LiteLLMClient  # LiteLLM client for text completion....
+      __init__(1)  CC=4.0
+    FileSearchText2Fraq  # Natural language to file search converter.
+
+Converts queries...
+      __init__(1)  CC=1.0
+    Text2Fraq  # Natural language to fractal query converter.
+
+Examples:
+    ...
+      __init__(2)  CC=3.0
+    Text2FraqSimple  # Rule-based text2fraq without LLM (fallback for offline use)....
+      parse(1)  CC=1.0
+        → _detect_fields(1)  CC=5.0
+        → _matches_pattern(1)  CC=1.0
+    _word_match(text,pattern)
+    _detect_format(text,default)
+    _detect_depth(text,default)
+    _detect_limit(text)
+    text2filesearch(text,base_path,fmt)
+    text2query(text,config)
+    text2fraq(text,config,root)
   main_websocket.py:
     e: ws_stream,ws_files,health
     ws_stream(websocket)
@@ -282,6 +278,19 @@ The cursor remembers the...
     example_finance_leasing()
     example_legal_clauses()
     example_perlin_organic()
+  examples/text2fraq_examples.py:
+    e: _print_header,_print_parsed_query,_print_file_params,example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_file_search_direct,example_env_config,example_full_pipeline
+    _print_header(title)
+    _print_parsed_query(query,parsed)
+    _print_file_params(query,params)
+    example_simple_parser()
+    example_qwen25()
+    example_llama32()
+    example_phi3()
+    example_convenience_functions()
+    example_file_search_direct()
+    example_env_config()
+    example_full_pipeline()
   examples/nlp2cmd_integration.py:
     e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi,example_grpc_proto,example_json_schema,example_full_nlp2cmd_workflow
     build_sensor_schema()

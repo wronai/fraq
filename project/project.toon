@@ -1,4 +1,4 @@
-# fraq | 38f 7091L | python:38
+# fraq | 38f 7447L | python:38
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
 M[38]:
   examples/api_server.py,312
@@ -14,17 +14,17 @@ M[38]:
   examples/fullstack-docker/websocket/main.py,44
   examples/nlp2cmd_integration.py,165
   examples/query_examples.py,160
-  examples/text2fraq_examples.py,261
+  examples/text2fraq_examples.py,203
   examples/text2fraq_files.py,202
   examples/websocket-docker/main.py,78
   examples/websocket-docker/run.py,65
   fraq/__init__.py,56
-  fraq/adapters.py,434
-  fraq/cli.py,210
+  fraq/adapters.py,735
+  fraq/cli.py,215
   fraq/core.py,277
   fraq/formats.py,152
   fraq/generators.py,91
-  fraq/query.py,166
+  fraq/query.py,167
   fraq/schema_export.py,399
   fraq/streaming.py,77
   fraq/text2fraq.py,361
@@ -38,7 +38,7 @@ M[38]:
   tests/test_query.py,101
   tests/test_schema_export.py,158
   tests/test_streaming.py,73
-  tests/test_text2fraq.py,64
+  tests/test_text2fraq.py,119
 D:
   examples/api_server.py:
     i: asyncio,json,datetime,contextlib.asynccontextmanager,fastapi.{FastAPI,HTTPException,Query},pathlib.Path,typing.{Any,AsyncIterator}
@@ -146,16 +146,16 @@ D:
     example_sensor_stream()
     example_sensor_to_formats()
   examples/text2fraq_examples.py:
-    i: os,dataclasses.dataclass,dotenv.load_dotenv,fraq
-    e: example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_env_config,example_benchmark,example_custom_schema
-    example_simple_parser()
-    example_qwen25()
-    example_llama32()
-    example_phi3()
-    example_convenience_functions()
-    example_env_config()
-    example_benchmark()
-    example_custom_schema()
+    i: dotenv.load_dotenv,fraq
+    e: example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_file_search_direct,example_env_config,example_full_pipeline
+    _print_header(title:str)->None
+    _print_parsed_query(query:str;parsed)->None
+    _print_file_params(query:str;params:dict[str;object])->None
+    example_simple_parser()->None
+    example_qwen25()->None
+    example_llama32()->None
+    example_phi3()->None
+    example_convenience_functions()->None
   examples/text2fraq_files.py:
     i: os,sys,datetime,dotenv.load_dotenv,fraq.{FileSearchAdapter,FileSearchText2Fraq,Text2Fraq,Text2FraqConfig,text2filesearch}
     e: example_pdf_search_rule_based,example_pdf_search_with_llm,example_convenience_function,example_file_search_adapter_direct,example_llm_file_intent
@@ -180,7 +180,7 @@ D:
     main()
   fraq/adapters.py:
     i: json,hashlib,abc.{ABC,abstractmethod},dataclasses.{dataclass,field},pathlib.Path,typing.{Any,Dict,Iterator}
-    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,FileSearchAdapter,HybridAdapter,_ADAPTERS
+    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,FileSearchAdapter,NetworkAdapter,WebCrawlerAdapter
     BaseAdapter: load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter m...
     FileAdapter: load_root(1),save(3),_dict_to_node(1)  # Read/write fractal state from local f...
     HTTPAdapter: load_root(1),save(3)  # Fetch fractal roots from remote HTTP...
@@ -333,8 +333,8 @@ D:
     TestAsyncStreamFunction: test_stream_count(0)
     event_loop()
   tests/test_text2fraq.py:
-    i: fraq.query.FraqQuery,fraq.text2fraq.{ParsedQuery,Text2Fraq,Text2FraqConfig,Text2FraqSimple,text2query}
-    e: StubClient,TestParsedQuery,TestText2Fraq,TestText2FraqSimple,TestConvenienceFunctions
+    i: importlib,fraq.query.FraqQuery,fraq.text2fraq
+    e: StubClient,TestParsedQuery,TestText2Fraq,TestText2FraqSimple,TestConvenienceFunctions,StubFileAdapter,TestFileSearchText2Fraq,TestText2FileSearchFunction
     StubClient: __init__(1),complete(1)
     TestParsedQuery: test_to_fraq_query_maps_filters_direction_and_limit(0)
     TestText2Fraq: test_parse_json_response(0),test_parse_falls_back_when_response_is_not_json(0)

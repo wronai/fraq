@@ -1,83 +1,102 @@
 #!/usr/bin/env python3
 """
-text2fraq — Natural Language → Fractal Query examples.
+fraq text2fraq — Natural language → fractal query examples.
 
-Demonstruje parsowanie NL z użyciem małych modeli lokalnych przez LiteLLM + Ollama:
-- Qwen2.5 3B ( Alibaba - szybki, dobry dla instrukcji)
-- Llama 3.2 3B (Meta - zbalansowany)
-- Phi-3 3.8B (Microsoft - mocny w reasoning)
+Setup:
+    pip install -e ".[ai]"
+    ollama pull qwen2.5:3b
+    ollama pull llama3.2:3b
+    ollama pull phi3:3.8b
+    cp .env.example .env
 
-Przed uruchomieniem:
-  1. Zainstaluj Ollama: https://ollama.com
-  2. Pobierz modele:
-     ollama pull qwen2.5:3b
-     ollama pull llama3.2:3b
-     ollama pull phi3:3.8b
-  3. Skopiuj .env.example → .env i dostosuj
+Usage:
+    python examples/text2fraq_examples.py
 """
 
 from __future__ import annotations
 
-import os
-from dataclasses import dataclass
+import sys
+from pathlib import Path
 
-# Load env before importing fraq
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 try:
     from dotenv import load_dotenv
+
     load_dotenv()
 except ImportError:
     pass
 
 from fraq import (
+    FileSearchAdapter,
+    FileSearchText2Fraq,
     Text2Fraq,
-    Text2FraqSimple,
     Text2FraqConfig,
-    FraqNode,
-    FraqSchema,
-    text2query,
+    Text2FraqSimple,
+    text2filesearch,
     text2fraq,
+    text2query,
 )
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 1. RULE-BASED PARSER (bez LLM — fallback)
-# ═══════════════════════════════════════════════════════════════════════════
+def _print_header(title: str) -> None:
+    print("=" * 72)
+    print(title)
+    print("=" * 72)
 
-def example_simple_parser():
-    """Text2FraqSimple — deterministyczny parser bez LLM."""
-    print("=" * 60)
-    print("1. RULE-BASED PARSER (Text2FraqSimple)")
-    print("=" * 60)
 
-    parser = Text2FraqSimple()
+def _print_parsed_query(query: str, parsed) -> None:
+    print(f'  "{query}"')
+    print(
+        f"    → fields={parsed.fields} depth={parsed.depth} "
+        f"format={parsed.format} limit={parsed.limit}"
+    )
+    if parsed.filters:
+        print(f"    → filters={parsed.filters}")
 
-    queries = [
-        "Show temperature and humidity readings",
-        "Get 20 sensor samples in CSV format",
-        "Stream pressure data as JSON",
-        "Active sensors with high temperature",
+
+def _print_file_params(query: str, params: dict[str, object]) -> None:
+    print(f'  "{query}"')
+    print(
+        f"    → extension={params.get('extension')} limit={params.get('limit')} "
+        f"sort={params.get('sort_by')} recent={params.get('newer_than') is not None}"
+    )
+
+
+def example_simple_parser() -> None:
+    """Rule-based parser — zero dependencies, works offline."""
+    _print_header("1. RULE-BASED PARSER")
+    simple = Text2FraqSimple()
+    file_search = FileSearchText2Fraq(".")
+
+    fraq_queries = [
+        "stream 50 sensor readings",
+        "show temperature data",
+        "show 20 humidity samples in csv",
+        "deep pressure analysis",
+    ]
+    file_queries = [
+        "podaj 10 ostatnich plików PDF",
+        "find 5 python files",
+        "list 20 recent markdown files",
+        "largest 3 csv files",
     ]
 
-    for q in queries:
-        result = parser.parse(q)
-        print(f"\n  NL: \"{q}\"")
-        print(f"  → fields={result.fields}, depth={result.depth}, format={result.format}")
-        if result.limit:
-            print(f"  → limit={result.limit}")
+    print("=== Parsed Fraq queries ===")
+    for query in fraq_queries:
+        _print_parsed_query(query, simple.parse(query))
 
+    print("\n=== Parsed file-search queries ===")
+    for query in file_queries:
+        _print_file_params(query, file_search.parse(query))
     print()
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 2. LLM PARSER — QWEN2.5 3B (Alibaba)
-# ═══════════════════════════════════════════════════════════════════════════
-
-def example_qwen25():
-    """Qwen2.5 3B — szybki model zorientowany na instrukcje (CN/EN)."""
-    print("=" * 60)
-    print("2. LLM PARSER — Qwen2.5 3B (ollama)")
-    print("=" * 60)
-
+def example_qwen25() -> None:
+    """qwen2.5:3b — good balance for Polish/English prompts."""
+    _print_header("2. LLM PARSER — qwen2.5:3b")
     config = Text2FraqConfig(
         provider="ollama",
         model="qwen2.5:3b",
@@ -86,52 +105,24 @@ def example_qwen25():
         max_tokens=512,
     )
 
+    queries = [
+        "show 100 temperature readings as csv",
+        "find active sensors with temperature greater than 0.7",
+        "stream pressure data as jsonl",
+    ]
+
     try:
-        t2f = Text2Fraq(config)
-
-        queries = [
-            "Show temperature and humidity for last 10 records",
-            "Get me 50 sensor readings in CSV format with depth 3",
-            "Stream pressure data as JSONL",
-            "Find active sensors where temperature is greater than 0.7",
-        ]
-
-        for q in queries:
-            print(f"\n  NL: \"{q}\"")
-            try:
-                parsed = t2f.parse(q)
-                print(f"  → fields={parsed.fields}")
-                print(f"  → depth={parsed.depth}, format={parsed.format}, limit={parsed.limit}")
-            except Exception as e:
-                print(f"  → ERROR: {e}")
-
-        # Execute one query
-        print("\n  Executing: 'Show 5 temperature readings'")
-        try:
-            result = t2f.execute("Show 5 temperature readings")
-            print(f"  → {str(result)[:200]}...")
-        except Exception as e:
-            print(f"  → ERROR: {e}")
-
-    except ImportError:
-        print("  LiteLLM not installed. Run: pip install litellm")
-    except Exception as e:
-        print(f"  Ollama error: {e}")
-        print("  Make sure Ollama is running and model is pulled: ollama pull qwen2.5:3b")
-
+        parser = Text2Fraq(config=config)
+        for query in queries:
+            _print_parsed_query(query, parser.parse(query))
+    except Exception as exc:
+        print(f"  ERROR: {exc}")
     print()
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 3. LLM PARSER — LLAMA 3.2 3B (Meta)
-# ═══════════════════════════════════════════════════════════════════════════
-
-def example_llama32():
-    """Llama 3.2 3B — lekki, zbalansowany model multimedialny."""
-    print("=" * 60)
-    print("3. LLM PARSER — Llama 3.2 3B (ollama)")
-    print("=" * 60)
-
+def example_llama32() -> None:
+    """llama3.2:3b — alternative lightweight model."""
+    _print_header("3. LLM PARSER — llama3.2:3b")
     config = Text2FraqConfig(
         provider="ollama",
         model="llama3.2:3b",
@@ -141,41 +132,16 @@ def example_llama32():
     )
 
     try:
-        t2f = Text2Fraq(config)
-
-        queries = [
-            "Extract 15 IoT sensor records as YAML",
-            "Give me deep analysis with depth 5 on temperature data",
-            "Quick overview of humidity in JSON format",
-        ]
-
-        for q in queries:
-            print(f"\n  NL: \"{q}\"")
-            try:
-                parsed = t2f.parse(q)
-                print(f"  → depth={parsed.depth}, format={parsed.format}, limit={parsed.limit}")
-            except Exception as e:
-                print(f"  → ERROR: {e}")
-
-    except ImportError:
-        print("  LiteLLM not installed. Run: pip install litellm")
-    except Exception as e:
-        print(f"  Ollama error: {e}")
-        print("  Make sure Ollama is running and model is pulled: ollama pull llama3.2:3b")
-
+        parser = Text2Fraq(config=config)
+        _print_parsed_query("extract 15 sensor records as yaml", parser.parse("extract 15 sensor records as yaml"))
+    except Exception as exc:
+        print(f"  ERROR: {exc}")
     print()
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 4. LLM PARSER — PHI-3 3.8B (Microsoft)
-# ═══════════════════════════════════════════════════════════════════════════
-
-def example_phi3():
-    """Phi-3 3.8B — mocny w reasoning, lepszy w złożone logikę."""
-    print("=" * 60)
-    print("4. LLM PARSER — Phi-3 3.8B (ollama)")
-    print("=" * 60)
-
+def example_phi3() -> None:
+    """phi3:3.8b — stronger reasoning-oriented option."""
+    _print_header("4. LLM PARSER — phi3:3.8b")
     config = Text2FraqConfig(
         provider="ollama",
         model="phi3:3.8b",
@@ -185,188 +151,108 @@ def example_phi3():
     )
 
     try:
-        t2f = Text2Fraq(config)
-
-        # Complex reasoning queries
-        queries = [
-            "If temperature > 0.8 and humidity < 40%, show alert status",
-            "Generate 100 samples for machine learning training",
-            "Create a CSV table with sensor_id, temperature, and active flag for 25 devices",
-        ]
-
-        for q in queries:
-            print(f"\n  NL: \"{q}\"")
-            try:
-                parsed = t2f.parse(q)
-                print(f"  → fields={parsed.fields}")
-                print(f"  → depth={parsed.depth}, format={parsed.format}, limit={parsed.limit}")
-            except Exception as e:
-                print(f"  → ERROR: {e}")
-
-    except ImportError:
-        print("  LiteLLM not installed. Run: pip install litellm")
-    except Exception as e:
-        print(f"  Ollama error: {e}")
-        print("  Make sure Ollama is running and model is pulled: ollama pull phi3:3.8b")
-
+        parser = Text2Fraq(config=config)
+        _print_parsed_query(
+            "create a csv table with sensor_id temperature and active flag for 25 devices",
+            parser.parse("create a csv table with sensor_id temperature and active flag for 25 devices"),
+        )
+    except Exception as exc:
+        print(f"  ERROR: {exc}")
     print()
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 5. CONVENIENCE FUNCTIONS
-# ═══════════════════════════════════════════════════════════════════════════
+def example_convenience_functions() -> None:
+    """One-liner functions — simplest possible API."""
+    _print_header("5. CONVENIENCE FUNCTIONS")
 
-def example_convenience_functions():
-    """text2query() i text2fraq() — szybkie funkcje one-liner."""
-    print("=" * 60)
-    print("5. CONVENIENCE FUNCTIONS")
-    print("=" * 60)
+    parsed = text2query("stream 30 pressure readings")
+    print(f"  text2query → depth={parsed.depth} format={parsed.format} limit={parsed.limit}")
 
-    # Bez LLM (fallback)
-    print("\n  Using text2query() [rule-based fallback]:")
-    parsed = text2query("Show temperature in CSV format")
-    print(f"  → Parsed: fields={parsed.fields}, format={parsed.format}")
+    file_results = text2filesearch("find 5 python files", base_path=".", fmt="records")
+    print(f"  text2filesearch → {len(file_results)} files found")
+    for record in file_results[:3]:
+        print(f"    {record['filename']} ({record['size']} bytes)")
 
-    print("\n  Using text2fraq() [with execution]:")
     try:
-        result = text2fraq("Get 3 temperature readings as JSON")
-        print(f"  → Result: {str(result)[:150]}...")
-    except Exception as e:
-        print(f"  → Fallback to simple parser: {e}")
-        # Use simple parser result
-        parsed = text2query("Get 3 temperature readings as JSON")
-        print(f"  → Parsed (no LLM): {parsed}")
-
+        result = text2fraq("show 5 temperature readings in json")
+        print(f"  text2fraq → {type(result).__name__}, {len(str(result))} chars")
+    except Exception as exc:
+        print(f"  text2fraq → ERROR: {exc}")
     print()
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 6. ENV CONFIGURATION
-# ═══════════════════════════════════════════════════════════════════════════
+def example_file_search_direct() -> None:
+    """FileSearchAdapter — search real files on disk."""
+    _print_header("6. FILE SEARCH ADAPTER")
+    adapter = FileSearchAdapter(base_path=".", recursive=True)
 
-def example_env_config():
-    """Ładowanie konfiguracji z .env."""
-    print("=" * 60)
-    print("6. ENVIRONMENT CONFIGURATION")
-    print("=" * 60)
+    py_files = adapter.search(extension="py", limit=5, sort_by="mtime")
+    print("  .py files (5 most recent):")
+    for file_record in py_files[:5]:
+        print(
+            f"    {file_record['filename']:35} "
+            f"{file_record['size']:>8} bytes"
+        )
 
-    print("\n  Current .env settings:")
+    test_files = adapter.search(pattern="test_*.py", limit=5)
+    print("\n  test_*.py files:")
+    for file_record in test_files:
+        print(f"    {file_record['filename']}")
+
+    csv_output = text2filesearch("show 3 markdown files", base_path=".", fmt="csv")
+    print("\n  markdown files as CSV:")
+    print(f"    {str(csv_output)[:200]}...")
+    print()
+
+
+def example_env_config() -> None:
+    """Load config from .env file."""
+    _print_header("7. .env CONFIGURATION")
     config = Text2FraqConfig.from_env()
-    print(f"  → Provider: {config.provider}")
-    print(f"  → Model: {config.model}")
-    print(f"  → Base URL: {config.base_url}")
-    print(f"  → Temperature: {config.temperature}")
-    print(f"  → Default format: {config.default_format}")
-    print(f"  → Default dims: {config.default_dims}")
-    print(f"  → Default depth: {config.default_depth}")
-
-    print("\n  To change settings, edit .env file or set environment variables:")
-    print("    export LITELLM_MODEL=llama3.2:3b")
-    print("    export LITELLM_TEMPERATURE=0.5")
+    print(f"  provider:     {config.provider}")
+    print(f"  model:        {config.model}")
+    print(f"  base_url:     {config.base_url}")
+    print(f"  temperature:  {config.temperature}")
+    print(f"  max_tokens:   {config.max_tokens}")
+    print(f"  default_fmt:  {config.default_format}")
+    print(f"  default_dims: {config.default_dims}")
+    print(f"  default_depth:{config.default_depth}")
     print()
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 7. BENCHMARK / COMPARISON
-# ═══════════════════════════════════════════════════════════════════════════
+def example_full_pipeline() -> None:
+    """Full pipeline NL → parse → execute / file search."""
+    _print_header("8. FULL PIPELINE")
 
-def example_benchmark():
-    """Porównanie wszystkich parserów na tych samych zapytaniach."""
-    print("=" * 60)
-    print("7. PARSER COMPARISON (same queries, different methods)")
-    print("=" * 60)
+    nl_query = "show 10 temperature readings in csv"
+    parsed = Text2FraqSimple().parse(nl_query)
+    _print_parsed_query(nl_query, parsed)
 
-    test_queries = [
-        "Show temperature readings",
-        "Get 20 samples in CSV",
-        "Stream humidity data as JSONL",
-    ]
+    try:
+        result = text2fraq(nl_query)
+        print(f"  execute → {str(result)[:200]}...")
+    except Exception as exc:
+        print(f"  execute → ERROR: {exc}")
 
-    print("\n  RULE-BASED (Text2FraqSimple):")
-    simple = Text2FraqSimple()
-    for q in test_queries:
-        parsed = simple.parse(q)
-        print(f"    '{q[:30]}...' → fmt={parsed.format}, limit={parsed.limit}, depth={parsed.depth}")
-
-    print("\n  LLM-based requires Ollama running. Comparison template:")
-    print("    Query                    | Simple    | Qwen2.5 | Llama3.2 | Phi-3")
-    print("    -------------------------|-----------|---------|----------|-------")
-    print("    'Show temperature'       | json/None | ?       | ?        | ?")
-    print("    'Get 20 samples CSV'     | csv/20    | ?       | ?        | ?")
+    file_query = "podaj listę 10 plików PDF, które zostały ostatnio utworzone"
+    file_search = FileSearchText2Fraq(".")
+    params = file_search.parse(file_query)
+    _print_file_params(file_query, params)
+    results = file_search.search(file_query)
+    print(f"  file search → {len(results)} results")
+    for record in results[:3]:
+        print(f"    {record.get('filename', '?')} — {record.get('size', 0)} bytes")
     print()
 
-
-# ═══════════════════════════════════════════════════════════════════════════
-# 8. CUSTOM SCHEMA INTEGRATION
-# ═══════════════════════════════════════════════════════════════════════════
-
-def example_custom_schema():
-    """Text2Fraq z custom FraqSchema (ERP, IoT, etc.)."""
-    print("=" * 60)
-    print("8. CUSTOM SCHEMA INTEGRATION")
-    print("=" * 60)
-
-    # ERP schema
-    root = FraqNode(position=(0.0, 0.0, 0.0, 0.0), seed=42)
-    schema = FraqSchema(root=root)
-    schema.add_field("invoice_id", "str")
-    schema.add_field("amount", "float")
-    schema.add_field("client_id", "str")
-    schema.add_field("paid", "bool")
-
-    print("\n  ERP Schema fields: invoice_id, amount, client_id, paid")
-
-    # Simple parser na ERP query
-    parser = Text2FraqSimple()
-
-    erp_queries = [
-        "Show all unpaid invoices with amount > 1000",
-        "Get 10 client records in CSV",
-        "List paid invoices as JSON",
-    ]
-
-    print("\n  Parsing ERP queries:")
-    for q in erp_queries:
-        parsed = parser.parse(q)
-        print(f"    '{q[:40]}...' → {parsed.fields}")
-
-    print()
-
-
-# ═══════════════════════════════════════════════════════════════════════════
-# RUN ALL
-# ═══════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     example_simple_parser()
-    example_qwen25()
-    example_llama32()
-    example_phi3()
     example_convenience_functions()
+    example_file_search_direct()
     example_env_config()
-    example_benchmark()
-    example_custom_schema()
+    example_full_pipeline()
 
-    print("=" * 60)
-    print("Setup instructions:")
-    print("=" * 60)
-    print("""
-1. Install Ollama:     https://ollama.com/download
-2. Pull models:
-   ollama pull qwen2.5:3b
-   ollama pull llama3.2:3b
-   ollama pull phi3:3.8b
-
-3. Copy .env.example to .env and adjust:
-   cp .env.example .env
-
-4. Install with AI extras:
-   pip install -e ".[ai]"
-
-5. Run specific model example by setting in .env:
-   LITELLM_MODEL=qwen2.5:3b
-   # or
-   LITELLM_MODEL=llama3.2:3b
-   # or
-   LITELLM_MODEL=phi3:3.8b
-""")
+    print("Uncomment below when Ollama is running with pulled models:")
+    print("  # example_qwen25()")
+    print("  # example_llama32()")
+    print("  # example_phi3()")

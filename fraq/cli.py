@@ -191,6 +191,86 @@ def _run_nl_fraq_query(query: str, fmt: str) -> None:
         print(FormatRegistry.serialize(fmt, result))
 
 
+def cmd_network_scan(args: argparse.Namespace) -> None:
+    """Scan network for devices."""
+    from fraq import NetworkAdapter
+    
+    ports = [int(p.strip()) for p in args.ports.split(",")]
+    adapter = NetworkAdapter(
+        network=args.network,
+        ports=ports,
+        timeout=args.timeout,
+    )
+    
+    print(f"🔍 Scanning network {args.network}...")
+    print(f"   Ports: {ports}")
+    print(f"   Timeout: {args.timeout}s")
+    print()
+    
+    results = adapter.search(limit=args.limit)
+    
+    if not results:
+        print("No devices found.")
+        return
+    
+    if args.format == "table":
+        print(f"{'IP':<16} {'Port':<6} {'Service':<15} {'Latency':<10} {'fraq_value'}")
+        print("-" * 60)
+        for device in results:
+            print(f"{device['ip']:<16} {device['port']:<6} {device['service']:<15} "
+                  f"{device['latency_ms']:<10} {device['fraq_value']:.6f}")
+    elif args.format == "json":
+        import json
+        print(json.dumps(results, indent=2))
+    elif args.format == "csv":
+        print("ip,port,service,latency_ms,fraq_value")
+        for device in results:
+            print(f"{device['ip']},{device['port']},{device['service']},"
+                  f"{device['latency_ms']},{device['fraq_value']}")
+    
+    print(f"\nFound {len(results)} open ports.")
+
+
+def cmd_web_crawl(args: argparse.Namespace) -> None:
+    """Crawl website."""
+    from fraq import WebCrawlerAdapter
+    
+    adapter = WebCrawlerAdapter(
+        base_url=args.url,
+        max_depth=args.depth,
+        max_pages=args.max_pages,
+        timeout=args.timeout,
+    )
+    
+    print(f"🕷️  Crawling {args.url}...")
+    print(f"   Max depth: {args.depth}")
+    print(f"   Max pages: {args.max_pages}")
+    print()
+    
+    results = adapter.search()
+    
+    if not results:
+        print("No pages found.")
+        return
+    
+    if args.format == "table":
+        print(f"{'URL':<50} {'Title':<30} {'Depth':<6} {'Size'}")
+        print("-" * 100)
+        for page in results:
+            title = page.get('title', 'N/A')[:30]
+            print(f"{page['url']:<50} {title:<30} {page['depth']:<6} {page['size_bytes']}")
+    elif args.format == "json":
+        import json
+        print(json.dumps(results, indent=2))
+    elif args.format == "csv":
+        print("url,title,depth,size_bytes")
+        for page in results:
+            title = page.get('title', '').replace(',', ' ')
+            print(f"{page['url']},{title},{page['depth']},{page['size_bytes']}")
+    
+    print(f"\nCrawled {len(results)} pages.")
+
+
 def main(argv: List[str] | None = None) -> None:
     # Shared arguments via parent parser
     shared = argparse.ArgumentParser(add_help=False)
@@ -251,6 +331,39 @@ def main(argv: List[str] | None = None) -> None:
     p_files_stat.add_argument("--format", "-f", default="human", 
                                choices=["human", "json"])
 
+    # Network subcommand
+    p_network = sub.add_parser("network", help="Network scanning operations")
+    network_sub = p_network.add_subparsers(dest="network_command")
+    
+    # network scan
+    p_network_scan = network_sub.add_parser("scan", help="Scan network for devices")
+    p_network_scan.add_argument("--network", "-n", default="192.168.1.0/24",
+                                help="Network CIDR (e.g., 192.168.1.0/24)")
+    p_network_scan.add_argument("--ports", "-p", default="80,443,22",
+                                help="Comma-separated ports to scan")
+    p_network_scan.add_argument("--timeout", "-t", type=float, default=1.0,
+                                help="Connection timeout in seconds")
+    p_network_scan.add_argument("--limit", "-l", type=int, default=100,
+                                help="Max hosts to scan")
+    p_network_scan.add_argument("--format", "-f", default="table",
+                                choices=["table", "json", "csv"])
+    
+    # Web subcommand
+    p_web = sub.add_parser("web", help="Web crawling operations")
+    web_sub = p_web.add_subparsers(dest="web_command")
+    
+    # web crawl
+    p_web_crawl = web_sub.add_parser("crawl", help="Crawl website")
+    p_web_crawl.add_argument("url", help="Base URL to crawl")
+    p_web_crawl.add_argument("--depth", "-d", type=int, default=2,
+                             help="Max crawl depth")
+    p_web_crawl.add_argument("--max-pages", "-n", type=int, default=50,
+                             help="Max pages to crawl")
+    p_web_crawl.add_argument("--timeout", "-t", type=float, default=10.0,
+                             help="Request timeout")
+    p_web_crawl.add_argument("--format", "-f", default="table",
+                             choices=["table", "json", "csv"])
+
     args = parser.parse_args(argv)
 
     if args.command == "explore":
@@ -270,6 +383,18 @@ def main(argv: List[str] | None = None) -> None:
             cmd_files_stat(args)
         else:
             p_files.print_help()
+            sys.exit(1)
+    elif args.command == "network":
+        if args.network_command == "scan":
+            cmd_network_scan(args)
+        else:
+            p_network.print_help()
+            sys.exit(1)
+    elif args.command == "web":
+        if args.web_command == "crawl":
+            cmd_web_crawl(args)
+        else:
+            p_web.print_help()
             sys.exit(1)
     else:
         parser.print_help()

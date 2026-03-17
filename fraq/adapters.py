@@ -16,6 +16,12 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional
+import asyncio
+import ipaddress
+import socket
+import urllib.parse
+from collections import deque
+from typing import AsyncIterator
 
 from fraq.core import FraqNode, FraqCursor, Vector
 from fraq.formats import FormatRegistry
@@ -494,6 +500,392 @@ class FileSearchAdapter(BaseAdapter):
 
 
 # ---------------------------------------------------------------------------
+# Network Adapter — Async LAN scanning
+# ---------------------------------------------------------------------------
+
+
+class NetworkAdapter(BaseAdapter):
+    """
+    Async adapter for scanning local network devices and services.
+    
+    Maps network topology to fractal coordinates:
+    - Position = (IP octets, latency, port)
+    - Seed = hash of (IP + port + service)
+    - Children = discovered services on device
+    
+    Example:
+        adapter = NetworkAdapter(network="192.168.1.0/24", ports=[80, 443, 22])
+        # Scan network
+        results = await adapter.scan_async()
+        # Stream results
+        async for device in adapter.stream_devices():
+            print(device)
+    """
+
+    source_type = SourceType.NETWORK
+
+    def __init__(
+        self,
+        network: str = "192.168.1.0/24",
+        ports: list[int] | None = None,
+        timeout: float = 1.0,
+        max_concurrent: int = 50,
+    ):
+        self.network = ipaddress.ip_network(network, strict=False)
+        self.ports = ports or [80, 443, 22, 8080, 3000]
+        self.timeout = timeout
+        self.max_concurrent = max_concurrent
+        self._semaphore = None
+
+    def load_root(self, uri: str = "", **opts: Any) -> FraqNode:
+        """Create root node representing the network."""
+        network_str = str(self.network)
+        return FraqNode(
+            position=(
+                float(self.network.network_address),
+                float(self.network.prefixlen),
+                0.0,
+            ),
+            seed=hash(network_str) % (2**32),
+            meta={
+                "network": network_str,
+                "ports": self.ports,
+                "total_hosts": self.network.num_addresses,
+            },
+        )
+
+    async def scan_async(
+        self,
+        ports: list[int] | None = None,
+        limit: int = 1000,
+    ) -> list[dict[str, Any]]:
+        """Async scan network for active devices and services."""
+        ports = ports or self.ports
+        self._semaphore = asyncio.Semaphore(self.max_concurrent)
+        
+        tasks = []
+        hosts_scanned = 0
+        
+        for host in self.network.hosts():
+            if hosts_scanned >= limit:
+                break
+            ip_str = str(host)
+            for port in ports:
+                tasks.append(self._check_port(ip_str, port))
+            hosts_scanned += 1
+        
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # Filter successful connections
+        devices = [r for r in results if isinstance(r, dict) and r.get("open")]
+        
+        # Sort by IP
+        devices.sort(key=lambda x: ipaddress.ip_address(x["ip"]))
+        
+        return devices
+
+    async def _check_port(self, ip: str, port: int) -> dict[str, Any]:
+        """Check if port is open on host."""
+        async with self._semaphore:
+            try:
+                start_time = asyncio.get_event_loop().time()
+                reader, writer = await asyncio.wait_for(
+                    asyncio.open_connection(ip, port),
+                    timeout=self.timeout
+                )
+                latency = (asyncio.get_event_loop().time() - start_time) * 1000
+                
+                # Try to identify service
+                service = self._identify_service(port)
+                
+                writer.close()
+                await writer.wait_closed()
+                
+                # Create fractal coordinates
+                ip_obj = ipaddress.ip_address(ip)
+                ip_int = int(ip_obj)
+                
+                return {
+                    "ip": ip,
+                    "port": port,
+                    "open": True,
+                    "service": service,
+                    "latency_ms": round(latency, 2),
+                    # Fractal coordinates
+                    "fraq_position": (
+                        float(ip_int % 256) / 256,  # Last octet normalized
+                        latency / 1000,  # Latency in seconds
+                        float(port) / 65535,  # Port normalized
+                    ),
+                    "fraq_seed": hash(f"{ip}:{port}") % (2**32),
+                    "fraq_value": hash(f"{ip}:{port}") / (2**32),
+                }
+            except (asyncio.TimeoutError, ConnectionRefusedError, OSError):
+                return {"ip": ip, "port": port, "open": False}
+            except Exception as e:
+                return {"ip": ip, "port": port, "open": False, "error": str(e)}
+
+    def _identify_service(self, port: int) -> str:
+        """Identify service by common port."""
+        services = {
+            22: "ssh", 80: "http", 443: "https", 21: "ftp",
+            25: "smtp", 53: "dns", 110: "pop3", 143: "imap",
+            3306: "mysql", 5432: "postgres", 27017: "mongodb",
+            6379: "redis", 9200: "elasticsearch", 8080: "http-alt",
+            3000: "dev-server", 5000: "flask", 8000: "http-alt",
+        }
+        return services.get(port, f"port-{port}")
+
+    async def stream_devices(
+        self,
+        ports: list[int] | None = None,
+    ) -> AsyncIterator[dict[str, Any]]:
+        """Stream discovered devices asynchronously."""
+        ports = ports or self.ports
+        self._semaphore = asyncio.Semaphore(self.max_concurrent)
+        
+        for host in self.network.hosts():
+            ip_str = str(host)
+            for port in ports:
+                result = await self._check_port(ip_str, port)
+                if result.get("open"):
+                    yield result
+
+    def search(self, **opts: Any) -> list[dict[str, Any]]:
+        """Synchronous wrapper for scan_async."""
+        return asyncio.run(self.scan_async(**opts))
+
+    def stream(self, count: int = 100, **opts: Any) -> Iterator[dict[str, Any]]:
+        """Synchronous wrapper for stream_devices."""
+        async def _collect():
+            results = []
+            async for device in self.stream_devices(**opts):
+                results.append(device)
+                if len(results) >= count:
+                    break
+            return results
+        
+        return iter(asyncio.run(_collect()))
+
+    def save(self, node: FraqNode, uri: str, fmt: str = "json", **opts: Any) -> str:
+        """Save scan results to file."""
+        if "scan_results" in node.meta:
+            data = node.meta["scan_results"]
+            output = FormatRegistry.serialize(fmt, data)
+            path = Path(uri)
+            path.write_bytes(output.encode() if isinstance(output, str) else output)
+            return str(path)
+        return ""
+
+
+# ---------------------------------------------------------------------------
+# Web Crawler Adapter — Async website crawling
+# ---------------------------------------------------------------------------
+
+
+class WebCrawlerAdapter(BaseAdapter):
+    """
+    Async adapter for crawling websites and extracting links/content.
+    
+    Maps web pages to fractal coordinates:
+    - Position = (depth in crawl, page size, link count)
+    - Seed = hash of URL
+    - Children = links to other pages
+    
+    Example:
+        adapter = WebCrawlerAdapter(base_url="https://example.com", max_depth=2)
+        # Crawl site
+        results = await adapter.crawl_async()
+        # Stream pages
+        async for page in adapter.stream_pages():
+            print(page["url"], page["title"])
+    """
+
+    source_type = SourceType.HTTP
+
+    def __init__(
+        self,
+        base_url: str,
+        max_depth: int = 2,
+        max_pages: int = 100,
+        timeout: float = 10.0,
+        respect_robots: bool = True,
+    ):
+        self.base_url = base_url.rstrip("/")
+        self.max_depth = max_depth
+        self.max_pages = max_pages
+        self.timeout = timeout
+        self.respect_robots = respect_robots
+        self.visited: set[str] = set()
+        self.pages: list[dict[str, Any]] = []
+        self._session: aiohttp.ClientSession | None = None
+
+    async def _get_session(self) -> aiohttp.ClientSession:
+        """Get or create HTTP session."""
+        if self._session is None or self._session.closed:
+            self._session = aiohttp.ClientSession(
+                timeout=aiohttp.ClientTimeout(total=self.timeout),
+                headers={"User-Agent": "fraq-crawler/0.2.4"},
+            )
+        return self._session
+
+    def load_root(self, uri: str = "", **opts: Any) -> FraqNode:
+        """Create root node representing the website."""
+        parsed = urllib.parse.urlparse(self.base_url)
+        return FraqNode(
+            position=(0.0, 0.0, 0.0),
+            seed=hash(parsed.netloc) % (2**32),
+            meta={
+                "base_url": self.base_url,
+                "domain": parsed.netloc,
+                "max_depth": self.max_depth,
+            },
+        )
+
+    async def crawl_async(self) -> list[dict[str, Any]]:
+        """Async crawl website starting from base_url."""
+        self.visited.clear()
+        self.pages.clear()
+        
+        queue: deque[tuple[str, int]] = deque([(self.base_url, 0)])
+        
+        while queue and len(self.pages) < self.max_pages:
+            url, depth = queue.popleft()
+            
+            if url in self.visited or depth > self.max_depth:
+                continue
+            
+            self.visited.add(url)
+            
+            page_data = await self._fetch_page(url, depth)
+            if page_data:
+                self.pages.append(page_data)
+                
+                # Queue new links
+                for link in page_data.get("links", []):
+                    if link not in self.visited:
+                        queue.append((link, depth + 1))
+        
+        if self._session and not self._session.closed:
+            await self._session.close()
+        
+        return self.pages
+
+    async def _fetch_page(self, url: str, depth: int) -> dict[str, Any] | None:
+        """Fetch and parse single page."""
+        try:
+            session = await self._get_session()
+            async with session.get(url) as response:
+                if response.status != 200:
+                    return None
+                
+                content = await response.text()
+                soup = BeautifulSoup(content, "html.parser")
+                
+                # Extract data
+                title = soup.title.string if soup.title else "No title"
+                links = self._extract_links(soup, url)
+                
+                # Create fractal coordinates
+                return {
+                    "url": url,
+                    "title": title.strip()[:200],
+                    "depth": depth,
+                    "size_bytes": len(content),
+                    "status": response.status,
+                    "links": links,
+                    "link_count": len(links),
+                    # Fractal coordinates
+                    "fraq_position": (
+                        float(depth) / self.max_depth,  # Normalized depth
+                        float(len(content)) / 100000,  # Size (100KB scale)
+                        float(len(links)) / 100,  # Links (100 scale)
+                    ),
+                    "fraq_seed": hash(url) % (2**32),
+                    "fraq_value": hash(url) / (2**32),
+                }
+        except Exception as e:
+            return {"url": url, "error": str(e), "depth": depth}
+
+    def _extract_links(self, soup: BeautifulSoup, base_url: str) -> list[str]:
+        """Extract and normalize links from page."""
+        links = []
+        base_parsed = urllib.parse.urlparse(base_url)
+        
+        for tag in soup.find_all("a", href=True):
+            href = tag["href"]
+            
+            # Skip non-HTTP links
+            if href.startswith(("javascript:", "mailto:", "tel:")):
+                continue
+            
+            # Normalize URL
+            full_url = urllib.parse.urljoin(base_url, href)
+            parsed = urllib.parse.urlparse(full_url)
+            
+            # Only same domain
+            if parsed.netloc == base_parsed.netloc:
+                # Remove fragment
+                clean_url = full_url.split("#")[0]
+                if clean_url not in links:
+                    links.append(clean_url)
+        
+        return links
+
+    async def stream_pages(self) -> AsyncIterator[dict[str, Any]]:
+        """Stream crawled pages asynchronously."""
+        self.visited.clear()
+        queue: deque[tuple[str, int]] = deque([(self.base_url, 0)])
+        pages_yielded = 0
+        
+        while queue and pages_yielded < self.max_pages:
+            url, depth = queue.popleft()
+            
+            if url in self.visited or depth > self.max_depth:
+                continue
+            
+            self.visited.add(url)
+            
+            page_data = await self._fetch_page(url, depth)
+            if page_data and not page_data.get("error"):
+                yield page_data
+                pages_yielded += 1
+                
+                # Queue new links
+                for link in page_data.get("links", []):
+                    if link not in self.visited:
+                        queue.append((link, depth + 1))
+        
+        if self._session and not self._session.closed:
+            await self._session.close()
+
+    def search(self, **opts: Any) -> list[dict[str, Any]]:
+        """Synchronous wrapper for crawl_async."""
+        return asyncio.run(self.crawl_async())
+
+    def stream(self, count: int = 100, **opts: Any) -> Iterator[dict[str, Any]]:
+        """Synchronous wrapper for stream_pages."""
+        async def _collect():
+            results = []
+            async for page in self.stream_pages():
+                results.append(page)
+                if len(results) >= count:
+                    break
+            return results
+        
+        return iter(asyncio.run(_collect()))
+
+    def save(self, node: FraqNode, uri: str, fmt: str = "json", **opts: Any) -> str:
+        """Save crawl results to file."""
+        if self.pages:
+            output = FormatRegistry.serialize(fmt, self.pages)
+            path = Path(uri)
+            path.write_bytes(output.encode() if isinstance(output, str) else output)
+            return str(path)
+        return ""
+
+
+# ---------------------------------------------------------------------------
 # Hybrid adapter — merge multiple sources
 # ---------------------------------------------------------------------------
 
@@ -563,8 +955,9 @@ _ADAPTERS: Dict[SourceType, type] = {
     SourceType.HTTP: HTTPAdapter,
     SourceType.SQL: SQLAdapter,
     SourceType.SENSOR: SensorAdapter,
+    SourceType.NETWORK: NetworkAdapter,
     SourceType.HYBRID: HybridAdapter,
-    SourceType.MEMORY: BaseAdapter,  # type: ignore[assignment]
+    SourceType.MEMORY: BaseAdapter,
 }
 
 

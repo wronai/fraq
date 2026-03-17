@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+## [0.2.5] - 2026-03-17
+
+### Docs
+- Update PLAN_REFACTORING.md
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Other
+- Update examples/network_web_examples.py
+- Update examples/text2fraq_examples.py
+- Update fraq/__init__.py
+- Update fraq/adapters.py
+- Update fraq/cli.py
+- Update fraq/query.py
+- Update project/analysis.toon
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/compact_flow.mmd
+- ... and 10 more files
+
 ## [0.2.4] - 2026-03-17
 
 ### Docs
