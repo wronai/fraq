@@ -233,13 +233,24 @@ class FraqSchema:
 
     Parameters
     ----------
-    root : FraqNode
-        Root of the fractal.
+    root : FraqNode, optional
+        Root of the fractal. Auto-created with 3 dimensions if not provided.
     fields : list[FieldDef]
         Field definitions.
+
+    Examples
+    --------
+    >>> # Auto root - simplest usage
+    >>> schema = FraqSchema()
+    >>> schema.add_field("temp", "float", transform=lambda v: round(float(v)*40, 1))
+    >>> records = list(schema.records(count=10))
+    
+    >>> # With custom root
+    >>> root = FraqNode(position=(0.0, 0.0, 0.0), seed=42)
+    >>> schema = FraqSchema(root=root)
     """
 
-    root: FraqNode
+    root: FraqNode = field(default_factory=lambda: FraqNode(position=(0.0, 0.0, 0.0)))
     fields: List[FieldDef] = field(default_factory=list)
 
     def add_field(
@@ -265,37 +276,78 @@ class FraqSchema:
         for f in self.fields:
             child = node.zoom(f.direction)
             val = child.value
-            val = self._cast(val, f.type)
+            # Apply transform BEFORE type casting to avoid type conflicts
             if f.transform:
                 val = f.transform(val)
+            else:
+                val = self._cast(val, f.type)
             rec[f.name] = val
         return rec
 
     def records(
         self,
-        depth: int = 1,
+        depth: Optional[int] = None,
         branching: int = 4,
+        count: Optional[int] = None,
         node: Optional[FraqNode] = None,
     ) -> Iterator[Dict[str, Any]]:
-        """Yield records by exploring children at *depth*."""
+        """Yield records by exploring children.
+        
+        Parameters
+        ----------
+        depth : int, optional
+            Depth level for exploration. Mutually exclusive with count.
+        branching : int
+            Number of children per node (default 4).
+        count : int, optional
+            Exact number of records to yield. Easier than calculating depth.
+        node : FraqNode, optional
+            Starting node (defaults to root).
+        
+        Examples
+        --------
+        >>> # Get exactly 100 records (easiest)
+        >>> records = list(schema.records(count=100))
+        
+        >>> # Or use depth for fractal exploration
+        >>> records = list(schema.records(depth=3))
+        """
         node = node or self.root
+        
+        # If count specified, use simple iteration (easier API)
+        if count is not None:
+            yielded = 0
+            cursor = FraqCursor(root=node)
+            for _ in range(count):
+                if yielded >= count:
+                    break
+                cursor.advance()
+                rec = self.record(cursor.current)
+                rec['_index'] = yielded  # Add index for reference
+                yielded += 1
+                yield rec
+            return
+        
+        # Otherwise use depth-based exploration
+        depth = depth or 1
         if depth <= 0:
             yield self.record(node)
             return
         for child in node.children(branching=branching):
-            yield from self.records(depth - 1, branching, child)
+            yield from self.records(depth - 1, branching, None, child)
 
     @staticmethod
     def _cast(val: Any, type_name: str) -> Any:
+        """Cast value to type. Note: transforms are applied BEFORE this."""
         if type_name == "int":
-            return int(val * 2**31)
+            return int(float(val))  # Safer - accepts float strings
         if type_name == "str":
-            return hashlib.md5(str(val).encode()).hexdigest()[:12]
+            return str(val)  # Simple string conversion
         if type_name == "bool":
-            return val > 0.5
+            return bool(val) if isinstance(val, (int, float, bool)) else str(val).lower() in ('true', '1', 'yes')
         if type_name == "bytes":
-            return struct.pack("!d", val)
-        return val  # float or passthrough
+            return struct.pack("!d", float(val))
+        return float(val) if type_name == "float" else val
 
 
 # ---------------------------------------------------------------------------
