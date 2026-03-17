@@ -1,4 +1,4 @@
-# fraq/flow | 308 func | 12 pipelines | 6 hub-types | 2026-03-17
+# fraq/flow | 327 func | 12 pipelines | 6 hub-types | 2026-03-17
 
 PIPELINES[12] (Core:2, Export:1, IO:3, NLP:3, Unknown:3):
   Fraq [NLP]: str → bool
@@ -92,18 +92,18 @@ TRANSFORMS (fan-out ≥10):
   _parse_args(argv:List[str] | None) → argparse.Namespace fan=21   !! side-effects
   query_data(fields:str, depth:int, format:str, limit:int, dims:int) fan=18   fan=18
   ws_files(websocket:WebSocket)                           fan=16   fan=16
+  example_1_sse_generator()                               fan=16   fan=16
   schema_records(fields:str, depth:int, branching:int, format:str, dims:int) fan=16   fan=16
   _collect_files_filtered(base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]) → List[dict[str, Any]] fan=16   PIPELINE:FileSearchText2Fraq.entry
   example_hybrid_merge()                                  fan=15   fan=15
   ws_stream(websocket:WebSocket)                          fan=14   fan=14
+  example_1_generate_to_sqlite()                          fan=14   fan=14
   stream(count:int, dims:int, format:str)                 fan=14   fan=14
   files_stat(file_path:str)                               fan=14   fan=14
   ws_files(websocket:WebSocket)                           fan=14   fan=14
   example_ai_training_data()                              fan=14   fan=14
   example_full_pipeline() → None                          fan=13   fan=13
-  example_disk_json()                                     fan=13   fan=13
-  load_root(uri:str, **opts:Any) → FraqNode               fan=13   PIPELINE:FileAdapter.entry
-  ws_stream(websocket:WebSocket)                          fan=13   fan=13
+  example_3_kafka_pattern()                               fan=13   fan=13
 
 CONTRACTS:
   Pipeline: Fraq
@@ -343,7 +343,7 @@ CONTRACTS:
       OUT: bool
 
 
-DATA_TYPES (by cross-function usage) [223 annotated, 0 inferred / 308 functions]:
+DATA_TYPES (by cross-function usage) [223 annotated, 0 inferred / 327 functions]:
   str                  consumed:159 produced:34   !! HUB-TYPE → split interface
   int                  consumed:64  produced:4    !! HUB-TYPE → split interface
   FraqNode             consumed:20  produced:18   !! HUB-TYPE → split interface
@@ -351,17 +351,17 @@ DATA_TYPES (by cross-function usage) [223 annotated, 0 inferred / 308 functions]
   str, Any             consumed:4   produced:19 
   Vector               consumed:14  produced:2    !! HUB-TYPE → split interface
   FraqQuery            consumed:6   produced:7  
-  argparse.Namespace   consumed:10  produced:1    !! HUB-TYPE → split interface
-  FraqSchema           consumed:8   produced:3  
   bool                 consumed:5   produced:6  
-  dict[str, Any]       consumed:2   produced:7  
+  FraqSchema           consumed:8   produced:3  
+  argparse.Namespace   consumed:10  produced:1    !! HUB-TYPE → split interface
   WebSocket            consumed:9   produced:0    input-heavy (read-only flow)
+  dict[str, Any]       consumed:2   produced:7  
   Iterator[Dict[str, Any]] consumed:0   produced:8    output-heavy
-  ParsedQuery          consumed:1   produced:5    output-heavy
   dict                 consumed:0   produced:6    output-heavy
+  ParsedQuery          consumed:1   produced:5    output-heavy
   str | None           consumed:5   produced:0    input-heavy (read-only flow)
-  bytes                consumed:0   produced:4    narrow scope
   str | list[dict[str, Any]] consumed:0   produced:4    narrow scope
+  bytes                consumed:0   produced:4    narrow scope
   AsyncIterator[Dict[str, Any]] consumed:0   produced:4    narrow scope
   Text2FraqConfig      consumed:2   produced:1    narrow scope
 
@@ -380,9 +380,9 @@ DATA_TYPES (by cross-function usage) [223 annotated, 0 inferred / 308 functions]
       - (analyze consumers to suggest sub-interfaces)
 
 SIDE_EFFECTS:
-  IO:        ws_stream, ws_files, _to_json, _to_jsonl, cmd_explore, cmd_stream, cmd_schema, cmd_files_search, cmd_files_list, _print_stat
+  IO:        _to_json, _to_jsonl, ws_stream, ws_files, cmd_explore, cmd_stream, cmd_schema, cmd_files_search, cmd_files_list, _print_stat
   Mutation:  _to_binary, _simple_yaml, _mp_encode, AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, HashGenerator.__init__, FibonacciGenerator.__init__, PerlinGenerator.__init__, SensorStreamGenerator.__init__
-  Pure:      health, FormatRegistry.register, FormatRegistry.get, FormatRegistry.available, FormatRegistry.serialize, _to_csv, _to_yaml, _to_msgpack_lite, _prepare, _encode_value
+  Pure:      FormatRegistry.register, FormatRegistry.get, FormatRegistry.available, FormatRegistry.serialize, _to_csv, _to_yaml, _to_msgpack_lite, _prepare, _encode_value, health
 
   PIPELINE PURITY:
     Fraq            ██░░ 57% pure

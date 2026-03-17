@@ -3,7 +3,7 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T18:47:45Z'
+  analyzed_at: '2026-03-17T18:50:01Z'
   tool: code2llm
   stats:
     files: 29
@@ -103,7 +103,7 @@ modules:
   classes: 1
   methods: 11
   cc_max: 11
-  inbound_deps: 2
+  inbound_deps: 0
   exports:
   - name: FileSearchText2Fraq
     type: class
@@ -458,7 +458,7 @@ modules:
   classes: 1
   methods: 5
   cc_max: 3
-  inbound_deps: 2
+  inbound_deps: 3
   exports:
   - name: AsyncFraqStream
     type: class
