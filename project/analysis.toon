@@ -1,5 +1,5 @@
-# code2llm | 33f 4130L | python:32,shell:1 | 2026-03-17
-# CC̄=3.0 | critical:4/324 | dups:0 | cycles:3
+# code2llm | 33f 4343L | python:32,shell:1 | 2026-03-17
+# CC̄=3.1 | critical:6/320 | dups:0 | cycles:3
 
 HEALTH[0]: ok
 
@@ -19,22 +19,22 @@ LAYERS:
   │ main_websocket              52L  0C    3m  CC=5      ←0
   │ project.sh                  14L  0C    0m  CC=0.0    ←0
   │
-  fraq/                           CC̄=2.9    ←in:7  →out:2
-  │ schema_export              476L  0C    7m  CC=5      ←2
+  fraq/                           CC̄=3.1    ←in:7  →out:2
+  │ schema_export              476L  0C    7m  CC=5      ←1
   │ cli                        449L  0C   18m  CC=8      ←0
-  │ core                       360L  4C   17m  CC=5      ←1
-  │ query                      220L  4C   12m  CC=9      ←1
+  │ core                       412L  4C   17m  CC=8      ←1
+  │ !  __init__                   310L  0C    4m  CC=11     ←8
+  │ query                      220L  4C   12m  CC=9      ←0
   │ server                     217L  3C    7m  CC=8      ←0
   │ !  web_crawler                204L  1C   12m  CC=10     ←0
   │ !  file_search_parser         200L  1C   11m  CC=11     ←0
-  │ !  formats                    196L  1C   14m  CC=11     ←12
+  │ !  formats                    196L  1C   14m  CC=11     ←10
   │ network                    186L  1C   11m  CC=5      ←0
   │ file_search                165L  1C    8m  CC=8      ←0
-  │ __init__                   149L  0C    1m  CC=2      ←0
   │ session                    149L  1C    8m  CC=6      ←0
   │ generators                 117L  4C    9m  CC=2      ←0
   │ parser_llm                 109L  1C    7m  CC=5      ←0
-  │ streaming                   93L  1C    5m  CC=3      ←3
+  │ streaming                   93L  1C    5m  CC=3      ←2
   │ parser_rules                93L  1C    8m  CC=6      ←1
   │ router                      88L  1C    4m  CC=9      ←0
   │ sql_adapter                 64L  1C    5m  CC=6      ←0
@@ -55,27 +55,29 @@ LAYERS:
 
 DUPLICATES[0]: none
 
-FUNCTIONS (CC≥10, 4 of 193):
+FUNCTIONS (CC≥10, 6 of 196):
    11.0  _mp_encode                                 26n   9exit  loops+cond+ret
+   11.0  generate                                    8n   2exit  loops+cond+ret
    11.0  FileSearchText2Fraq._collect_files_filtered    7n   2exit  cond+ret
+   10.0  stream                                     10n   1exit  loops+cond
    10.0  WebCrawlerAdapter.crawl_async              11n   2exit  loops+cond+ret
    10.0  WebCrawlerAdapter.stream_pages             10n   1exit  loops+cond
 
   summary:
-    critical(≥10): 4 | high(5-10): 40 | medium(2-5): 86 | low(<2): 63
-    2% CC≥10  23% CC≥5
+    critical(≥10): 6 | high(5-10): 42 | medium(2-5): 85 | low(<2): 63
+    3% CC≥10  24% CC≥5
 
 HOTSPOTS:
   #1  _parse_args                          fan=21   "calls 21 functions"
-  #2  FileSearchText2Fraq._collect_files_filtered  fan=16   "FileSearchText2Fraq method, fan-out=16"
-  #3  FileAdapter.load_root                fan=13   "FileAdapter method, fan-out=13"
-  #4  ws_stream                            fan=13   "calls 13 functions"
-  #5  WebCrawlerAdapter.crawl_async        fan=12   "WebCrawlerAdapter method, fan-out=12"
-  #6  FileSearchAdapter._collect_files     fan=12   "FileSearchAdapter method, fan-out=12"
-  #7  ws_stream                            fan=11   "calls 11 functions"
-  #8  cmd_schema                           fan=11   "calls 11 functions"
-  #9  FileSearchAdapter.load_root          fan=11   "FileSearchAdapter method, fan-out=11"
-  #10 _to_csv                              fan=10   "calls 10 functions"
+  #2  generate                             fan=16   "calls 16 functions"
+  #3  FileSearchText2Fraq._collect_files_filtered  fan=16   "FileSearchText2Fraq method, fan-out=16"
+  #4  FileAdapter.load_root                fan=13   "FileAdapter method, fan-out=13"
+  #5  ws_stream                            fan=13   "calls 13 functions"
+  #6  WebCrawlerAdapter.crawl_async        fan=12   "WebCrawlerAdapter method, fan-out=12"
+  #7  FileSearchAdapter._collect_files     fan=12   "FileSearchAdapter method, fan-out=12"
+  #8  ws_stream                            fan=11   "calls 11 functions"
+  #9  cmd_schema                           fan=11   "calls 11 functions"
+  #10 FileSearchAdapter.load_root          fan=11   "FileSearchAdapter method, fan-out=11"
 
 CLASSES:
   WebCrawlerAdapter              ████████████████████████  12m  CC̄=3.7   max=10  
@@ -88,7 +90,7 @@ CLASSES:
   FraqNode                       ██████████                 5m  CC̄=3.6   max=5   
   SQLAdapter                     ██████████                 5m  CC̄=3.0   max=6   
   FormatRegistry                 ████████                   4m  CC̄=1.5   max=2   
-  FraqSchema                     ████████                   4m  CC̄=4.2   max=5   
+  FraqSchema                     ████████                   4m  CC̄=5.8   max=8   
   FraqCursor                     ████████                   4m  CC̄=2.2   max=4   
   FraqExecutor                   ████████                   4m  CC̄=3.8   max=9   
   Text2FraqSimple                ████████                   4m  CC̄=2.2   max=5   
@@ -129,6 +131,12 @@ D:
     _simple_yaml(obj,indent)
     _encode_value(v)
     _mp_encode(obj)
+  fraq/__init__.py:
+    e: generate,stream,quick_schema,__getattr__
+    generate(fields,count,seed)
+    stream(fields,count,interval)
+    quick_schema()
+    __getattr__(name)
   fraq/text2fraq/file_search_parser.py:
     e: FileSearchText2Fraq
     FileSearchText2Fraq  # Natural language to file search converter....
@@ -144,11 +152,6 @@ D:
     example_convenience_function()
     example_file_search_adapter_direct()
     example_llm_file_intent()
-  examples/iot/sensor_examples.py:
-    e: example_1_sensor_readings,example_2_mqtt_payloads,example_3_device_health
-    example_1_sensor_readings()
-    example_2_mqtt_payloads()
-    example_3_device_health()
   fraq/query.py:
     e: SourceType,FraqFilter,FraqQuery,FraqExecutor,query
     SourceType  # Known data source families....
@@ -188,6 +191,26 @@ The executor build...
     _parse_args(argv)
     _dispatch_command(args)
     main(argv)
+  fraq/core.py:
+    e: FraqNode,FieldDef,FraqSchema,FraqCursor,_vec_add,_vec_scale,_vec_norm,_vec_hash
+    FraqNode  # A single point in the infinite fractal data space.
+
+Paramete...
+      zoom(1)  CC=5.0
+        → _child(1)  CC=2.0
+    FieldDef  # One field in a FraqSchema....
+    FraqSchema  # Typed projection of a fractal into structured records.
+
+A sc...
+      add_field(4)  CC=4.0
+    FraqCursor  # Stateful walk through the fractal.
+
+The cursor remembers the...
+      advance(1)  CC=4.0
+    _vec_add(a,b)
+    _vec_scale(v,s)
+    _vec_norm(v)
+    _vec_hash(v,seed)
   fraq/adapters/hybrid_adapter.py:
     e: HybridAdapter
     HybridAdapter  # Combine roots from several adapters into one fractal....
@@ -228,11 +251,6 @@ The executor build...
     natural_language(query,path,format)
     ws_stream(websocket)
     ws_files(websocket)
-  examples/ai_ml/training_data.py:
-    e: example_1_classification,example_2_regression,example_3_time_series
-    example_1_classification()
-    example_2_regression()
-    example_3_time_series()
   fraq/text2fraq/parser_rules.py:
     e: Text2FraqSimple,_word_match,_detect_format,_detect_depth,_detect_limit
     Text2FraqSimple  # Rule-based text2fraq without LLM (fallback for offline use)....
@@ -265,31 +283,19 @@ The executor build...
     to_asyncapi(schema,title,version)
     to_proto(schema,package,message_name)
     to_json_schema(schema,title)
-  fraq/core.py:
-    e: FraqNode,FieldDef,FraqSchema,FraqCursor,_vec_add,_vec_scale,_vec_norm,_vec_hash
-    FraqNode  # A single point in the infinite fractal data space.
-
-Paramete...
-      zoom(1)  CC=5.0
-        → _child(1)  CC=2.0
-    FieldDef  # One field in a FraqSchema....
-    FraqSchema  # Typed projection of a fractal into structured records.
-
-A sc...
-      add_field(4)  CC=4.0
-    FraqCursor  # Stateful walk through the fractal.
-
-The cursor remembers the...
-      advance(1)  CC=4.0
-    _vec_add(a,b)
-    _vec_scale(v,s)
-    _vec_norm(v)
-    _vec_hash(v,seed)
-  examples/database/sqlite_examples.py:
-    e: example_1_generate_to_sqlite,example_2_sql_adapter,example_3_hybrid_data
-    example_1_generate_to_sqlite()
-    example_2_sql_adapter()
-    example_3_hybrid_data()
+  examples/etl/pipeline_examples.py:
+    e: example_1_extract,example_2_transform,example_3_validate,example_4_pipeline
+    example_1_extract()
+    example_2_transform()
+    example_3_validate()
+    example_4_pipeline()
+  examples/basic/applications.py:
+    e: example_1_iot_sensors,example_2_erp_invoices,example_3_ai_training,example_4_devops_metrics,example_5_finance
+    example_1_iot_sensors()
+    example_2_erp_invoices()
+    example_3_ai_training()
+    example_4_devops_metrics()
+    example_5_finance()
   examples/fullstack-docker/websocket/main.py:
     e: ws_stream,ws_files,health
     ws_stream(websocket)
@@ -309,20 +315,11 @@ The cursor remembers the...
     e: NetworkAdapter
     NetworkAdapter  # Async adapter for scanning local network devices and service...
       __init__(4)  CC=2.0
-  examples/etl/pipeline_examples.py:
-    e: example_1_multi_source,example_2_transformation,example_3_validation,example_4_pipeline
-    example_1_multi_source()
-    example_2_transformation()
-    example_3_validation()
-    example_4_pipeline()
-  examples/basic/async_streaming.py:
-    e: example_basic_stream,example_typed_stream,example_async_query,example_fastapi_sse_pattern,example_kafka_producer_pattern,main
-    example_basic_stream()
-    example_typed_stream()
-    example_async_query()
-    example_fastapi_sse_pattern()
-    example_kafka_producer_pattern()
-    main()
+  examples/ai_ml/training_data.py:
+    e: example_1_classification,example_2_regression,example_3_timeseries
+    example_1_classification()
+    example_2_regression()
+    example_3_timeseries()
   fraq/text2fraq/llm_client.py:
     e: LiteLLMClient
     LiteLLMClient  # LiteLLM client for text completion....
@@ -368,15 +365,16 @@ The cursor remembers the...
     example_fractal_coordinates()
     example_streaming_comparison()
     main()
-  examples/basic/applications.py:
-    e: example_iot_sensor_network,example_erp_invoices,example_ai_training_data,example_devops_load_test,example_finance_leasing,example_legal_clauses,example_perlin_organic
-    example_iot_sensor_network()
-    example_erp_invoices()
-    example_ai_training_data()
-    example_devops_load_test()
-    example_finance_leasing()
-    example_legal_clauses()
-    example_perlin_organic()
+  examples/iot/sensor_examples.py:
+    e: example_1_sensors,example_2_mqtt,example_3_streaming
+    example_1_sensors()
+    example_2_mqtt()
+    example_3_streaming()
+  examples/database/sqlite_examples.py:
+    e: example_1_sqlite,example_2_hybrid,example_3_schema_save
+    example_1_sqlite()
+    example_2_hybrid()
+    example_3_schema_save()
   fraq/adapters/registry.py:
     e: get_adapter
     get_adapter(source)
@@ -393,9 +391,6 @@ The cursor remembers the...
     e: SensorAdapter
     SensorAdapter  # Simulate or consume live sensor data as fractal streams....
       __init__(4)  CC=1.0
-  fraq/__init__.py:
-    e: __getattr__
-    __getattr__(name)
   fraq/generators.py:
     e: HashGenerator,FibonacciGenerator,PerlinGenerator,SensorStreamGenerator
     HashGenerator  # Deterministic pseudo-random values via SHA-256.
@@ -412,10 +407,11 @@ Parameters
 Produces dict paylo...
       __init__(3)  CC=1.0
   examples/streaming/sse_examples.py:
-    e: example_1_sse_generator,example_2_websocket_template,example_3_async_stream
-    example_1_sse_generator()
-    example_2_websocket_template()
-    example_3_async_stream()
+    e: example_1_sse,example_2_websocket,example_3_streaming,example_4_kafka
+    example_1_sse()
+    example_2_websocket()
+    example_3_streaming()
+    example_4_kafka()
   examples/fastapi-docker/main.py:
     e: root,health,explore,files_search,files_stat
     root()
@@ -423,18 +419,20 @@ Produces dict paylo...
     explore(depth,dims,format)
     files_search(path,ext,limit,sort)
     files_stat(file_path)
+  examples/basic/async_streaming.py:
+    e: example_1_basic,example_2_typed,example_3_kafka,main
+    example_1_basic()
+    example_2_typed()
+    example_3_kafka()
+    main()
   examples/basic/query_examples.py:
-    e: example_disk_json,example_disk_csv,example_disk_yaml,example_http_api,example_sql_query,example_sql_custom_mapping,example_sensor_stream,example_sensor_to_formats,example_hybrid_merge,example_oneliners
-    example_disk_json()
-    example_disk_csv()
-    example_disk_yaml()
-    example_http_api()
-    example_sql_query()
-    example_sql_custom_mapping()
-    example_sensor_stream()
-    example_sensor_to_formats()
-    example_hybrid_merge()
-    example_oneliners()
+    e: example_1_basic_query,example_2_json_output,example_3_csv_output,example_4_streaming,example_5_schema,example_6_custom_schema
+    example_1_basic_query()
+    example_2_json_output()
+    example_3_csv_output()
+    example_4_streaming()
+    example_5_schema()
+    example_6_custom_schema()
   fraq/text2fraq/shortcuts.py:
     e: text2filesearch,text2query,text2fraq
     text2filesearch(text,base_path,fmt)
@@ -461,16 +459,16 @@ Produces dict paylo...
     e: Text2FraqConfig
     Text2FraqConfig  # Configuration for text2fraq....
       from_env(0)  CC=1.0
+  fraq/adapters/base.py:
+    e: BaseAdapter
+    BaseAdapter  # Interface every data-source adapter must implement....
+      load_root(1)  CC=1.0
   examples/v028/new_features.py:
     e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
     example_model_router()
     example_fraq_session()
     example_fastapi_server()
     example_combined_usage()
-  fraq/adapters/base.py:
-    e: BaseAdapter
-    BaseAdapter  # Interface every data-source adapter must implement....
-      load_root(1)  CC=1.0
   fraq/types.py:
   examples/websocket-docker/run.sh:
   examples/cli-docker/run.sh:
@@ -480,5 +478,6 @@ Produces dict paylo...
   fraq/text2fraq/__init__.py:
   fraq/adapters/__init__.py:
   project.sh:
+  examples/nlp_examples.sh:
   examples/bash_examples.sh:
   examples/cli-docker/bash_examples.sh:

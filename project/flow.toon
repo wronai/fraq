@@ -1,4 +1,4 @@
-# fraq/flow | 324 func | 12 pipelines | 6 hub-types | 2026-03-17
+# fraq/flow | 320 func | 12 pipelines | 6 hub-types | 2026-03-17
 
 PIPELINES[12] (Core:2, Export:1, IO:3, NLP:3, Unknown:3):
   Fraq [NLP]: str → bool
@@ -69,17 +69,17 @@ PIPELINES[12] (Core:2, Export:1, IO:3, NLP:3, Unknown:3):
               → _vec_scale(v:Vector, s:float) → Vector  CC=2    pure ■
               PURITY: 2/3 pure  BOTTLENECK: children(CC=5)
 
-  Fraq [Core]: int → Any
-              → records(depth:int, branching:int, node:Optional[FraqNode]) → Iterator[Dict[str, Any]] CC=4    pure ▶
+  Fraq [Core]: Optional[int] → Any
+              → records(depth:Optional[int], branching:int, count:Optional[int], node:Optional[FraqNode]) → Iterator[Dict[str, Any]] CC=8    pure ▶
               → record(node:Optional[FraqNode]) → Dict[str, Any] CC=4    pure
-              → _cast(val:Any, type_name:str) → Any     CC=5    pure ■
-              PURITY: 3/3 pure  BOTTLENECK: _cast(CC=5)
+              → _cast(val:Any, type_name:str) → Any     CC=7    pure ■
+              PURITY: 3/3 pure  BOTTLENECK: records(CC=8)
 
-  Examples [Unknown]: ? → AsyncIterator[Dict[str, Any]]
-              → main()                                  CC=1    pure ▶
-              → example_kafka_producer_pattern()        CC=2    IO
-              → async_stream(root:Optional[FraqNode], count:int, interval:float, direction:Optional[Vector], dims:int) → AsyncIterator[Dict[str, Any]] CC=3    pure ■
-              PURITY: 2/3 pure  BOTTLENECK: async_stream(CC=3)
+  Examples [Unknown]: ? → List[Dict[str, Any]]
+              → main()                                  CC=1    IO ▶
+              → example_3_kafka()                       CC=2    IO
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=11   pure ■
+              PURITY: 1/3 pure  BOTTLENECK: generate(CC=11)
 
   Fraq [IO]: str → bool
               → search(text:str) → List[dict[str, Any]] CC=2    pure ▶
@@ -90,20 +90,20 @@ PIPELINES[12] (Core:2, Export:1, IO:3, NLP:3, Unknown:3):
 
 TRANSFORMS (fan-out ≥10):
   _parse_args(argv:List[str] | None) → argparse.Namespace fan=21   !! side-effects
-  example_1_sse_generator()                               fan=18   fan=18
   query_data(fields:str, depth:int, format:str, limit:int, dims:int) fan=18   fan=18
+  generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] fan=16   fan=16
   ws_files(websocket:WebSocket)                           fan=16   fan=16
-  example_4_pipeline()                                    fan=16   fan=16
-  example_1_generate_to_sqlite()                          fan=16   fan=16
   schema_records(fields:str, depth:int, branching:int, format:str, dims:int) fan=16   fan=16
   _collect_files_filtered(base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]) → List[dict[str, Any]] fan=16   PIPELINE:FileSearchText2Fraq.entry
-  example_hybrid_merge()                                  fan=15   fan=15
   ws_stream(websocket:WebSocket)                          fan=14   fan=14
-  example_1_sensor_readings()                             fan=14   fan=14
-  example_3_time_series()                                 fan=14   fan=14
   stream(count:int, dims:int, format:str)                 fan=14   fan=14
   files_stat(file_path:str)                               fan=14   fan=14
   ws_files(websocket:WebSocket)                           fan=14   fan=14
+  example_full_pipeline() → None                          fan=13   fan=13
+  example_1_sse()                                         fan=13   fan=13
+  load_root(uri:str, **opts:Any) → FraqNode               fan=13   PIPELINE:FileAdapter.entry
+  ws_stream(websocket:WebSocket)                          fan=13   fan=13
+  example_pdf_search_with_llm()                           fan=12   fan=12
 
 CONTRACTS:
   Pipeline: Fraq
@@ -301,8 +301,8 @@ CONTRACTS:
       OUT: Vector
 
   Pipeline: Fraq
-    records(depth:int, branching:int, node:Optional[FraqNode]) → Iterator[Dict[str, Any]]
-      IN:  depth:int, branching:int, node:Optional[FraqNode]
+    records(depth:Optional[int], branching:int, count:Optional[int], node:Optional[FraqNode]) → Iterator[Dict[str, Any]]
+      IN:  depth:Optional[int], branching:int, count:Optional[int], node:Optional[FraqNode]
       OUT: Iterator[Dict[str, Any]]
 
     record(node:Optional[FraqNode]) → Dict[str, Any]
@@ -317,15 +317,16 @@ CONTRACTS:
     main()
       IN:  ()
       OUT: None
+      SIDE-EFFECT: IO(print, print, print)
 
-    example_kafka_producer_pattern()
+    example_3_kafka()
       IN:  ()
       OUT: None
-      SIDE-EFFECT: IO(print, print, dumps)
+      SIDE-EFFECT: IO(print, print, print)
 
-    async_stream(root:Optional[FraqNode], count:int, interval:float, direction:Optional[Vector], dims:int) → AsyncIterator[Dict[str, Any]]
-      IN:  root:Optional[FraqNode], count:int, interval:float, direction:Optional[Vector], dims:int
-      OUT: AsyncIterator[Dict[str, Any]]
+    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: List[Dict[str, Any]]
 
   Pipeline: Fraq
     search(text:str) → List[dict[str, Any]]
@@ -343,36 +344,36 @@ CONTRACTS:
       OUT: bool
 
 
-DATA_TYPES (by cross-function usage) [223 annotated, 0 inferred / 324 functions]:
-  str                  consumed:159 produced:35   !! HUB-TYPE → split interface
-  int                  consumed:64  produced:4    !! HUB-TYPE → split interface
+DATA_TYPES (by cross-function usage) [226 annotated, 0 inferred / 320 functions]:
+  str                  consumed:160 produced:33   !! HUB-TYPE → split interface
+  int                  consumed:68  produced:4    !! HUB-TYPE → split interface
   FraqNode             consumed:20  produced:18   !! HUB-TYPE → split interface
-  float                consumed:20  produced:6    !! HUB-TYPE → split interface
-  str, Any             consumed:4   produced:19 
+  float                consumed:21  produced:6    !! HUB-TYPE → split interface
+  str, Any             consumed:4   produced:20 
   Vector               consumed:14  produced:2    !! HUB-TYPE → split interface
   FraqQuery            consumed:6   produced:7  
-  FraqSchema           consumed:8   produced:3  
+  FraqSchema           consumed:8   produced:4  
   bool                 consumed:5   produced:6  
   argparse.Namespace   consumed:10  produced:1    !! HUB-TYPE → split interface
-  dict[str, Any]       consumed:2   produced:7  
   WebSocket            consumed:9   produced:0    input-heavy (read-only flow)
-  Iterator[Dict[str, Any]] consumed:0   produced:8    output-heavy
-  dict                 consumed:0   produced:6    output-heavy
+  Iterator[Dict[str, Any]] consumed:0   produced:9    output-heavy
+  dict[str, Any]       consumed:2   produced:7  
   ParsedQuery          consumed:1   produced:5    output-heavy
+  dict                 consumed:0   produced:6    output-heavy
   str | None           consumed:5   produced:0    input-heavy (read-only flow)
-  bytes                consumed:0   produced:4    narrow scope
   str | list[dict[str, Any]] consumed:0   produced:4    narrow scope
+  bytes                consumed:0   produced:4    narrow scope
   AsyncIterator[Dict[str, Any]] consumed:0   produced:4    narrow scope
   Text2FraqConfig      consumed:2   produced:1    narrow scope
 
   HUB TYPES (consumed ≥10):
-    str → 159 consumers → split into:
+    str → 160 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    int → 64 consumers → split into:
+    int → 68 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
     FraqNode → 20 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    float → 20 consumers → split into:
+    float → 21 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
     Vector → 14 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
@@ -395,5 +396,5 @@ SIDE_EFFECTS:
     Fraq            ████ 100% pure
     Fraq            ██░░ 66% pure
     Fraq            ████ 100% pure
-    Examples        ██░░ 66% pure
+    Examples        █░░░ 33% pure
     Fraq            ██░░ 66% pure

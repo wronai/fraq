@@ -1,191 +1,129 @@
 #!/usr/bin/env python3
-"""
-fraq — Praktyczne zastosowania.
+"""Applications examples - UPROSZCZONE z nowym API fraq."""
 
-IoT, ERP, AI/ML, DevOps, Legal, Finance — każde z zero storage.
-"""
+from __future__ import annotations
 
-from fraq import (
-    FraqNode, FraqSchema, FraqCursor, FraqQuery, FraqExecutor,
-    SensorAdapter, SQLAdapter, FormatRegistry,
-    HashGenerator, PerlinGenerator, SensorStreamGenerator,
-    to_nlp2cmd_schema, to_openapi, to_proto,
-)
+from fraq import generate, stream, FraqSchema
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 1. EMBEDDED / IoT — Sensor network simulation
-# ═══════════════════════════════════════════════════════════════════════════
+def example_1_iot_sensors():
+    """IoT sensors - UPROSZCZONE."""
+    print("=" * 60)
+    print("1. IOT SENSORS (UPROSZCZONE)")
+    print("=" * 60)
 
-def example_iot_sensor_network():
-    """Symulacja 10k sensorów bez storage'u — dla firmware dev na RPi/ESP32."""
-    adapter = SensorAdapter(base_temp=23.5, base_humidity=60.0)
+    # UPROSZCZONE: generate() dla sensorów
+    readings = generate({
+        'device_id': 'str',
+        'temperature': 'float:15-30',
+        'humidity': 'float:30-80',
+        'battery': 'float:20-100',
+    }, count=20)
 
-    print("=== IoT: 10 sensor readings ===")
-    for i, reading in enumerate(adapter.stream(depth=5, count=10)):
-        print(f"  sensor[{i}] → {reading['temperature']:.1f}°C, "
-              f"{reading['humidity']:.1f}%, {reading['pressure']:.1f}hPa")
+    # Group by device
+    devices = {}
+    for r in readings:
+        did = r['device_id']
+        if did not in devices:
+            devices[did] = []
+        devices[did].append(r)
 
-    # Eksport do Protobuf schema dla edge gateway
-    root = adapter.load_root()
-    schema = FraqSchema(root=root)
-    schema.add_field("temperature", "float")
-    schema.add_field("humidity", "float")
-    schema.add_field("device_id", "str")
-    proto = to_proto(schema, package="iot.edge")
-    print(f"\n  Proto schema generated: {len(proto)} chars")
-    print()
-
-
-# ═══════════════════════════════════════════════════════════════════════════
-# 2. ERP / ACCOUNTING — Invoice generation
-# ═══════════════════════════════════════════════════════════════════════════
-
-def example_erp_invoices():
-    """Dynamiczne faktury z nieskończonymi detalami."""
-    root = FraqNode(position=(0.0, 0.0, 0.0, 0.0), seed=2026)
-    schema = FraqSchema(root=root)
-    schema.add_field("invoice_id", "str")
-    schema.add_field("amount", "float", transform=lambda v: round(v * 10000, 2))
-    schema.add_field("vat", "float", transform=lambda v: round(v * 0.23, 4))
-    schema.add_field("client_id", "str")
-    schema.add_field("paid", "bool")
-
-    print("=== ERP: Invoices (depth=2, branching=3 → 9 invoices) ===")
-    for rec in schema.records(depth=2, branching=3):
-        status = "PAID" if rec["paid"] else "PENDING"
-        print(f"  {rec['invoice_id']} | {rec['amount']:>10.2f} PLN | "
-              f"VAT {rec['vat']:.4f} | {rec['client_id']} | {status}")
-
-    # SQL integration
-    adapter = SQLAdapter(table="invoices")
-    insert = adapter.save(root, "")
-    print(f"\n  SQL: {insert[:80]}...")
-    print()
+    print(f"Data from {len(devices)} devices:")
+    for did, dev_readings in list(devices.items())[:3]:
+        avg_temp = sum(r['temperature'] for r in dev_readings) / len(dev_readings)
+        print(f"  {did}: {len(dev_readings)} readings, avg temp={avg_temp:.1f}°C")
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 3. AI/ML — Training data generation
-# ═══════════════════════════════════════════════════════════════════════════
+def example_2_erp_invoices():
+    """ERP invoices - UPROSZCZONE."""
+    print("\n" + "=" * 60)
+    print("2. ERP INVOICES (UPROSZCZONE)")
+    print("=" * 60)
 
-def example_ai_training_data():
-    """Nieskończone datasety treningowe — zero disk, perfect dla federated learning."""
-    root = FraqNode(position=(0.0, 0.0, 0.0), seed=1337)
-    schema = FraqSchema(root=root)
-    schema.add_field("feature_1", "float")
-    schema.add_field("feature_2", "float")
-    schema.add_field("feature_3", "float")
-    schema.add_field("label", "bool")
+    invoices = generate({
+        'invoice_id': 'str',
+        'amount': 'float:100-10000',
+        'vat_rate': 'float:0.08-0.23',
+        'client_id': 'str',
+        'paid': 'bool',
+    }, count=10)
 
-    q = FraqQuery().zoom(3).select(
-        "feature_1:float", "feature_2:float", "feature_3:float", "label:bool"
-    ).output("records").take(20)
+    total = sum(inv['amount'] for inv in invoices)
+    paid = sum(inv['amount'] for inv in invoices if inv['paid'])
+    unpaid = total - paid
 
-    records = FraqExecutor(root).execute(q)
-    print(f"=== AI/ML: {len(records)} training samples ===")
-    for i, r in enumerate(records[:5]):
-        print(f"  [{i}] f1={r['feature_1']:.4f} f2={r['feature_2']:.4f} "
-              f"f3={r['feature_3']:.4f} label={r['label']}")
-    print(f"  ... ({len(records)} total)")
-
-    # NDJSON export for LLM fine-tuning
-    ndjson = FormatRegistry.serialize("jsonl", records[:3])
-    print(f"\n  NDJSON preview:\n  {ndjson[:200]}")
-    print()
+    print(f"Invoices: {len(invoices)}")
+    print(f"  Total: ${total:,.2f}")
+    print(f"  Paid: ${paid:,.2f}, Unpaid: ${unpaid:,.2f}")
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 4. DEVOPS — Load / chaos testing
-# ═══════════════════════════════════════════════════════════════════════════
+def example_3_ai_training():
+    """AI training data - UPROSZCZONE."""
+    print("\n" + "=" * 60)
+    print("3. AI TRAINING DATA (UPROSZCZONE)")
+    print("=" * 60)
 
-def example_devops_load_test():
-    """Generuj test payloads dla K8s load testing."""
-    root = FraqNode(position=(0.0, 0.0, 0.0), seed=9999,
-                    generator=HashGenerator(range_min=0.0, range_max=100.0))
+    # Classification dataset
+    dataset = generate({
+        'feature_1': 'float',
+        'feature_2': 'float',
+        'feature_3': 'float',
+        'label': 'bool',
+    }, count=1000)
 
-    print("=== DevOps: Load test payloads ===")
-    cursor = FraqCursor(root=root)
-    for i in range(5):
-        cursor.advance()
-        val = cursor.current.value
-        print(f"  request[{i}] → CPU load: {val:.1f}%, depth: {cursor.depth}")
+    # Split
+    train_size = int(0.8 * len(dataset))
+    train = dataset[:train_size]
+    test = dataset[train_size:]
 
-    # OpenAPI spec for the test endpoint
-    schema = FraqSchema(root=root)
-    schema.add_field("cpu_percent", "float")
-    schema.add_field("memory_mb", "int")
-    schema.add_field("request_id", "str")
-    spec = to_openapi(schema, title="Load Test API", base_path="/chaos")
-    print(f"\n  OpenAPI spec: {len(spec['paths'])} endpoints")
-    print()
+    print(f"Dataset: {len(dataset)} samples")
+    print(f"  Train: {len(train)}, Test: {len(test)}")
 
-
-# ═══════════════════════════════════════════════════════════════════════════
-# 5. FINANCE — Leasing scenario simulation
-# ═══════════════════════════════════════════════════════════════════════════
-
-def example_finance_leasing():
-    """Nieskończone warianty leasingu + modyfikacje camper van."""
-    root = FraqNode(position=(0.0, 0.0, 0.0), seed=150000)
-    schema = FraqSchema(root=root)
-    schema.add_field("monthly_rate", "float", transform=lambda v: round(v * 5000, 2))
-    schema.add_field("total_cost", "float", transform=lambda v: round(v * 200000, 2))
-    schema.add_field("mods_included", "bool")
-    schema.add_field("scenario_id", "str")
-
-    print("=== Finance: Leasing scenarios ===")
-    for rec in schema.records(depth=2, branching=3):
-        mods = "WITH mods" if rec["mods_included"] else "base"
-        print(f"  {rec['scenario_id']} | monthly: {rec['monthly_rate']:>8.2f} PLN | "
-              f"total: {rec['total_cost']:>10.2f} PLN | {mods}")
-    print()
+    # Class distribution
+    positive = sum(1 for s in train if s['label'])
+    print(f"  Class balance: {positive}/{len(train)-positive}")
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 6. LEGAL — Document clause generation
-# ═══════════════════════════════════════════════════════════════════════════
+def example_4_devops_metrics():
+    """DevOps metrics - UPROSZCZONE."""
+    print("\n" + "=" * 60)
+    print("4. DEVOPS METRICS (UPROSZCZONE)")
+    print("=" * 60)
 
-def example_legal_clauses():
-    """Nieskończone klauzule umów — każdy zoom = nowy poziom detali."""
-    root = FraqNode(position=(0.0, 0.0, 0.0), seed=42)
-    schema = FraqSchema(root=root)
-    schema.add_field("clause_id", "str")
-    schema.add_field("weight", "float", transform=lambda v: round(v, 3))
-    schema.add_field("binding", "bool")
-
-    print("=== Legal: Contract clauses (depth 2) ===")
-    for rec in schema.records(depth=2, branching=3):
-        binding = "BINDING" if rec["binding"] else "advisory"
-        print(f"  §{rec['clause_id']} | weight: {rec['weight']} | {binding}")
-    print()
+    # Stream metrics
+    print("Streaming 5 system metrics:")
+    for i, metric in enumerate(stream({
+        'cpu_percent': 'float:0-100',
+        'memory_mb': 'int:100-16000',
+        'request_id': 'str',
+    }, count=5)):
+        status = "ALERT" if metric['cpu_percent'] > 80 else "OK"
+        print(f"  [{i}] CPU={metric['cpu_percent']:.1f}% MEM={metric['memory_mb']}MB {status}")
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 7. SMOOTH DATA — Perlin noise for organic patterns
-# ═══════════════════════════════════════════════════════════════════════════
+def example_5_finance():
+    """Finance - UPROSZCZONE."""
+    print("\n" + "=" * 60)
+    print("5. FINANCE LEASING (UPROSZCZONE)")
+    print("=" * 60)
 
-def example_perlin_organic():
-    """Smooth data z PerlinGenerator — organic sensor patterns."""
-    gen = PerlinGenerator(frequency=2.0, amplitude=10.0)
-    root = FraqNode(position=(0.0,), generator=gen)
+    scenarios = generate({
+        'monthly_rate': 'float:500-5000',
+        'total_cost': 'float:20000-200000',
+        'down_payment': 'float:0-50000',
+    }, count=5)
 
-    print("=== Perlin: Organic sensor pattern ===")
-    cursor = FraqCursor(root=root)
-    for i in range(15):
-        cursor.advance()
-        val = cursor.current.value
-        bar = "█" * max(0, int((val + 10) * 2))
-        print(f"  t={i:>2} | {val:>6.2f} | {bar}")
-    print()
+    print("Leasing scenarios:")
+    for i, s in enumerate(scenarios, 1):
+        print(f"  {i}. ${s['monthly_rate']:.0f}/mo, total ${s['total_cost']:,.0f}")
 
-
-# ═══════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
-    example_iot_sensor_network()
-    example_erp_invoices()
-    example_ai_training_data()
-    example_devops_load_test()
-    example_finance_leasing()
-    example_legal_clauses()
-    example_perlin_organic()
+    example_1_iot_sensors()
+    example_2_erp_invoices()
+    example_3_ai_training()
+    example_4_devops_metrics()
+    example_5_finance()
+    print("\n" + "=" * 60)
+    print("Done! Applications w wersji uproszczonej")
+    print("=" * 60)

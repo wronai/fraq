@@ -64,13 +64,13 @@
 </p>
 
 <div class="grid">
-  <div class="card"><div class="value">193</div><div class="label">Functions</div></div>
+  <div class="card"><div class="value">196</div><div class="label">Functions</div></div>
   <div class="card"><div class="value">35</div><div class="label">Classes</div></div>
   <div class="card"><div class="value">29</div><div class="label">Files</div></div>
-  <div class="card"><div class="value">5,478</div><div class="label">Lines</div></div>
+  <div class="card"><div class="value">5,691</div><div class="label">Lines</div></div>
   <div class="card"><div class="value">2</div><div class="label">Languages</div></div>
-  <div class="card"><div class="value">3.0</div><div class="label">Avg CC</div></div>
-  <div class="card"><div class="value">4</div><div class="label">Critical (CC≥10)</div></div>
+  <div class="card"><div class="value">3.1</div><div class="label">Avg CC</div></div>
+  <div class="card"><div class="value">6</div><div class="label">Critical (CC≥10)</div></div>
   <div class="card"><div class="value">0</div><div class="label">Duplicates</div></div>
   <div class="card"><div class="value">3</div><div class="label">Cycles</div></div>
 </div>
@@ -94,9 +94,9 @@
   <div class="chart-container">
     <h2 style="border:none;margin:0 0 .5rem;">Evolution (2026-03-17)</h2>
     <div class="evo-cards">
-      <div class="card"><div class="value">3.0</div><div class="label">CC̄ →</div></div>
-      <div class="card"><div class="value">4</div><div class="label">Critical →</div></div>
-      <div class="card"><div class="value">5478</div><div class="label">Lines</div></div>
+      <div class="card"><div class="value">3.1</div><div class="label">CC̄ →</div></div>
+      <div class="card"><div class="value">6</div><div class="label">Critical →</div></div>
+      <div class="card"><div class="value">5691</div><div class="label">Lines</div></div>
     </div>
     <p class="trend" style="margin-top:.5rem;">Run analysis multiple times to build a trend chart (≥3 data points needed).</p>
   </div>
@@ -125,10 +125,18 @@
             <tr>
                 <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>core.py</td>
                 <td style="color:var(--muted);font-size:.75rem">fraq</td>
-                <td style="text-align:right">360</td>
+                <td style="text-align:right">412</td>
                 <td style="text-align:right">17</td>
                 <td style="text-align:right">4</td>
-                <td style="text-align:right">5</td>
+                <td style="text-align:right">8</td>
+            </tr>
+            <tr>
+                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>__init__.py</td>
+                <td style="color:var(--muted);font-size:.75rem">fraq</td>
+                <td style="text-align:right">310</td>
+                <td style="text-align:right">4</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">11</td>
             </tr>
             <tr>
                 <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>query.py</td>
@@ -193,14 +201,6 @@
                 <td style="text-align:right">8</td>
                 <td style="text-align:right">1</td>
                 <td style="text-align:right">6</td>
-            </tr>
-            <tr>
-                <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>__init__.py</td>
-                <td style="color:var(--muted);font-size:.75rem">fraq</td>
-                <td style="text-align:right">149</td>
-                <td style="text-align:right">1</td>
-                <td style="text-align:right">0</td>
-                <td style="text-align:right">2</td>
             </tr>
             <tr>
                 <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3572A5;margin-right:6px"></span>generators.py</td>
@@ -271,7 +271,7 @@
   </div>
 </div>
 
-<h2>Alerts (14)</h2>
+<h2>Alerts (16)</h2>
 <div class="card"><div class="table-wrap">
 <table>
   <thead><tr><th>Severity</th><th>Target</th><th>Type</th><th>Value</th><th>Limit</th></tr></thead>
@@ -281,6 +281,13 @@
                 <td>_parse_args</td>
                 <td>high_fan_out</td>
                 <td>21</td>
+                <td>10</td>
+            </tr>
+            <tr class="error">
+                <td><span class="badge error">error</span></td>
+                <td>generate</td>
+                <td>high_fan_out</td>
+                <td>16</td>
                 <td>10</td>
             </tr>
             <tr class="error">
@@ -348,6 +355,13 @@
             </tr>
             <tr class="warning">
                 <td><span class="badge warning">warning</span></td>
+                <td>stream</td>
+                <td>high_fan_out</td>
+                <td>10</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
                 <td>_dispatch_command</td>
                 <td>high_fan_out</td>
                 <td>10</td>
@@ -366,13 +380,6 @@
                 <td>high_fan_out</td>
                 <td>10</td>
                 <td>10</td>
-            </tr>
-            <tr class="warning">
-                <td><span class="badge warning">warning</span></td>
-                <td>natural_language</td>
-                <td>high_fan_out</td>
-                <td>10</td>
-                <td>10</td>
             </tr></tbody>
 </table>
 </div></div>
@@ -388,6 +395,13 @@
                 <td><strong>_parse_args</strong></td>
                 <td>21</td>
                 <td>Parse command line arguments.</td>
+            </tr>
+            <tr>
+                <td><strong>generate</strong></td>
+                <td>16</td>
+                <td>Generate records with simple field specification.
+
+This is the EASIEST way to cr</td>
             </tr>
             <tr>
                 <td><strong>FileSearchText2Fraq._collect_files_filtered</strong></td>
@@ -428,18 +442,13 @@
                 <td><strong>FileSearchAdapter.load_root</strong></td>
                 <td>11</td>
                 <td>Orchestrates 11 calls</td>
-            </tr>
-            <tr>
-                <td><strong>_to_csv</strong></td>
-                <td>10</td>
-                <td>Serialise list of flat dicts to CSV.</td>
             </tr></tbody>
 </table>
 </div></div>
 </div>
 
 <div>
-<h2>Refactoring Priorities (5)</h2>
+<h2>Refactoring Priorities (6)</h2>
 <div class="card"><div class="table-wrap">
 <table>
   <thead><tr><th>#</th><th>Action</th><th>Impact</th><th>Effort</th></tr></thead>
@@ -470,6 +479,12 @@
             </tr>
             <tr>
                 <td>5</td>
+                <td>Reduce generate fan-out (currently 16)</td>
+                <td><span class="badge medium">medium</span></td>
+                <td>medium</td>
+            </tr>
+            <tr>
+                <td>6</td>
                 <td>Reduce FileSearchText2Fraq._collect_files_filtered fan-out (currently 16)</td>
                 <td><span class="badge medium">medium</span></td>
                 <td>medium</td>
@@ -479,7 +494,7 @@
 </div>
 </div>
 
-<footer>Generated by code2llm on 2026-03-17 19:11</footer>
+<footer>Generated by code2llm on 2026-03-17 21:43</footer>
 
 <script>
 // Evolution chart disabled — fewer than 3 data points
@@ -509,8 +524,8 @@ const modLinesCtx = document.getElementById('modLinesChart').getContext('2d');
 new Chart(modLinesCtx, {
   type: 'bar',
   data: {
-    labels: ['schema_export.py', 'cli.py', 'core.py', 'query.py', 'server.py', 'web_crawler.py', 'file_search_parser.py', 'formats.py', 'network.py', 'file_search.py', 'session.py', '__init__.py', 'generators.py', 'parser_llm.py', 'parser_rules.py'],
-    datasets: [{ label: 'Lines', data: [476, 449, 360, 220, 217, 204, 200, 196, 186, 165, 149, 149, 117, 109, 93],
+    labels: ['schema_export.py', 'cli.py', 'core.py', '__init__.py', 'query.py', 'server.py', 'web_crawler.py', 'file_search_parser.py', 'formats.py', 'network.py', 'file_search.py', 'session.py', 'generators.py', 'parser_llm.py', 'parser_rules.py'],
+    datasets: [{ label: 'Lines', data: [476, 449, 412, 310, 220, 217, 204, 200, 196, 186, 165, 149, 117, 109, 93],
       backgroundColor: '#3b82f6'
     }]
   },

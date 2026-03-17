@@ -51,6 +51,41 @@ docker compose run cli explore --depth 5
 
 ## Python API
 
+### 🆕 NEW: Simplified API (v0.2.11+)
+
+The easiest way to use fraq — just `generate()` data with field specifications:
+
+```python
+from fraq import generate, stream, quick_schema, FraqSchema
+
+# 1. generate() — simplest data generation
+records = generate({
+    'temperature': 'float:10-40',  # 10-40°C range
+    'humidity': 'float:0-100',     # 0-100% range
+    'sensor_id': 'str',            # auto-formatted IDs
+}, count=100)
+# Returns: [{'temperature': 23.5, 'humidity': 67.2, 'sensor_id': 'SEN-004572'}, ...]
+
+# 2. stream() — lazy infinite streaming
+for record in stream({'cpu': 'float:0-100'}, count=1000, interval=0.1):
+    print(record)  # Process one by one
+
+# 3. quick_schema() — auto-detect types with smart transforms
+schema = quick_schema('temp', 'humidity', 'pressure')  # auto-ranges for common fields
+records = list(schema.records(count=50))
+
+# 4. FraqSchema() without root — auto-created
+schema = FraqSchema()  # No need for root=FraqNode(...)
+schema.add_field('value', 'float')
+records = list(schema.records(count=10))  # Use count instead of depth
+```
+
+See `examples/` for complete usage patterns with the new API.
+
+---
+
+### Classic API
+
 ```python
 from fraq import FraqNode, FraqSchema, FraqCursor, FormatRegistry, query
 

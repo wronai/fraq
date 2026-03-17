@@ -1,122 +1,79 @@
 #!/usr/bin/env python3
-"""AI/ML examples - synthetic training data with fraq."""
+"""AI/ML examples - UPROSZCZONE z nowym API fraq."""
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
-from typing import List, Dict, Any
-
-from fraq import FraqSchema, FraqNode
+from fraq import generate, FraqSchema
 
 
 def example_1_classification():
-    """Generate binary classification dataset."""
+    """Binary classification - UPROSZCZONE."""
     print("=" * 60)
-    print("1. BINARY CLASSIFICATION DATASET")
+    print("1. BINARY CLASSIFICATION (UPROSZCZONE)")
     print("=" * 60)
 
-    root = FraqNode(position=(0.0, 0.0, 0.0))
-    schema = FraqSchema(root=root)
-    schema.add_field("feature_1", "float")
-    schema.add_field("feature_2", "float")
-    schema.add_field("feature_3", "float")
-    # Label based on sum of features
-    schema.add_field("label", "float", transform=lambda v: float(v) * 3 > 1.5)
+    # UPROSZCZONE: generate() z field hints
+    samples = generate({
+        'feature_1': 'float',
+        'feature_2': 'float',
+        'feature_3': 'float',
+        'label': 'bool',
+    }, count=100)
 
-    samples = []
-    for i, record in enumerate(schema.records(depth=4, branching=3)):
-        if i >= 100:
-            break
-        samples.append(record)
-
-    positive = sum(1 for s in samples if s["label"])
+    positive = sum(1 for s in samples if s['label'])
     negative = len(samples) - positive
 
     print(f"Generated {len(samples)} samples")
-    print(f"Class distribution: {positive} positive, {negative} negative")
-    print("\nSample records:")
+    print(f"Distribution: {positive} positive, {negative} negative")
+    print("\nSamples:")
     for s in samples[:3]:
-        print(f"  f1={s['feature_1']:.3f}, f2={s['feature_2']:.3f}, f3={s['feature_3']:.3f} → {s['label']}")
+        print(f"  f1={s['feature_1']:.2f}, f2={s['feature_2']:.2f} → {s['label']}")
 
 
 def example_2_regression():
-    """Generate regression training data."""
+    """Regression - UPROSZCZONE."""
     print("\n" + "=" * 60)
-    print("2. REGRESSION DATASET (House Prices)")
+    print("2. REGRESSION HOUSES (UPROSZCZONE)")
     print("=" * 60)
 
-    root = FraqNode(position=(0.0, 0.0, 0.0))
-    schema = FraqSchema(root=root)
-    schema.add_field("sqm", "float", transform=lambda v: int(20 + float(v) * 180))
-    schema.add_field("bedrooms", "float", transform=lambda v: int(1 + float(v) * 4))
-    schema.add_field("age_years", "float", transform=lambda v: int(float(v) * 50))
-    schema.add_field("distance_city", "float", transform=lambda v: round(float(v) * 30, 2))
+    # UPROSZCZONE: range hints dla realistic data
+    houses = generate({
+        'sqm': 'int:20-200',
+        'bedrooms': 'int:1-5',
+        'age_years': 'int:0-50',
+        'distance_km': 'float:0-30',
+        'price': 'float:50000-500000',
+    }, count=50)
 
-    def calc_price(v):
-        sqm = int(20 + float(v) * 180)
-        bedrooms = int(1 + float(v) * 4)
-        age = int(float(v) * 50)
-        base = 100000
-        price = base + sqm * 3000 + bedrooms * 50000 - age * 2000
-        return round(price, 2)
-
-    schema.add_field("price", "float", transform=calc_price)
-
-    houses = []
-    for i, record in enumerate(schema.records(depth=3, branching=4)):
-        if i >= 50:
-            break
-        houses.append(record)
-
-    print(f"Generated {len(houses)} house records")
-    print("\nSample houses:")
+    print(f"Generated {len(houses)} houses")
+    print("\nSamples:")
     for h in houses[:3]:
-        print(f"  {h['sqm']}m², {int(h['bedrooms'])}br, {int(h['age_years'])}y → ${h['price']:,.0f}")
+        print(f"  {h['sqm']}m², {h['bedrooms']}br, {h['age_years']}y → ${h['price']:,.0f}")
 
-    avg_price = sum(h["price"] for h in houses) / len(houses)
+    avg_price = sum(h['price'] for h in houses) / len(houses)
     print(f"\nAverage price: ${avg_price:,.0f}")
 
 
-def example_3_time_series():
-    """Generate time-series data for forecasting."""
+def example_3_timeseries():
+    """Time-series - UPROSZCZONE."""
     print("\n" + "=" * 60)
-    print("3. TIME-SERIES FORECASTING DATA")
+    print("3. TIME-SERIES (UPROSZCZONE)")
     print("=" * 60)
 
-    start_date = datetime(2024, 1, 1)
+    # UPROSZCZONE: FraqSchema() bez root
+    schema = FraqSchema()
+    schema.add_field('value', 'float', transform=lambda v: round(100 + float(v) * 50, 2))
 
-    root = FraqNode(position=(0.0, 0.0, 0.0))
-    schema = FraqSchema(root=root)
+    series = list(schema.records(count=168))  # 7 days * 24 hours
 
-    def calc_value(v):
-        hour = int(float(v) * 168)
-        base = 100 + float(v) * 50
-        noise = (float(v) - 0.5) * 20
-        seasonality = 20 * ((hour % 24) / 24)
-        return round(base + seasonality + noise, 2)
-
-    schema.add_field("value", "float", transform=calc_value)
-
-    series = []
-    for i, record in enumerate(schema.records(depth=3, branching=6)):
-        if i >= 168:
-            break
-        timestamp = start_date + timedelta(hours=i)
-        series.append({
-            "timestamp": timestamp.isoformat(),
-            "value": record["value"],
-        })
-
-    print(f"Generated {len(series)} hourly data points")
-    print("\nFirst 3 hours:")
-    for s in series[:3]:
-        print(f"  {s['timestamp'][:16]}: {s['value']}")
+    print(f"Generated {len(series)} hourly points")
+    print(f"First: {series[0]['value']}, Last: {series[-1]['value']}")
 
 
 if __name__ == "__main__":
     example_1_classification()
     example_2_regression()
-    example_3_time_series()
+    example_3_timeseries()
     print("\n" + "=" * 60)
-    print("Done!")
+    print("Done! AI/ML w wersji uproszczonej")
     print("=" * 60)

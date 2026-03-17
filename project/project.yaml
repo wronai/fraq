@@ -3,16 +3,16 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T19:11:25Z'
+  analyzed_at: '2026-03-17T21:43:36Z'
   tool: code2llm
   stats:
     files: 29
-    lines: 5478
-    functions: 193
+    lines: 5691
+    functions: 196
     classes: 35
 health:
-  cc_avg: 3.0
-  critical_count: 4
+  cc_avg: 3.1
+  critical_count: 6
   critical_limit: 10
   duplicates: 0
   cycles: 3
@@ -22,6 +22,11 @@ health:
     value: 21
     limit: 10
     severity: critical
+  - type: high_fan_out
+    target: generate
+    value: 16
+    limit: 10
+    severity: error
   - type: high_fan_out
     target: FileSearchText2Fraq._collect_files_filtered
     value: 16
@@ -68,6 +73,11 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
+    target: stream
+    value: 10
+    limit: 10
+    severity: warning
+  - type: high_fan_out
     target: _dispatch_command
     value: 10
     limit: 10
@@ -88,6 +98,24 @@ health:
     limit: 10
     severity: warning
 modules:
+- path: fraq/__init__.py
+  lines: 310
+  classes: 0
+  methods: 4
+  cc_max: 11
+  inbound_deps: 8
+  exports:
+  - name: generate
+    type: function
+    cc: 11
+    fan_out: 16
+  - name: stream
+    type: function
+    cc: 10
+    fan_out: 10
+  - name: quick_schema
+    type: function
+    cc: 6
 - path: fraq/formats.py
   lines: 196
   classes: 1
@@ -133,7 +161,7 @@ modules:
   classes: 4
   methods: 12
   cc_max: 9
-  inbound_deps: 1
+  inbound_deps: 0
   exports:
   - name: SourceType
     type: class
@@ -225,6 +253,25 @@ modules:
   - name: main
     type: function
     cc: 1
+- path: fraq/core.py
+  lines: 412
+  classes: 4
+  methods: 17
+  cc_max: 8
+  inbound_deps: 1
+  exports:
+  - name: FraqNode
+    type: class
+    cc_avg: 3.6
+  - name: FieldDef
+    type: class
+    cc_avg: 0.0
+  - name: FraqSchema
+    type: class
+    cc_avg: 5.8
+  - name: FraqCursor
+    type: class
+    cc_avg: 2.2
 - path: fraq/server.py
   lines: 217
   classes: 3
@@ -308,31 +355,12 @@ modules:
   - name: NetworkAdapter
     type: class
     cc_avg: 2.8
-- path: fraq/core.py
-  lines: 360
-  classes: 4
-  methods: 17
-  cc_max: 5
-  inbound_deps: 1
-  exports:
-  - name: FraqNode
-    type: class
-    cc_avg: 3.6
-  - name: FieldDef
-    type: class
-    cc_avg: 0.0
-  - name: FraqSchema
-    type: class
-    cc_avg: 4.2
-  - name: FraqCursor
-    type: class
-    cc_avg: 2.2
 - path: fraq/schema_export.py
   lines: 476
   classes: 0
   methods: 7
   cc_max: 5
-  inbound_deps: 2
+  inbound_deps: 1
   exports:
   - name: to_nlp2cmd_schema
     type: function
@@ -458,7 +486,7 @@ modules:
   classes: 1
   methods: 5
   cc_max: 3
-  inbound_deps: 3
+  inbound_deps: 2
   exports:
   - name: AsyncFraqStream
     type: class
@@ -469,12 +497,6 @@ modules:
   - name: async_stream
     type: function
     cc: 3
-- path: fraq/__init__.py
-  lines: 149
-  classes: 0
-  methods: 1
-  cc_max: 2
-  inbound_deps: 0
 - path: fraq/generators.py
   lines: 117
   classes: 4
@@ -558,6 +580,12 @@ hotspots:
 - name: _parse_args
   fan_out: 21
   note: Parse command line arguments.
+- name: generate
+  fan_out: 16
+  note: 'Generate records with simple field specification.
+
+
+    This is the EASIEST way to cr'
 - name: FileSearchText2Fraq._collect_files_filtered
   fan_out: 16
   note: Collect files with exclusion filtering.
@@ -582,9 +610,6 @@ hotspots:
 - name: FileSearchAdapter.load_root
   fan_out: 11
   note: Orchestrates 11 calls
-- name: _to_csv
-  fan_out: 10
-  note: Serialise list of flat dicts to CSV.
 refactoring:
   priorities:
   - action: 'Break circular dependency: fraq.formats._prepare'
@@ -599,13 +624,16 @@ refactoring:
   - action: Reduce _parse_args fan-out (currently 21)
     impact: medium
     effort: medium
+  - action: Reduce generate fan-out (currently 16)
+    impact: medium
+    effort: medium
   - action: Reduce FileSearchText2Fraq._collect_files_filtered fan-out (currently
       16)
     impact: medium
     effort: medium
 evolution:
 - date: '2026-03-17'
-  cc_avg: 3.0
-  critical: 4
-  lines: 5478
+  cc_avg: 3.1
+  critical: 6
+  lines: 5691
   note: Automated analysis

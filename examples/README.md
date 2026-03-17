@@ -1,6 +1,34 @@
 # fraq — Przykłady
 
-Kompletne przykłady użycia biblioteki fraq z różnymi technologiami.
+Kompletne przykłady użycia biblioteki fraq z **NOWYM uproszczonym API**.
+
+## 🆕 NOWE Uproszczone API (v0.2.11+)
+
+```python
+from fraq import generate, stream, quick_schema, FraqSchema
+
+# 1. generate() - najprostsze generowanie danych
+records = generate({
+    'temp': 'float:10-40',      # 10-40°C
+    'humidity': 'float:0-100',   # 0-100%
+    'sensor_id': 'str',
+}, count=100)
+
+# 2. stream() - leniwe strumieniowanie
+for record in stream({'value': 'float'}, count=1000):
+    process(record)
+
+# 3. quick_schema() - auto-detekcja typów
+schema = quick_schema('temp', 'humidity', 'pressure')
+records = list(schema.records(count=10))
+
+# 4. FraqSchema() bez root - auto-root!
+schema = FraqSchema()  # Nie potrzeba root=FraqNode(...)
+schema.add_field('value', 'float')
+records = list(schema.records(count=10))  # count zamiast depth
+```
+
+**Redukcja kodu: 50-70% mniej linii!**
 
 ## 📁 Struktura
 

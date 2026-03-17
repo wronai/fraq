@@ -1,16 +1,16 @@
-# fraq | 59f 8456L | python:52,shell:7
+# fraq | 60f 8546L | python:52,shell:8
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[59]:
-  examples/ai_ml/training_data.py,122
+M[60]:
+  examples/ai_ml/training_data.py,79
   examples/bash_examples.sh,193
   examples/basic/app_integrations.py,566
-  examples/basic/applications.py,191
-  examples/basic/async_streaming.py,103
-  examples/basic/query_examples.py,236
+  examples/basic/applications.py,129
+  examples/basic/async_streaming.py,72
+  examples/basic/query_examples.py,114
   examples/cli-docker/bash_examples.sh,314
   examples/cli-docker/run.sh,36
-  examples/database/sqlite_examples.py,119
-  examples/etl/pipeline_examples.py,159
+  examples/database/sqlite_examples.py,93
+  examples/etl/pipeline_examples.py,124
   examples/fastapi-docker/api_server.py,405
   examples/fastapi-docker/main.py,86
   examples/fastapi-docker/run.sh,80
@@ -18,16 +18,17 @@ M[59]:
   examples/fullstack-docker/frontend/app.py,60
   examples/fullstack-docker/run.sh,85
   examples/fullstack-docker/websocket/main.py,52
-  examples/iot/sensor_examples.py,128
+  examples/iot/sensor_examples.py,84
   examples/network/network_web_examples.py,192
-  examples/streaming/sse_examples.py,95
+  examples/nlp_examples.sh,233
+  examples/streaming/sse_examples.py,102
   examples/text2fraq/nlp2cmd_integration.py,223
   examples/text2fraq/text2fraq_examples.py,258
   examples/text2fraq/text2fraq_files.py,275
   examples/v028/new_features.py,144
   examples/websocket-docker/main.py,104
   examples/websocket-docker/run.sh,62
-  fraq/__init__.py,149
+  fraq/__init__.py,310
   fraq/adapters/__init__.py,25
   fraq/adapters/base.py,32
   fraq/adapters/file_adapter.py,47
@@ -40,7 +41,7 @@ M[59]:
   fraq/adapters/sql_adapter.py,64
   fraq/adapters/web_crawler.py,204
   fraq/cli.py,449
-  fraq/core.py,360
+  fraq/core.py,412
   fraq/formats.py,196
   fraq/generators.py,117
   fraq/query.py,220
@@ -74,6 +75,12 @@ D:
     _simple_yaml(obj;indent)
     _encode_value(v)
     _mp_encode(obj)
+  fraq/__init__.py:
+    e: generate,stream,quick_schema,__getattr__
+    generate(fields;count;seed)
+    stream(fields;count;interval)
+    quick_schema()
+    __getattr__(name)
   fraq/text2fraq/file_search_parser.py:
     e: FileSearchText2Fraq
     FileSearchText2Fraq: __init__(1),_detect_path(1),_should_exclude(1),_collect_files_filtered(5),parse(1),_detect_extension(1),_detect_limit(1),_detect_newer_than(1),_detect_sort_by(1),search(1),format_results(3)  # Natural language to file search converter...
@@ -87,11 +94,6 @@ D:
     example_convenience_function()
     example_file_search_adapter_direct()
     example_llm_file_intent()
-  examples/iot/sensor_examples.py:
-    e: example_1_sensor_readings,example_2_mqtt_payloads,example_3_device_health
-    example_1_sensor_readings()
-    example_2_mqtt_payloads()
-    example_3_device_health()
   fraq/query.py:
     e: SourceType,FraqFilter,FraqQuery,FraqExecutor,query
     SourceType(str,Enum):  # Known data source families...
@@ -127,6 +129,22 @@ The executor build...
     _parse_args(argv)
     _dispatch_command(args)
     main(argv)
+  fraq/core.py:
+    e: FraqNode,FieldDef,FraqSchema,FraqCursor,_vec_add,_vec_scale,_vec_norm,_vec_hash
+    FraqNode: zoom(1),children(1),_child(1),to_dict(1),__repr__(0)  # A single point in the infinite fractal data space.
+
+Paramete...
+    FieldDef:  # One field in a FraqSchema...
+    FraqSchema: add_field(4),record(1),records(4),_cast(1)  # Typed projection of a fractal into structured records.
+
+A sc...
+    FraqCursor: advance(1),back(0),reset(0),snapshot(0)  # Stateful walk through the fractal.
+
+The cursor remembers the...
+    _vec_add(a;b)
+    _vec_scale(v;s)
+    _vec_norm(v)
+    _vec_hash(v;seed)
   fraq/adapters/hybrid_adapter.py:
     e: HybridAdapter
     HybridAdapter(BaseAdapter): __init__(0),add(2),load_root(1),save(3)  # Combine roots from several adapters into one fractal...
@@ -165,11 +183,6 @@ The executor build...
     natural_language(query;path;format)
     ws_stream(websocket)
     ws_files(websocket)
-  examples/ai_ml/training_data.py:
-    e: example_1_classification,example_2_regression,example_3_time_series
-    example_1_classification()
-    example_2_regression()
-    example_3_time_series()
   fraq/text2fraq/parser_rules.py:
     e: Text2FraqSimple,_word_match,_detect_format,_detect_depth,_detect_limit
     Text2FraqSimple: parse(1),_detect_fields(1),_matches_pattern(1),execute(2)  # Rule-based text2fraq without LLM (fallback for offline use)...
@@ -197,27 +210,19 @@ The executor build...
     to_asyncapi(schema;title;version)
     to_proto(schema;package;message_name)
     to_json_schema(schema;title)
-  fraq/core.py:
-    e: FraqNode,FieldDef,FraqSchema,FraqCursor,_vec_add,_vec_scale,_vec_norm,_vec_hash
-    FraqNode: zoom(1),children(1),_child(1),to_dict(1),__repr__(0)  # A single point in the infinite fractal data space.
-
-Paramete...
-    FieldDef:  # One field in a FraqSchema...
-    FraqSchema: add_field(4),record(1),records(3),_cast(1)  # Typed projection of a fractal into structured records.
-
-A sc...
-    FraqCursor: advance(1),back(0),reset(0),snapshot(0)  # Stateful walk through the fractal.
-
-The cursor remembers the...
-    _vec_add(a;b)
-    _vec_scale(v;s)
-    _vec_norm(v)
-    _vec_hash(v;seed)
-  examples/database/sqlite_examples.py:
-    e: example_1_generate_to_sqlite,example_2_sql_adapter,example_3_hybrid_data
-    example_1_generate_to_sqlite()
-    example_2_sql_adapter()
-    example_3_hybrid_data()
+  examples/etl/pipeline_examples.py:
+    e: example_1_extract,example_2_transform,example_3_validate,example_4_pipeline
+    example_1_extract()
+    example_2_transform()
+    example_3_validate()
+    example_4_pipeline()
+  examples/basic/applications.py:
+    e: example_1_iot_sensors,example_2_erp_invoices,example_3_ai_training,example_4_devops_metrics,example_5_finance
+    example_1_iot_sensors()
+    example_2_erp_invoices()
+    example_3_ai_training()
+    example_4_devops_metrics()
+    example_5_finance()
   examples/fullstack-docker/websocket/main.py:
     e: ws_stream,ws_files,health
     ws_stream(websocket)
@@ -233,20 +238,11 @@ The cursor remembers the...
   fraq/adapters/network.py:
     e: NetworkAdapter
     NetworkAdapter(BaseAdapter): __init__(4),load_root(1),scan_async(2),_plan_scan(2),_parse_result(5),_check_port_io(2),_identify_service(1),stream_devices(1),search(0),stream(1),save(3)  # Async adapter for scanning local network devices and service...
-  examples/etl/pipeline_examples.py:
-    e: example_1_multi_source,example_2_transformation,example_3_validation,example_4_pipeline
-    example_1_multi_source()
-    example_2_transformation()
-    example_3_validation()
-    example_4_pipeline()
-  examples/basic/async_streaming.py:
-    e: example_basic_stream,example_typed_stream,example_async_query,example_fastapi_sse_pattern,example_kafka_producer_pattern,main
-    example_basic_stream()
-    example_typed_stream()
-    example_async_query()
-    example_fastapi_sse_pattern()
-    example_kafka_producer_pattern()
-    main()
+  examples/ai_ml/training_data.py:
+    e: example_1_classification,example_2_regression,example_3_timeseries
+    example_1_classification()
+    example_2_regression()
+    example_3_timeseries()
   fraq/text2fraq/llm_client.py:
     e: LiteLLMClient
     LiteLLMClient: __init__(1),complete(1)  # LiteLLM client for text completion...
@@ -290,15 +286,16 @@ The cursor remembers the...
     example_fractal_coordinates()
     example_streaming_comparison()
     main()
-  examples/basic/applications.py:
-    e: example_iot_sensor_network,example_erp_invoices,example_ai_training_data,example_devops_load_test,example_finance_leasing,example_legal_clauses,example_perlin_organic
-    example_iot_sensor_network()
-    example_erp_invoices()
-    example_ai_training_data()
-    example_devops_load_test()
-    example_finance_leasing()
-    example_legal_clauses()
-    example_perlin_organic()
+  examples/iot/sensor_examples.py:
+    e: example_1_sensors,example_2_mqtt,example_3_streaming
+    example_1_sensors()
+    example_2_mqtt()
+    example_3_streaming()
+  examples/database/sqlite_examples.py:
+    e: example_1_sqlite,example_2_hybrid,example_3_schema_save
+    example_1_sqlite()
+    example_2_hybrid()
+    example_3_schema_save()
   fraq/adapters/registry.py:
     e: get_adapter
     get_adapter(source)
@@ -311,9 +308,6 @@ The cursor remembers the...
   fraq/adapters/sensor_adapter.py:
     e: SensorAdapter
     SensorAdapter(BaseAdapter): __init__(4),load_root(1),save(3),stream(3)  # Simulate or consume live sensor data as fractal streams...
-  fraq/__init__.py:
-    e: __getattr__
-    __getattr__(name)
   fraq/generators.py:
     e: HashGenerator,FibonacciGenerator,PerlinGenerator,SensorStreamGenerator
     HashGenerator: __init__(3),__call__(1)  # Deterministic pseudo-random values via SHA-256.
@@ -326,10 +320,11 @@ Parameters
 
 Produces dict paylo...
   examples/streaming/sse_examples.py:
-    e: example_1_sse_generator,example_2_websocket_template,example_3_async_stream
-    example_1_sse_generator()
-    example_2_websocket_template()
-    example_3_async_stream()
+    e: example_1_sse,example_2_websocket,example_3_streaming,example_4_kafka
+    example_1_sse()
+    example_2_websocket()
+    example_3_streaming()
+    example_4_kafka()
   examples/fastapi-docker/main.py:
     e: root,health,explore,files_search,files_stat
     root()
@@ -337,18 +332,20 @@ Produces dict paylo...
     explore(depth;dims;format)
     files_search(path;ext;limit;sort)
     files_stat(file_path)
+  examples/basic/async_streaming.py:
+    e: example_1_basic,example_2_typed,example_3_kafka,main
+    example_1_basic()
+    example_2_typed()
+    example_3_kafka()
+    main()
   examples/basic/query_examples.py:
-    e: example_disk_json,example_disk_csv,example_disk_yaml,example_http_api,example_sql_query,example_sql_custom_mapping,example_sensor_stream,example_sensor_to_formats,example_hybrid_merge,example_oneliners
-    example_disk_json()
-    example_disk_csv()
-    example_disk_yaml()
-    example_http_api()
-    example_sql_query()
-    example_sql_custom_mapping()
-    example_sensor_stream()
-    example_sensor_to_formats()
-    example_hybrid_merge()
-    example_oneliners()
+    e: example_1_basic_query,example_2_json_output,example_3_csv_output,example_4_streaming,example_5_schema,example_6_custom_schema
+    example_1_basic_query()
+    example_2_json_output()
+    example_3_csv_output()
+    example_4_streaming()
+    example_5_schema()
+    example_6_custom_schema()
   fraq/text2fraq/shortcuts.py:
     e: text2filesearch,text2query,text2fraq
     text2filesearch(text;base_path;fmt)
@@ -374,15 +371,15 @@ Produces dict paylo...
   fraq/text2fraq/config.py:
     e: Text2FraqConfig
     Text2FraqConfig: from_env(0)  # Configuration for text2fraq...
+  fraq/adapters/base.py:
+    e: BaseAdapter
+    BaseAdapter(ABC): load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter must implement...
   examples/v028/new_features.py:
     e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
     example_model_router()
     example_fraq_session()
     example_fastapi_server()
     example_combined_usage()
-  fraq/adapters/base.py:
-    e: BaseAdapter
-    BaseAdapter(ABC): load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter must implement...
   fraq/types.py:
   examples/websocket-docker/run.sh:
   examples/cli-docker/run.sh:
@@ -392,5 +389,6 @@ Produces dict paylo...
   fraq/text2fraq/__init__.py:
   fraq/adapters/__init__.py:
   project.sh:
+  examples/nlp_examples.sh:
   examples/bash_examples.sh:
   examples/cli-docker/bash_examples.sh:

@@ -1,9 +1,14 @@
 flowchart TD
-    examples_basic["examples.basic<br/>32 funcs"]
+    examples_ai_ml["examples.ai_ml<br/>3 funcs"]
+    examples_basic["examples.basic<br/>24 funcs"]
+    examples_database["examples.database<br/>3 funcs"]
+    examples_etl["examples.etl<br/>4 funcs"]
     examples_fastapi_docker["examples.fastapi-docker<br/>23 funcs"]
-    examples_streaming["examples.streaming<br/>3 funcs"]
+    examples_iot["examples.iot<br/>3 funcs"]
+    examples_streaming["examples.streaming<br/>4 funcs"]
     examples_text2fraq["examples.text2fraq<br/>27 funcs"]
     examples_v028["examples.v028<br/>4 funcs"]
+    fraq["fraq<br/>4 funcs"]
     fraq_adapters["fraq.adapters<br/>54 funcs"]
     fraq_cli["fraq.cli<br/>18 funcs"]
     fraq_core["fraq.core<br/>17 funcs"]
@@ -14,21 +19,23 @@ flowchart TD
     fraq_server["fraq.server<br/>7 funcs"]
     fraq_streaming["fraq.streaming<br/>5 funcs"]
     fraq_text2fraq["fraq.text2fraq<br/>46 funcs"]
+    examples_basic ==>|11| fraq
     examples_text2fraq ==>|10| fraq_schema_export
     examples_text2fraq ==>|7| fraq_text2fraq
     fraq_cli ==>|6| fraq_formats
     fraq_adapters ==>|6| fraq_formats
+    examples_etl ==>|5| fraq
     examples_fastapi_docker ==>|4| fraq_formats
-    examples_basic ==>|4| fraq_streaming
-    examples_basic ==>|4| fraq_query
-    examples_basic -->|2| fraq_schema_export
-    examples_basic -->|2| fraq_formats
-    fraq_generators -->|1| fraq_core
+    examples_iot -->|3| fraq
+    examples_streaming -->|3| fraq
+    examples_ai_ml -->|2| fraq
+    examples_database -->|2| fraq
     fraq_cli -->|1| fraq_text2fraq
-    examples_streaming -->|1| fraq_streaming
+    fraq_generators -->|1| fraq_core
     fraq_query -->|1| fraq_formats
     examples_fastapi_docker -->|1| fraq_text2fraq
     examples_fastapi_docker -->|1| fraq_streaming
+    examples_basic -->|1| fraq_streaming
     fraq_text2fraq -->|1| fraq_formats
     examples_v028 -->|1| fraq_text2fraq
     fraq_server -->|1| fraq_text2fraq

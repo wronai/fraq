@@ -1,122 +1,102 @@
 #!/usr/bin/env python3
-"""Testing examples - mock data and test fixtures with fraq."""
+"""Testing examples - UPROSZCZONE z nowym API fraq."""
 
 from __future__ import annotations
 
-import json
-from datetime import datetime, timedelta
-from typing import List, Dict, Any
 from dataclasses import dataclass
+from fraq import generate
 
-from fraq import FraqSchema, FraqNode
+
+@dataclass
+class User:
+    user_id: str
+    name: str
+    email: str
+    age: int
+    active: bool
 
 
-def example_1_unit_test_fixtures():
-    """Generate fixtures for unit testing."""
+def example_1_fixtures():
+    """Unit test fixtures - UPROSZCZONE."""
     print("=" * 60)
-    print("1. UNIT TEST FIXTURES")
+    print("1. UNIT TEST FIXTURES (UPROSZCZONE)")
     print("=" * 60)
 
-    @dataclass
-    class User:
-        user_id: str
-        name: str
-        email: str
-        age: int
-        active: bool
+    # UPROSZCZONE: generate() zamiast ręcznego tworzenia
+    records = generate({
+        'user_id': 'str',
+        'name': 'str',
+        'email': 'str',
+        'age': 'int:18-70',
+        'active': 'bool',
+    }, count=5)
 
-    def generate_users(count: int = 5) -> List[User]:
-        root = FraqNode(position=(0.0, 0.0, 0.0))
-        schema = FraqSchema(root=root)
-        schema.add_field("user_id", "float", transform=lambda v: f"USR-{int(float(v)*10000):06d}")
-        schema.add_field("name", "float", transform=lambda v: f"User_{int(float(v)*1000):03d}")
-        schema.add_field("email", "float", transform=lambda v: f"user{int(float(v)*1000)}@test.com")
-        schema.add_field("age", "float", transform=lambda v: int(18 + float(v) * 50))
-        schema.add_field("active", "bool")
+    users = [User(**r) for r in records]
 
-        users = []
-        for i, record in enumerate(schema.records(depth=2, branching=5)):
-            if i >= count:
-                break
-            users.append(User(**record))
-        return users
+    print(f"Generated {len(users)} test users")
+    for u in users[:3]:
+        status = "✓" if u.active else "✗"
+        print(f"  {status} {u.user_id}: {u.name}, {u.age}y")
 
-    test_users = generate_users(5)
-
-    print(f"Generated {len(test_users)} test users")
-    for user in test_users[:3]:
-        status = "✓" if user.active else "✗"
-        print(f"  {status} {user.user_id}: {user.name}, {user.age}y")
-
-    assert len(test_users) == 5
-    assert all(isinstance(u.age, int) for u in test_users)
+    # Assertions
+    assert len(users) == 5
+    assert all(isinstance(u.age, int) for u in users)
     print("\n✓ All assertions passed")
 
 
 def example_2_mock_api():
-    """Generate mock API responses."""
+    """Mock API - UPROSZCZONE."""
     print("\n" + "=" * 60)
-    print("2. MOCK API RESPONSES")
+    print("2. MOCK API RESPONSES (UPROSZCZONE)")
     print("=" * 60)
 
-    def mock_products(count: int = 3) -> Dict[str, Any]:
-        root = FraqNode(position=(0.0, 0.0, 0.0))
-        schema = FraqSchema(root=root)
-        schema.add_field("product_id", "float", transform=lambda v: f"PROD-{int(float(v)*10000):06d}")
-        schema.add_field("name", "float", transform=lambda v: f"Product {int(float(v)*1000)}")
-        schema.add_field("price", "float", transform=lambda v: round(9.99 + float(v) * 990, 2))
-        schema.add_field("in_stock", "bool")
+    products = generate({
+        'product_id': 'str',
+        'name': 'str',
+        'price': 'float:10-1000',
+        'in_stock': 'bool',
+    }, count=3)
 
-        products = []
-        for i, record in enumerate(schema.records(depth=2, branching=4)):
-            if i >= count:
-                break
-            products.append(record)
+    response = {
+        "status": "success",
+        "count": len(products),
+        "data": products,
+    }
 
-        return {"status": "success", "count": len(products), "data": products}
-
-    response = mock_products(3)
-    print(f"Mock API response:")
-    print(f"  Status: {response['status']}")
-    print(f"  Products: {len(response['data'])}")
-    for p in response['data'][:2]:
+    print(f"Mock response: {response['status']}, {response['count']} products")
+    for p in products[:2]:
         stock = "✓" if p['in_stock'] else "✗"
-        print(f"    {stock} {p['name']}: ${p['price']}")
+        print(f"  {stock} {p['name']}: ${p['price']:.2f}")
 
 
 def example_3_load_testing():
-    """Generate data for load testing."""
+    """Load testing - UPROSZCZONE."""
     print("\n" + "=" * 60)
-    print("3. LOAD TESTING DATA")
+    print("3. LOAD TESTING (UPROSZCZONE)")
     print("=" * 60)
 
-    root = FraqNode(position=(0.0, 0.0, 0.0))
-    schema = FraqSchema(root=root)
-    schema.add_field("request_id", "float", transform=lambda v: f"REQ-{int(float(v)*1000000):010d}")
-    schema.add_field("user_id", "float", transform=lambda v: f"USR-{int(float(v)*10000):06d}")
-    schema.add_field("endpoint", "float", transform=lambda v: ["/api/users", "/api/products", "/api/orders"][int(float(v) * 3)])
-    schema.add_field("payload_size", "float", transform=lambda v: int(100 + float(v) * 9900))
+    requests = generate({
+        'request_id': 'str',
+        'endpoint': 'str',
+        'method': 'str',
+        'payload_size': 'int:100-10000',
+    }, count=100)
 
-    payloads = []
-    for i, record in enumerate(schema.records(depth=4, branching=8)):
-        if i >= 1000:
-            break
-        payloads.append(record)
-
+    # Stats
     by_endpoint = {}
-    for p in payloads:
-        ep = p["endpoint"]
+    for r in requests:
+        ep = r['endpoint']
         by_endpoint[ep] = by_endpoint.get(ep, 0) + 1
 
-    print(f"Generated {len(payloads)} load test payloads")
-    for ep, count in sorted(by_endpoint.items())[:3]:
-        print(f"  {ep}: {count} ({count/len(payloads)*100:.1f}%)")
+    print(f"Generated {len(requests)} load test requests")
+    for ep, count in sorted(by_endpoint.items(), key=lambda x: -x[1])[:3]:
+        print(f"  {ep}: {count} ({count/len(requests)*100:.1f}%)")
 
 
 if __name__ == "__main__":
-    example_1_unit_test_fixtures()
+    example_1_fixtures()
     example_2_mock_api()
     example_3_load_testing()
     print("\n" + "=" * 60)
-    print("Done!")
+    print("Done! Testing w wersji uproszczonej")
     print("=" * 60)

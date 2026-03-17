@@ -1,119 +1,93 @@
 #!/usr/bin/env python3
-"""Database examples - SQL integration with fraq."""
+"""Database examples - UPROSZCZONE z nowym API fraq."""
 
 from __future__ import annotations
 
 import sqlite3
-from datetime import datetime
-from pathlib import Path
-
-from fraq import FraqSchema, FraqNode
-from fraq.adapters.sql_adapter import SQLAdapter
+from fraq import generate, FraqSchema
 
 
-def example_1_generate_to_sqlite():
-    """Generate fractal sensor data and store in SQLite."""
+def example_1_sqlite():
+    """Generuj dane do SQLite - UPROSZCZONE."""
     print("=" * 60)
-    print("1. GENERATE FRACTAL DATA → SQLITE")
+    print("1. GENERUJ → SQLITE (UPROSZCZONE)")
     print("=" * 60)
+
+    # UPROSZCZONE: generate() zamiast root + schema + records
+    records = generate({
+        'temperature': 'float:10-40',
+        'humidity': 'float:0-100',
+        'pressure': 'float:980-1060',
+        'sensor_id': 'str',
+    }, count=50)
 
     conn = sqlite3.connect(":memory:")
     conn.execute("""
-        CREATE TABLE sensor_readings (
-            id INTEGER PRIMARY KEY,
-            timestamp TEXT,
-            temperature REAL,
-            humidity REAL,
-            pressure REAL,
-            sensor_id TEXT,
-            fraq_seed INTEGER
-        )
+        CREATE TABLE sensors (temp REAL, humidity REAL, pressure REAL, sensor_id TEXT)
     """)
 
-    # Generate fractal data - use float type for all fields with transforms
-    root = FraqNode(position=(0.0, 0.0, 0.0))
-    schema = FraqSchema(root=root)
-    schema.add_field("temperature", "float", transform=lambda v: round(float(v) * 40 - 10, 2))
-    schema.add_field("humidity", "float", transform=lambda v: round(float(v) * 100, 2))
-    schema.add_field("pressure", "float", transform=lambda v: round(980 + float(v) * 80, 2))
-    schema.add_field("sensor_id", "float", transform=lambda v: f"sensor_{int(float(v) * 1000):04d}")
-
-    now = datetime.now()
-    for i, record in enumerate(schema.records(depth=3, branching=4)):
-        if i >= 50:
-            break
+    for r in records:
         conn.execute(
-            "INSERT INTO sensor_readings (timestamp, temperature, humidity, pressure, sensor_id, fraq_seed) VALUES (?, ?, ?, ?, ?, ?)",
-            (now.isoformat(), record["temperature"], record["humidity"], record["pressure"], record["sensor_id"], i)
+            "INSERT INTO sensors VALUES (?, ?, ?, ?)",
+            (r['temperature'], r['humidity'], r['pressure'], r['sensor_id'])
         )
     conn.commit()
 
-    cursor = conn.execute("SELECT * FROM sensor_readings LIMIT 5")
-    rows = cursor.fetchall()
-
-    print(f"Inserted 50 sensor readings into SQLite")
-    print("Sample records:")
-    for row in rows:
-        print(f"  {row[5]}: {row[2]}°C, {row[3]}%, {row[4]}hPa")
-
+    cursor = conn.execute("SELECT * FROM sensors LIMIT 5")
+    print(f"Wstawiono {len(records)} rekordów")
+    for row in cursor.fetchall():
+        print(f"  {row[3]}: {row[0]}°C, {row[1]}%, {row[2]}hPa")
     conn.close()
 
 
-def example_2_sql_adapter():
-    """Use SQL adapter to work with database."""
+def example_2_hybrid():
+    """Hybrid: real + fractal - UPROSZCZONE."""
     print("\n" + "=" * 60)
-    print("2. SQL ADAPTER")
+    print("2. HYBRID: REAL + FRACTAL")
     print("=" * 60)
 
-    adapter = SQLAdapter(table="invoices")
-    rows = [
-        {"invoice_id": "INV-001", "amount": 1234.56, "paid": 1},
-        {"invoice_id": "INV-002", "amount": 5678.90, "paid": 0},
+    customers = [
+        {"customer_id": "C001", "name": "Acme Corp"},
+        {"customer_id": "C002", "name": "TechStart"},
     ]
-    node = adapter.load_root(rows=rows)
 
-    print(f"Loaded {len(rows)} rows via SQL adapter")
-    print(f"Node seed: {node.seed}")
+    # UPROSZCZONE: generate() dla danych fraktalnych
+    transactions = generate({
+        'tx_id': 'str',
+        'amount': 'float:100-10000',
+        'risk': 'float:0-1',
+    }, count=6)
+
+    print(f"Klienci: {len(customers)}")
+    for i, cust in enumerate(customers):
+        txs = transactions[i*3:(i+1)*3]
+        print(f"\n  {cust['name']}:")
+        for tx in txs:
+            print(f"    {tx['tx_id']}: ${tx['amount']:.2f} (risk: {tx['risk']:.2f})")
 
 
-def example_3_hybrid_data():
-    """Combine real DB data with fractal-generated data."""
+def example_3_schema_save():
+    """Schema + save - UPROSZCZONE."""
     print("\n" + "=" * 60)
-    print("3. HYBRID: REAL DATA + FRACTAL DATA")
+    print("3. SCHEMA → SQLITE")
     print("=" * 60)
 
-    real_customers = [
-        {"customer_id": "C001", "name": "Acme Corp", "region": "EU"},
-        {"customer_id": "C002", "name": "TechStart Inc", "region": "US"},
-    ]
+    # UPROSZCZONE: FraqSchema() bez root
+    schema = FraqSchema()
+    schema.add_field('device_id', 'str')
+    schema.add_field('value', 'float')
+    schema.add_field('status', 'float', transform=lambda v: 'OK' if float(v) > 0.5 else 'FAIL')
 
-    root = FraqNode(position=(0.0, 0.0, 0.0))
-    schema = FraqSchema(root=root)
-    schema.add_field("transaction_id", "float", transform=lambda v: f"TX-{int(float(v) * 100000):06d}")
-    schema.add_field("amount", "float", transform=lambda v: round(float(v) * 10000, 2))
-    schema.add_field("risk_score", "float", transform=lambda v: round(float(v), 4))
-
-    print(f"Real customers: {len(real_customers)}")
-    for customer in real_customers:
-        transactions = []
-        for record in schema.records(depth=1, branching=3):
-            if len(transactions) >= 3:
-                break
-            transactions.append({
-                **record,
-                "customer_id": customer["customer_id"],
-                "customer_name": customer["name"],
-            })
-
-        print(f"\n  {customer['name']}:")
-        for tx in transactions[:2]:
-            print(f"    {tx['transaction_id']}: ${tx['amount']} (risk: {tx['risk_score']})")
+    records = list(schema.records(count=10))
+    print(f"Generated {len(records)} records via schema")
+    for r in records[:3]:
+        print(f"  {r}")
 
 
 if __name__ == "__main__":
-    example_1_generate_to_sqlite()
-    example_2_sql_adapter()
-    example_3_hybrid_data()
+    example_1_sqlite()
+    example_2_hybrid()
+    example_3_schema_save()
     print("\n" + "=" * 60)
-    print("Done!")
+    print("Done! Nowe uproszczone API fraq")
     print("=" * 60)
