@@ -13,15 +13,6 @@ flowchart TD
         examples__example_fastapi_sse_pattern["example_fastapi_sse_pattern"]
         examples__example_kafka_producer_pattern["example_kafka_producer_pattern"]
         examples__basic__async_streaming__main["main"]
-        examples__example_fastapi_app["example_fastapi_app"]
-        examples__example_streamlit_app["example_streamlit_app"]
-        examples__example_flask_app["example_flask_app"]
-        examples__example_cli_chat["example_cli_chat"]
-        examples__example_websocket_server["example_websocket_server"]
-        examples__example_kafka_producer["example_kafka_producer"]
-        examples__example_grpc_service["example_grpc_service"]
-        examples__example_jupyter_notebook["example_jupyter_notebook"]
-        examples__example_celery_task["example_celery_task"]
         examples__basic__query_examples__example_disk_json["example_disk_json"]
         examples__basic__query_examples__example_disk_csv["example_disk_csv"]
         examples__basic__query_examples__example_disk_yaml["example_disk_yaml"]
@@ -32,6 +23,15 @@ flowchart TD
         examples__example_sensor_to_formats["example_sensor_to_formats"]
         examples__example_hybrid_merge["example_hybrid_merge"]
         examples__basic__query_examples__example_oneliners["example_oneliners"]
+        examples__example_fastapi_app["example_fastapi_app"]
+        examples__example_streamlit_app["example_streamlit_app"]
+        examples__example_flask_app["example_flask_app"]
+        examples__example_cli_chat["example_cli_chat"]
+        examples__example_websocket_server["example_websocket_server"]
+        examples__example_kafka_producer["example_kafka_producer"]
+        examples__example_grpc_service["example_grpc_service"]
+        examples__example_jupyter_notebook["example_jupyter_notebook"]
+        examples__example_celery_task["example_celery_task"]
     end
     subgraph examples_cli_docker
         examples__cli_docker__run__run_in_docker["run_in_docker"]
@@ -114,7 +114,7 @@ flowchart TD
         examples__example_file_search_adapter_direct["example_file_search_adapter_direct"]
         examples__example_llm_file_intent["example_llm_file_intent"]
     end
-    subgraph examples_v030
+    subgraph examples_v028
         examples__example_model_router["example_model_router"]
         examples__example_fraq_session["example_fraq_session"]
         examples__example_fastapi_server["example_fastapi_server"]
@@ -144,6 +144,11 @@ flowchart TD
         fraq___dict_to_node["_dict_to_node"]
         fraq__load_root["load_root"]
         fraq__adapters__http_adapter__HTTPAdapter__save["save"]
+        fraq__adapters__sql_adapter__SQLAdapter____init__["__init__"]
+        fraq__adapters__sql_adapter__SQLAdapter__load_root["load_root"]
+        fraq__adapters__sql_adapter__SQLAdapter__save["save"]
+        fraq__generate_sql_function["generate_sql_function"]
+        fraq___default_row_to_node["_default_row_to_node"]
         fraq____init__["__init__"]
         fraq___get_session["_get_session"]
         fraq__load_root["load_root"]
@@ -156,11 +161,6 @@ flowchart TD
         fraq__search["search"]
         fraq__stream["stream"]
         fraq__save["save"]
-        fraq__adapters__sql_adapter__SQLAdapter____init__["__init__"]
-        fraq__adapters__sql_adapter__SQLAdapter__load_root["load_root"]
-        fraq__adapters__sql_adapter__SQLAdapter__save["save"]
-        fraq__generate_sql_function["generate_sql_function"]
-        fraq___default_row_to_node["_default_row_to_node"]
         fraq____init__["__init__"]
         fraq__load_root["load_root"]
         fraq__save["save"]
@@ -296,14 +296,6 @@ flowchart TD
     end
     subgraph fraq_text2fraq
         fraq__text2fraq__config__Text2FraqConfig__from_env["from_env"]
-        fraq__text2fraq__parser_rules___word_match["_word_match"]
-        fraq__text2fraq__parser_rules___detect_format["_detect_format"]
-        fraq__text2fraq__parser_rules___detect_depth["_detect_depth"]
-        fraq__text2fraq__parser_rules___detect_limit["_detect_limit"]
-        fraq__parse["parse"]
-        fraq___detect_fields["_detect_fields"]
-        fraq___matches_pattern["_matches_pattern"]
-        fraq__execute["execute"]
         fraq____init__["__init__"]
         fraq___detect_path["_detect_path"]
         fraq___should_exclude["_should_exclude"]
@@ -315,6 +307,14 @@ flowchart TD
         fraq___detect_sort_by["_detect_sort_by"]
         fraq__search["search"]
         fraq__format_results["format_results"]
+        fraq__text2fraq__parser_rules___word_match["_word_match"]
+        fraq__text2fraq__parser_rules___detect_format["_detect_format"]
+        fraq__text2fraq__parser_rules___detect_depth["_detect_depth"]
+        fraq__text2fraq__parser_rules___detect_limit["_detect_limit"]
+        fraq__parse["parse"]
+        fraq___detect_fields["_detect_fields"]
+        fraq___matches_pattern["_matches_pattern"]
+        fraq__execute["execute"]
         fraq____post_init__["__post_init__"]
         fraq__text2fraq__session__FraqSession__ask["ask"]
         fraq___is_followup["_is_followup"]
@@ -327,6 +327,8 @@ flowchart TD
         fraq__text2fraq__router__ModelRouter__route["route"]
         fraq___estimate_complexity("_estimate_complexity CC=9")
         fraq__get_config_for_model["get_config_for_model"]
+        fraq__to_fraq_query["to_fraq_query"]
+        fraq__text2fraq__models__LLMClient__complete["complete"]
         fraq__text2fraq__parser_llm__Text2Fraq____init__["__init__"]
         fraq__text2fraq__parser_llm__Text2Fraq__parse["parse"]
         fraq___parse_response["_parse_response"]
@@ -334,8 +336,6 @@ flowchart TD
         fraq___fallback_parse["_fallback_parse"]
         fraq___fallback_fields["_fallback_fields"]
         fraq__text2fraq__parser_llm__Text2Fraq__execute["execute"]
-        fraq__to_fraq_query["to_fraq_query"]
-        fraq__text2fraq__models__LLMClient__complete["complete"]
         fraq__text2fraq__shortcuts__text2filesearch["text2filesearch"]
         fraq__text2fraq__shortcuts__text2query["text2query"]
         fraq__text2fraq__shortcuts__text2fraq["text2fraq"]
@@ -441,7 +441,6 @@ flowchart TD
     examples__fastapi_docker__run__main --> examples__fastapi_docker__run__test_api
     examples__fastapi_docker__run__main --> examples__fastapi_docker__run__run_docker
     examples__fastapi_docker__run__main --> examples__fastapi_docker__run__run_local
-    fraq__query__FraqExecutor__execute --> fraq__formats__FormatRegistry__serialize
     examples__fastapi_docker__api_server__explore --> fraq__formats__FormatRegistry__serialize
     examples__fastapi_docker__api_server__stream --> fraq__formats__FormatRegistry__serialize
     examples__schema_records --> fraq__formats__FormatRegistry__serialize
@@ -463,19 +462,20 @@ flowchart TD
     examples__basic__query_examples__example_disk_yaml --> fraq__query__query
     examples__example_sensor_to_formats --> fraq__formats__FormatRegistry__serialize
     examples__basic__query_examples__example_oneliners --> fraq__query__query
+    fraq__format_results --> fraq__formats__FormatRegistry__serialize
     fraq__parse --> fraq__text2fraq__parser_rules___detect_depth
     fraq__parse --> fraq__text2fraq__parser_rules___detect_format
-    fraq__parse --> fraq__text2fraq__parser_rules___detect_limit
+    fraq__parse --> fraq___detect_limit
     fraq___matches_pattern --> fraq__text2fraq__parser_rules___word_match
-    fraq__format_results --> fraq__formats__FormatRegistry__serialize
     fraq____post_init__ --> fraq__text2fraq__config__Text2FraqConfig__from_env
+    fraq__query__FraqExecutor__execute --> fraq__formats__FormatRegistry__serialize
+    examples__example_combined_usage --> fraq__text2fraq__config__Text2FraqConfig__from_env
     fraq__text2fraq__parser_llm__Text2Fraq____init__ --> fraq__text2fraq__config__Text2FraqConfig__from_env
     fraq___fallback_parse --> fraq__text2fraq__parser_rules___detect_depth
     fraq___fallback_parse --> fraq__text2fraq__parser_rules___detect_format
-    fraq___fallback_parse --> fraq__text2fraq__parser_rules___detect_limit
+    fraq___fallback_parse --> fraq___detect_limit
     fraq___fallback_fields --> fraq__text2fraq__parser_rules___word_match
     fraq__adapters__file_adapter__FileAdapter__save --> fraq__formats__FormatRegistry__serialize
-    examples__example_combined_usage --> fraq__text2fraq__config__Text2FraqConfig__from_env
     fraq__load_root --> fraq___dict_to_node
     fraq__adapters__http_adapter__HTTPAdapter__save --> fraq__formats__FormatRegistry__serialize
     fraq__save --> fraq__formats__FormatRegistry__serialize
@@ -485,4 +485,4 @@ flowchart TD
 
     classDef highCC fill:#ff6b6b,stroke:#c92a2a,color:#fff
     classDef medCC fill:#ffd43b,stroke:#f08c00,color:#000
-    class fraq__formats___prepare,fraq__formats___mp_encode,fraq__cli__cmd_network_scan,fraq__cli___dispatch_command,examples__example_pdf_search_with_llm,fraq__query__FraqFilter__matches,fraq__query__FraqExecutor___iter_records,fraq___collect_files_filtered,fraq___estimate_complexity,fraq__crawl_async,fraq__stream_pages,fraq__load_root,fraq__stream,fraq__server__ws_stream medCC
+    class fraq__formats___prepare,fraq__formats___mp_encode,fraq__cli__cmd_network_scan,fraq__cli___dispatch_command,examples__example_pdf_search_with_llm,fraq___collect_files_filtered,fraq__query__FraqFilter__matches,fraq__query__FraqExecutor___iter_records,fraq___estimate_complexity,fraq__crawl_async,fraq__stream_pages,fraq__load_root,fraq__stream,fraq__server__ws_stream medCC

@@ -351,18 +351,18 @@ DATA_TYPES (by cross-function usage) [223 annotated, 0 inferred / 308 functions]
   str, Any             consumed:4   produced:19 
   Vector               consumed:14  produced:2    !! HUB-TYPE → split interface
   FraqQuery            consumed:6   produced:7  
-  FraqSchema           consumed:8   produced:3  
   argparse.Namespace   consumed:10  produced:1    !! HUB-TYPE → split interface
+  FraqSchema           consumed:8   produced:3  
   bool                 consumed:5   produced:6  
   dict[str, Any]       consumed:2   produced:7  
   WebSocket            consumed:9   produced:0    input-heavy (read-only flow)
   Iterator[Dict[str, Any]] consumed:0   produced:8    output-heavy
-  dict                 consumed:0   produced:6    output-heavy
   ParsedQuery          consumed:1   produced:5    output-heavy
+  dict                 consumed:0   produced:6    output-heavy
   str | None           consumed:5   produced:0    input-heavy (read-only flow)
   bytes                consumed:0   produced:4    narrow scope
-  AsyncIterator[Dict[str, Any]] consumed:0   produced:4    narrow scope
   str | list[dict[str, Any]] consumed:0   produced:4    narrow scope
+  AsyncIterator[Dict[str, Any]] consumed:0   produced:4    narrow scope
   Text2FraqConfig      consumed:2   produced:1    narrow scope
 
   HUB TYPES (consumed ≥10):
@@ -381,8 +381,8 @@ DATA_TYPES (by cross-function usage) [223 annotated, 0 inferred / 308 functions]
 
 SIDE_EFFECTS:
   IO:        ws_stream, ws_files, _to_json, _to_jsonl, cmd_explore, cmd_stream, cmd_schema, cmd_files_search, cmd_files_list, _print_stat
-  Mutation:  AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, _to_binary, _simple_yaml, _mp_encode, HashGenerator.__init__, FibonacciGenerator.__init__, PerlinGenerator.__init__, SensorStreamGenerator.__init__
-  Pure:      health, async_query, async_stream, FormatRegistry.register, FormatRegistry.get, FormatRegistry.available, FormatRegistry.serialize, _to_csv, _to_yaml, _to_msgpack_lite
+  Mutation:  _to_binary, _simple_yaml, _mp_encode, AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, HashGenerator.__init__, FibonacciGenerator.__init__, PerlinGenerator.__init__, SensorStreamGenerator.__init__
+  Pure:      health, FormatRegistry.register, FormatRegistry.get, FormatRegistry.available, FormatRegistry.serialize, _to_csv, _to_yaml, _to_msgpack_lite, _prepare, _encode_value
 
   PIPELINE PURITY:
     Fraq            ██░░ 57% pure

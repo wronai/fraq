@@ -18,7 +18,7 @@ M[53]:
   examples/text2fraq/nlp2cmd_integration.py,223
   examples/text2fraq/text2fraq_examples.py,258
   examples/text2fraq/text2fraq_files.py,275
-  examples/v030/new_features_v030.py,144
+  examples/v028/new_features_v030.py,144
   examples/websocket-docker/main.py,104
   examples/websocket-docker/run.sh,62
   fraq/__init__.py,149
@@ -202,13 +202,13 @@ The cursor remembers the...
     ws_stream(websocket)
     ws_files(websocket)
     health()
-  fraq/text2fraq/parser_llm.py:
-    e: Text2Fraq
-    Text2Fraq: __init__(2),parse(1),_parse_response(1),_extract_structured_response(1),_fallback_parse(1),_fallback_fields(1),execute(2)  # Natural language to fractal query converter (LLM-based)...
   fraq/text2fraq/models.py:
     e: ParsedQuery,LLMClient
     ParsedQuery: to_fraq_query(0)  # Parsed natural language query...
     LLMClient(Protocol): complete(1)  # Protocol for LLM clients...
+  fraq/text2fraq/parser_llm.py:
+    e: Text2Fraq
+    Text2Fraq: __init__(2),parse(1),_parse_response(1),_extract_structured_response(1),_fallback_parse(1),_fallback_fields(1),execute(2)  # Natural language to fractal query converter (LLM-based)...
   fraq/adapters/network.py:
     e: NetworkAdapter
     NetworkAdapter(BaseAdapter): __init__(4),load_root(1),scan_async(2),_plan_scan(2),_parse_result(5),_check_port_io(2),_identify_service(1),stream_devices(1),search(0),stream(1),save(3)  # Async adapter for scanning local network devices and service...
@@ -342,15 +342,15 @@ Produces dict paylo...
   fraq/text2fraq/config.py:
     e: Text2FraqConfig
     Text2FraqConfig: from_env(0)  # Configuration for text2fraq...
-  fraq/adapters/base.py:
-    e: BaseAdapter
-    BaseAdapter(ABC): load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter must implement...
-  examples/v030/new_features_v030.py:
+  examples/v028/new_features_v030.py:
     e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
     example_model_router()
     example_fraq_session()
     example_fastapi_server()
     example_combined_usage()
+  fraq/adapters/base.py:
+    e: BaseAdapter
+    BaseAdapter(ABC): load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter must implement...
   fraq/types.py:
   examples/websocket-docker/run.sh:
   examples/cli-docker/run.sh:

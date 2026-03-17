@@ -26,7 +26,7 @@ LAYERS:
   │ query                      220L  4C   12m  CC=9      ←1
   │ server                     217L  3C    7m  CC=8      ←0
   │ !  web_crawler                204L  1C   12m  CC=10     ←0
-  │ !  file_search_parser         200L  1C   11m  CC=11     ←0
+  │ !  file_search_parser         200L  1C   11m  CC=11     ←2
   │ !  formats                    196L  1C   14m  CC=11     ←12
   │ network                    186L  1C   11m  CC=5      ←0
   │ file_search                165L  1C    8m  CC=8      ←0
@@ -90,8 +90,8 @@ CLASSES:
   FormatRegistry                 ████████                   4m  CC̄=1.5   max=2   
   FraqSchema                     ████████                   4m  CC̄=4.2   max=5   
   FraqCursor                     ████████                   4m  CC̄=2.2   max=4   
-  FraqExecutor                   ████████                   4m  CC̄=3.8   max=9   
   Text2FraqSimple                ████████                   4m  CC̄=2.2   max=5   
+  FraqExecutor                   ████████                   4m  CC̄=3.8   max=9   
   ModelRouter                    ████████                   4m  CC̄=3.8   max=9   
   BaseAdapter                    ████████                   4m  CC̄=1.0   max=1   
   SensorAdapter                  ████████                   4m  CC̄=1.8   max=3   
@@ -104,8 +104,8 @@ CLASSES:
   SensorStreamGenerator          ████                       2m  CC̄=1.0   max=1   
   HTTPAdapter                    ████                       2m  CC̄=2.5   max=3   
   LiteLLMClient                  ████                       2m  CC̄=2.5   max=4   
-  FraqFilter                     ██                         1m  CC̄=9.0   max=9   
   Text2FraqConfig                ██                         1m  CC̄=1.0   max=1   
+  FraqFilter                     ██                         1m  CC̄=9.0   max=9   
   ParsedQuery                    ██                         1m  CC̄=5.0   max=5   
   LLMClient                      ██                         1m  CC̄=1.0   max=1   
   FieldDef                                                  0m  CC̄=0.0   max=0.0 
@@ -280,16 +280,16 @@ The cursor remembers the...
     ws_stream(websocket)
     ws_files(websocket)
     health()
-  fraq/text2fraq/parser_llm.py:
-    e: Text2Fraq
-    Text2Fraq  # Natural language to fractal query converter (LLM-based)....
-      __init__(2)  CC=3.0
   fraq/text2fraq/models.py:
     e: ParsedQuery,LLMClient
     ParsedQuery  # Parsed natural language query....
       to_fraq_query(0)  CC=5.0
     LLMClient  # Protocol for LLM clients....
       complete(1)  CC=1.0
+  fraq/text2fraq/parser_llm.py:
+    e: Text2Fraq
+    Text2Fraq  # Natural language to fractal query converter (LLM-based)....
+      __init__(2)  CC=3.0
   fraq/adapters/network.py:
     e: NetworkAdapter
     NetworkAdapter  # Async adapter for scanning local network devices and service...
@@ -435,16 +435,16 @@ Produces dict paylo...
     e: Text2FraqConfig
     Text2FraqConfig  # Configuration for text2fraq....
       from_env(0)  CC=1.0
-  fraq/adapters/base.py:
-    e: BaseAdapter
-    BaseAdapter  # Interface every data-source adapter must implement....
-      load_root(1)  CC=1.0
-  examples/v030/new_features_v030.py:
+  examples/v028/new_features_v030.py:
     e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
     example_model_router()
     example_fraq_session()
     example_fastapi_server()
     example_combined_usage()
+  fraq/adapters/base.py:
+    e: BaseAdapter
+    BaseAdapter  # Interface every data-source adapter must implement....
+      load_root(1)  CC=1.0
   fraq/types.py:
   examples/websocket-docker/run.sh:
   examples/cli-docker/run.sh:

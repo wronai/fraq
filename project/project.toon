@@ -17,7 +17,7 @@ M[62]:
   examples/text2fraq/nlp2cmd_integration.py,165
   examples/text2fraq/text2fraq_examples.py,208
   examples/text2fraq/text2fraq_files.py,202
-  examples/v030/new_features_v030.py,79
+  examples/v028/new_features_v030.py,79
   examples/websocket-docker/main.py,78
   examples/websocket-docker/run.py,65
   fraq/__init__.py,126
@@ -198,7 +198,7 @@ D:
     example_convenience_function()
     example_file_search_adapter_direct()
     example_llm_file_intent()
-  examples/v030/new_features_v030.py:
+  examples/v028/new_features_v030.py:
     e: example_model_router,example_fraq_session,example_fastapi_server,example_combined_usage
     example_model_router()
     example_fraq_session()
