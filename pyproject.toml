@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fraq"
+version = "0.2.0"
+description = "Fractal Query Data Library — model data as infinite, self-similar fractal structures"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    {name = "Softreck / Prototypowanie.pl"},
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Typing :: Typed",
+]
+keywords = [
+    "fractal", "data", "procedural", "generation", "lazy", "infinite",
+    "query", "streaming", "iot", "sensor", "schema", "openapi", "graphql",
+    "asyncapi", "grpc", "protobuf", "nlp2cmd",
+]
+
+[project.urls]
+Homepage = "https://github.com/softreck/fraq"
+Documentation = "https://github.com/softreck/fraq#readme"
+Repository = "https://github.com/softreck/fraq"
+Issues = "https://github.com/softreck/fraq/issues"
+Changelog = "https://github.com/softreck/fraq/blob/main/CHANGELOG.md"
+
+[project.scripts]
+fraq = "fraq.cli:main"
+
+[project.optional-dependencies]
+http = ["requests>=2.28.0"]
+async = ["aiohttp>=3.9.0"]
+fast = ["orjson>=3.9.0"]
+all = ["requests>=2.28.0", "aiohttp>=3.9.0", "orjson>=3.9.0"]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "pytest-asyncio>=0.21.0",
+    "mypy>=1.0",
+    "ruff>=0.1.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["fraq*"]
+
+[tool.setuptools.package-data]
+fraq = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = false
+warn_return_any = true
