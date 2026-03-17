@@ -115,18 +115,10 @@ def cmd_files_list(args: argparse.Namespace) -> None:
             print(r['filename'])
 
 
-def cmd_files_stat(args: argparse.Namespace) -> None:
-    """Show file statistics with fractal coordinates."""
-    path = Path(args.file).expanduser().resolve()
-    
-    if not path.exists():
-        print(f"Error: File not found: {path}", file=sys.stderr)
-        sys.exit(1)
-    
+def _collect_file_stat(path: Path) -> dict[str, Any]:
+    """Collect file statistics (pure function)."""
     stat = path.stat()
-    
-    # Create fractal representation
-    record = {
+    return {
         "filename": path.name,
         "path": str(path),
         "extension": path.suffix.lstrip(".").lower() if path.suffix else "",
@@ -142,16 +134,31 @@ def cmd_files_stat(args: argparse.Namespace) -> None:
         "fraq_seed": hash(str(path)) % (2**32),
         "fraq_value": hash(str(path)) / (2**32),
     }
-    
-    if args.format == "json":
+
+
+def _print_stat(data: dict[str, Any], fmt: str) -> None:
+    """Print file statistics in specified format (IO function)."""
+    if fmt == "json":
         import json
-        print(json.dumps(record, indent=2))
+        print(json.dumps(data, indent=2))
     else:
-        print(f"File: {record['path']}")
-        print(f"Size: {record['size']:,} bytes ({record['size']/1024:.2f} KB)")
-        print(f"Modified: {datetime.fromtimestamp(record['mtime'])}")
-        print(f"Fractal seed: {record['fraq_seed']}")
-        print(f"Fractal value: {record['fraq_value']:.6f}")
+        print(f"File: {data['path']}")
+        print(f"Size: {data['size']:,} bytes ({data['size']/1024:.2f} KB)")
+        print(f"Modified: {datetime.fromtimestamp(data['mtime'])}")
+        print(f"Fractal seed: {data['fraq_seed']}")
+        print(f"Fractal value: {data['fraq_value']:.6f}")
+
+
+def cmd_files_stat(args: argparse.Namespace) -> None:
+    """Show file statistics with fractal coordinates."""
+    path = Path(args.file).expanduser().resolve()
+
+    if not path.exists():
+        print(f"Error: File not found: {path}", file=sys.stderr)
+        sys.exit(1)
+
+    data = _collect_file_stat(path)
+    _print_stat(data, args.format)
 
 
 def cmd_nl(args: argparse.Namespace) -> None:
@@ -271,7 +278,31 @@ def cmd_web_crawl(args: argparse.Namespace) -> None:
     print(f"\nCrawled {len(results)} pages.")
 
 
-def main(argv: List[str] | None = None) -> None:
+# Command registry for dispatching
+COMMANDS = {
+    "explore": cmd_explore,
+    "stream": cmd_stream,
+    "schema": cmd_schema,
+    "nl": cmd_nl,
+}
+
+FILE_COMMANDS = {
+    "search": cmd_files_search,
+    "list": cmd_files_list,
+    "stat": cmd_files_stat,
+}
+
+NETWORK_COMMANDS = {
+    "scan": cmd_network_scan,
+}
+
+WEB_COMMANDS = {
+    "crawl": cmd_web_crawl,
+}
+
+
+def _parse_args(argv: List[str] | None) -> argparse.Namespace:
+    """Parse command line arguments."""
     # Shared arguments via parent parser
     shared = argparse.ArgumentParser(add_help=False)
     shared.add_argument("--format", "-f", default="json", choices=[*FormatRegistry.available(), "table"])
@@ -291,7 +322,7 @@ def main(argv: List[str] | None = None) -> None:
     p_schema.add_argument("--fields", required=True, help="Comma-separated name:type pairs")
     p_schema.add_argument("--depth", type=int, default=1)
     p_schema.add_argument("--branching", type=int, default=4)
-    
+
     # Natural language command
     p_nl = sub.add_parser("nl", parents=[shared], help="Natural language query")
     p_nl.add_argument("query", help="Natural language query string")
@@ -300,19 +331,19 @@ def main(argv: List[str] | None = None) -> None:
     # Files subcommand
     p_files = sub.add_parser("files", help="File system operations via fractal queries")
     files_sub = p_files.add_subparsers(dest="files_command")
-    
+
     # files search
     p_files_search = files_sub.add_parser("search", parents=[shared], help="Search files")
     p_files_search.add_argument("path", nargs="?", default=".", help="Directory to search")
     p_files_search.add_argument("--ext", "-e", help="File extension (pdf, txt, py...)")
     p_files_search.add_argument("--pattern", "-p", help="Glob pattern (*.pdf, data*)")
     p_files_search.add_argument("--limit", "-n", type=int, default=10, help="Max results")
-    p_files_search.add_argument("--sort", default="mtime", 
+    p_files_search.add_argument("--sort", default="mtime",
                                 choices=["name", "mtime", "size"],
                                 help="Sort order")
-    p_files_search.add_argument("--no-recursive", action="store_true", 
+    p_files_search.add_argument("--no-recursive", action="store_true",
                                 help="Don't search subdirectories")
-    
+
     # files list
     p_files_list = files_sub.add_parser("list", help="List files (ls-style)")
     p_files_list.add_argument("path", nargs="?", default=".", help="Directory to list")
@@ -322,19 +353,19 @@ def main(argv: List[str] | None = None) -> None:
     p_files_list.add_argument("--sort", "-s", default="name", choices=["name", "mtime", "size"])
     p_files_list.add_argument("--recursive", "-r", action="store_true", help="List recursively")
     p_files_list.add_argument("--long", "-l", action="store_true", help="Long format")
-    p_files_list.add_argument("--format", "-f", default="text", 
+    p_files_list.add_argument("--format", "-f", default="text",
                               choices=["text", "json", "csv", "yaml"])
-    
+
     # files stat
     p_files_stat = files_sub.add_parser("stat", help="Show file statistics")
     p_files_stat.add_argument("file", help="File path")
-    p_files_stat.add_argument("--format", "-f", default="human", 
+    p_files_stat.add_argument("--format", "-f", default="human",
                                choices=["human", "json"])
 
     # Network subcommand
     p_network = sub.add_parser("network", help="Network scanning operations")
     network_sub = p_network.add_subparsers(dest="network_command")
-    
+
     # network scan
     p_network_scan = network_sub.add_parser("scan", help="Scan network for devices")
     p_network_scan.add_argument("--network", "-n", default="192.168.1.0/24",
@@ -347,11 +378,11 @@ def main(argv: List[str] | None = None) -> None:
                                 help="Max hosts to scan")
     p_network_scan.add_argument("--format", "-f", default="table",
                                 choices=["table", "json", "csv"])
-    
+
     # Web subcommand
     p_web = sub.add_parser("web", help="Web crawling operations")
     web_sub = p_web.add_subparsers(dest="web_command")
-    
+
     # web crawl
     p_web_crawl = web_sub.add_parser("crawl", help="Crawl website")
     p_web_crawl.add_argument("url", help="Base URL to crawl")
@@ -364,41 +395,54 @@ def main(argv: List[str] | None = None) -> None:
     p_web_crawl.add_argument("--format", "-f", default="table",
                              choices=["table", "json", "csv"])
 
-    args = parser.parse_args(argv)
+    return parser.parse_args(argv)
 
-    if args.command == "explore":
-        cmd_explore(args)
-    elif args.command == "stream":
-        cmd_stream(args)
-    elif args.command == "schema":
-        cmd_schema(args)
-    elif args.command == "nl":
-        cmd_nl(args)
-    elif args.command == "files":
-        if args.files_command == "search":
-            cmd_files_search(args)
-        elif args.files_command == "list":
-            cmd_files_list(args)
-        elif args.files_command == "stat":
-            cmd_files_stat(args)
+
+def _dispatch_command(args: argparse.Namespace) -> None:
+    """Dispatch to appropriate command handler."""
+    # Dispatch via command registry
+    handler = COMMANDS.get(args.command)
+    if handler:
+        handler(args)
+        return
+
+    # Handle subcommand groups
+    if args.command == "files":
+        file_handler = FILE_COMMANDS.get(args.files_command)
+        if file_handler:
+            file_handler(args)
         else:
-            p_files.print_help()
+            print("Usage: fraq files {search|list|stat} ...")
             sys.exit(1)
-    elif args.command == "network":
-        if args.network_command == "scan":
-            cmd_network_scan(args)
+        return
+
+    if args.command == "network":
+        network_handler = NETWORK_COMMANDS.get(args.network_command)
+        if network_handler:
+            network_handler(args)
         else:
-            p_network.print_help()
+            print("Usage: fraq network scan ...")
             sys.exit(1)
-    elif args.command == "web":
-        if args.web_command == "crawl":
-            cmd_web_crawl(args)
+        return
+
+    if args.command == "web":
+        web_handler = WEB_COMMANDS.get(args.web_command)
+        if web_handler:
+            web_handler(args)
         else:
-            p_web.print_help()
+            print("Usage: fraq web crawl ...")
             sys.exit(1)
-    else:
-        parser.print_help()
-        sys.exit(1)
+        return
+
+    # No command matched - show help
+    print("Usage: fraq {explore|stream|schema|nl|files|network|web} ...")
+    sys.exit(1)
+
+
+def main(argv: List[str] | None = None) -> None:
+    """Main entry point - 4 line orchestrator: parse -> dispatch."""
+    args = _parse_args(argv)
+    _dispatch_command(args)
 
 
 if __name__ == "__main__":

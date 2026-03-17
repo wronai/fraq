@@ -3,7 +3,7 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T18:10:01Z'
+  analyzed_at: '2026-03-17T18:18:23Z'
   tool: code2llm
   stats:
     files: 27
@@ -113,7 +113,7 @@ health:
     limit: 10
     severity: warning
   - type: high_fan_out
-    target: HTTPAdapter.load_root
+    target: WebCrawlerAdapter._fetch_page
     value: 10
     limit: 10
     severity: warning

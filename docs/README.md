@@ -151,14 +151,14 @@ Content outside the markers is preserved when regenerating. Enable this with `sy
 
 ```
 fraq/
-├── main_websocket    ├── formats    ├── streaming├── fraq/    ├── generators    ├── cli    ├── schema_export    ├── adapters/    ├── applications    ├── async_streaming    ├── query_examples    ├── network_web_examples    ├── app_integrations    ├── text2fraq_examples    ├── nlp2cmd_integration    ├── api_server    ├── text2fraq_files        ├── run        ├── main        ├── run        ├── run        ├── run        ├── main            ├── app            ├── main            ├── main        ├── config        ├── file_search_parser    ├── core    ├── text2fraq        ├── parser_rules        ├── parser_llm    ├── query        ├── shortcuts        ├── base        ├── registry        ├── file_adapter        ├── web_crawler        ├── http_adapter        ├── sql_adapter        ├── sensor_adapter        ├── hybrid_adapter        ├── file_search        ├── network├── project    ├── bash_examples        ├── models        ├── llm_client```
+├── main_websocket    ├── streaming    ├── formats├── fraq/    ├── generators    ├── cli    ├── schema_export    ├── adapters/    ├── applications    ├── async_streaming    ├── query_examples    ├── network_web_examples    ├── app_integrations    ├── text2fraq_examples    ├── nlp2cmd_integration    ├── api_server    ├── text2fraq_files        ├── run        ├── main        ├── run        ├── run        ├── run        ├── main            ├── app            ├── main            ├── main        ├── config    ├── core        ├── file_search_parser    ├── text2fraq        ├── parser_rules        ├── parser_llm        ├── models        ├── shortcuts        ├── base        ├── registry        ├── file_adapter    ├── query        ├── web_crawler        ├── http_adapter        ├── sensor_adapter        ├── sql_adapter        ├── hybrid_adapter        ├── file_search├── project    ├── bash_examples        ├── network        ├── llm_client```
 
 ## API Overview
 
 ### Classes
 
-- **`FormatRegistry`** — Registry of serialisation backends.
 - **`AsyncFraqStream`** — Async generator that yields fractal records at a controlled rate.
+- **`FormatRegistry`** — Registry of serialisation backends.
 - **`HashGenerator`** — Deterministic pseudo-random values via SHA-256.
 - **`FibonacciGenerator`** — Value based on generalised Fibonacci sequence at the node's depth.
 - **`PerlinGenerator`** — Simplified 1-D Perlin-ish noise from the L2 norm of position.
@@ -173,29 +173,28 @@ fraq/
 - **`WebCrawlerAdapter`** — Async adapter for crawling websites and extracting links/content.
 - **`HybridAdapter`** — Combine roots from several adapters into one fractal.
 - **`Text2FraqConfig`** — Configuration for text2fraq.
-- **`FileSearchText2Fraq`** — Natural language to file search converter.
 - **`FraqNode`** — A single point in the infinite fractal data space.
 - **`FieldDef`** — One field in a FraqSchema.
 - **`FraqSchema`** — Typed projection of a fractal into structured records.
 - **`FraqCursor`** — Stateful walk through the fractal.
+- **`FileSearchText2Fraq`** — Natural language to file search converter.
 - **`Text2FraqSimple`** — Rule-based text2fraq without LLM (fallback for offline use).
 - **`Text2Fraq`** — Natural language to fractal query converter (LLM-based).
+- **`ParsedQuery`** — Parsed natural language query.
+- **`LLMClient`** — Protocol for LLM clients.
+- **`BaseAdapter`** — Interface every data-source adapter must implement.
+- **`FileAdapter`** — Read/write fractal state from local files.
 - **`SourceType`** — Known data source families.
 - **`FraqFilter`** — Post-zoom predicate on a record field.
 - **`FraqQuery`** — Declarative query against fractal data.
 - **`FraqExecutor`** — Execute a FraqQuery against a root node.
-- **`BaseAdapter`** — Interface every data-source adapter must implement.
-- **`FileAdapter`** — Read/write fractal state from local files.
 - **`WebCrawlerAdapter`** — Async adapter for crawling websites and extracting links/content.
 - **`HTTPAdapter`** — Fetch fractal roots from remote HTTP APIs.
-- **`SQLAdapter`** — Map fractal nodes to/from relational tables.
 - **`SensorAdapter`** — Simulate or consume live sensor data as fractal streams.
+- **`SQLAdapter`** — Map fractal nodes to/from relational tables.
 - **`HybridAdapter`** — Combine roots from several adapters into one fractal.
 - **`FileSearchAdapter`** — Adapter for searching files on disk using fractal patterns.
 - **`NetworkAdapter`** — Async adapter for scanning local network devices and services.
-- **`ParsedQuery`** — Parsed natural language query.
-- **`LLMClient`** — Protocol for LLM clients.
-- **`LiteLLMClient`** — LiteLLM client for text completion.
 - **`Text2FraqConfig`** — Configuration for text2fraq.
 - **`ParsedQuery`** — Parsed natural language query.
 - **`LLMClient`** — Protocol for LLM clients.
@@ -203,6 +202,7 @@ fraq/
 - **`FileSearchText2Fraq`** — Natural language to file search converter.
 - **`Text2Fraq`** — Natural language to fractal query converter.
 - **`Text2FraqSimple`** — Rule-based text2fraq without LLM (fallback for offline use).
+- **`LiteLLMClient`** — LiteLLM client for text completion.
 
 ### Functions
 
@@ -337,11 +337,11 @@ fraq/
 - `health()` — —
 - `explore(depth)` — —
 - `files_search(path, ext, limit)` — —
-- `query(depth, direction, fields, format)` — One-shot fractal query.
 - `text2filesearch(text, base_path, fmt)` — One-liner to search files via natural language.
 - `text2query(text, config)` — Convert text to ParsedQuery.
 - `text2fraq(text, config, root)` — Convert text and execute query.
 - `get_adapter(source)` — Factory: return the right adapter for a source type.
+- `query(depth, direction, fields, format)` — One-shot fractal query.
 - `text2filesearch(text, base_path, fmt)` — One-liner to search files via natural language.
 - `text2query(text, config)` — Convert text to ParsedQuery.
 - `text2fraq(text, config, root)` — Convert text and execute query.

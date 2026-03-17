@@ -49,21 +49,21 @@ class FileSearchAdapter(BaseAdapter):
             },
         )
 
-    def search(
-        self,
-        extension: Optional[str] = None,
-        pattern: Optional[str] = None,
-        limit: int = 10,
-        sort_by: str = "name",
-        newer_than: Optional[float] = None,
-        **opts: Any,
-    ) -> List[Dict[str, Any]]:
+    def _build_glob(self, extension: Optional[str], pattern: Optional[str]) -> str:
+        """Build glob pattern from extension and pattern parameters."""
         search_pattern = pattern or self.pattern
         if extension and not search_pattern.endswith(f".{extension}"):
             search_pattern = f"*.{extension}"
+        return search_pattern
 
-        files = []
-        iterator = self.base_path.rglob(search_pattern) if self.recursive else self.base_path.glob(search_pattern)
+    def _collect_files(
+        self,
+        glob_pattern: str,
+        newer_than: Optional[float],
+    ) -> List[Dict[str, Any]]:
+        """Iterate filesystem and collect matching files."""
+        files: List[Dict[str, Any]] = []
+        iterator = self.base_path.rglob(glob_pattern) if self.recursive else self.base_path.glob(glob_pattern)
 
         for path in iterator:
             if not path.is_file():
@@ -93,15 +93,35 @@ class FileSearchAdapter(BaseAdapter):
                 files.append(record)
             except (OSError, PermissionError):
                 continue
+        return files
 
+    def _sort_and_limit(
+        self,
+        files: List[Dict[str, Any]],
+        sort_by: str,
+        limit: int,
+    ) -> List[Dict[str, Any]]:
+        """Sort files and apply limit."""
         if sort_by == "mtime":
             files.sort(key=lambda x: x["mtime"], reverse=True)
         elif sort_by == "size":
             files.sort(key=lambda x: x["size"], reverse=True)
         else:
             files.sort(key=lambda x: x["filename"])
-
         return files[:limit]
+
+    def search(
+        self,
+        extension: Optional[str] = None,
+        pattern: Optional[str] = None,
+        limit: int = 10,
+        sort_by: str = "name",
+        newer_than: Optional[float] = None,
+        **opts: Any,
+    ) -> List[Dict[str, Any]]:
+        search_pattern = self._build_glob(extension, pattern)
+        files = self._collect_files(search_pattern, newer_than)
+        return self._sort_and_limit(files, sort_by, limit)
 
     def save(self, node: FraqNode, uri: str, fmt: str = "json", **opts: Any) -> str:
         if "files" in node.meta:

@@ -192,11 +192,11 @@ flowchart TD
         fraq__load_root["load_root"]
         fraq__adapters__file_adapter__FileAdapter__save["save"]
         fraq___dict_to_node["_dict_to_node"]
+        fraq____init__["__init__"]
+        fraq___get_session["_get_session"]
         fraq__load_root["load_root"]
-        fraq__adapters__http_adapter__HTTPAdapter__save["save"]
-        fraq__adapters__sql_adapter__SQLAdapter____init__["__init__"]
-        fraq__adapters__sql_adapter__SQLAdapter__load_root["load_root"]
-        fraq__adapters__sql_adapter__SQLAdapter__save["save"]
+        fraq__crawl_async("crawl_async CC=10")
+        fraq___fetch_page["_fetch_page"]
     end
     subgraph fraq_cli
         fraq__cli___make_root["_make_root"]
@@ -315,11 +315,13 @@ flowchart TD
         fraq___fallback_parse["_fallback_parse"]
         fraq___fallback_fields["_fallback_fields"]
         fraq__text2fraq__parser_llm__Text2Fraq__execute["execute"]
-        fraq__to_fraq_query["to_fraq_query"]
-        fraq__text2fraq__models__LLMClient__complete["complete"]
         fraq__text2fraq__shortcuts__text2filesearch["text2filesearch"]
         fraq__text2fraq__shortcuts__text2query["text2query"]
         fraq__text2fraq__shortcuts__text2fraq["text2fraq"]
+        fraq__to_fraq_query["to_fraq_query"]
+        fraq__text2fraq__models__LLMClient__complete["complete"]
+        fraq____init__["__init__"]
+        fraq__complete["complete"]
         fraq__text2fraq___word_match["_word_match"]
         fraq__text2fraq___detect_format["_detect_format"]
         fraq__text2fraq___detect_depth["_detect_depth"]
@@ -349,8 +351,6 @@ flowchart TD
         fraq__text2fraq__Text2FraqSimple___matches_pattern["_matches_pattern"]
         fraq__text2fraq__Text2FraqSimple__execute["execute"]
         fraq__text2fraq__text2filesearch["text2filesearch"]
-        fraq__text2fraq__text2query["text2query"]
-        fraq__text2fraq__text2fraq["text2fraq"]
     end
     subgraph main_websocket
         main_websocket__ws_stream["ws_stream"]
@@ -482,8 +482,8 @@ flowchart TD
     fraq___fallback_fields --> fraq__text2fraq__parser_rules___word_match
     fraq__query__FraqExecutor__execute --> fraq__formats__FormatRegistry__serialize
     fraq__adapters__file_adapter__FileAdapter__save --> fraq__formats__FormatRegistry__serialize
-    fraq__adapters__http_adapter__HTTPAdapter__save --> fraq__formats__FormatRegistry__serialize
     fraq__save --> fraq__formats__FormatRegistry__serialize
+    fraq__adapters__http_adapter__HTTPAdapter__save --> fraq__formats__FormatRegistry__serialize
     fraq__adapters__network__NetworkAdapter__save --> fraq__formats__FormatRegistry__serialize
     fraq__text2fraq__Text2Fraq___fallback_parse --> fraq__text2fraq__parser_rules___detect_depth
     fraq__text2fraq__Text2Fraq___fallback_parse --> fraq__text2fraq__parser_rules___detect_format

@@ -66,7 +66,55 @@ class WebCrawlerAdapter(BaseAdapter):
             },
         )
 
+    def _parse_page(self, html: str, url: str, depth: int) -> Dict[str, Any]:
+        """Parse HTML content into structured page data (pure function)."""
+        soup = BeautifulSoup(html, "html.parser")
+        title = soup.title.string if soup.title else "No title"
+        links = self._extract_links(soup, url)
+
+        return {
+            "url": url,
+            "title": title.strip()[:200],
+            "depth": depth,
+            "size_bytes": len(html),
+            "status": 200,
+            "links": links,
+            "link_count": len(links),
+            "fraq_position": (
+                float(depth) / self.max_depth,
+                float(len(html)) / 100000,
+                float(len(links)) / 100,
+            ),
+            "fraq_seed": hash(url) % (2**32),
+            "fraq_value": hash(url) / (2**32),
+        }
+
+    def _plan_next_links(
+        self,
+        current_links: List[str],
+        visited: Set[str],
+    ) -> List[str]:
+        """Plan next URLs to visit (pure function)."""
+        return [link for link in current_links if link not in visited]
+
+    async def _process_url(
+        self,
+        url: str,
+        depth: int,
+    ) -> Optional[Dict[str, Any]]:
+        """Fetch and process a single URL (IO operation)."""
+        try:
+            session = await self._get_session()
+            async with session.get(url) as response:
+                if response.status != 200:
+                    return None
+                content = await response.text()
+                return self._parse_page(content, url, depth)
+        except Exception as e:
+            return {"url": url, "error": str(e), "depth": depth}
+
     async def crawl_async(self) -> List[Dict[str, Any]]:
+        """Crawl website and return all pages."""
         self.visited.clear()
         self.pages.clear()
         queue: deque[tuple[str, int]] = deque([(self.base_url, 0)])
@@ -77,47 +125,20 @@ class WebCrawlerAdapter(BaseAdapter):
                 continue
             self.visited.add(url)
 
-            page_data = await self._fetch_page(url, depth)
-            if page_data:
+            page_data = await self._process_url(url, depth)
+            if page_data and not page_data.get("error"):
                 self.pages.append(page_data)
-                for link in page_data.get("links", []):
-                    if link not in self.visited:
-                        queue.append((link, depth + 1))
+                new_links = self._plan_next_links(
+                    page_data.get("links", []),
+                    self.visited,
+                )
+                for link in new_links:
+                    queue.append((link, depth + 1))
 
         if self._session and not self._session.closed:
             await self._session.close()
 
         return self.pages
-
-    async def _fetch_page(self, url: str, depth: int) -> Optional[Dict[str, Any]]:
-        try:
-            session = await self._get_session()
-            async with session.get(url) as response:
-                if response.status != 200:
-                    return None
-                content = await response.text()
-                soup = BeautifulSoup(content, "html.parser")
-                title = soup.title.string if soup.title else "No title"
-                links = self._extract_links(soup, url)
-
-                return {
-                    "url": url,
-                    "title": title.strip()[:200],
-                    "depth": depth,
-                    "size_bytes": len(content),
-                    "status": response.status,
-                    "links": links,
-                    "link_count": len(links),
-                    "fraq_position": (
-                        float(depth) / self.max_depth,
-                        float(len(content)) / 100000,
-                        float(len(links)) / 100,
-                    ),
-                    "fraq_seed": hash(url) % (2**32),
-                    "fraq_value": hash(url) / (2**32),
-                }
-        except Exception as e:
-            return {"url": url, "error": str(e), "depth": depth}
 
     def _extract_links(self, soup: BeautifulSoup, base_url: str) -> List[str]:
         links = []
@@ -136,6 +157,7 @@ class WebCrawlerAdapter(BaseAdapter):
         return links
 
     async def stream_pages(self) -> AsyncIterator[Dict[str, Any]]:
+        """Stream pages as they are crawled."""
         self.visited.clear()
         queue: deque[tuple[str, int]] = deque([(self.base_url, 0)])
         pages_yielded = 0
@@ -146,13 +168,16 @@ class WebCrawlerAdapter(BaseAdapter):
                 continue
             self.visited.add(url)
 
-            page_data = await self._fetch_page(url, depth)
+            page_data = await self._process_url(url, depth)
             if page_data and not page_data.get("error"):
                 yield page_data
                 pages_yielded += 1
-                for link in page_data.get("links", []):
-                    if link not in self.visited:
-                        queue.append((link, depth + 1))
+                new_links = self._plan_next_links(
+                    page_data.get("links", []),
+                    self.visited,
+                )
+                for link in new_links:
+                    queue.append((link, depth + 1))
 
         if self._session and not self._session.closed:
             await self._session.close()

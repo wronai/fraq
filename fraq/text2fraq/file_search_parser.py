@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta
-from typing import Any, List, Optional
+from pathlib import Path
+from typing import Any, List, Optional, Set
 
 from fraq.formats import FormatRegistry
 from fraq.adapters.file_search import FileSearchAdapter
@@ -35,9 +36,102 @@ class FileSearchText2Fraq:
         "md": ["md", "markdown", "documentation"],
     }
 
+    # Patterns that indicate user's home directory
+    HOME_PATTERNS: list[str] = [
+        "home", "user folder", "user directory", "katalog domowy",
+        "folder użytkownika", "folder domowy", "folder usera",
+        "w domu", "użytkownika", "usera", "domowy",
+        "documents", "downloads", "desktop", "pulpit",
+    ]
+
+    # Directories to exclude from search
+    EXCLUDED_DIRS: Set[str] = {
+        ".venv", "venv", "env", ".env",
+        "node_modules", "__pycache__", ".git",
+        ".tox", ".pytest_cache", ".mypy_cache",
+        "build", "dist", "target", "*.egg-info",
+        "site-packages", "lib", "lib64",
+    }
+
     def __init__(self, base_path: str = "."):
         self.base_path = base_path
-        self.adapter = FileSearchAdapter(base_path=base_path, recursive=True)
+        self.adapter: Optional[FileSearchAdapter] = None
+
+    def _detect_path(self, text: str) -> str:
+        """Detect if query refers to a specific location."""
+        text_lower = text.lower()
+        if any(pattern in text_lower for pattern in self.HOME_PATTERNS):
+            return str(Path.home())
+        return self.base_path
+
+    def _should_exclude(self, path: Path) -> bool:
+        """Check if path should be excluded from search."""
+        for part in path.parts:
+            if part in self.EXCLUDED_DIRS:
+                return True
+            # Handle wildcards like *.egg-info
+            for excluded in self.EXCLUDED_DIRS:
+                if excluded.startswith("*") and part.endswith(excluded[1:]):
+                    return True
+        return False
+
+    def _collect_files_filtered(
+        self,
+        base_path: str,
+        extension: Optional[str],
+        limit: int,
+        sort_by: str,
+        newer_than: Optional[float],
+    ) -> List[dict[str, Any]]:
+        """Collect files with exclusion filtering."""
+        path = Path(base_path).expanduser().resolve()
+        pattern = f"*.{extension}" if extension else "*"
+
+        files: List[dict[str, Any]] = []
+
+        try:
+            for file_path in path.rglob(pattern):
+                if not file_path.is_file():
+                    continue
+                if self._should_exclude(file_path):
+                    continue
+
+                try:
+                    stat = file_path.stat()
+                    mtime = stat.st_mtime
+                    if newer_than and mtime <= newer_than:
+                        continue
+
+                    files.append({
+                        "filename": file_path.name,
+                        "path": str(file_path),
+                        "extension": file_path.suffix.lstrip(".").lower(),
+                        "size": stat.st_size,
+                        "mtime": mtime,
+                        "ctime": stat.st_ctime,
+                        "depth": len(file_path.relative_to(path).parts),
+                        "fraq_position": (
+                            float(stat.st_size) / (1024 * 1024),
+                            float(mtime),
+                            float(stat.st_ctime),
+                        ),
+                        "fraq_seed": hash(str(file_path)) % (2**32),
+                        "fraq_value": hash(str(file_path)) / (2**32),
+                    })
+                except (OSError, PermissionError):
+                    continue
+        except (OSError, PermissionError):
+            pass
+
+        # Sort and limit
+        if sort_by == "mtime":
+            files.sort(key=lambda x: x["mtime"], reverse=True)
+        elif sort_by == "size":
+            files.sort(key=lambda x: x["size"], reverse=True)
+        else:
+            files.sort(key=lambda x: x["filename"])
+
+        return files[:limit]
 
     def parse(self, text: str) -> dict[str, Any]:
         """Parse natural language file query to search parameters."""
@@ -47,6 +141,7 @@ class FileSearchText2Fraq:
             "limit": self._detect_limit(text_lower),
             "newer_than": self._detect_newer_than(text_lower),
             "sort_by": self._detect_sort_by(text_lower),
+            "path": self._detect_path(text_lower),
         }
 
     def _detect_extension(self, text: str) -> Optional[str]:
@@ -77,7 +172,21 @@ class FileSearchText2Fraq:
 
     def search(self, text: str) -> List[dict[str, Any]]:
         """Parse query and execute file search."""
-        return self.adapter.search(**self.parse(text))
+        params = self.parse(text)
+        # Use injected adapter if available (for testing), otherwise use default
+        if self.adapter is not None:
+            return self.adapter.search(
+                extension=params["extension"],
+                limit=params["limit"],
+                sort_by=params["sort_by"],
+            )
+        return self._collect_files_filtered(
+            base_path=params["path"],
+            extension=params["extension"],
+            limit=params["limit"],
+            sort_by=params["sort_by"],
+            newer_than=params["newer_than"],
+        )
 
     def format_results(
         self,
