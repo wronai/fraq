@@ -103,7 +103,7 @@ async for record in async_stream(count=1000, interval=0.1):
 
 ## NLP2CMD Integration
 
-## New in v0.2.8 — Multi-Model Router & Session Memory
+## New in v0.2.10 — Multi-Model Router & Session Memory
 
 ```python
 from fraq.text2fraq import ModelRouter, FraqSession
@@ -273,19 +273,19 @@ fraq/
 │   │   ├── llm_client.py
 │   │   ├── parser_rules.py
 │   │   ├── parser_llm.py
-│   │   ├── router.py        # v0.3.0: ModelRouter
-│   │   ├── session.py       # v0.3.0: FraqSession
+│   │   ├── router.py        # v0.2.10: ModelRouter
+│   │   ├── session.py       # v0.2.10: FraqSession
 │   │   └── shortcuts.py
 │   ├── schema_export.py     # NLP2CMD, OpenAPI, GraphQL, AsyncAPI, Proto, JSON Schema
 │   ├── streaming.py         # AsyncFraqStream, async_query, async_stream
-│   ├── server.py            # v0.3.0: FastAPI production server
+│   ├── server.py            # v0.2.10: FastAPI production server
 │   └── cli.py               # CLI entry point
 ├── tests/                   # 159 test suite
 ├── examples/
 │   ├── basic/               # Core examples
 │   ├── text2fraq/           # NLP examples
 │   ├── network/             # Network & web crawling
-│   ├── v030/                # v0.3.0 new features
+│   ├── v028/                # v0.2.10 new features
 │   └── *-docker/            # Docker compositions
 └── .github/workflows/       # CI/CD
 ```

@@ -1,10 +1,8 @@
 flowchart TD
     subgraph examples_ai_ml
-        examples__example_1_classification_dataset["example_1_classification_dataset"]
-        examples__example_2_regression_data["example_2_regression_data"]
-        examples__example_3_time_series_forecasting["example_3_time_series_forecasting"]
-        examples__example_4_nlp_text_corpus["example_4_nlp_text_corpus"]
-        examples__example_5_multiclass_classification["example_5_multiclass_classification"]
+        examples__example_1_classification["example_1_classification"]
+        examples__example_2_regression["example_2_regression"]
+        examples__example_3_time_series["example_3_time_series"]
     end
     subgraph examples_basic
         examples__example_iot_sensor_network["example_iot_sensor_network"]
@@ -47,9 +45,14 @@ flowchart TD
     end
     subgraph examples_database
         examples__example_1_generate_to_sqlite["example_1_generate_to_sqlite"]
-        examples__example_2_sql_adapter_query["example_2_sql_adapter_query"]
-        examples__example_3_generate_sql_function["example_3_generate_sql_function"]
-        examples__example_4_hybrid_data["example_4_hybrid_data"]
+        examples__example_2_sql_adapter["example_2_sql_adapter"]
+        examples__example_3_hybrid_data["example_3_hybrid_data"]
+    end
+    subgraph examples_etl
+        examples__example_1_multi_source["example_1_multi_source"]
+        examples__example_2_transformation["example_2_transformation"]
+        examples__example_3_validation["example_3_validation"]
+        examples__example_4_pipeline["example_4_pipeline"]
     end
     subgraph examples_fastapi_docker
         examples__fastapi_docker__run__run_local["run_local"]
@@ -81,20 +84,18 @@ flowchart TD
         examples__fullstack_docker__run__stop_docker["stop_docker"]
         examples__fullstack_docker__run__test_stack["test_stack"]
         examples__fullstack_docker__run__main["main"]
+        examples__ws_stream["ws_stream"]
+        examples__ws_files["ws_files"]
+        examples__health["health"]
         examples__fullstack_docker__api__main__root["root"]
         examples__fullstack_docker__api__main__health["health"]
         examples__fullstack_docker__api__main__explore["explore"]
         examples__files_search["files_search"]
-        examples__ws_stream["ws_stream"]
-        examples__ws_files["ws_files"]
-        examples__health["health"]
     end
     subgraph examples_iot
         examples__example_1_sensor_readings["example_1_sensor_readings"]
-        examples__example_2_mqtt_payloads("example_2_mqtt_payloads CC=9")
-        examples__example_3_time_series_with_anomalies("example_3_time_series_with_anomalie CC=9")
-        examples__example_4_device_registry("example_4_device_registry CC=11")
-        examples__example_5_edge_computing("example_5_edge_computing CC=9")
+        examples__example_2_mqtt_payloads["example_2_mqtt_payloads"]
+        examples__example_3_device_health("example_3_device_health CC=9")
     end
     subgraph examples_network
         examples__example_network_scan_sync["example_network_scan_sync"]
@@ -107,10 +108,8 @@ flowchart TD
     end
     subgraph examples_streaming
         examples__example_1_sse_generator["example_1_sse_generator"]
-        examples__example_2_websocket_client["example_2_websocket_client"]
-        examples__example_3_kafka_pattern["example_3_kafka_pattern"]
-        examples__example_4_async_stream["example_4_async_stream"]
-        examples__example_5_fastapi_sse_endpoint["example_5_fastapi_sse_endpoint"]
+        examples__example_2_websocket_template["example_2_websocket_template"]
+        examples__example_3_async_stream["example_3_async_stream"]
     end
     subgraph examples_text2fraq
         examples___print_header["_print_header"]
@@ -169,13 +168,6 @@ flowchart TD
         fraq__load_root["load_root"]
         fraq__adapters__file_adapter__FileAdapter__save["save"]
         fraq___dict_to_node["_dict_to_node"]
-        fraq__load_root["load_root"]
-        fraq__adapters__http_adapter__HTTPAdapter__save["save"]
-        fraq__adapters__sql_adapter__SQLAdapter____init__["__init__"]
-        fraq__adapters__sql_adapter__SQLAdapter__load_root["load_root"]
-        fraq__adapters__sql_adapter__SQLAdapter__save["save"]
-        fraq__generate_sql_function["generate_sql_function"]
-        fraq___default_row_to_node["_default_row_to_node"]
         fraq____init__["__init__"]
         fraq___get_session["_get_session"]
         fraq__load_root["load_root"]
@@ -188,6 +180,13 @@ flowchart TD
         fraq__search["search"]
         fraq__stream["stream"]
         fraq__save["save"]
+        fraq__load_root["load_root"]
+        fraq__adapters__http_adapter__HTTPAdapter__save["save"]
+        fraq__adapters__sql_adapter__SQLAdapter____init__["__init__"]
+        fraq__adapters__sql_adapter__SQLAdapter__load_root["load_root"]
+        fraq__adapters__sql_adapter__SQLAdapter__save["save"]
+        fraq__generate_sql_function["generate_sql_function"]
+        fraq___default_row_to_node["_default_row_to_node"]
         fraq____init__["__init__"]
         fraq__load_root["load_root"]
         fraq__save["save"]
@@ -461,11 +460,11 @@ flowchart TD
     fraq__core__FraqNode___child --> fraq__core___vec_hash
     fraq__core__FraqNode___child --> fraq__core___vec_add
     fraq__core__FraqNode___child --> fraq__core___vec_scale
-    fraq__query__FraqExecutor__execute --> fraq__formats__FormatRegistry__serialize
-    examples__example_4_async_stream --> fraq__streaming__async_stream
+    examples__example_3_async_stream --> fraq__streaming__async_stream
     examples__fullstack_docker__run__main --> examples__fullstack_docker__run__stop_docker
     examples__fullstack_docker__run__main --> examples__fullstack_docker__run__test_stack
     examples__fullstack_docker__run__main --> examples__fullstack_docker__run__run_docker
+    fraq__query__FraqExecutor__execute --> fraq__formats__FormatRegistry__serialize
     examples__fastapi_docker__run__main --> examples__fastapi_docker__run__stop_docker
     examples__fastapi_docker__run__main --> examples__fastapi_docker__run__test_api
     examples__fastapi_docker__run__main --> examples__fastapi_docker__run__run_docker
@@ -502,15 +501,15 @@ flowchart TD
     fraq___fallback_parse --> fraq__text2fraq__parser_rules___detect_format
     fraq___fallback_parse --> fraq__text2fraq__parser_rules___detect_limit
     fraq___fallback_fields --> fraq__text2fraq__parser_rules___word_match
-    examples__example_combined_usage --> fraq__text2fraq__config__Text2FraqConfig__from_env
     fraq__adapters__file_adapter__FileAdapter__save --> fraq__formats__FormatRegistry__serialize
+    fraq__save --> fraq__formats__FormatRegistry__serialize
     fraq__load_root --> fraq___dict_to_node
     fraq__adapters__http_adapter__HTTPAdapter__save --> fraq__formats__FormatRegistry__serialize
-    fraq__save --> fraq__formats__FormatRegistry__serialize
+    examples__example_combined_usage --> fraq__text2fraq__config__Text2FraqConfig__from_env
     fraq__adapters__network__NetworkAdapter__save --> fraq__formats__FormatRegistry__serialize
     fraq__server__natural_language --> fraq__text2fraq__config__Text2FraqConfig__from_env
     fraq____init__ --> fraq__text2fraq__config__Text2FraqConfig__from_env
 
     classDef highCC fill:#ff6b6b,stroke:#c92a2a,color:#fff
     classDef medCC fill:#ffd43b,stroke:#f08c00,color:#000
-    class fraq__formats___prepare,fraq__formats___mp_encode,fraq__cli__cmd_network_scan,fraq__cli___dispatch_command,examples__example_pdf_search_with_llm,fraq__query__FraqFilter__matches,fraq__query__FraqExecutor___iter_records,examples__example_2_mqtt_payloads,examples__example_3_time_series_with_anomalies,examples__example_4_device_registry,examples__example_5_edge_computing,fraq___collect_files_filtered,fraq___estimate_complexity,fraq__crawl_async,fraq__stream_pages,fraq__load_root,fraq__stream,fraq__server__ws_stream medCC
+    class fraq__formats___prepare,fraq__formats___mp_encode,fraq__cli__cmd_network_scan,fraq__cli___dispatch_command,examples__example_pdf_search_with_llm,examples__example_3_device_health,fraq__query__FraqFilter__matches,fraq__query__FraqExecutor___iter_records,fraq___collect_files_filtered,fraq___estimate_complexity,fraq__crawl_async,fraq__stream_pages,fraq__load_root,fraq__stream,fraq__server__ws_stream medCC

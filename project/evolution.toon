@@ -1,4 +1,4 @@
-# code2llm/evolution | 327 func | 51f | 2026-03-17
+# code2llm/evolution | 324 func | 52f | 2026-03-17
 
 NEXT[1] (ranked by impact):
   [1] !! SPLIT           examples/basic/app_integrations.py
@@ -17,4 +17,4 @@ METRICS-TARGET:
   hub-types:   0 → ≤0
 
 HISTORY:
-  prev CC̄=2.7 → now CC̄=2.8
+  prev CC̄=2.8 → now CC̄=2.8

@@ -1,7 +1,7 @@
 flowchart TD
     examples_basic["examples.basic<br/>32 funcs"]
     examples_fastapi_docker["examples.fastapi-docker<br/>23 funcs"]
-    examples_streaming["examples.streaming<br/>5 funcs"]
+    examples_streaming["examples.streaming<br/>3 funcs"]
     examples_text2fraq["examples.text2fraq<br/>27 funcs"]
     examples_v028["examples.v028<br/>4 funcs"]
     fraq_adapters["fraq.adapters<br/>54 funcs"]
@@ -25,8 +25,8 @@ flowchart TD
     examples_basic -->|2| fraq_formats
     fraq_generators -->|1| fraq_core
     fraq_cli -->|1| fraq_text2fraq
-    fraq_query -->|1| fraq_formats
     examples_streaming -->|1| fraq_streaming
+    fraq_query -->|1| fraq_formats
     examples_fastapi_docker -->|1| fraq_text2fraq
     examples_fastapi_docker -->|1| fraq_streaming
     fraq_text2fraq -->|1| fraq_formats

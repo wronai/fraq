@@ -6,55 +6,71 @@ Kompletne przykłady użycia biblioteki fraq z różnymi technologiami.
 
 ```
 examples/
-├── CLI & curl/                    # Użycie bez Docker
-│   ├── CLI_CURL_GUIDE.md         # Pełna dokumentacja CLI/API
-│   └── bash_examples.sh          # Skrypt z przykładami bash/curl
+├── basic/                         # Podstawowe przykłady
+│   ├── query_examples.py          # Zapytania i formaty
+│   ├── applications.py            # IoT, ERP, Finance
+│   ├── async_streaming.py         # Async/SSE/Kafka
+│   └── app_integrations.py        # FastAPI/Streamlit/Flask
 │
-├── fastapi-docker/                # REST API w Docker
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   ├── main.py                   # Aplikacja FastAPI
-│   ├── run.sh                    # Skrypt uruchamiający (bash)
-│   ├── run.py                    # Skrypt uruchamiający (python)
-│   └── README.md
+├── text2fraq/                     # Natural language
+│   ├── text2fraq_examples.py      # NL do zapytań
+│   ├── text2fraq_files.py         # NL wyszukiwanie plików
+│   └── nlp2cmd_integration.py     # NLP2CMD schema
+│
+├── v028/                          # Nowe funkcje v0.2.10
+│   └── new_features.py            # ModelRouter, FraqSession
+│
+├── database/                      # Bazy danych
+│   └── sqlite_examples.py         # SQLite/PostgreSQL/SQL
+│
+├── streaming/                     # Streaming
+│   └── sse_examples.py            # SSE/WebSocket/Kafka
+│
+├── ai_ml/                         # AI/ML
+│   └── training_data.py           # Synthetic datasets
+│
+├── iot/                           # IoT
+│   └── sensor_examples.py         # MQTT/Time-series
+│
+├── etl/                           # ETL/Pipelines
+│   └── pipeline_examples.py       # Data pipelines
+│
+├── testing/                       # Testing
+│   └── test_fixtures.py           # Mock data/fixtures
+│
+├── network/                       # Network
+│   └── network_web_examples.py    # Scanning/crawling
 │
 ├── cli-docker/                    # CLI w Docker
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   ├── run.sh
-│   ├── run.py
-│   └── README.md
-│
+├── fastapi-docker/                # REST API w Docker
 ├── websocket-docker/              # WebSocket w Docker
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   ├── main.py
-│   ├── run.sh
-│   ├── run.py
-│   └── README.md
+├── fullstack-docker/              # Full stack w Docker
 │
-├── fullstack-docker/              # Kompletny stack w Docker
-│   ├── docker-compose.yml
-│   ├── api/                      # Usługa REST API
-│   ├── websocket/                # Usługa WebSocket
-│   ├── frontend/                 # Streamlit frontend
-│   ├── run.sh
-│   ├── run.py
-│   └── README.md
-│
-└── (pliki Python)                 # Przykłady bez Docker
-    ├── api_server.py             # Pełny serwer API (FastAPI + WS)
-    ├── text2fraq_examples.py     # Przykłady text2fraq
-    ├── text2fraq_files.py        # Przykłady wyszukiwania plików
-    ├── query_examples.py         # Przykłady zapytań
-    ├── applications.py           # Zastosowania praktyczne
-    ├── async_streaming.py        # Streaming asynchroniczny
-    └── nlp2cmd_integration.py    # Integracja NLP2CMD
+└── CLI_CURL_GUIDE.md              # Pełna dokumentacja
 ```
 
 ## 🚀 Szybki start
 
-### 1. CLI (natywnie)
+### Python Examples
+
+```bash
+# Podstawowe
+PYTHONPATH=/home/tom/github/wronai/fraq python3 basic/query_examples.py
+PYTHONPATH=/home/tom/github/wronai/fraq python3 basic/applications.py
+
+# Nowe funkcje v0.2.10
+PYTHONPATH=/home/tom/github/wronai/fraq python3 v028/new_features.py
+
+# Nowe kategorie
+PYTHONPATH=/home/tom/github/wronai/fraq python3 database/sqlite_examples.py
+PYTHONPATH=/home/tom/github/wronai/fraq python3 ai_ml/training_data.py
+PYTHONPATH=/home/tom/github/wronai/fraq python3 iot/sensor_examples.py
+PYTHONPATH=/home/tom/github/wronai/fraq python3 etl/pipeline_examples.py
+PYTHONPATH=/home/tom/github/wronai/fraq python3 testing/test_fixtures.py
+PYTHONPATH=/home/tom/github/wronai/fraq python3 streaming/sse_examples.py
+```
+
+### CLI
 
 ```bash
 pip install fraq[ai]
@@ -64,40 +80,83 @@ fraq files search --ext pdf --limit 10 ~
 
 # Natural language
 fraq nl "pokaż 10 najnowszych plików"
+fraq nl "pokaż pliki python w folderze domowym"
 ```
 
-### 2. REST API (Docker)
+### Docker
 
 ```bash
-cd examples/fastapi-docker
-./run.sh up
+# CLI w Docker
+cd cli-docker && ./run.sh fraq explore --depth 5
 
-# Test
-curl 'http://localhost:8000/files/search?ext=pdf&limit=5'
+# REST API
+cd fastapi-docker && ./run.sh up
+
+# WebSocket
+cd websocket-docker && ./run.sh up
+
+# Fullstack
+cd fullstack-docker && ./run.sh up
 ```
 
-### 3. Fullstack (Docker)
+## 📖 Kategorie
 
-```bash
-cd examples/fullstack-docker
-./run.sh up
+### 🔧 Basic
+| Plik | Opis |
+|------|------|
+| `query_examples.py` | JSON, CSV, YAML, SQL, streaming |
+| `applications.py` | IoT sensors, ERP invoices, AI/ML, DevOps |
+| `async_streaming.py` | Async generators, SSE, Kafka pattern |
+| `app_integrations.py` | FastAPI, Streamlit, Flask templates |
 
-# Otwórz:
-# - Frontend: http://localhost:8501
-# - API: http://localhost:8000
-```
+### 🗄️ Database
+| Plik | Opis |
+|------|------|
+| `sqlite_examples.py` | SQLite, PostgreSQL, SQL functions |
 
-## 📖 Dokumentacja
+### 📡 Streaming
+| Plik | Opis |
+|------|------|
+| `sse_examples.py` | SSE, WebSocket, Kafka, async stream |
 
-| Przykład | Opis | Uruchomienie |
-|----------|------|--------------|
-| `fastapi-docker/` | REST API | `./run.sh up` |
-| `cli-docker/` | CLI w kontenerze | `./run.sh [komenda]` |
-| `websocket-docker/` | WebSocket streaming | `./run.sh up` |
-| `fullstack-docker/` | API + WS + Frontend | `./run.sh up` |
-| `CLI_CURL_GUIDE.md` | Kompletna dokumentacja CLI/API | - |
+### 🤖 AI/ML
+| Plik | Opis |
+|------|------|
+| `training_data.py` | Classification, regression, time-series, NLP |
 
-## 🐳 Docker Compose (root)
+### 🔌 IoT
+| Plik | Opis |
+|------|------|
+| `sensor_examples.py` | MQTT, anomalies, device registry, edge computing |
+
+### 🔄 ETL
+| Plik | Opis |
+|------|------|
+| `pipeline_examples.py` | Multi-source extract, transform, validate, load |
+
+### 🧪 Testing
+| Plik | Opis |
+|------|------|
+| `test_fixtures.py` | Unit tests, mock APIs, property-based, load testing |
+
+### 🌐 Network
+| Plik | Opis |
+|------|------|
+| `network_web_examples.py` | Network scanning, web crawling |
+
+### 💬 Natural Language
+| Plik | Opis |
+|------|------|
+| `text2fraq_examples.py` | Rule-based + LLM parsing |
+| `text2fraq_files.py` | NL file search |
+| `nlp2cmd_integration.py` | NLP2CMD schema export |
+
+### 🆕 Nowe funkcje v0.2.10
+| Plik | Opis |
+|------|------|
+| `v028/new_features.py` | ModelRouter, FraqSession, FastAPI |
+
+## 🐳 Docker
 
 Alternatywnie, użyj głównego `docker-compose.yml` w root projektu:
 

@@ -1,14 +1,14 @@
-# fraq | 68f 10263L | python:68
+# fraq | 68f 9535L | python:68
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
 M[68]:
-  examples/ai_ml/training_data.py,181
+  examples/ai_ml/training_data.py,93
   examples/basic/app_integrations.py,458
   examples/basic/applications.py,126
   examples/basic/async_streaming.py,81
   examples/basic/query_examples.py,160
   examples/cli-docker/run.py,41
-  examples/database/sqlite_examples.py,148
-  examples/etl/pipeline_examples.py,227
+  examples/database/sqlite_examples.py,94
+  examples/etl/pipeline_examples.py,123
   examples/fastapi-docker/api_server.py,312
   examples/fastapi-docker/main.py,67
   examples/fastapi-docker/run.py,73
@@ -16,10 +16,10 @@ M[68]:
   examples/fullstack-docker/frontend/app.py,50
   examples/fullstack-docker/run.py,56
   examples/fullstack-docker/websocket/main.py,44
-  examples/iot/sensor_examples.py,200
+  examples/iot/sensor_examples.py,102
   examples/network/network_web_examples.py,143
-  examples/streaming/sse_examples.py,155
-  examples/testing/test_fixtures.py,202
+  examples/streaming/sse_examples.py,76
+  examples/testing/test_fixtures.py,96
   examples/text2fraq/nlp2cmd_integration.py,165
   examples/text2fraq/text2fraq_examples.py,208
   examples/text2fraq/text2fraq_files.py,202
@@ -71,13 +71,11 @@ M[68]:
   tests/test_text2fraq.py,122
 D:
   examples/ai_ml/training_data.py:
-    i: json,datetime,datetime.timedelta,fraq.{FraqSchema,query},typing.{Any,Dict,List}
-    e: example_1_classification_dataset,example_2_regression_data,example_3_time_series_forecasting,example_4_nlp_text_corpus,example_5_multiclass_classification
-    example_1_classification_dataset()
-    example_2_regression_data()
-    example_3_time_series_forecasting()
-    example_4_nlp_text_corpus()
-    example_5_multiclass_classification()
+    i: datetime,datetime.timedelta,fraq.{FraqNode,FraqSchema},typing.{Any,Dict,List}
+    e: example_1_classification,example_2_regression,example_3_time_series
+    example_1_classification()
+    example_2_regression()
+    example_3_time_series()
   examples/basic/app_integrations.py:
     i: json,dataclasses.dataclass
     e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook
@@ -126,20 +124,18 @@ D:
     run_local(args_list)
     main()
   examples/database/sqlite_examples.py:
-    i: sqlite3,json,datetime,fraq.{FraqNode,FraqSchema,query},fraq.adapters.sql_adapter.SQLAdapter,pathlib.Path
-    e: example_1_generate_to_sqlite,example_2_sql_adapter_query,example_3_generate_sql_function,example_4_hybrid_data
+    i: sqlite3,datetime,fraq.{FraqNode,FraqSchema},fraq.adapters.sql_adapter.SQLAdapter,pathlib.Path
+    e: example_1_generate_to_sqlite,example_2_sql_adapter,example_3_hybrid_data
     example_1_generate_to_sqlite()
-    example_2_sql_adapter_query()
-    example_3_generate_sql_function()
-    example_4_hybrid_data()
+    example_2_sql_adapter()
+    example_3_hybrid_data()
   examples/etl/pipeline_examples.py:
-    i: json,csv,datetime,fraq.{FraqSchema,query},io.StringIO,typing.{Any,Dict,Iterator,List}
-    e: example_1_multi_source_extract,example_2_schema_transformation,example_3_data_validation,example_4_incremental_load,example_5_pipeline_orchestration
-    example_1_multi_source_extract()
-    example_2_schema_transformation()
-    example_3_data_validation()
-    example_4_incremental_load()
-    example_5_pipeline_orchestration()
+    i: json,csv,datetime,fraq.{FraqNode,FraqSchema},io.StringIO,typing.{Any,Dict,List}
+    e: example_1_multi_source,example_2_transformation,example_3_validation,example_4_pipeline
+    example_1_multi_source()
+    example_2_transformation()
+    example_3_validation()
+    example_4_pipeline()
   examples/fastapi-docker/api_server.py:
     i: asyncio,json,datetime,contextlib.asynccontextmanager,fastapi.{FastAPI,HTTPException,Query},pathlib.Path,typing.{Any,AsyncIterator}
     e: lifespan,root,health,explore,stream,query_data,schema_records,files_search
@@ -189,12 +185,10 @@ D:
     health()
   examples/iot/sensor_examples.py:
     i: json,datetime,datetime.timedelta,fraq.{FraqNode,FraqSchema},typing.{Any,Dict,List}
-    e: example_1_sensor_readings,example_2_mqtt_payloads,example_3_time_series_with_anomalies,example_4_device_registry,example_5_edge_computing
+    e: example_1_sensor_readings,example_2_mqtt_payloads,example_3_device_health
     example_1_sensor_readings()
     example_2_mqtt_payloads()
-    example_3_time_series_with_anomalies()
-    example_4_device_registry()
-    example_5_edge_computing()
+    example_3_device_health()
   examples/network/network_web_examples.py:
     i: asyncio,fraq.{NetworkAdapter,WebCrawlerAdapter}
     e: example_network_scan_sync,example_network_scan_async,example_web_crawl_sync,example_web_crawl_async,example_fractal_coordinates,example_streaming_comparison,main
@@ -206,21 +200,17 @@ D:
     example_streaming_comparison()
     main()
   examples/streaming/sse_examples.py:
-    i: asyncio,json,datetime,fraq.{FraqSchema,query},fraq.streaming.async_stream,typing.AsyncIterator
-    e: example_1_sse_generator,example_2_websocket_client,example_3_kafka_pattern,example_4_async_stream,example_5_fastapi_sse_endpoint
+    i: asyncio,json,datetime,fraq.{FraqNode,FraqSchema},fraq.streaming.async_stream,typing.AsyncIterator
+    e: example_1_sse_generator,example_2_websocket_template,example_3_async_stream
     example_1_sse_generator()
-    example_2_websocket_client()
-    example_3_kafka_pattern()
-    example_4_async_stream()
-    example_5_fastapi_sse_endpoint()
+    example_2_websocket_template()
+    example_3_async_stream()
   examples/testing/test_fixtures.py:
-    i: json,datetime,dataclasses.dataclass,datetime.timedelta,fraq.{FraqSchema,query},typing.{Any,Callable,Dict,List}
-    e: example_1_unit_test_fixtures,example_2_mock_api_responses,example_3_property_based_data,example_4_database_fixtures,example_5_load_testing_data
+    i: json,datetime,dataclasses.dataclass,datetime.timedelta,fraq.{FraqNode,FraqSchema},typing.{Any,Dict,List}
+    e: example_1_unit_test_fixtures,example_2_mock_api,example_3_load_testing
     example_1_unit_test_fixtures()
-    example_2_mock_api_responses()
-    example_3_property_based_data()
-    example_4_database_fixtures()
-    example_5_load_testing_data()
+    example_2_mock_api()
+    example_3_load_testing()
   examples/text2fraq/nlp2cmd_integration.py:
     i: json,fraq
     e: build_sensor_schema,build_erp_schema,example_nlp2cmd_command_schema,example_nlp2cmd_actions,example_nlp2cmd_erp,example_openapi,example_graphql,example_asyncapi

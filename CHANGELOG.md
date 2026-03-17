@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+## [0.2.11] - 2026-03-17
+
+### Docs
+- Update README.md
+- Update docs/README.md
+- Update examples/README.md
+- Update project/README.md
+
+### Other
+- Update examples/ai_ml/training_data.py
+- Update examples/bash_examples.sh
+- Update examples/database/sqlite_examples.py
+- Update examples/etl/pipeline_examples.py
+- Update examples/iot/sensor_examples.py
+- Update examples/streaming/sse_examples.py
+- Update examples/testing/test_fixtures.py
+- Update examples/v028/new_features.py
+- Update project/analysis.toon
+- Update project/calls.mmd
+- ... and 11 more files
+
 ## [0.2.10] - 2026-03-17
 
 ### Other
