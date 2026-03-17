@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fraq"
-version = "0.2.0"
+version = "0.2.1"
 description = "Fractal Query Data Library — model data as infinite, self-similar fractal structures"
 readme = "README.md"
-license = "MIT"
+license = "Apache-2.0"
 requires-python = ">=3.10"
 authors = [
     {name = "Softreck / Prototypowanie.pl"},
+    {name = "Tom Sapletta", email = "tom@sapletta.com"},
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -48,7 +49,8 @@ fraq = "fraq.cli:main"
 http = ["requests>=2.28.0"]
 async = ["aiohttp>=3.9.0"]
 fast = ["orjson>=3.9.0"]
-all = ["requests>=2.28.0", "aiohttp>=3.9.0", "orjson>=3.9.0"]
+ai = ["litellm>=1.0.0", "python-dotenv>=1.0.0"]
+all = ["requests>=2.28.0", "aiohttp>=3.9.0", "orjson>=3.9.0", "litellm>=1.0.0", "python-dotenv>=1.0.0"]
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",

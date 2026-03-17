@@ -4,23 +4,23 @@
 
 - **Project**: fraq
 - **Language**: python
-- **Files**: 8
-- **Lines**: 3078
-- **Functions**: 92
-- **Classes**: 20
-- **Avg CC**: 2.7
-- **Critical (CC≥10)**: 1
+- **Files**: 9
+- **Lines**: 3428
+- **Functions**: 106
+- **Classes**: 26
+- **Avg CC**: 2.8
+- **Critical (CC≥10)**: 3
 
 ## Architecture
 
-### fraq/ (9 files, 1989L, 92 functions)
+### fraq/ (10 files, 2339L, 106 functions)
 
+- `text2fraq.py` — 341L, 14 methods, CC↑18
 - `formats.py` — 196L, 14 methods, CC↑11
 - `query.py` — 219L, 12 methods, CC↑9
 - `adapters.py` — 394L, 23 methods, CC↑8
 - `core.py` — 360L, 17 methods, CC↑5
-- `schema_export.py` — 476L, 7 methods, CC↑5
-- _4 more files_
+- _5 more files_
 
 ### root/ (1 files, 14L, 0 functions)
 
@@ -28,6 +28,10 @@
 
 ## Key Exports
 
+- **Text2Fraq** (class, CC̄=5.4)
+  - `_fallback_parse` CC=18 ⚠ split
+- **Text2FraqSimple** (class, CC̄=8.5)
+  - `parse` CC=15 ⚠ split
 - **FraqFilter** (class, CC̄=9.0)
 
 ## Hotspots (High Fan-Out)
@@ -43,9 +47,11 @@
 
 | # | Action | Impact | Effort |
 |---|--------|--------|--------|
-| 1 | Break circular dependency: fraq.formats._prepare | medium | low |
-| 2 | Break circular dependency: fraq.formats._simple_yaml | medium | low |
-| 3 | Break circular dependency: fraq.formats._mp_encode | medium | low |
+| 1 | Split Text2Fraq._fallback_parse (CC=18 → target CC<10) | medium | low |
+| 2 | Split Text2FraqSimple.parse (CC=15 → target CC<10) | medium | low |
+| 3 | Break circular dependency: fraq.formats._prepare | medium | low |
+| 4 | Break circular dependency: fraq.formats._simple_yaml | medium | low |
+| 5 | Break circular dependency: fraq.formats._mp_encode | medium | low |
 
 ## Context for LLM
 

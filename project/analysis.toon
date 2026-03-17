@@ -1,24 +1,28 @@
-# code2llm | 10f 2003L | python:9,shell:1 | 2026-03-17
-# CC̄=2.7 | critical:1/126 | dups:0 | cycles:3
+# code2llm | 11f 2353L | python:10,shell:1 | 2026-03-17
+# CC̄=2.8 | critical:3/157 | dups:0 | cycles:3
 
-HEALTH[0]: ok
+HEALTH[2]:
+  🟡 CC    _fallback_parse CC=18 (limit:15)
+  🟡 CC    parse CC=15 (limit:15)
 
-REFACTOR[1]:
-  1. break 3 circular dependencies
+REFACTOR[2]:
+  1. split 2 high-CC methods  (CC>15)
+  2. break 3 circular dependencies
 
 COUPLING: no cross-package imports detected
 
 LAYERS:
-  fraq/                           CC̄=2.7    ←in:0  →out:0
+  fraq/                           CC̄=2.8    ←in:0  →out:0
   │ schema_export              476L  0C    7m  CC=5      ←2
   │ adapters                   394L  6C   23m  CC=8      ←0
   │ core                       360L  4C   17m  CC=5      ←1
+  │ !! text2fraq                  341L  6C   14m  CC=18     ←1
   │ query                      219L  4C   12m  CC=9      ←1
   │ !  formats                    196L  1C   14m  CC=11     ←5
   │ generators                 117L  4C    9m  CC=2      ←0
   │ streaming                   93L  1C    5m  CC=3      ←1
   │ cli                         88L  0C    5m  CC=4      ←0
-  │ __init__                    46L  0C    0m  CC=0.0    ←0
+  │ __init__                    55L  0C    0m  CC=0.0    ←0
   │
   ./                              CC̄=0.0    ←in:0  →out:0
   │ project.sh                  14L  0C    0m  CC=0.0    ←0
@@ -26,12 +30,14 @@ LAYERS:
 
 DUPLICATES[0]: none
 
-FUNCTIONS (CC≥10, 1 of 92):
+FUNCTIONS (CC≥10, 3 of 106):
+   18.0  Text2Fraq._fallback_parse                  27n   2exit  cond+ret  !! split
+   15.0  Text2FraqSimple.parse                      20n   2exit  loops+cond+ret  !! split
    11.0  _mp_encode                                 26n   9exit  loops+cond+ret
 
   summary:
-    critical(≥10): 1 | high(5-10): 13 | medium(2-5): 45 | low(<2): 33
-    1% CC≥10  15% CC≥5
+    critical(≥10): 3 | high(5-10): 13 | medium(2-5): 53 | low(<2): 37
+    3% CC≥10  15% CC≥5
 
 HOTSPOTS:
   #1  main                                 fan=14   "calls 14 functions"
@@ -49,6 +55,7 @@ CLASSES:
   FraqQuery                      ████████████████████████   6m  CC̄=1.5   max=3   
   SQLAdapter                     ████████████████████       5m  CC̄=3.0   max=6   
   FraqNode                       ████████████████████       5m  CC̄=3.6   max=5   
+  Text2Fraq                      ████████████████████       5m  CC̄=5.4   max=18    !!
   FormatRegistry                 ████████████████           4m  CC̄=1.5   max=2   
   BaseAdapter                    ████████████████           4m  CC̄=1.0   max=1   
   SensorAdapter                  ████████████████           4m  CC̄=1.8   max=3   
@@ -63,11 +70,35 @@ CLASSES:
   PerlinGenerator                ████████                   2m  CC̄=1.5   max=2   
   SensorStreamGenerator          ████████                   2m  CC̄=1.0   max=1   
   HTTPAdapter                    ████████                   2m  CC̄=2.5   max=3   
+  LiteLLMClient                  ████████                   2m  CC̄=2.5   max=4   
+  Text2FraqSimple                ████████                   2m  CC̄=8.5   max=15    !!
+  Text2FraqConfig                ████                       1m  CC̄=1.0   max=1   
+  ParsedQuery                    ████                       1m  CC̄=3.0   max=3   
+  LLMClient                      ████                       1m  CC̄=1.0   max=1   
   FraqFilter                     ████                       1m  CC̄=9.0   max=9   
   FieldDef                                                  0m  CC̄=0.0   max=0.0 
   SourceType                                                0m  CC̄=0.0   max=0.0 
 
 D:
+  fraq/text2fraq.py:
+    e: Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,Text2Fraq,Text2FraqSimple,text2query,text2fraq
+    Text2FraqConfig  # Configuration for text2fraq....
+      from_env(0)  CC=1.0
+    ParsedQuery  # Parsed natural language query....
+      to_fraq_query(0)  CC=3.0
+    LLMClient  # Protocol for LLM clients....
+      complete(1)  CC=1.0
+    LiteLLMClient  # LiteLLM client for text completion....
+      __init__(1)  CC=4.0
+    Text2Fraq  # Natural language to fractal query converter.
+
+Examples:
+    ...
+      __init__(2)  CC=3.0
+    Text2FraqSimple  # Rule-based text2fraq without LLM (fallback for offline use)....
+      parse(1)  CC=15.0  !
+    text2query(text,config)
+    text2fraq(text,config,root)
   fraq/formats.py:
     e: FormatRegistry,_to_json,_to_jsonl,_to_csv,_to_yaml,_to_binary,_to_msgpack_lite,_prepare,_simple_yaml,_encode_value,_mp_encode
     FormatRegistry  # Registry of serialisation backends....
@@ -121,6 +152,16 @@ In...
 The m...
       __init__(0)  CC=1.0
     get_adapter(source)
+  examples/text2fraq_examples.py:
+    e: example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_env_config,example_benchmark,example_custom_schema
+    example_simple_parser()
+    example_qwen25()
+    example_llama32()
+    example_phi3()
+    example_convenience_functions()
+    example_env_config()
+    example_benchmark()
+    example_custom_schema()
   fraq/schema_export.py:
     e: to_nlp2cmd_schema,to_nlp2cmd_actions,to_openapi,to_graphql,to_asyncapi,to_proto,to_json_schema
     to_nlp2cmd_schema(schema,command_name,version,category)
@@ -220,5 +261,16 @@ Produces dict paylo...
     example_sensor_to_formats()
     example_hybrid_merge()
     example_oneliners()
+  examples/app_integrations.py:
+    e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook,example_celery_task
+    example_fastapi_app()
+    example_streamlit_app()
+    example_flask_app()
+    example_cli_chat()
+    example_websocket_server()
+    example_kafka_producer()
+    example_grpc_service()
+    example_jupyter_notebook()
+    example_celery_task()
   fraq/__init__.py:
   project.sh:

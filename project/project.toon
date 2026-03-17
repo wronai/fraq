@@ -1,11 +1,13 @@
-# fraq | 22f 3839L | python:22
+# fraq | 25f 5130L | python:25
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[22]:
+M[25]:
+  examples/app_integrations.py,458
   examples/applications.py,126
   examples/async_streaming.py,81
   examples/nlp2cmd_integration.py,165
   examples/query_examples.py,160
-  fraq/__init__.py,43
+  examples/text2fraq_examples.py,261
+  fraq/__init__.py,52
   fraq/adapters.py,286
   fraq/cli.py,65
   fraq/core.py,277
@@ -14,6 +16,7 @@ M[22]:
   fraq/query.py,166
   fraq/schema_export.py,399
   fraq/streaming.py,77
+  fraq/text2fraq.py,278
   tests/__init__.py,0
   tests/test_adapters.py,136
   tests/test_cli.py,37
@@ -24,6 +27,17 @@ M[22]:
   tests/test_schema_export.py,158
   tests/test_streaming.py,73
 D:
+  examples/app_integrations.py:
+    i: json,dataclasses.dataclass
+    e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook
+    example_fastapi_app()
+    example_streamlit_app()
+    example_flask_app()
+    example_cli_chat()
+    example_websocket_server()
+    example_kafka_producer()
+    example_grpc_service()
+    example_jupyter_notebook()
   examples/applications.py:
     i: fraq
     e: example_iot_sensor_network,example_erp_invoices,example_ai_training_data,example_devops_load_test,example_finance_leasing,example_legal_clauses,example_perlin_organic
@@ -65,9 +79,20 @@ D:
     example_sql_custom_mapping()
     example_sensor_stream()
     example_sensor_to_formats()
+  examples/text2fraq_examples.py:
+    i: os,dataclasses.dataclass,dotenv.load_dotenv,fraq
+    e: example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_env_config,example_benchmark,example_custom_schema
+    example_simple_parser()
+    example_qwen25()
+    example_llama32()
+    example_phi3()
+    example_convenience_functions()
+    example_env_config()
+    example_benchmark()
+    example_custom_schema()
   fraq/adapters.py:
-    i: json,hashlib,__future__.annotations,abc.{ABC,abstractmethod},dataclasses.{dataclass,field},pathlib.Path,typing.{Any,Dict}
-    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,HybridAdapter,get_adapter
+    i: json,hashlib,abc.{ABC,abstractmethod},dataclasses.{dataclass,field},pathlib.Path,typing.{Any,Dict,Iterator}
+    e: BaseAdapter,FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter,HybridAdapter,_ADAPTERS,get_adapter
     BaseAdapter: load_root(1),save(3),execute(1),execute_iter(1)  # Interface every data-source adapter m...
     FileAdapter: load_root(1),save(3),_dict_to_node(1)  # Read/write fractal state from local f...
     HTTPAdapter: load_root(1),save(3)  # Fetch fractal roots from remote HTTP...
@@ -75,7 +100,7 @@ D:
     SensorAdapter: __init__(4),load_root(1),save(3),stream(3)  # Simulate or consume live sensor data...
     get_adapter(source:SourceType)->BaseAdapter
   fraq/cli.py:
-    i: argparse,sys,__future__.annotations,fraq.core.{FraqCursor,FraqNode,FraqSchema},fraq.formats.FormatRegistry,fraq.generators.HashGenerator,typing.List
+    i: argparse,sys,fraq.core.{FraqCursor,FraqNode,FraqSchema},fraq.formats.FormatRegistry,fraq.generators.HashGenerator,typing.List
     e: cmd_explore,cmd_stream,cmd_schema,main
     _make_root(dims:int;seed:int=0)->FraqNode
     cmd_explore(args:Any)->None
@@ -83,7 +108,7 @@ D:
     cmd_schema(args:Any)->None
     main(argv:Any=None)->None
   fraq/core.py:
-    i: hashlib,math,struct,__future__.annotations,dataclasses.{dataclass,field},typing.{Any,Callable,Dict,Iterator}
+    i: hashlib,math,struct,dataclasses.{dataclass,field},typing.{Any,Callable,Dict,Iterator,List}
     e: FraqNode,FieldDef,FraqSchema,FraqCursor
     FraqNode: value(0),zoom(1),children(1),_child(1),to_dict(1)  # A single point in the infinite fracta...
     FieldDef:   # One field in a FraqSchema.
@@ -94,7 +119,7 @@ D:
     _vec_norm(v:Vector)->float
     _vec_hash(v:Vector;seed:int=0)->int
   fraq/formats.py:
-    i: csv,io,json,struct,__future__.annotations,typing.{Any,Callable,Dict,Iterator,List}
+    i: csv,io,json,struct,typing
     e: FormatRegistry
     FormatRegistry: register(2),get(1),available(0),serialize(2)  # Registry of serialisation backends.
     _to_json(data:Any)->str
@@ -106,14 +131,14 @@ D:
     _prepare(obj:Any)->Any
     _simple_yaml(obj:Any;indent:int=0)->str
   fraq/generators.py:
-    i: hashlib,math,struct,__future__.annotations,fraq.core.{FraqNode,_vec_hash},typing.Any
+    i: hashlib,math,struct,fraq.core.{FraqNode,_vec_hash},typing.Any
     e: HashGenerator,FibonacciGenerator,PerlinGenerator,SensorStreamGenerator
     HashGenerator: __init__(3),__call__(1)  # Deterministic pseudo-random values vi...
     FibonacciGenerator: __init__(2),_fib(1),__call__(1)  # Value based on generalised Fibonacci...
     PerlinGenerator: __init__(2),__call__(1)  # Simplified 1-D Perlin-ish noise from...
     SensorStreamGenerator: __init__(3),__call__(1)  # Simulate an infinite IoT sensor stream.
   fraq/query.py:
-    i: json,__future__.annotations,dataclasses.{dataclass,field},enum.Enum,typing.{Any,Dict,Iterator,List,Optional}
+    i: json,dataclasses.{dataclass,field},enum.Enum,typing
     e: SourceType,FraqFilter,FraqQuery,FraqExecutor,query
     SourceType:   # Known data source families.
     FraqFilter: matches(1)  # Post-zoom predicate on a record field.
@@ -121,21 +146,31 @@ D:
     FraqExecutor: __init__(2),execute(1),execute_iter(1),_iter_records(1)  # Execute a FraqQuery against a root node.
     query(depth:int=1;direction:Optional[Vector]=None;fields:Optional[List[str]]=None;format:str='json';limit:Optional[int]=None;dims:int=3;...+1)->Any
   fraq/schema_export.py:
-    i: json,__future__.annotations,dataclasses.dataclass,fraq.core.{FieldDef,FraqSchema},typing.{Any,Dict,List,Optional}
-    e: to_nlp2cmd_schema,to_nlp2cmd_actions,to_openapi,to_graphql,to_asyncapi,to_proto,to_json_schema
-    to_nlp2cmd_schema(schema:FraqSchema;command_name:str='fraq';version:str='1.0';category:str='data')->Dict[str,Any]
-    to_nlp2cmd_actions(schema:FraqSchema)->List[Dict[str,Any]]
-    to_openapi(schema:FraqSchema;title:str='Fraq Fractal API';version:str='1.0.0';base_path:str='/api/fraq')->Dict[str,Any]
+    i: json,dataclasses.dataclass,fraq.core.{FieldDef,FraqSchema},typing.{Any,Dict,List,Optional}
+    e: _FRAQ_TO_JSON_SCHEMA,_FRAQ_TO_PROTO,_FRAQ_TO_GRAPHQL,to_nlp2cmd_schema,to_nlp2cmd_actions,to_openapi,to_graphql,to_asyncapi
+    to_nlp2cmd_schema(schema:FraqSchema;command_name:str='fraq';version:str='1.0';category:str='data')->Dict[str, Any]
+    to_nlp2cmd_actions(schema:FraqSchema)->List[Dict[str, Any]]
+    to_openapi(schema:FraqSchema;title:str='Fraq Fractal API';version:str='1.0.0';base_path:str='/api/fraq')->Dict[str, Any]
     to_graphql(schema:FraqSchema;type_name:str='FraqRecord')->str
-    to_asyncapi(schema:FraqSchema;title:str='Fraq Streams';version:str='1.0.0')->Dict[str,Any]
+    to_asyncapi(schema:FraqSchema;title:str='Fraq Streams';version:str='1.0.0')->Dict[str, Any]
     to_proto(schema:FraqSchema;package:str='fraq';message_name:str='FraqRecord')->str
-    to_json_schema(schema:FraqSchema;title:str='FraqRecord')->Dict[str,Any]
+    to_json_schema(schema:FraqSchema;title:str='FraqRecord')->Dict[str, Any]
   fraq/streaming.py:
-    i: asyncio,__future__.annotations,fraq.core.{FraqCursor,FraqNode,FraqSchema,Vector},typing.{Any,AsyncIterator,Dict,Optional}
+    i: asyncio,fraq.core.{FraqCursor,FraqNode,FraqSchema,Vector},fraq.query.FraqQuery,typing.{Any,AsyncIterator,Dict,Optional}
     e: AsyncFraqStream,async_query,async_stream
     AsyncFraqStream: __init__(5),__aiter__(0),stop(0),depth(0)  # Async generator that yields fractal r...
-    async_query(query:FraqQuery;root:Optional[FraqNode]=None;dims:int=3)->list[Dict[str,Any]]
-    async_stream(root:Optional[FraqNode]=None;count:int=10;interval:float=0.1;direction:Optional[Vector]=None;dims:int=3)->AsyncIterator[Dict[str,Any]]
+    async_query(query:FraqQuery;root:Optional[FraqNode]=None;dims:int=3)->list[Dict[str, Any]]
+    async_stream(root:Optional[FraqNode]=None;count:int=10;interval:float=0.1;direction:Optional[Vector]=None;dims:int=3)->AsyncIterator[Dict[str, Any]]
+  fraq/text2fraq.py:
+    i: json,os,re,litellm,dataclasses.{dataclass,field},dotenv.load_dotenv,fraq.FraqQuery,typing.{Any,Protocol}
+    e: Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,Text2Fraq,Text2FraqSimple,text2query,text2fraq
+    Text2FraqConfig: from_env(0)  # Configuration for text2fraq.
+    ParsedQuery: to_fraq_query(0)  # Parsed natural language query.
+    LLMClient: complete(1)  # Protocol for LLM clients.
+    LiteLLMClient: __init__(1),complete(1)  # LiteLLM client for text completion.
+    Text2Fraq: __init__(2),parse(1),_parse_response(1),_fallback_parse(1),execute(2)  # Natural language to fractal query con...
+    text2query(text:str;config:Any=None)->ParsedQuery
+    text2fraq(text:str;config:Any=None;root:Any=None)->str | list[dict[str, Any]]
   tests/test_adapters.py:
     i: json,pytest,fraq.adapters.{FileAdapter,HTTPAdapter,SQLAdapter,SensorAdapter},fraq.core.FraqNode,fraq.query.{FraqQuery,SourceType},pathlib.Path
     e: TestFileAdapter,TestHTTPAdapter,TestSQLAdapter,TestSensorAdapter,TestHybridAdapter,TestGetAdapter
@@ -157,7 +192,7 @@ D:
     TestFraqCursor: test_initial_depth_zero(0),test_advance_increases_depth(0),test_back_decreases_depth(0),test_back_at_root(0),test_reset(0)
   tests/test_formats.py:
     i: json,pytest,fraq.core.FraqNode,fraq.formats.FormatRegistry
-    e: TestFormatRegistry,TestJsonFormat,TestJsonlFormat,TestCsvFormat,TestYamlFormat,TestBinaryFormat,TestMsgpackLiteFormat,sample_data
+    e: sample_data,sample_records,TestFormatRegistry,TestJsonFormat,TestJsonlFormat,TestCsvFormat,TestYamlFormat,TestBinaryFormat
     TestFormatRegistry: test_available_formats(0),test_unknown_format_raises(0),test_custom_format_registration(0)
     TestJsonFormat: test_dict_roundtrip(1),test_fraq_node_serialises(0)
     TestJsonlFormat: test_multiple_records(1),test_single_dict_becomes_one_line(1)
@@ -181,7 +216,7 @@ D:
     TestQueryFunction: test_basic_query(0),test_query_csv(0)
   tests/test_schema_export.py:
     i: json,pytest,fraq.core.{FraqNode,FraqSchema},fraq.schema_export
-    e: TestNLP2CMDSchema,TestNLP2CMDActions,TestOpenAPI,TestGraphQL,TestAsyncAPI,TestProto,TestJSONSchema,sample_schema
+    e: sample_schema,TestNLP2CMDSchema,TestNLP2CMDActions,TestOpenAPI,TestGraphQL,TestAsyncAPI,TestProto,TestJSONSchema
     TestNLP2CMDSchema: test_structure(1),test_field_parameters(1),test_templates(1),test_examples(1),test_json_serializable(1)
     TestNLP2CMDActions: test_four_actions(1),test_action_parameters(1),test_query_includes_schema_fields(1)
     TestOpenAPI: test_structure(1),test_endpoints(1),test_record_schema(1),test_custom_base_path(1)
@@ -190,7 +225,7 @@ D:
     sample_schema()
   tests/test_streaming.py:
     i: asyncio,pytest,fraq.core.{FraqNode,FraqSchema},fraq.query.FraqQuery,fraq.streaming.{AsyncFraqStream,async_query,async_stream}
-    e: TestAsyncFraqStream,TestAsyncQuery,TestAsyncStreamFunction,event_loop
+    e: event_loop,TestAsyncFraqStream,TestAsyncQuery,TestAsyncStreamFunction
     TestAsyncFraqStream: test_stream_with_count(0),test_stream_with_schema(0),test_depth_increases(0)
     TestAsyncQuery: test_basic_query(0)
     TestAsyncStreamFunction: test_stream_count(0)

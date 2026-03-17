@@ -32,8 +32,16 @@ from fraq.schema_export import (
     to_proto,
     to_json_schema,
 )
+from fraq.text2fraq import (
+    Text2Fraq,
+    Text2FraqSimple,
+    Text2FraqConfig,
+    ParsedQuery,
+    text2query,
+    text2fraq,
+)
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __all__ = [
     "FraqNode", "FraqSchema", "FraqCursor",
     "FormatRegistry",
@@ -43,4 +51,5 @@ __all__ = [
     "get_adapter",
     "to_nlp2cmd_schema", "to_nlp2cmd_actions",
     "to_openapi", "to_graphql", "to_asyncapi", "to_proto", "to_json_schema",
+    "Text2Fraq", "Text2FraqSimple", "Text2FraqConfig", "ParsedQuery", "text2query", "text2fraq",
 ]

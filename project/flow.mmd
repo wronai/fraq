@@ -1,4 +1,15 @@
 flowchart TD
+    subgraph examples_app_integrations
+        examples__app_integrations__example_fastapi_app["example_fastapi_app"]
+        examples__app_integrations__example_streamlit_app["example_streamlit_app"]
+        examples__app_integrations__example_flask_app["example_flask_app"]
+        examples__app_integrations__example_cli_chat["example_cli_chat"]
+        examples__example_websocket_server["example_websocket_server"]
+        examples__app_integrations__example_kafka_producer["example_kafka_producer"]
+        examples__app_integrations__example_grpc_service["example_grpc_service"]
+        examples__example_jupyter_notebook["example_jupyter_notebook"]
+        examples__app_integrations__example_celery_task["example_celery_task"]
+    end
     subgraph examples_applications
         examples__applications__example_iot_sensor_network["example_iot_sensor_network"]
         examples__applications__example_erp_invoices["example_erp_invoices"]
@@ -40,6 +51,16 @@ flowchart TD
         examples__example_sensor_to_formats["example_sensor_to_formats"]
         examples__query_examples__example_hybrid_merge["example_hybrid_merge"]
         examples__query_examples__example_oneliners["example_oneliners"]
+    end
+    subgraph examples_text2fraq_examples
+        examples__example_simple_parser["example_simple_parser"]
+        examples__text2fraq_examples__example_qwen25["example_qwen25"]
+        examples__text2fraq_examples__example_llama32["example_llama32"]
+        examples__text2fraq_examples__example_phi3["example_phi3"]
+        examples__example_convenience_functions["example_convenience_functions"]
+        examples__text2fraq_examples__example_env_config["example_env_config"]
+        examples__text2fraq_examples__example_benchmark["example_benchmark"]
+        examples__example_custom_schema["example_custom_schema"]
     end
     subgraph fraq_adapters
         fraq__adapters__BaseAdapter__load_root["load_root"]
@@ -149,12 +170,29 @@ flowchart TD
         fraq__streaming__async_query["async_query"]
         fraq__streaming__async_stream["async_stream"]
     end
+    subgraph fraq_text2fraq
+        fraq__text2fraq__Text2FraqConfig__from_env["from_env"]
+        fraq__text2fraq__ParsedQuery__to_fraq_query["to_fraq_query"]
+        fraq__text2fraq__LLMClient__complete["complete"]
+        fraq__text2fraq__LiteLLMClient____init__["__init__"]
+        fraq__text2fraq__LiteLLMClient__complete["complete"]
+        fraq__text2fraq__Text2Fraq____init__["__init__"]
+        fraq__text2fraq__Text2Fraq__parse["parse"]
+        fraq__text2fraq__Text2Fraq___parse_response["_parse_response"]
+        fraq__text2fraq__Text2Fraq___fallback_parse{{_fallback_parse CC=18}}
+        fraq__text2fraq__Text2Fraq__execute["execute"]
+        fraq__text2fraq__Text2FraqSimple__parse{{parse CC=15}}
+        fraq__text2fraq__Text2FraqSimple__execute["execute"]
+        fraq__text2fraq__text2query["text2query"]
+        fraq__text2fraq__text2fraq["text2fraq"]
+    end
     fraq__cli__cmd_explore --> fraq__cli___make_root
     fraq__cli__cmd_explore --> fraq__formats__FormatRegistry__serialize
     fraq__cli__cmd_stream --> fraq__cli___make_root
     fraq__cli__cmd_stream --> fraq__formats__FormatRegistry__serialize
     fraq__cli__cmd_schema --> fraq__cli___make_root
     fraq__cli__cmd_schema --> fraq__formats__FormatRegistry__serialize
+    fraq__generators__SensorStreamGenerator____call__ --> fraq__core___vec_hash
     fraq__formats___to_json --> fraq__formats__FormatRegistry__register
     fraq__formats___to_json --> fraq__formats___prepare
     fraq__formats___to_jsonl --> fraq__formats__FormatRegistry__register
@@ -169,11 +207,13 @@ flowchart TD
     fraq__formats___to_msgpack_lite --> fraq__formats__FormatRegistry__register
     fraq__formats___to_msgpack_lite --> fraq__formats___mp_encode
     fraq__formats___to_msgpack_lite --> fraq__formats___prepare
-    fraq__generators__SensorStreamGenerator____call__ --> fraq__core___vec_hash
     fraq__adapters__FileAdapter__save --> fraq__formats__FormatRegistry__serialize
     fraq__adapters__HTTPAdapter__load_root --> fraq__adapters__FileAdapter___dict_to_node
     fraq__adapters__HTTPAdapter__save --> fraq__formats__FormatRegistry__serialize
     fraq__adapters__SensorAdapter__save --> fraq__formats__FormatRegistry__serialize
+    examples__applications__example_iot_sensor_network --> fraq__schema_export__to_proto
+    examples__applications__example_ai_training_data --> fraq__formats__FormatRegistry__serialize
+    examples__applications__example_devops_load_test --> fraq__schema_export__to_openapi
     examples__async_streaming__example_basic_stream --> fraq__streaming__async_stream
     examples__async_streaming__example_async_query --> fraq__streaming__async_query
     examples__example_fastapi_sse_pattern --> fraq__streaming__async_stream
@@ -183,12 +223,12 @@ flowchart TD
     examples__async_streaming__main --> examples__async_streaming__example_async_query
     examples__async_streaming__main --> examples__example_fastapi_sse_pattern
     examples__async_streaming__main --> examples__example_kafka_producer_pattern
-    examples__applications__example_iot_sensor_network --> fraq__schema_export__to_proto
-    examples__applications__example_ai_training_data --> fraq__formats__FormatRegistry__serialize
-    examples__applications__example_devops_load_test --> fraq__schema_export__to_openapi
     examples__query_examples__example_disk_yaml --> fraq__query__query
     examples__example_sensor_to_formats --> fraq__formats__FormatRegistry__serialize
     examples__query_examples__example_oneliners --> fraq__query__query
+    examples__example_convenience_functions --> fraq__text2fraq__text2query
+    examples__example_convenience_functions --> fraq__text2fraq__text2fraq
+    examples__text2fraq_examples__example_env_config --> fraq__text2fraq__Text2FraqConfig__from_env
     examples__example_nlp2cmd_command_schema --> examples__nlp2cmd_integration__build_sensor_schema
     examples__example_nlp2cmd_command_schema --> fraq__schema_export__to_nlp2cmd_schema
     examples__example_nlp2cmd_actions --> examples__nlp2cmd_integration__build_sensor_schema
@@ -211,8 +251,11 @@ flowchart TD
     fraq__core__FraqNode___child --> fraq__core___vec_hash
     fraq__core__FraqNode___child --> fraq__core___vec_add
     fraq__core__FraqNode___child --> fraq__core___vec_scale
+    fraq__text2fraq__LiteLLMClient____init__ --> fraq__text2fraq__Text2FraqConfig__from_env
+    fraq__text2fraq__Text2Fraq____init__ --> fraq__text2fraq__Text2FraqConfig__from_env
     fraq__query__FraqExecutor__execute --> fraq__formats__FormatRegistry__serialize
 
     classDef highCC fill:#ff6b6b,stroke:#c92a2a,color:#fff
     classDef medCC fill:#ffd43b,stroke:#f08c00,color:#000
+    class fraq__text2fraq__Text2Fraq___fallback_parse,fraq__text2fraq__Text2FraqSimple__parse highCC
     class fraq__formats___prepare,fraq__formats___mp_encode,fraq__adapters__HybridAdapter__load_root,fraq__query__FraqFilter__matches,fraq__query__FraqExecutor___iter_records medCC

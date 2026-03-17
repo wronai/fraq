@@ -1,5 +1,29 @@
 # Changelog
 
+## [Unreleased]
+
+## [0.2.1] - 2026-03-17
+
+### Docs
+- Update README.md
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Other
+- Update .env.example
+- Update examples/app_integrations.py
+- Update examples/text2fraq_examples.py
+- Update fraq/__init__.py
+- Update fraq/text2fraq.py
+- Update project.sh
+- Update project/analysis.toon
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/compact_flow.mmd
+- ... and 10 more files
+
+
 All notable changes to **fraq** are documented here.
 
 ## [0.2.0] — 2026-03-16

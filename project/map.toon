@@ -1,11 +1,13 @@
-# fraq | 14f 2756L | python:13,shell:1
+# fraq | 17f 4044L | python:16,shell:1
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[14]:
+M[17]:
+  examples/app_integrations.py,566
   examples/applications.py,191
   examples/async_streaming.py,103
   examples/nlp2cmd_integration.py,223
   examples/query_examples.py,236
-  fraq/__init__.py,46
+  examples/text2fraq_examples.py,372
+  fraq/__init__.py,55
   fraq/adapters.py,394
   fraq/cli.py,88
   fraq/core.py,360
@@ -14,8 +16,22 @@ M[14]:
   fraq/query.py,219
   fraq/schema_export.py,476
   fraq/streaming.py,93
+  fraq/text2fraq.py,341
   project.sh,14
 D:
+  fraq/text2fraq.py:
+    e: Text2FraqConfig,ParsedQuery,LLMClient,LiteLLMClient,Text2Fraq,Text2FraqSimple,text2query,text2fraq
+    Text2FraqConfig: from_env(0)  # Configuration for text2fraq...
+    ParsedQuery: to_fraq_query(0)  # Parsed natural language query...
+    LLMClient(Protocol): complete(1)  # Protocol for LLM clients...
+    LiteLLMClient: __init__(1),complete(1)  # LiteLLM client for text completion...
+    Text2Fraq: __init__(2),parse(1),_parse_response(1),_fallback_parse(1),execute(2)  # Natural language to fractal query converter.
+
+Examples:
+    ...
+    Text2FraqSimple: parse(1),execute(2)  # Rule-based text2fraq without LLM (fallback for offline use)...
+    text2query(text;config)
+    text2fraq(text;config;root)
   fraq/formats.py:
     e: FormatRegistry,_to_json,_to_jsonl,_to_csv,_to_yaml,_to_binary,_to_msgpack_lite,_prepare,_simple_yaml,_encode_value,_mp_encode
     FormatRegistry: register(2),get(1),available(0),serialize(2)  # Registry of serialisation backends...
@@ -58,6 +74,16 @@ In...
 
 The m...
     get_adapter(source)
+  examples/text2fraq_examples.py:
+    e: example_simple_parser,example_qwen25,example_llama32,example_phi3,example_convenience_functions,example_env_config,example_benchmark,example_custom_schema
+    example_simple_parser()
+    example_qwen25()
+    example_llama32()
+    example_phi3()
+    example_convenience_functions()
+    example_env_config()
+    example_benchmark()
+    example_custom_schema()
   fraq/schema_export.py:
     e: to_nlp2cmd_schema,to_nlp2cmd_actions,to_openapi,to_graphql,to_asyncapi,to_proto,to_json_schema
     to_nlp2cmd_schema(schema;command_name;version;category)
@@ -148,5 +174,16 @@ Produces dict paylo...
     example_sensor_to_formats()
     example_hybrid_merge()
     example_oneliners()
+  examples/app_integrations.py:
+    e: example_fastapi_app,example_streamlit_app,example_flask_app,example_cli_chat,example_websocket_server,example_kafka_producer,example_grpc_service,example_jupyter_notebook,example_celery_task
+    example_fastapi_app()
+    example_streamlit_app()
+    example_flask_app()
+    example_cli_chat()
+    example_websocket_server()
+    example_kafka_producer()
+    example_grpc_service()
+    example_jupyter_notebook()
+    example_celery_task()
   fraq/__init__.py:
   project.sh:

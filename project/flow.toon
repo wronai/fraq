@@ -1,6 +1,13 @@
-# fraq/flow | 126 func | 6 pipelines | 5 hub-types | 2026-03-17
+# fraq/flow | 157 func | 7 pipelines | 5 hub-types | 2026-03-17
 
-PIPELINES[6] (Core:2, Export:1, NLP:1, Unknown:2):
+PIPELINES[7] (Core:2, Export:1, NLP:1, Unknown:3):
+  Fraq [Unknown]: str → dict[str, Any]
+              → execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]] CC=2    IO ▶
+              → parse(text:str) → ParsedQuery           CC=1    pure
+              → _parse_response(response:str) → ParsedQuery CC=3    IO
+              → _fallback_parse(text:str) → dict[str, Any] CC=18   mutation  !! ■
+              PURITY: 1/4 pure  BOTTLENECK: _fallback_parse(CC=18)
+
   Fraq [Export]: List[str] | None → Any
               → main(argv:List[str] | None) → None      CC=4    pure ▶
               → cmd_schema(args:argparse.Namespace) → None CC=3    IO
@@ -55,6 +62,27 @@ TRANSFORMS (fan-out ≥10):
   example_http_api()                                      fan=10   fan=10
 
 CONTRACTS:
+  Pipeline: Fraq
+    execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]]
+      IN:  text:str, root:FraqNode | None
+      OUT: str | list[dict[str, Any]]
+      SIDE-EFFECT: IO(execute)
+
+    parse(text:str) → ParsedQuery
+      IN:  text:str
+      OUT: ParsedQuery
+
+    _parse_response(response:str) → ParsedQuery
+      IN:  response:str
+      OUT: ParsedQuery
+      SIDE-EFFECT: IO(loads)
+
+    _fallback_parse(text:str) → dict[str, Any]
+      IN:  text:str
+      OUT: dict[str, Any]
+      SIDE-EFFECT: pure
+      SMELL: CC=18 → split
+
   Pipeline: Fraq
     main(argv:List[str] | None) → None
       IN:  argv:List[str] | None
@@ -139,30 +167,30 @@ CONTRACTS:
       OUT: FraqNode
 
 
-DATA_TYPES (by cross-function usage) [94 annotated, 0 inferred / 126 functions]:
-  str                  consumed:46  produced:17   !! HUB-TYPE → split interface
+DATA_TYPES (by cross-function usage) [108 annotated, 0 inferred / 157 functions]:
+  str                  consumed:56  produced:19   !! HUB-TYPE → split interface
   FraqNode             consumed:16  produced:15   !! HUB-TYPE → split interface
   int                  consumed:24  produced:2    !! HUB-TYPE → split interface
   float                consumed:14  produced:4    !! HUB-TYPE → split interface
   Vector               consumed:14  produced:2    !! HUB-TYPE → split interface
-  FraqQuery            consumed:6   produced:6  
+  FraqQuery            consumed:6   produced:7  
   FraqSchema           consumed:8   produced:3  
   str, Any             consumed:3   produced:8  
   Iterator[Dict[str, Any]] consumed:0   produced:5    output-heavy
   bytes                consumed:0   produced:4    narrow scope
+  Text2FraqConfig | None consumed:4   produced:0    narrow scope
+  ParsedQuery          consumed:0   produced:4    narrow scope
+  str | list[dict[str, Any]] consumed:0   produced:3    narrow scope
+  FraqNode | None      consumed:3   produced:0    narrow scope
   argparse.Namespace   consumed:3   produced:0    narrow scope
   Callable             consumed:1   produced:1    narrow scope
-  AsyncIterator[Dict[str, Any]] consumed:0   produced:2    narrow scope
-  BaseAdapter          consumed:1   produced:1    narrow scope
   SourceType           consumed:2   produced:0    narrow scope
-  dict[str, Any]       consumed:0   produced:1    narrow scope
-  bool                 consumed:0   produced:1    narrow scope
-  List[str] | None     consumed:1   produced:0    narrow scope
-  list[Dict[str, Any]] consumed:0   produced:1    narrow scope
-  Sequence[Vector]     consumed:1   produced:0    narrow scope
+  BaseAdapter          consumed:1   produced:1    narrow scope
+  AsyncIterator[Dict[str, Any]] consumed:0   produced:2    narrow scope
+  dict[str, Any]       consumed:0   produced:2    narrow scope
 
   HUB TYPES (consumed ≥10):
-    str → 46 consumers → split into:
+    str → 56 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
     FraqNode → 16 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
@@ -175,10 +203,11 @@ DATA_TYPES (by cross-function usage) [94 annotated, 0 inferred / 126 functions]:
 
 SIDE_EFFECTS:
   IO:        cmd_explore, cmd_stream, cmd_schema, _to_json, _to_jsonl, BaseAdapter.execute, FileAdapter.load_root, FileAdapter.save, HTTPAdapter.save, SensorAdapter.save
-  Mutation:  AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, _to_binary, _simple_yaml, _mp_encode, HashGenerator.__init__, FibonacciGenerator.__init__, PerlinGenerator.__init__, SensorStreamGenerator.__init__
-  Pure:      async_query, async_stream, _make_root, main, FormatRegistry.register, FormatRegistry.get, FormatRegistry.available, FormatRegistry.serialize, _to_csv, _to_yaml
+  Mutation:  AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, HashGenerator.__init__, FibonacciGenerator.__init__, PerlinGenerator.__init__, SensorStreamGenerator.__init__, _to_binary, _simple_yaml, _mp_encode
+  Pure:      async_query, async_stream, _make_root, main, HashGenerator.__call__, FibonacciGenerator._fib, FibonacciGenerator.__call__, PerlinGenerator.__call__, SensorStreamGenerator.__call__, FormatRegistry.register
 
   PIPELINE PURITY:
+    Fraq            █░░░ 25% pure
     Fraq            ██░░ 66% pure
     Examples        ██░░ 66% pure
     Fraq            ██░░ 66% pure

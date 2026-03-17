@@ -150,6 +150,68 @@ to_json_schema(schema) # JSON Schema for validation
 | `SensorAdapter` | IoT streams (RPi/ESP32) | Infinite deterministic readings |
 | `HybridAdapter` | Multiple sources merged | Mean position, XOR seeds |
 
+## text2fraq — Natural Language to Fractal Query
+
+Convert natural language to fractal queries using LLM (LiteLLM) or rule-based fallback.
+
+### Setup (Ollama with small models)
+
+```bash
+# Install Ollama: https://ollama.com
+ollama pull qwen2.5:3b      # Fast, instruction-tuned
+ollama pull llama3.2:3b     # Balanced, multilingual
+ollama pull phi3:3.8b       # Strong reasoning
+
+# Install with AI extras
+pip install -e ".[ai]"
+
+# Copy and edit config
+cp .env.example .env
+```
+
+### Usage
+
+```python
+from fraq import text2fraq, Text2Fraq, Text2FraqSimple
+
+# One-liner (auto-fallback to rule-based if LLM unavailable)
+result = text2fraq("Show 20 temperature readings in CSV")
+
+# With specific model
+from fraq.text2fraq import Text2FraqConfig
+t2f = Text2Fraq(Text2FraqConfig(model="qwen2.5:3b"))
+parsed = t2f.parse("Get deep analysis with depth 5")
+
+# Rule-based (deterministic, no LLM needed)
+parser = Text2FraqSimple()
+query = parser.parse("Stream sensor data as JSON")
+```
+
+### Environment Variables (.env)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LITELLM_PROVIDER` | `ollama` | LLM provider |
+| `LITELLM_MODEL` | `qwen2.5:3b` | Model name |
+| `LITELLM_BASE_URL` | `http://localhost:11434` | API endpoint |
+| `LITELLM_TEMPERATURE` | `0.1` | Generation temperature |
+| `TEXT2FRAQ_DEFAULT_FORMAT` | `json` | Default output format |
+| `TEXT2FRAQ_DEFAULT_DIMS` | `3` | Default fractal dimensions |
+| `TEXT2FRAQ_DEFAULT_DEPTH` | `3` | Default query depth |
+
+## Application Integrations
+
+See `examples/app_integrations.py` for templates:
+
+- **FastAPI** — REST API with `/query`, `/stream` (SSE), `/zoom/{depth}`
+- **Streamlit** — Interactive dashboard with sliders and charts
+- **Flask** — Blueprints with NL endpoints
+- **WebSocket** — Real-time streaming server
+- **Kafka** — Producer/consumer with aiokafka
+- **gRPC** — High-performance RPC service
+- **Celery** — Background task processing
+- **Jupyter** — Interactive exploration widgets
+
 ## Testing
 
 ```bash
@@ -184,4 +246,8 @@ fraq/
 
 ## License
 
-MIT
+Apache License 2.0 - see [LICENSE](LICENSE) for details.
+
+## Author
+
+Created by **Tom Sapletta** - [tom@sapletta.com](mailto:tom@sapletta.com)

@@ -3,20 +3,30 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T12:18:16Z'
+  analyzed_at: '2026-03-17T12:45:50Z'
   tool: code2llm
   stats:
-    files: 8
-    lines: 3078
-    functions: 92
-    classes: 20
+    files: 9
+    lines: 3428
+    functions: 106
+    classes: 26
 health:
-  cc_avg: 2.7
-  critical_count: 1
+  cc_avg: 2.8
+  critical_count: 3
   critical_limit: 10
   duplicates: 0
   cycles: 3
   alerts:
+  - type: cc_exceeded
+    target: Text2Fraq._fallback_parse
+    value: 18
+    limit: 15
+    severity: warning
+  - type: cc_exceeded
+    target: Text2FraqSimple.parse
+    value: 15
+    limit: 15
+    severity: warning
   - type: high_fan_out
     target: main
     value: 14
@@ -48,6 +58,45 @@ health:
     limit: 10
     severity: warning
 modules:
+- path: fraq/text2fraq.py
+  lines: 341
+  classes: 6
+  methods: 14
+  cc_max: 18
+  inbound_deps: 1
+  exports:
+  - name: Text2FraqConfig
+    type: class
+    cc_avg: 1.0
+  - name: ParsedQuery
+    type: class
+    cc_avg: 3.0
+  - name: LLMClient
+    type: class
+    cc_avg: 1.0
+  - name: LiteLLMClient
+    type: class
+    cc_avg: 2.5
+  - name: Text2Fraq
+    type: class
+    cc_avg: 5.4
+    methods:
+    - name: _fallback_parse
+      cc: 18
+      flag: split
+  - name: Text2FraqSimple
+    type: class
+    cc_avg: 8.5
+    methods:
+    - name: parse
+      cc: 15
+      flag: split
+  - name: text2query
+    type: function
+    cc: 2
+  - name: text2fraq
+    type: function
+    cc: 2
 - path: fraq/formats.py
   lines: 196
   classes: 1
@@ -224,7 +273,7 @@ modules:
     type: class
     cc_avg: 1.0
 - path: fraq/__init__.py
-  lines: 46
+  lines: 55
   classes: 0
   methods: 0
   cc_max: 0
@@ -256,6 +305,14 @@ hotspots:
   note: Orchestrates 10 calls
 refactoring:
   priorities:
+  - action: Split Text2Fraq._fallback_parse (CC=18 → target CC<10)
+    impact: medium
+    effort: low
+    module: text2fraq.py
+  - action: Split Text2FraqSimple.parse (CC=15 → target CC<10)
+    impact: medium
+    effort: low
+    module: text2fraq.py
   - action: 'Break circular dependency: fraq.formats._prepare'
     impact: medium
     effort: low
@@ -267,7 +324,7 @@ refactoring:
     effort: low
 evolution:
 - date: '2026-03-17'
-  cc_avg: 2.7
-  critical: 1
-  lines: 3078
+  cc_avg: 2.8
+  critical: 3
+  lines: 3428
   note: Automated analysis
