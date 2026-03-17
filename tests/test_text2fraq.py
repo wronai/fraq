@@ -13,8 +13,9 @@ from fraq.text2fraq import (
     text2query,
 )
 
-# Import module with different name to avoid conflict with function
-text2fraq_mod = importlib.import_module("fraq.text2fraq")
+# Import modules with different names to avoid conflict with functions
+text2fraq_pkg = importlib.import_module("fraq.text2fraq")
+text2fraq_shortcuts = importlib.import_module("fraq.text2fraq.shortcuts")
 
 
 class StubClient:
@@ -150,9 +151,8 @@ class TestText2FileSearchFunction:
         searcher = FileSearchText2Fraq(".")
         searcher.adapter = adapter
 
-        # Patch the class in text2fraq module
         monkeypatch.setattr(
-            text2fraq_mod,
+            text2fraq_shortcuts,
             "FileSearchText2Fraq",
             lambda base_path=".": searcher,
         )
@@ -160,3 +160,6 @@ class TestText2FileSearchFunction:
         result = text2filesearch("list 1 markdown file", fmt="records")
 
         assert result == [{"filename": "notes.md"}]
+
+    def test_package_re_exports_file_search_shortcut(self):
+        assert text2fraq_pkg.text2filesearch is text2filesearch

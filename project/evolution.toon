@@ -1,4 +1,4 @@
-# code2llm/evolution | 261 func | 26f | 2026-03-17
+# code2llm/evolution | 348 func | 44f | 2026-03-17
 
 NEXT[2] (ranked by impact):
   [1] !! SPLIT           fraq/adapters.py
@@ -15,11 +15,11 @@ RISKS[2]:
   ⚠ Splitting examples/app_integrations.py may break 9 import paths
 
 METRICS-TARGET:
-  CC̄:          2.7 → ≤1.9
-  max-CC:      12 → ≤6
+  CC̄:          2.8 → ≤2.0
+  max-CC:      13 → ≤6
   god-modules: 2 → 0
   high-CC(≥15): 0 → ≤0
   hub-types:   0 → ≤0
 
 HISTORY:
-  prev CC̄=2.7 → now CC̄=2.7
+  prev CC̄=2.7 → now CC̄=2.8

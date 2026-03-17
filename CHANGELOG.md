@@ -2,6 +2,29 @@
 
 ## [Unreleased]
 
+## [0.2.6] - 2026-03-17
+
+### Docs
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_text2fraq.py
+
+### Other
+- Update fraq/adapters/__init__.py
+- Update fraq/adapters/base.py
+- Update fraq/adapters/file_adapter.py
+- Update fraq/adapters/file_search.py
+- Update fraq/adapters/http_adapter.py
+- Update fraq/adapters/hybrid_adapter.py
+- Update fraq/adapters/network.py
+- Update fraq/adapters/registry.py
+- Update fraq/adapters/sensor_adapter.py
+- Update fraq/adapters/sql_adapter.py
+- ... and 23 more files
+
 ## [0.2.5] - 2026-03-17
 
 ### Docs
