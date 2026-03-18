@@ -227,33 +227,46 @@ def run_all_benchmarks(
     return results
 
 
+def _print_speed_section(data: Dict[str, BenchmarkResult]) -> None:
+    """Print speed benchmark results. CC≤3"""
+    if not data:
+        return
+    winner = max(data.items(), key=lambda x: x[1].records_per_second)
+    print(f"\nFastest: {winner[0]} at {winner[1].records_per_second:,.0f} rec/s")
+
+
+def _print_memory_section(data: Dict[str, int]) -> None:
+    """Print memory benchmark results. CC≤3"""
+    if not data or 'fraq' not in data:
+        return
+    fraq_mem = data['fraq']
+    print(f"\nfraq memory: {fraq_mem / (1024*1024):.1f} MB")
+    
+    for name, mem in data.items():
+        if name != 'fraq' and mem > 0:
+            ratio = mem / fraq_mem if fraq_mem > 0 else 0
+            print(f"{name}: {mem / (1024*1024):.1f} MB ({ratio:.1f}x fraq)")
+
+
+def _print_structural_section(data: Dict[str, float]) -> None:
+    """Print structural benchmark results. CC≤3"""
+    if not data:
+        return
+    print("\nSelf-similarity scores:")
+    for name, score in sorted(data.items(), key=lambda x: -x[1]):
+        indicator = "✓" if score > 0.7 else " "
+        print(f"  {indicator} {name}: {score:.2f}")
+
+
 def print_summary(results: Dict[str, Any]) -> None:
-    """Print benchmark summary."""
+    """Print benchmark summary. Orchestrator: CC≤3"""
     print("\n" + "=" * 60)
     print("BENCHMARK SUMMARY")
     print("=" * 60)
     
-    # Speed winner
-    if results['speed']:
-        winner = max(results['speed'].items(), key=lambda x: x[1].records_per_second)
-        print(f"\nFastest: {winner[0]} at {winner[1].records_per_second:,.0f} rec/s")
-    
-    # Memory comparison
-    if results['memory'] and 'fraq' in results['memory']:
-        fraq_mem = results['memory']['fraq']
-        print(f"\nfraq memory: {fraq_mem / (1024*1024):.1f} MB")
-        
-        for name, mem in results['memory'].items():
-            if name != 'fraq' and mem > 0:
-                ratio = mem / fraq_mem if fraq_mem > 0 else 0
-                print(f"{name}: {mem / (1024*1024):.1f} MB ({ratio:.1f}x fraq)")
-    
-    # Self-similarity
-    if results['structure']:
-        print("\nSelf-similarity scores:")
-        for name, score in sorted(results['structure'].items(), key=lambda x: -x[1]):
-            indicator = "✓" if score > 0.7 else " "
-            print(f"  {indicator} {name}: {score:.2f}")
+    _print_speed_section(results.get('speed', {}))
+    _print_memory_section(results.get('memory', {}))
+    _print_structural_section(results.get('structure', {}))
     
     print("\n" + "=" * 60)
 

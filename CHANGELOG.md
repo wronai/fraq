@@ -209,6 +209,15 @@ fraq/
 └── cli.py              # Refactored CLI
 ```
 
+## [0.2.14] - 2026-03-18
+
+### Other
+- Update examples/basic/app_integrations.py
+- Update fraq/benchmarks.py
+- Update fraq/inference.py
+- Update fraq/schema_export.py
+- Update fraq/text2fraq/file_search_parser.py
+
 ## [0.2.13] - 2026-03-18
 
 ### Docs

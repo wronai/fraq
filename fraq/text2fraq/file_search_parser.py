@@ -75,6 +75,77 @@ class FileSearchText2Fraq:
                     return True
         return False
 
+    def _collect_files(
+        self,
+        base_path: str,
+        extension: Optional[str],
+    ) -> List[Path]:
+        """Collect raw file paths with exclusion filtering. CC≤4"""
+        path = Path(base_path).expanduser().resolve()
+        pattern = f"*.{extension}" if extension else "*"
+        
+        files: List[Path] = []
+        try:
+            for file_path in path.rglob(pattern):
+                if not file_path.is_file():
+                    continue
+                if self._should_exclude(file_path):
+                    continue
+                files.append(file_path)
+        except (OSError, PermissionError):
+            pass
+        return files
+
+    def _apply_filters(
+        self,
+        files: List[Path],
+        base_path: Path,
+        newer_than: Optional[float],
+    ) -> List[dict[str, Any]]:
+        """Apply date filters and build file info. CC≤3"""
+        result: List[dict[str, Any]] = []
+        for file_path in files:
+            try:
+                stat = file_path.stat()
+                mtime = stat.st_mtime
+                if newer_than and mtime <= newer_than:
+                    continue
+                
+                result.append({
+                    "filename": file_path.name,
+                    "path": str(file_path),
+                    "extension": file_path.suffix.lstrip(".").lower(),
+                    "size": stat.st_size,
+                    "mtime": mtime,
+                    "ctime": stat.st_ctime,
+                    "depth": len(file_path.relative_to(base_path).parts),
+                    "fraq_position": (
+                        float(stat.st_size) / (1024 * 1024),
+                        float(mtime),
+                        float(stat.st_ctime),
+                    ),
+                    "fraq_seed": hash(str(file_path)) % (2**32),
+                    "fraq_value": hash(str(file_path)) / (2**32),
+                })
+            except (OSError, PermissionError):
+                continue
+        return result
+
+    def _sort_and_limit(
+        self,
+        files: List[dict[str, Any]],
+        sort_by: str,
+        limit: int,
+    ) -> List[dict[str, Any]]:
+        """Sort and limit results. CC≤3"""
+        if sort_by == "mtime":
+            files.sort(key=lambda x: x["mtime"], reverse=True)
+        elif sort_by == "size":
+            files.sort(key=lambda x: x["size"], reverse=True)
+        else:
+            files.sort(key=lambda x: x["filename"])
+        return files[:limit]
+
     def _collect_files_filtered(
         self,
         base_path: str,
@@ -83,55 +154,17 @@ class FileSearchText2Fraq:
         sort_by: str,
         newer_than: Optional[float],
     ) -> List[dict[str, Any]]:
-        """Collect files with exclusion filtering."""
+        """Orchestrate: collect → filter → sort/limit. CC≤3"""
         path = Path(base_path).expanduser().resolve()
-        pattern = f"*.{extension}" if extension else "*"
-
-        files: List[dict[str, Any]] = []
-
-        try:
-            for file_path in path.rglob(pattern):
-                if not file_path.is_file():
-                    continue
-                if self._should_exclude(file_path):
-                    continue
-
-                try:
-                    stat = file_path.stat()
-                    mtime = stat.st_mtime
-                    if newer_than and mtime <= newer_than:
-                        continue
-
-                    files.append({
-                        "filename": file_path.name,
-                        "path": str(file_path),
-                        "extension": file_path.suffix.lstrip(".").lower(),
-                        "size": stat.st_size,
-                        "mtime": mtime,
-                        "ctime": stat.st_ctime,
-                        "depth": len(file_path.relative_to(path).parts),
-                        "fraq_position": (
-                            float(stat.st_size) / (1024 * 1024),
-                            float(mtime),
-                            float(stat.st_ctime),
-                        ),
-                        "fraq_seed": hash(str(file_path)) % (2**32),
-                        "fraq_value": hash(str(file_path)) / (2**32),
-                    })
-                except (OSError, PermissionError):
-                    continue
-        except (OSError, PermissionError):
-            pass
-
-        # Sort and limit
-        if sort_by == "mtime":
-            files.sort(key=lambda x: x["mtime"], reverse=True)
-        elif sort_by == "size":
-            files.sort(key=lambda x: x["size"], reverse=True)
-        else:
-            files.sort(key=lambda x: x["filename"])
-
-        return files[:limit]
+        
+        # Step 1: Collect
+        raw_files = self._collect_files(base_path, extension)
+        
+        # Step 2: Apply filters
+        filtered = self._apply_filters(raw_files, path, newer_than)
+        
+        # Step 3: Sort and limit
+        return self._sort_and_limit(filtered, sort_by, limit)
 
     def parse(self, text: str) -> dict[str, Any]:
         """Parse natural language file query to search parameters."""
