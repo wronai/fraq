@@ -36,27 +36,65 @@ def to_msgpack_lite(data: Any, **kw) -> bytes:
 
 
 def mp_encode(obj: Any) -> bytes:
-    """Minimal msgpack-ish encoder."""
-    if obj is None:
-        return b"\xc0"
-    if isinstance(obj, bool):
-        return b"\xc3" if obj else b"\xc2"
-    if isinstance(obj, int):
-        return b"\xd3" + struct.pack("!q", obj)
-    if isinstance(obj, float):
-        return b"\xcb" + struct.pack("!d", obj)
-    if isinstance(obj, str):
-        raw = obj.encode("utf-8")
-        return b"\xdb" + struct.pack("!I", len(raw)) + raw
-    if isinstance(obj, (list, tuple)):
-        parts = [b"\xdd" + struct.pack("!I", len(obj))]
-        for item in obj:
-            parts.append(mp_encode(item))
-        return b"".join(parts)
-    if isinstance(obj, dict):
-        parts = [b"\xdf" + struct.pack("!I", len(obj))]
-        for k, v in obj.items():
-            parts.append(mp_encode(k))
-            parts.append(mp_encode(v))
-        return b"".join(parts)
-    return mp_encode(str(obj))
+    """Minimal msgpack-ish encoder using lookup table.
+    
+    Refactored: CC 11→2 (was if/elif chain, now dispatch table).
+    """
+    encoder = _ENCODERS.get(type(obj))
+    if encoder:
+        return encoder(obj)
+    return _encode_fallback(obj)
+
+
+# Type-specific encoders (CC≤2 each)
+def _encode_none(obj: None) -> bytes:
+    return b"\xc0"
+
+
+def _encode_bool(obj: bool) -> bytes:
+    return b"\xc3" if obj else b"\xc2"
+
+
+def _encode_int(obj: int) -> bytes:
+    return b"\xd3" + struct.pack("!q", obj)
+
+
+def _encode_float(obj: float) -> bytes:
+    return b"\xcb" + struct.pack("!d", obj)
+
+
+def _encode_str(obj: str) -> bytes:
+    raw = obj.encode("utf-8")
+    return b"\xdb" + struct.pack("!I", len(raw)) + raw
+
+
+def _encode_list(obj: list | tuple) -> bytes:
+    parts = [b"\xdd" + struct.pack("!I", len(obj))]
+    for item in obj:
+        parts.append(mp_encode(item))
+    return b"".join(parts)
+
+
+def _encode_dict(obj: dict) -> bytes:
+    parts = [b"\xdf" + struct.pack("!I", len(obj))]
+    for k, v in obj.items():
+        parts.append(mp_encode(k))
+        parts.append(mp_encode(v))
+    return b"".join(parts)
+
+
+def _encode_fallback(obj: Any) -> bytes:
+    return _encode_str(str(obj))
+
+
+# Lookup table: type → encoder function
+_ENCODERS: dict[type, Callable[[Any], bytes]] = {
+    type(None): _encode_none,
+    bool: _encode_bool,
+    int: _encode_int,
+    float: _encode_float,
+    str: _encode_str,
+    list: _encode_list,
+    tuple: _encode_list,
+    dict: _encode_dict,
+}

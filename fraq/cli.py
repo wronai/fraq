@@ -164,7 +164,7 @@ def cmd_files_stat(args: argparse.Namespace) -> None:
 def cmd_nl(args: argparse.Namespace) -> None:
     """Natural language query (requires LLM)."""
     if _is_file_query(args.query):
-        _run_nl_file_query(args.query, args.path or ".", args.format)
+        _run_nl_file_query(args.query, args.path or str(Path.home()), args.format)
         return
     _run_nl_fraq_query(args.query, args.format)
 
@@ -200,7 +200,12 @@ def _run_nl_fraq_query(query: str, fmt: str) -> None:
 
 def cmd_network_scan(args: argparse.Namespace) -> None:
     """Scan network for devices."""
-    from fraq import NetworkAdapter
+    try:
+        from fraq import NetworkAdapter
+    except ImportError:
+        print("Error: NetworkAdapter not available in core fraq.")
+        print("Install optional network package: pip install fraq-net")
+        sys.exit(1)
     
     ports = [int(p.strip()) for p in args.ports.split(",")]
     adapter = NetworkAdapter(
@@ -240,7 +245,12 @@ def cmd_network_scan(args: argparse.Namespace) -> None:
 
 def cmd_web_crawl(args: argparse.Namespace) -> None:
     """Crawl website."""
-    from fraq import WebCrawlerAdapter
+    try:
+        from fraq import WebCrawlerAdapter
+    except ImportError:
+        print("Error: WebCrawlerAdapter not available in core fraq.")
+        print("Install optional web package: pip install fraq-web")
+        sys.exit(1)
     
     adapter = WebCrawlerAdapter(
         base_url=args.url,
@@ -352,7 +362,7 @@ def _build_core_parsers(sub: argparse._SubParsersAction) -> None:
     # nl
     p = sub.add_parser("nl", parents=[shared], help="Natural language query")
     p.add_argument("query", help="Natural language query string")
-    p.add_argument("--path", "-p", default=".", help="Base path for file searches")
+    p.add_argument("--path", "-p", default=str(Path.home()), help="Base path for file searches")
 
 
 def _build_files_parsers(sub: argparse._SubParsersAction) -> None:

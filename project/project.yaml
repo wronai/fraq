@@ -3,50 +3,25 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-18T12:34:32Z'
+  analyzed_at: '2026-03-18T12:59:24Z'
   tool: code2llm
   stats:
-    files: 36
-    lines: 7683
-    functions: 241
-    classes: 51
+    files: 47
+    lines: 9108
+    functions: 289
+    classes: 59
 health:
-  cc_avg: 3.1
-  critical_count: 8
+  cc_avg: 2.8
+  critical_count: 2
   critical_limit: 10
-  duplicates: 0
-  cycles: 3
+  duplicates: 3
+  cycles: 2
   alerts:
   - type: high_fan_out
     target: FileSearchText2Fraq._collect_files_filtered
     value: 16
     limit: 10
     severity: error
-  - type: cc_exceeded
-    target: FractalAnalyzer.box_counting_dimension
-    value: 16
-    limit: 15
-    severity: warning
-  - type: cc_exceeded
-    target: FractalAnalyzer.detect_hierarchy
-    value: 15
-    limit: 15
-    severity: warning
-  - type: cc_exceeded
-    target: FractalAnalyzer.analyze_correlations
-    value: 15
-    limit: 15
-    severity: warning
-  - type: high_fan_out
-    target: FractalAnalyzer.detect_hierarchy
-    value: 14
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: FractalAnalyzer.box_counting_dimension
-    value: 13
-    limit: 10
-    severity: warning
   - type: high_fan_out
     target: FileAdapter.load_root
     value: 13
@@ -55,11 +30,6 @@ health:
   - type: high_fan_out
     target: ws_stream
     value: 13
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: _parse_transform
-    value: 12
     limit: 10
     severity: warning
   - type: high_fan_out
@@ -74,16 +44,6 @@ health:
     severity: warning
   - type: high_fan_out
     target: _dispatch_command
-    value: 10
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: stream
-    value: 10
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: FractalAnalyzer.analyze_correlations
     value: 10
     limit: 10
     severity: warning
@@ -108,41 +68,6 @@ health:
     limit: 10
     severity: warning
 modules:
-- path: fraq/inference.py
-  lines: 347
-  classes: 4
-  methods: 10
-  cc_max: 16
-  inbound_deps: 1
-  exports:
-  - name: FractalDimension
-    type: class
-    cc_avg: 0.0
-  - name: PatternSignature
-    type: class
-    cc_avg: 0.0
-  - name: FractalAnalyzer
-    type: class
-    cc_avg: 11.8
-    methods:
-    - name: box_counting_dimension
-      cc: 16
-      flag: split
-      fan_out: 13
-    - name: detect_hierarchy
-      cc: 15
-      flag: split
-      fan_out: 14
-    - name: analyze_correlations
-      cc: 15
-      flag: split
-      fan_out: 10
-  - name: InferredSchema
-    type: class
-    cc_avg: 3.4
-  - name: infer_fractal
-    type: function
-    cc: 2
 - path: fraq/benchmarks.py
   lines: 263
   classes: 4
@@ -168,22 +93,6 @@ modules:
   - name: print_summary
     type: function
     cc: 11
-- path: fraq/formats/binary.py
-  lines: 62
-  classes: 0
-  methods: 3
-  cc_max: 11
-  inbound_deps: 0
-  exports:
-  - name: to_binary
-    type: function
-    cc: 3
-  - name: to_msgpack_lite
-    type: function
-    cc: 1
-  - name: mp_encode
-    type: function
-    cc: 11
 - path: fraq/text2fraq/file_search_parser.py
   lines: 200
   classes: 1
@@ -198,23 +107,44 @@ modules:
     - name: _collect_files_filtered
       cc: 11
       fan_out: 16
-- path: fraq/api.py
-  lines: 281
+- path: fraq/cli.py
+  lines: 477
   classes: 0
-  methods: 9
-  cc_max: 10
-  inbound_deps: 11
+  methods: 24
+  cc_max: 9
+  inbound_deps: 0
   exports:
-  - name: generate
+  - name: cmd_explore
     type: function
-    cc: 6
-  - name: stream
+    cc: 1
+  - name: cmd_stream
     type: function
-    cc: 10
-    fan_out: 10
-  - name: quick_schema
+    cc: 2
+  - name: cmd_schema
     type: function
-    cc: 6
+    cc: 3
+    fan_out: 11
+  - name: cmd_files_search
+    type: function
+    cc: 5
+  - name: cmd_files_list
+    type: function
+    cc: 5
+  - name: cmd_files_stat
+    type: function
+    cc: 2
+  - name: cmd_nl
+    type: function
+    cc: 3
+  - name: cmd_network_scan
+    type: function
+    cc: 9
+  - name: cmd_web_crawl
+    type: function
+    cc: 8
+  - name: main
+    type: function
+    cc: 1
 - path: fraq/query.py
   lines: 220
   classes: 4
@@ -257,44 +187,6 @@ modules:
   - name: HybridAdapter
     type: class
     cc_avg: 3.2
-- path: fraq/cli.py
-  lines: 467
-  classes: 0
-  methods: 24
-  cc_max: 8
-  inbound_deps: 0
-  exports:
-  - name: cmd_explore
-    type: function
-    cc: 1
-  - name: cmd_stream
-    type: function
-    cc: 2
-  - name: cmd_schema
-    type: function
-    cc: 3
-    fan_out: 11
-  - name: cmd_files_search
-    type: function
-    cc: 5
-  - name: cmd_files_list
-    type: function
-    cc: 5
-  - name: cmd_files_stat
-    type: function
-    cc: 2
-  - name: cmd_nl
-    type: function
-    cc: 3
-  - name: cmd_network_scan
-    type: function
-    cc: 8
-  - name: cmd_web_crawl
-    type: function
-    cc: 7
-  - name: main
-    type: function
-    cc: 1
 - path: fraq/core.py
   lines: 412
   classes: 4
@@ -327,6 +219,16 @@ modules:
   - name: encode_value
     type: function
     cc: 6
+- path: fraq/inference/correlation.py
+  lines: 98
+  classes: 1
+  methods: 4
+  cc_max: 8
+  inbound_deps: 0
+  exports:
+  - name: CorrelationAnalyzer
+    type: class
+    cc_avg: 5.2
 - path: fraq/server.py
   lines: 217
   classes: 3
@@ -413,7 +315,7 @@ modules:
   classes: 5
   methods: 11
   cc_max: 7
-  inbound_deps: 2
+  inbound_deps: 16
   exports:
   - name: AffineTransform
     type: class
@@ -433,6 +335,19 @@ modules:
   - name: create_ifs
     type: function
     cc: 3
+- path: fraq/inference/dimension.py
+  lines: 126
+  classes: 2
+  methods: 8
+  cc_max: 7
+  inbound_deps: 0
+  exports:
+  - name: FractalDimension
+    type: class
+    cc_avg: 0.0
+  - name: BoxCountingAnalyzer
+    type: class
+    cc_avg: 3.5
 - path: fraq/adapters/sql_adapter.py
   lines: 64
   classes: 1
@@ -447,6 +362,28 @@ modules:
     - name: load_root
       cc: 4
       fan_out: 10
+- path: fraq/api.py
+  lines: 354
+  classes: 2
+  methods: 18
+  cc_max: 6
+  inbound_deps: 9
+  exports:
+  - name: TypeTransformRegistry
+    type: class
+    cc_avg: 2.3
+  - name: StreamConfig
+    type: class
+    cc_avg: 2.0
+  - name: generate
+    type: function
+    cc: 6
+  - name: stream
+    type: function
+    cc: 1
+  - name: quick_schema
+    type: function
+    cc: 6
 - path: fraq/providers/faker_provider.py
   lines: 177
   classes: 3
@@ -489,12 +426,64 @@ modules:
   - name: FraqSession
     type: class
     cc_avg: 2.9
+- path: fraq/export/nlp2cmd.py
+  lines: 138
+  classes: 0
+  methods: 2
+  cc_max: 5
+  inbound_deps: 0
+  exports:
+  - name: to_nlp2cmd_schema
+    type: function
+    cc: 5
+  - name: to_nlp2cmd_actions
+    type: function
+    cc: 2
+- path: fraq/inference.py
+  lines: 347
+  classes: 3
+  methods: 5
+  cc_max: 5
+  inbound_deps: 0
+  exports:
+  - name: FractalDimension
+    type: class
+    cc_avg: 0.0
+  - name: PatternSignature
+    type: class
+    cc_avg: 0.0
+  - name: InferredSchema
+    type: class
+    cc_avg: 3.4
+- path: fraq/inference/hierarchy.py
+  lines: 130
+  classes: 2
+  methods: 7
+  cc_max: 5
+  inbound_deps: 0
+  exports:
+  - name: PatternSignature
+    type: class
+    cc_avg: 1.0
+  - name: HierarchyDetector
+    type: class
+    cc_avg: 3.3
+- path: fraq/inference/schema.py
+  lines: 109
+  classes: 1
+  methods: 5
+  cc_max: 5
+  inbound_deps: 0
+  exports:
+  - name: InferredSchema
+    type: class
+    cc_avg: 3.4
 - path: fraq/schema_export.py
   lines: 476
   classes: 0
   methods: 7
   cc_max: 5
-  inbound_deps: 1
+  inbound_deps: 2
   exports:
   - name: to_nlp2cmd_schema
     type: function
@@ -634,12 +623,28 @@ modules:
   - name: SensorAdapter
     type: class
     cc_avg: 1.8
+- path: fraq/formats/binary.py
+  lines: 100
+  classes: 0
+  methods: 11
+  cc_max: 3
+  inbound_deps: 0
+  exports:
+  - name: to_binary
+    type: function
+    cc: 3
+  - name: to_msgpack_lite
+    type: function
+    cc: 1
+  - name: mp_encode
+    type: function
+    cc: 2
 - path: fraq/streaming.py
   lines: 93
   classes: 1
   methods: 5
   cc_max: 3
-  inbound_deps: 2
+  inbound_deps: 3
   exports:
   - name: AsyncFraqStream
     type: class
@@ -656,6 +661,56 @@ modules:
   methods: 1
   cc_max: 2
   inbound_deps: 0
+- path: fraq/export/asyncapi.py
+  lines: 67
+  classes: 0
+  methods: 1
+  cc_max: 2
+  inbound_deps: 0
+  exports:
+  - name: to_asyncapi
+    type: function
+    cc: 2
+- path: fraq/export/graphql.py
+  lines: 36
+  classes: 0
+  methods: 1
+  cc_max: 2
+  inbound_deps: 0
+  exports:
+  - name: to_graphql
+    type: function
+    cc: 2
+- path: fraq/export/json_schema.py
+  lines: 32
+  classes: 0
+  methods: 1
+  cc_max: 2
+  inbound_deps: 0
+  exports:
+  - name: to_json_schema
+    type: function
+    cc: 2
+- path: fraq/export/openapi.py
+  lines: 116
+  classes: 0
+  methods: 1
+  cc_max: 2
+  inbound_deps: 0
+  exports:
+  - name: to_openapi
+    type: function
+    cc: 2
+- path: fraq/export/proto.py
+  lines: 56
+  classes: 0
+  methods: 1
+  cc_max: 2
+  inbound_deps: 0
+  exports:
+  - name: to_proto
+    type: function
+    cc: 2
 - path: fraq/formats/registry.py
   lines: 40
   classes: 1
@@ -685,6 +740,19 @@ modules:
   - name: SensorStreamGenerator
     type: class
     cc_avg: 1.0
+- path: fraq/inference/__init__.py
+  lines: 124
+  classes: 1
+  methods: 5
+  cc_max: 2
+  inbound_deps: 2
+  exports:
+  - name: FractalAnalyzer
+    type: class
+    cc_avg: 1.0
+  - name: infer_fractal
+    type: function
+    cc: 2
 - path: fraq/text2fraq/shortcuts.py
   lines: 47
   classes: 0
@@ -727,6 +795,18 @@ modules:
   methods: 0
   cc_max: 0
   inbound_deps: 0
+- path: fraq/export/__init__.py
+  lines: 30
+  classes: 0
+  methods: 0
+  cc_max: 0
+  inbound_deps: 0
+- path: fraq/export/common.py
+  lines: 37
+  classes: 0
+  methods: 0
+  cc_max: 0
+  inbound_deps: 0
 - path: fraq/formats/__init__.py
   lines: 74
   classes: 0
@@ -761,30 +841,12 @@ hotspots:
 - name: FileSearchText2Fraq._collect_files_filtered
   fan_out: 16
   note: Collect files with exclusion filtering.
-- name: FractalAnalyzer.detect_hierarchy
-  fan_out: 14
-  note: 'Detect hierarchical structure in data.
-
-
-    Analyzes parent-child relationships to f'
-- name: FractalAnalyzer.box_counting_dimension
-  fan_out: 13
-  note: 'Calculate box-counting dimension of value distribution.
-
-
-    True fractals have non-'
 - name: FileAdapter.load_root
   fan_out: 13
   note: Orchestrates 13 calls
 - name: ws_stream
   fan_out: 13
   note: WebSocket endpoint for streaming fractal data.
-- name: _parse_transform
-  fan_out: 12
-  note: 'Parse type specification and return transform function.
-
-
-    Handles: range hints (f'
 - name: ws_stream
   fan_out: 11
   note: Orchestrates 11 calls
@@ -794,32 +856,21 @@ hotspots:
 - name: _dispatch_command
   fan_out: 10
   note: 10-way dispatch
-- name: stream
+- name: HTTPAdapter.load_root
   fan_out: 10
-  note: 'Stream records lazily. Like generate() but returns iterator.
-
-
-    Parameters
-
-    -------'
+  note: Orchestrates 10 calls
+- name: SQLAdapter.load_root
+  fan_out: 10
+  note: Orchestrates 10 calls
+- name: FileSearchAdapter.load_root
+  fan_out: 10
+  note: Orchestrates 10 calls
+- name: natural_language
+  fan_out: 10
+  note: Natural language → fraq result with session support.
 refactoring:
   priorities:
-  - action: Split FractalAnalyzer.box_counting_dimension (CC=16 → target CC<10)
-    impact: medium
-    effort: low
-    module: inference.py
-  - action: Split FractalAnalyzer.detect_hierarchy (CC=15 → target CC<10)
-    impact: medium
-    effort: low
-    module: inference.py
-  - action: Split FractalAnalyzer.analyze_correlations (CC=15 → target CC<10)
-    impact: medium
-    effort: low
-    module: inference.py
   - action: 'Break circular dependency: fraq.formats.prepare.prepare'
-    impact: medium
-    effort: low
-  - action: 'Break circular dependency: fraq.formats.binary.mp_encode'
     impact: medium
     effort: low
   - action: 'Break circular dependency: fraq.formats.text.simple_yaml'
@@ -836,7 +887,7 @@ evolution:
   lines: 7433
   note: Automated analysis
 - date: '2026-03-18'
-  cc_avg: 3.1
-  critical: 8
-  lines: 7683
+  cc_avg: 2.8
+  critical: 2
+  lines: 9108
   note: Automated analysis

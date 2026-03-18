@@ -4,53 +4,61 @@ flowchart TD
     examples_database["examples.database<br/>3 funcs"]
     examples_etl["examples.etl<br/>4 funcs"]
     examples_fastapi_docker["examples.fastapi-docker<br/>23 funcs"]
+    examples_integrations["examples.integrations<br/>32 funcs"]
     examples_iot["examples.iot<br/>3 funcs"]
     examples_new_features_demo["examples.new_features_demo<br/>6 funcs"]
     examples_streaming["examples.streaming<br/>4 funcs"]
     examples_text2fraq["examples.text2fraq<br/>27 funcs"]
     examples_v028["examples.v028<br/>4 funcs"]
     fraq_adapters["fraq.adapters<br/>41 funcs"]
-    fraq_api["fraq.api<br/>9 funcs"]
+    fraq_api["fraq.api<br/>18 funcs"]
     fraq_benchmarks["fraq.benchmarks<br/>8 funcs"]
     fraq_cli["fraq.cli<br/>24 funcs"]
     fraq_core["fraq.core<br/>17 funcs"]
     fraq_dataframes["fraq.dataframes<br/>4 funcs"]
-    fraq_formats["fraq.formats<br/>14 funcs"]
+    fraq_formats["fraq.formats<br/>22 funcs"]
     fraq_generators["fraq.generators<br/>9 funcs"]
     fraq_ifs["fraq.ifs<br/>11 funcs"]
-    fraq_inference["fraq.inference<br/>10 funcs"]
+    fraq_inference["fraq.inference<br/>34 funcs"]
     fraq_providers["fraq.providers<br/>13 funcs"]
     fraq_query["fraq.query<br/>12 funcs"]
     fraq_schema_export["fraq.schema_export<br/>7 funcs"]
     fraq_server["fraq.server<br/>7 funcs"]
     fraq_streaming["fraq.streaming<br/>5 funcs"]
     fraq_text2fraq["fraq.text2fraq<br/>46 funcs"]
-    examples_basic ==>|11| fraq_api
     examples_text2fraq ==>|10| fraq_schema_export
+    examples_integrations ==>|9| fraq_ifs
+    examples_basic ==>|8| fraq_ifs
     examples_text2fraq ==>|7| fraq_text2fraq
     fraq_cli ==>|6| fraq_formats
-    examples_etl ==>|5| fraq_api
-    fraq_benchmarks ==>|4| fraq_api
+    examples_etl ==>|5| fraq_ifs
+    fraq_benchmarks ==>|4| fraq_ifs
     examples_fastapi_docker ==>|4| fraq_formats
+    examples_integrations ==>|4| fraq_api
     fraq_adapters ==>|4| fraq_formats
-    fraq_dataframes -->|3| fraq_api
-    examples_iot -->|3| fraq_api
-    examples_streaming -->|3| fraq_api
-    examples_new_features_demo -->|2| fraq_api
+    fraq_dataframes -->|3| fraq_ifs
+    examples_new_features_demo -->|3| fraq_ifs
+    examples_basic -->|3| fraq_api
     examples_new_features_demo -->|2| fraq_benchmarks
-    examples_ai_ml -->|2| fraq_api
-    examples_database -->|2| fraq_api
+    examples_iot -->|2| fraq_ifs
+    examples_streaming -->|2| fraq_ifs
+    examples_ai_ml -->|2| fraq_ifs
+    examples_database -->|2| fraq_ifs
     fraq_cli -->|1| fraq_text2fraq
-    fraq_api -->|1| fraq_providers
-    fraq_benchmarks -->|1| fraq_ifs
+    fraq_benchmarks -->|1| fraq_api
     fraq_generators -->|1| fraq_core
+    fraq_api -->|1| fraq_providers
     fraq_query -->|1| fraq_formats
     examples_new_features_demo -->|1| fraq_dataframes
-    examples_new_features_demo -->|1| fraq_ifs
     examples_new_features_demo -->|1| fraq_inference
+    examples_iot -->|1| fraq_api
+    examples_streaming -->|1| fraq_api
     examples_v028 -->|1| fraq_text2fraq
-    examples_basic -->|1| fraq_streaming
     examples_fastapi_docker -->|1| fraq_text2fraq
     examples_fastapi_docker -->|1| fraq_streaming
+    examples_basic -->|1| fraq_streaming
+    examples_integrations -->|1| fraq_schema_export
+    examples_integrations -->|1| fraq_streaming
+    examples_integrations -->|1| fraq_inference
     fraq_text2fraq -->|1| fraq_formats
     fraq_server -->|1| fraq_text2fraq

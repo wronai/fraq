@@ -209,6 +209,30 @@ fraq/
 └── cli.py              # Refactored CLI
 ```
 
+## [0.2.13] - 2026-03-18
+
+### Docs
+- Update docs/README.md
+- Update docs/index.html
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_testing.py
+
+### Other
+- Update examples/integrations/cli_chat_example.py
+- Update examples/integrations/fastapi_example.py
+- Update examples/integrations/flask_example.py
+- Update examples/integrations/grpc_example.py
+- Update examples/integrations/jupyter_example.py
+- Update examples/integrations/kafka_example.py
+- Update examples/integrations/streamlit_example.py
+- Update examples/integrations/websocket_example.py
+- Update fraq/__init__.py
+- Update fraq/api.py
+- ... and 32 more files
+
 ## [0.2.12] - 2026-03-18
 
 ### Docs

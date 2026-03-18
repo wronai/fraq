@@ -1,6 +1,20 @@
-# fraq | 85f 11577L | python:85
+# fraq | 109f 13898L | python:109
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[85]:
+M[109]:
+  examples/integrations/cli_chat_example.py,116
+  examples/integrations/fastapi_example.py,66
+  examples/integrations/flask_example.py,49
+  examples/integrations/grpc_example.py,77
+  examples/integrations/jupyter_example.py,89
+  examples/integrations/kafka_example.py,88
+  examples/integrations/streamlit_example.py,47
+  examples/integrations/websocket_example.py,70
+  fraq/export/asyncapi.py,60
+  fraq/export/graphql.py,28
+  fraq/export/json_schema.py,25
+  fraq/export/proto.py,46
+  docs/examples/advanced_usage.py,6
+  docs/examples/quickstart.py,7
   examples/ai_ml/training_data.py,56
   examples/basic/app_integrations.py,458
   examples/basic/applications.py,95
@@ -37,20 +51,29 @@ M[85]:
   fraq/adapters/registry.py,24
   fraq/adapters/sensor_adapter.py,51
   fraq/adapters/sql_adapter.py,53
-  fraq/api.py,214
+  fraq/api.py,272
   fraq/benchmarks.py,185
-  fraq/cli.py,351
+  fraq/cli.py,361
   fraq/core.py,319
   fraq/dataframes.py,132
+  fraq/export/__init__.py,24
+  fraq/export/common.py,28
+  fraq/export/nlp2cmd.py,124
+  fraq/export/openapi.py,109
   fraq/formats.py,55
   fraq/formats/__init__.py,53
-  fraq/formats/binary.py,50
+  fraq/formats/binary.py,67
   fraq/formats/prepare.py,37
   fraq/formats/registry.py,29
   fraq/formats/text.py,57
   fraq/generators.py,91
   fraq/ifs.py,222
   fraq/inference.py,243
+  fraq/inference/__init__.py,94
+  fraq/inference/correlation.py,72
+  fraq/inference/dimension.py,91
+  fraq/inference/hierarchy.py,95
+  fraq/inference/schema.py,86
   fraq/providers/__init__.py,29
   fraq/providers/faker_provider.py,128
   fraq/query.py,167
@@ -72,6 +95,7 @@ M[85]:
   main_websocket.py,44
   tests/__init__.py,0
   tests/test_adapters.py,136
+  tests/test_api_export.py,100
   tests/test_cli.py,37
   tests/test_core.py,161
   tests/test_dataframes.py,49
@@ -84,9 +108,70 @@ M[85]:
   tests/test_query.py,101
   tests/test_schema_export.py,158
   tests/test_streaming.py,73
-  tests/test_testing.py,48
+  tests/test_testing.py,104
   tests/test_text2fraq.py,122
 D:
+  examples/integrations/cli_chat_example.py:
+    i: cmd,json,fraq.{FraqSchema,generate,stream}
+    e: FraqChat,main
+    FraqChat: __init__(0),do_generate(1),do_stream(1),do_schema(1),do_save(1)  # Interactive CLI for fraq operations.
+    main()
+  examples/integrations/fastapi_example.py:
+    i: asyncio,json,fastapi.{FastAPI,Query},fastapi.responses.StreamingResponse,fraq.{FraqExecutor,FraqNode,FraqQuery,FraqSchema},fraq.streaming.async_stream
+    e: root,query_data,stream_data,zoom,generate_data
+    root()
+    query_data(fields:str=Query('temperature:float;humidity:float');depth:int=Query(3; ge=1; le=20);fmt:str=Query('json'; regex='^(json|csv|yaml|jsonl)$');limit:int=Query(100; ge=1; le=10000))
+    stream_data(count:int=Query(100; ge=1; le=10000);interval:float=Query(0.1; gt=0))
+    zoom(depth:int;direction:str='0.5;0.5;0.5')
+    generate_data(fields:dict;count:int=Query(100; ge=1; le=10000);seed:int=Query(42; ge=0))
+  examples/integrations/flask_example.py:
+    i: json,flask.{Flask,Response,jsonify,request},fraq.{FraqSchema,generate,stream}
+    e: index,api_generate,api_stream,api_schema,health
+    index()
+    api_generate()
+    api_stream()
+    api_schema()
+    health()
+  examples/integrations/grpc_example.py:
+    i: fraq.{FraqSchema,to_proto}
+    e: generate_proto_file,example_grpc_server_stub
+    generate_proto_file()
+    example_grpc_server_stub()
+  examples/integrations/jupyter_example.py:
+    i: pandas,IPython.display,IPython.display.HTML,fraq.{FraqSchema,generate,infer_fractal},matplotlib.pyplot
+    e: jupyter_basic_usage,jupyter_visualization,jupyter_interactive_widget,jupyter_fractal_analysis
+    jupyter_basic_usage()
+    jupyter_visualization()
+    jupyter_interactive_widget()
+    jupyter_fractal_analysis()
+  examples/integrations/kafka_example.py:
+    i: json,time,fraq.{generate,stream},kafka.{KafkaConsumer,KafkaProducer}
+    e: KAFKA_BOOTSTRAP,TOPIC_DATA,TOPIC_STREAM,produce_to_kafka,stream_to_kafka,consume_from_kafka
+    produce_to_kafka(count:int=1000)->None
+    stream_to_kafka(duration_seconds:int=30)->None
+    consume_from_kafka(topic:str=TOPIC_DATA;max_records:int=10)->None
+  examples/integrations/websocket_example.py:
+    i: asyncio,json,websockets,fraq.stream
+    e: fraq_websocket_handler,main,test_client
+    fraq_websocket_handler(websocket;path)
+    main()
+    test_client()
+  fraq/export/asyncapi.py:
+    i: fraq.core.FraqSchema,fraq.export.common.FRAQ_TO_JSON_SCHEMA,typing.{Any,Dict}
+    e: to_asyncapi
+    to_asyncapi(schema:FraqSchema;title:str='Fraq Streams';version:str='1.0.0')->Dict[str, Any]
+  fraq/export/graphql.py:
+    i: fraq.core.FraqSchema,fraq.export.common.FRAQ_TO_GRAPHQL
+    e: to_graphql
+    to_graphql(schema:FraqSchema;type_name:str='FraqRecord')->str
+  fraq/export/json_schema.py:
+    i: fraq.core.FraqSchema,fraq.export.common.FRAQ_TO_JSON_SCHEMA,typing.{Any,Dict,List}
+    e: to_json_schema
+    to_json_schema(schema:FraqSchema;title:str='FraqRecord')->Dict[str, Any]
+  fraq/export/proto.py:
+    i: fraq.core.FraqSchema,fraq.export.common.FRAQ_TO_PROTO
+    e: to_proto
+    to_proto(schema:FraqSchema;package:str='fraq';message_name:str='FraqRecord')->str
   examples/ai_ml/training_data.py:
     i: fraq.{FraqSchema,generate}
     e: example_1_classification,example_2_regression,example_3_timeseries
@@ -321,16 +406,18 @@ D:
     e: SQLAdapter
     SQLAdapter: __init__(2),load_root(1),save(3),generate_sql_function(1),_default_row_to_node(1)  # Map fractal nodes to/from relational...
   fraq/api.py:
-    i: time,fraq.core.FraqNode,typing
-    e: generate,stream,quick_schema
+    i: time,dataclasses.dataclass,typing
+    e: TypeTransformRegistry,generate,StreamConfig,stream,quick_schema
+    TypeTransformRegistry: register(2),resolve(2),_default_transform(2)  # Registry for type transform factories.
+    StreamConfig: build_schema(0)  # Configuration for stream().
+    _faker_factory(name:str;spec:str)->Optional[Callable[[Any], Any]]
+    _float_factory(name:str;spec:str)->Optional[Callable[[Any], Any]]
+    _int_factory(name:str;spec:str)->Optional[Callable[[Any], Any]]
     _fields_to_schema(fields:Dict[str;str];seed:Optional[int]=None)->FraqSchema
     _parse_transform(name:str;type_spec:str)->Optional[Callable[[Any], Any]]
     _generate_records(schema:FraqSchema;count:int)->Iterator[Dict[str, Any]]
     generate(fields:Dict[str;str];count:int=10;seed:Optional[int]=None;output:DataFrameOutput='list')->Union[List[Dict[str, Any]], Any]
-    stream(fields:Optional[Dict[str;str]]=None;count:Optional[int]=None;interval:float=0.0)->Iterator[Dict[str, Any]]
-    quick_schema()->FraqSchema
-    _to_polars(records:List[Dict[str;Any]])->Any
-    _to_pandas(records:List[Dict[str;Any]])->Any
+    _build_stream_config(fields:Optional[Dict[str;str]]=None;count:Optional[int]=None;interval:float=0.0)->StreamConfig
   fraq/benchmarks.py:
     i: gc,time,tracemalloc,dataclasses.dataclass,typing.{Any,Callable,Dict,List,Optional}
     e: BenchmarkResult,SpeedBenchmark,MemoryBenchmark,StructuralBenchmark,run_all_benchmarks,print_summary
@@ -369,12 +456,26 @@ D:
     to_pandas(fields:Dict[str;str];count:int=100;seed:Optional[int]=None)->"pd.DataFrame"
     to_arrow(fields:Dict[str;str];count:int=100;seed:Optional[int]=None)->"pa.Table"
     generate_df(fields:Dict[str;str];count:int=100;seed:Optional[int]=None;output:str='polars')->Any
+  fraq/export/nlp2cmd.py:
+    i: fraq.core.FraqSchema,fraq.export.common.FRAQ_TO_JSON_SCHEMA,typing.{Any,Dict,List}
+    e: to_nlp2cmd_schema,to_nlp2cmd_actions
+    to_nlp2cmd_schema(schema:FraqSchema;command_name:str='fraq';version:str='1.0';category:str='data')->Dict[str, Any]
+    to_nlp2cmd_actions(schema:FraqSchema)->List[Dict[str, Any]]
+  fraq/export/openapi.py:
+    i: fraq.core.FraqSchema,fraq.export.common.FRAQ_TO_JSON_SCHEMA,typing.{Any,Dict,List}
+    e: to_openapi
+    to_openapi(schema:FraqSchema;title:str='Fraq Fractal API';version:str='1.0.0';base_path:str='/api/fraq')->Dict[str, Any]
   fraq/formats/binary.py:
     i: struct,fraq.formats.prepare,typing.Any
-    e: to_binary,to_msgpack_lite,mp_encode
+    e: to_binary,to_msgpack_lite,mp_encode,_ENCODERS
     to_binary(data:Any)->bytes
     to_msgpack_lite(data:Any)->bytes
     mp_encode(obj:Any)->bytes
+    _encode_none(obj:None)->bytes
+    _encode_bool(obj:bool)->bytes
+    _encode_int(obj:int)->bytes
+    _encode_float(obj:float)->bytes
+    _encode_str(obj:str)->bytes
   fraq/formats/prepare.py:
     i: struct,typing.{Any,Iterator}
     e: prepare,encode_value
@@ -416,6 +517,29 @@ D:
     FractalAnalyzer: __init__(2),box_counting_dimension(3),detect_hierarchy(2),analyze_correlations(1)  # Analyze data for fractal properties.
     InferredSchema: __init__(3),_build_ifs(0),generate(2),_generate_value(2),to_dict(0)  # Schema inferred from real data with f...
     infer_fractal(data:List[Dict[str;Any]];min_depth:int=2;max_depth:int=6)->'InferredSchema'
+  fraq/inference/__init__.py:
+    i: fraq.inference.correlation.CorrelationAnalyzer,fraq.inference.dimension.{BoxCountingAnalyzer,FractalDimension},fraq.inference.hierarchy.{HierarchyDetector,PatternSignature},typing.{Any,Dict,List,Optional,Tuple}
+    e: FractalAnalyzer,infer_fractal
+    FractalAnalyzer: __init__(2),box_counting_dimension(3),detect_hierarchy(2),analyze_correlations(1)  # Facade delegating to specialized anal...
+    infer_fractal(data:List[Dict[str;Any]];min_depth:int=2;max_depth:int=6)->InferredSchema
+  fraq/inference/correlation.py:
+    i: math,typing.{Any,Dict,List,Tuple}
+    e: CorrelationAnalyzer
+    CorrelationAnalyzer: _extract_numeric_column(2),_calculate_means(1),_calculate_correlation(2),analyze(1)  # Analyze self-similar correlations bet...
+  fraq/inference/dimension.py:
+    i: math,dataclasses.dataclass,typing.{List,Tuple}
+    e: FractalDimension,BoxCountingAnalyzer
+    FractalDimension:   # Fractal dimension analysis result.
+    BoxCountingAnalyzer: __init__(2),_validate_values(1),_normalize(1),_count_boxes(2),_compute_scales(1)  # Isolated box-counting fractal dimensi...
+  fraq/inference/hierarchy.py:
+    i: fraq.inference.dimension.{BoxCountingAnalyzer,FractalDimension},typing.{Any,Dict,List,Optional}
+    e: PatternSignature,HierarchyDetector
+    PatternSignature: __init__(5)  # Detected pattern in data column.
+    HierarchyDetector: __init__(2),_extract_numeric_values(2),_detect_pattern_type(1),_estimate_depth(1),_estimate_branching(1)  # Detect hierarchical patterns in data...
+  fraq/inference/schema.py:
+    i: math,fraq.inference.hierarchy.PatternSignature,typing.{Any,Dict,List,Optional,Tuple}
+    e: InferredSchema
+    InferredSchema: __init__(3),_build_ifs(0),_generate_value(2),generate(2),to_dict(0)  # Schema inferred from real data with f...
   fraq/providers/faker_provider.py:
     i: typing
     e: ValueProvider,FakerProvider,ProviderRegistry,get_provider_registry,generate_with_faker
@@ -524,6 +648,14 @@ D:
     TestSQLAdapter: test_load_from_rows(0),test_load_no_rows_fallback(0),test_save_returns_insert(0),test_generate_sql_function(0),test_custom_row_to_node(0)
     TestSensorAdapter: test_load_root(0),test_stream_count(0),test_stream_deterministic(0),test_save(1)
     TestHybridAdapter: test_merge_two_file_sources(1),test_empty_hybrid(0)
+  tests/test_api_export.py:
+    i: pytest,fraq.api.{_to_arrow,_to_pandas,_to_polars,generate}
+    e: TestGenerateOutput,TestPolarsExport,TestPandasExport,TestArrowExport,TestFakerInGenerate,TestConversionFunctions
+    TestGenerateOutput: test_output_list_default(0),test_output_list_explicit(0),test_output_records(0),test_output_invalid_raises(0)  # Test generate() with output parameter.
+    TestPolarsExport: test_import_error_without_polars(0)  # Test Polars DataFrame export.
+    TestPandasExport: test_import_error_without_pandas(0)  # Test Pandas DataFrame export.
+    TestArrowExport: test_import_error_without_pyarrow(0)  # Test PyArrow Table export.
+    TestFakerInGenerate: test_faker_spec_raises_without_faker(0)  # Test Faker integration via generate().
   tests/test_cli.py:
     i: json,pytest,sys,fraq.cli.main,io.StringIO
     e: TestCli
@@ -609,10 +741,12 @@ D:
     TestAsyncStreamFunction: test_stream_count(0)
     event_loop()
   tests/test_testing.py:
-    i: pytest,fraq.testing.{fraq_fixture,make_fixture}
-    e: TestFraqFixture,TestMakeFixture
-    TestFraqFixture: test_basic_usage(0),test_default_seed(0),test_determinism(0),test_different_seeds(0)  # Test fraq_fixture function.
+    i: pytest,fraq.testing.{fixture_factory,fraq_fixture,make_fixture}
+    e: TestFraqFixture,TestMakeFixture,TestFixtureFactory,TestPytestPluginFixtures
+    TestFraqFixture: test_basic_usage(0),test_default_seed(0),test_determinism(0),test_different_seeds(0),test_output_parameter(0)  # Test fraq_fixture function.
     TestMakeFixture: test_factory_creation(0),test_factory_call(0),test_factory_override_count(0)  # Test make_fixture factory function.
+    TestFixtureFactory: test_decorator_creates_callable(0),test_decorator_returns_data(0),test_decorator_preserves_name(0)  # Test fixture_factory decorator.
+    TestPytestPluginFixtures: test_fraq_session_fixture_available(0),test_fraq_data_fixture_available(0),test_fraq_schema_fixture_available(0)  # Test auto-discovered pytest fixtures.
   tests/test_text2fraq.py:
     i: importlib,fraq.query.FraqQuery,fraq.text2fraq
     e: StubClient,TestParsedQuery,TestText2Fraq,TestText2FraqSimple,TestConvenienceFunctions,StubFileAdapter,TestFileSearchText2Fraq,TestText2FileSearchFunction

@@ -33,7 +33,7 @@ from fraq.ifs import (
 # NEW: High-level API (moved to api.py for cleaner structure)
 from fraq.api import generate, stream, quick_schema
 
-__version__ = "0.2.12"
+__version__ = "0.2.13"
 
 # Public API list - used for lazy loading and IDE support
 __all__ = [
@@ -96,14 +96,14 @@ _LAZY_IMPORTS: dict[str, str] = {
     "FileSearchAdapter": "fraq.adapters",
     # Note: NetworkAdapter, WebCrawlerAdapter moved to fraq.adapters directly
     "get_adapter": "fraq.adapters",
-    # schema_export
-    "to_nlp2cmd_schema": "fraq.schema_export",
-    "to_nlp2cmd_actions": "fraq.schema_export",
-    "to_openapi": "fraq.schema_export",
-    "to_graphql": "fraq.schema_export",
-    "to_asyncapi": "fraq.schema_export",
-    "to_proto": "fraq.schema_export",
-    "to_json_schema": "fraq.schema_export",
+    # schema_export (now fraq.export)
+    "to_nlp2cmd_schema": "fraq.export",
+    "to_nlp2cmd_actions": "fraq.export",
+    "to_openapi": "fraq.export",
+    "to_graphql": "fraq.export",
+    "to_asyncapi": "fraq.export",
+    "to_proto": "fraq.export",
+    "to_json_schema": "fraq.export",
     # text2fraq
     "Text2Fraq": "fraq.text2fraq",
     "Text2FraqSimple": "fraq.text2fraq",
@@ -146,7 +146,7 @@ if TYPE_CHECKING:
         WebCrawlerAdapter,
         get_adapter,
     )
-    from fraq.schema_export import (
+    from fraq.export import (
         to_nlp2cmd_schema,
         to_nlp2cmd_actions,
         to_openapi,

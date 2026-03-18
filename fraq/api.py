@@ -8,6 +8,7 @@ All functions are pure (no side effects) and deterministic.
 from __future__ import annotations
 
 import time
+from dataclasses import dataclass
 from typing import Any, Callable, Dict, Iterator, List, Literal, Optional, Union
 
 from fraq.core import FraqNode, FraqSchema, FraqCursor
@@ -16,18 +17,86 @@ from fraq.core import FraqNode, FraqSchema, FraqCursor
 DataFrameOutput = Literal["list", "polars", "pandas", "arrow", "records"]
 
 
+class TypeTransformRegistry:
+    """Registry for type transform factories. Reduces CC from 10 to ≤3."""
+    
+    _transforms: Dict[str, Callable[[str, str], Optional[Callable[[Any], Any]]]] = {}
+    
+    @classmethod
+    def register(cls, type_name: str, factory: Callable[[str, str], Optional[Callable[[Any], Any]]]) -> None:
+        cls._transforms[type_name] = factory
+    
+    @classmethod
+    def resolve(cls, name: str, type_spec: str) -> tuple[str, Optional[Callable[[Any], Any]]]:
+        """Resolve type spec to (base_type, transform). CC≤3"""
+        if ':' not in type_spec:
+            return type_spec, cls._default_transform(name, type_spec)
+        
+        base_type, spec = type_spec.split(':', 1)
+        factory = cls._transforms.get(base_type)
+        
+        if factory:
+            transform = factory(name, spec)
+        else:
+            transform = cls._default_transform(name, spec)
+        
+        return base_type, transform
+    
+    @classmethod
+    def _default_transform(cls, name: str, spec: str) -> Optional[Callable[[Any], Any]]:
+        """Default transform for ID patterns. CC≤2"""
+        if 'id' in name.lower() or name.endswith('_id'):
+            return lambda v, n=name: f"{n[:3].upper()}-{int(float(v)*10000):06d}"
+        return None
+
+
+def _faker_factory(name: str, spec: str) -> Optional[Callable[[Any], Any]]:
+    """Factory for Faker transforms. CC≤2"""
+    from fraq.providers.faker_provider import generate_with_faker
+    full_spec = f"faker:{spec}"
+    return lambda v, fs=full_spec: generate_with_faker(fs, seed=int(float(v) * 10000))
+
+
+def _float_factory(name: str, spec: str) -> Optional[Callable[[Any], Any]]:
+    """Factory for float range transforms. CC≤3"""
+    if '-' not in spec:
+        return None
+    try:
+        min_val, max_val = map(float, spec.split('-'))
+        return lambda v, min_v=min_val, max_v=max_val: round(min_v + float(v) * (max_v - min_v), 2)
+    except ValueError:
+        return None
+
+
+def _int_factory(name: str, spec: str) -> Optional[Callable[[Any], Any]]:
+    """Factory for int range transforms. CC≤3"""
+    if '-' not in spec:
+        return None
+    try:
+        min_val, max_val = map(float, spec.split('-'))
+        return lambda v, min_v=min_val, max_v=max_val: int(min_v + float(v) * (max_v - min_v))
+    except ValueError:
+        return None
+
+
+# Register factories
+TypeTransformRegistry.register('faker', _faker_factory)
+TypeTransformRegistry.register('float', _float_factory)
+TypeTransformRegistry.register('int', _int_factory)
+
+
 def _fields_to_schema(fields: Dict[str, str], seed: Optional[int] = None) -> FraqSchema:
     """Convert field specifications to FraqSchema.
     
     Pure function - no side effects, deterministic.
+    Uses TypeTransformRegistry for modular transform resolution.
     """
     root = FraqNode(position=(0.0, 0.0, 0.0), seed=seed or 42)
     schema = FraqSchema(root=root)
     
     for name, type_spec in fields.items():
-        transform = _parse_transform(name, type_spec)
-        type_name = type_spec.split(':')[0]
-        schema.add_field(name, type_name, transform=transform)
+        base_type, transform = TypeTransformRegistry.resolve(name, type_spec)
+        schema.add_field(name, base_type, transform=transform)
     
     return schema
 
@@ -35,33 +104,10 @@ def _fields_to_schema(fields: Dict[str, str], seed: Optional[int] = None) -> Fra
 def _parse_transform(name: str, type_spec: str) -> Optional[Callable[[Any], Any]]:
     """Parse type specification and return transform function.
     
-    Handles: range hints (float:10-40), ID formatting, Faker specs.
+    Refactored to use TypeTransformRegistry. CC≤3 (was 10).
     """
-    # Check for Faker specification
-    if type_spec.startswith("faker:"):
-        from fraq.providers.faker_provider import generate_with_faker
-        return lambda v, spec=type_spec: generate_with_faker(spec, seed=int(float(v) * 10000))
-    
-    parts = type_spec.split(':')
-    type_name = parts[0]
-    
-    # Check for range hint (e.g., 'float:10-40')
-    if len(parts) >= 2 and '-' in parts[1]:
-        range_part = parts[1]
-        try:
-            min_val, max_val = map(float, range_part.split('-'))
-            if type_name == 'float':
-                return lambda v, min_v=min_val, max_v=max_val: round(min_v + float(v) * (max_v - min_v), 2)
-            elif type_name == 'int':
-                return lambda v, min_v=min_val, max_v=max_val: int(min_v + float(v) * (max_v - min_v))
-        except ValueError:
-            pass  # Invalid range, ignore
-    
-    # Special handling for ID-like strings
-    if type_name == 'str' and ('id' in name.lower() or name.endswith('_id')):
-        return lambda v, n=name: f"{n[:3].upper()}-{int(float(v)*10000):06d}"
-    
-    return None
+    _, transform = TypeTransformRegistry.resolve(name, type_spec)
+    return transform
 
 
 def _generate_records(schema: FraqSchema, count: int) -> Iterator[Dict[str, Any]]:
@@ -133,6 +179,52 @@ def generate(
         raise ValueError(f"Unknown output format: {output}. Use: list, polars, pandas, arrow, records")
 
 
+@dataclass
+class StreamConfig:
+    """Configuration for stream()."""
+    fields: Dict[str, str]
+    count: Optional[int]
+    interval: float
+    
+    def build_schema(self) -> FraqSchema:
+        """Build FraqSchema from fields. CC≤3"""
+        schema = FraqSchema()
+        for name, type_spec in self.fields.items():
+            base_type, transform = TypeTransformRegistry.resolve(name, type_spec)
+            schema.add_field(name, base_type, transform=transform)
+        return schema
+
+
+def _build_stream_config(
+    fields: Optional[Dict[str, str]] = None,
+    count: Optional[int] = None,
+    interval: float = 0.0,
+) -> StreamConfig:
+    """Build stream configuration. CC≤2"""
+    return StreamConfig(
+        fields=fields or {'value': 'float'},
+        count=count,
+        interval=interval,
+    )
+
+
+def _stream_records(
+    schema: FraqSchema,
+    config: StreamConfig,
+) -> Iterator[Dict[str, Any]]:
+    """Generate records with throttling. CC≤4"""
+    yielded = 0
+    max_records = config.count or float('inf')
+    
+    for record in schema.records(count=max_records):
+        if config.count and yielded >= config.count:
+            break
+        if config.interval > 0:
+            time.sleep(config.interval)
+        yielded += 1
+        yield record
+
+
 def stream(
     fields: Optional[Dict[str, str]] = None,
     count: Optional[int] = None,
@@ -154,28 +246,9 @@ def stream(
     >>> for record in stream({'temp': 'float:0-50'}, count=1000):
     ...     process(record)
     """
-    fields = fields or {'value': 'float'}
-    schema = FraqSchema()
-    
-    for name, type_spec in fields.items():
-        parts = type_spec.split(':')
-        type_name = parts[0]
-        
-        transform = None
-        if len(parts) >= 2 and '-' in parts[1]:
-            min_val, max_val = map(float, parts[1].split('-'))
-            transform = lambda v, min_v=min_val, max_v=max_val: min_v + float(v) * (max_v - min_v)
-        
-        schema.add_field(name, type_name, transform=transform)
-    
-    yielded = 0
-    for record in schema.records(count=count or float('inf')):
-        if count and yielded >= count:
-            break
-        if interval > 0:
-            time.sleep(interval)
-        yielded += 1
-        yield record
+    config = _build_stream_config(fields, count, interval)
+    schema = config.build_schema()
+    yield from _stream_records(schema, config)
 
 
 def quick_schema(*fields: str) -> FraqSchema:

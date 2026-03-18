@@ -4,22 +4,22 @@
 
 - **Project**: fraq
 - **Language**: python
-- **Files**: 36
-- **Lines**: 7683
-- **Functions**: 241
-- **Classes**: 51
-- **Avg CC**: 3.1
-- **Critical (CC≥10)**: 8
+- **Files**: 47
+- **Lines**: 9108
+- **Functions**: 289
+- **Classes**: 59
+- **Avg CC**: 2.8
+- **Critical (CC≥10)**: 2
 
 ## Architecture
 
-### fraq/ (14 files, 3563L, 124 functions)
+### fraq/ (14 files, 3646L, 128 functions)
 
-- `inference.py` — 347L, 10 methods, CC↑16
 - `benchmarks.py` — 263L, 8 methods, CC↑11
-- `api.py` — 281L, 9 methods, CC↑10
+- `cli.py` — 477L, 24 methods, CC↑9
 - `query.py` — 220L, 12 methods, CC↑9
-- `cli.py` — 467L, 24 methods, CC↑8
+- `core.py` — 412L, 17 methods, CC↑8
+- `server.py` — 217L, 7 methods, CC↑8
 - _9 more files_
 
 ### fraq/adapters/ (9 files, 621L, 41 functions)
@@ -31,13 +31,30 @@
 - `http_adapter.py` — 46L, 2 methods, CC↑3
 - _4 more files_
 
-### fraq/formats/ (5 files, 294L, 14 functions)
+### fraq/export/ (8 files, 512L, 7 functions)
 
-- `binary.py` — 62L, 3 methods, CC↑11
+- `nlp2cmd.py` — 138L, 2 methods, CC↑5
+- `asyncapi.py` — 67L, 1 methods, CC↑2
+- `graphql.py` — 36L, 1 methods, CC↑2
+- `json_schema.py` — 32L, 1 methods, CC↑2
+- `openapi.py` — 116L, 1 methods, CC↑2
+- _3 more files_
+
+### fraq/formats/ (5 files, 332L, 22 functions)
+
 - `prepare.py` — 47L, 2 methods, CC↑8
 - `text.py` — 71L, 5 methods, CC↑7
+- `binary.py` — 100L, 11 methods, CC↑3
 - `registry.py` — 40L, 4 methods, CC↑2
 - `__init__.py` — 74L, 0 methods, CC↑0
+
+### fraq/inference/ (5 files, 587L, 29 functions)
+
+- `correlation.py` — 98L, 4 methods, CC↑8
+- `dimension.py` — 126L, 8 methods, CC↑7
+- `hierarchy.py` — 130L, 7 methods, CC↑5
+- `schema.py` — 109L, 5 methods, CC↑5
+- `__init__.py` — 124L, 5 methods, CC↑2
 
 ### fraq/providers/ (2 files, 212L, 13 functions)
 
@@ -60,41 +77,28 @@
 
 ## Key Exports
 
-- **FractalAnalyzer** (class, CC̄=11.8)
-  - `box_counting_dimension` CC=16 ⚠ split
-  - `detect_hierarchy` CC=15 ⚠ split
-  - `analyze_correlations` CC=15 ⚠ split
 - **FraqFilter** (class, CC̄=9.0)
 - **FraqSchema** (class, CC̄=5.8)
+- **CorrelationAnalyzer** (class, CC̄=5.2)
 - **ParsedQuery** (class, CC̄=5.0)
 
 ## Hotspots (High Fan-Out)
 
 - **FileSearchText2Fraq._collect_files_filtered** — fan-out=16: Collect files with exclusion filtering.
-- **FractalAnalyzer.detect_hierarchy** — fan-out=14: Detect hierarchical structure in data.
-
-Analyzes parent-child relationships to f
-- **FractalAnalyzer.box_counting_dimension** — fan-out=13: Calculate box-counting dimension of value distribution.
-
-True fractals have non-
 - **FileAdapter.load_root** — fan-out=13: Orchestrates 13 calls
 - **ws_stream** — fan-out=13: WebSocket endpoint for streaming fractal data.
-- **_parse_transform** — fan-out=12: Parse type specification and return transform function.
-
-Handles: range hints (f
 - **ws_stream** — fan-out=11: Orchestrates 11 calls
+- **cmd_schema** — fan-out=11: Orchestrates 11 calls
+- **_dispatch_command** — fan-out=10: 10-way dispatch
+- **HTTPAdapter.load_root** — fan-out=10: Orchestrates 10 calls
 
 ## Refactoring Priorities
 
 | # | Action | Impact | Effort |
 |---|--------|--------|--------|
-| 1 | Split FractalAnalyzer.box_counting_dimension (CC=16 → target CC<10) | medium | low |
-| 2 | Split FractalAnalyzer.detect_hierarchy (CC=15 → target CC<10) | medium | low |
-| 3 | Split FractalAnalyzer.analyze_correlations (CC=15 → target CC<10) | medium | low |
-| 4 | Break circular dependency: fraq.formats.prepare.prepare | medium | low |
-| 5 | Break circular dependency: fraq.formats.binary.mp_encode | medium | low |
-| 6 | Break circular dependency: fraq.formats.text.simple_yaml | medium | low |
-| 7 | Reduce FileSearchText2Fraq._collect_files_filtered fan-out (currently 16) | medium | medium |
+| 1 | Break circular dependency: fraq.formats.prepare.prepare | medium | low |
+| 2 | Break circular dependency: fraq.formats.text.simple_yaml | medium | low |
+| 3 | Reduce FileSearchText2Fraq._collect_files_filtered fan-out (currently 16) | medium | medium |
 
 ## Context for LLM
 
