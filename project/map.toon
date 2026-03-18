@@ -1,6 +1,6 @@
-# fraq | 71f 10086L | python:63,shell:8
+# fraq | 70f 9990L | python:62,shell:8
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[71]:
+M[70]:
   examples/ai_ml/training_data.py,79
   examples/bash_examples.sh,193
   examples/basic/app_integrations.py,566
@@ -20,6 +20,7 @@ M[71]:
   examples/fullstack-docker/websocket/main.py,52
   examples/iot/sensor_examples.py,84
   examples/network/network_web_examples.py,192
+  examples/new_features_demo.py,196
   examples/nlp_examples.sh,233
   examples/streaming/sse_examples.py,102
   examples/text2fraq/nlp2cmd_integration.py,223
@@ -28,19 +29,17 @@ M[71]:
   examples/v028/new_features.py,144
   examples/websocket-docker/main.py,104
   examples/websocket-docker/run.sh,62
-  fraq/__init__.py,155
-  fraq/adapters/__init__.py,25
+  fraq/__init__.py,167
+  fraq/adapters/__init__.py,21
   fraq/adapters/base.py,32
   fraq/adapters/file_adapter.py,47
   fraq/adapters/file_search.py,268
   fraq/adapters/http_adapter.py,46
   fraq/adapters/hybrid_adapter.py,51
-  fraq/adapters/network.py,186
-  fraq/adapters/registry.py,33
+  fraq/adapters/registry.py,31
   fraq/adapters/sensor_adapter.py,61
   fraq/adapters/sql_adapter.py,64
-  fraq/adapters/web_crawler.py,204
-  fraq/api.py,189
+  fraq/api.py,281
   fraq/benchmarks.py,263
   fraq/cli.py,467
   fraq/core.py,412
@@ -97,16 +96,16 @@ D:
     to_msgpack_lite(data)
     mp_encode(obj)
   fraq/api.py:
-    e: _fields_to_schema,_parse_transform,_generate_records,generate,stream,quick_schema
+    e: _fields_to_schema,_parse_transform,_generate_records,generate,stream,quick_schema,_to_polars,_to_pandas,_to_arrow
     _fields_to_schema(fields;seed)
     _parse_transform(name;type_spec)
     _generate_records(schema;count)
-    generate(fields;count;seed)
+    generate(fields;count;seed;output)
     stream(fields;count;interval)
     quick_schema()
-  fraq/adapters/web_crawler.py:
-    e: WebCrawlerAdapter
-    WebCrawlerAdapter(BaseAdapter): __init__(5),_get_session(0),load_root(1),_parse_page(3),_plan_next_links(2),_process_url(2),crawl_async(0),_extract_links(2),stream_pages(0),search(0),stream(1),save(3)  # Async adapter for crawling websites and extracting links/con...
+    _to_polars(records)
+    _to_pandas(records)
+    _to_arrow(records)
   fraq/query.py:
     e: SourceType,FraqFilter,FraqQuery,FraqExecutor,query
     SourceType(str,Enum):  # Known data source families...
@@ -273,6 +272,14 @@ Maps fractal coordinates ...
     to_asyncapi(schema;title;version)
     to_proto(schema;package;message_name)
     to_json_schema(schema;title)
+  examples/new_features_demo.py:
+    e: example_1_faker,example_2_dataframes,example_3_pytest_fixture,example_4_ifs_generator,example_5_fractal_inference,example_6_benchmarks
+    example_1_faker()
+    example_2_dataframes()
+    example_3_pytest_fixture()
+    example_4_ifs_generator()
+    example_5_fractal_inference()
+    example_6_benchmarks()
   examples/etl/pipeline_examples.py:
     e: example_1_extract,example_2_transform,example_3_validate,example_4_pipeline
     example_1_extract()
@@ -298,9 +305,6 @@ Maps fractal coordinates ...
     e: ParsedQuery,LLMClient
     ParsedQuery: to_fraq_query(0)  # Parsed natural language query...
     LLMClient(Protocol): complete(1)  # Protocol for LLM clients...
-  fraq/adapters/network.py:
-    e: NetworkAdapter
-    NetworkAdapter(BaseAdapter): __init__(4),load_root(1),scan_async(2),_plan_scan(2),_parse_result(5),_check_port_io(2),_identify_service(1),stream_devices(1),search(0),stream(1),save(3)  # Async adapter for scanning local network devices and service...
   fraq/dataframes.py:
     e: to_polars,to_pandas,to_arrow,generate_df
     to_polars(fields;count;seed)

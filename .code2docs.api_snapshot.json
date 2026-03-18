@@ -1,0 +1,2174 @@
+{
+  "functions": {
+    "main_websocket.ws_stream": {
+      "signature": "ws_stream(websocket)",
+      "is_method": false,
+      "module": "main_websocket",
+      "docstring_hash": "0"
+    },
+    "main_websocket.ws_files": {
+      "signature": "ws_files(websocket)",
+      "is_method": false,
+      "module": "main_websocket",
+      "docstring_hash": "0"
+    },
+    "main_websocket.health": {
+      "signature": "health()",
+      "is_method": false,
+      "module": "main_websocket",
+      "docstring_hash": "0"
+    },
+    "fraq.streaming.AsyncFraqStream.stop": {
+      "signature": "stop(self)",
+      "is_method": true,
+      "module": "fraq.streaming",
+      "docstring_hash": "0"
+    },
+    "fraq.streaming.async_query": {
+      "signature": "async_query(query, root, dims)",
+      "is_method": false,
+      "module": "fraq.streaming",
+      "docstring_hash": "83934810"
+    },
+    "fraq.streaming.async_stream": {
+      "signature": "async_stream(root, count, interval, direction, dims)",
+      "is_method": false,
+      "module": "fraq.streaming",
+      "docstring_hash": "54616074"
+    },
+    "fraq.dataframes.to_polars": {
+      "signature": "to_polars(fields, count, seed)",
+      "is_method": false,
+      "module": "fraq.dataframes",
+      "docstring_hash": "65442195"
+    },
+    "fraq.dataframes.to_pandas": {
+      "signature": "to_pandas(fields, count, seed)",
+      "is_method": false,
+      "module": "fraq.dataframes",
+      "docstring_hash": "-6069563"
+    },
+    "fraq.dataframes.to_arrow": {
+      "signature": "to_arrow(fields, count, seed)",
+      "is_method": false,
+      "module": "fraq.dataframes",
+      "docstring_hash": "52272449"
+    },
+    "fraq.dataframes.generate_df": {
+      "signature": "generate_df(fields, count, seed, output)",
+      "is_method": false,
+      "module": "fraq.dataframes",
+      "docstring_hash": "-8280468"
+    },
+    "fraq.cli.cmd_explore": {
+      "signature": "cmd_explore(args)",
+      "is_method": false,
+      "module": "fraq.cli",
+      "docstring_hash": "0"
+    },
+    "fraq.cli.cmd_stream": {
+      "signature": "cmd_stream(args)",
+      "is_method": false,
+      "module": "fraq.cli",
+      "docstring_hash": "0"
+    },
+    "fraq.cli.cmd_schema": {
+      "signature": "cmd_schema(args)",
+      "is_method": false,
+      "module": "fraq.cli",
+      "docstring_hash": "0"
+    },
+    "fraq.cli.cmd_files_search": {
+      "signature": "cmd_files_search(args)",
+      "is_method": false,
+      "module": "fraq.cli",
+      "docstring_hash": "-5687511"
+    },
+    "fraq.cli.cmd_files_list": {
+      "signature": "cmd_files_list(args)",
+      "is_method": false,
+      "module": "fraq.cli",
+      "docstring_hash": "-5967622"
+    },
+    "fraq.cli.cmd_files_stat": {
+      "signature": "cmd_files_stat(args)",
+      "is_method": false,
+      "module": "fraq.cli",
+      "docstring_hash": "-2321828"
+    },
+    "fraq.cli.cmd_nl": {
+      "signature": "cmd_nl(args)",
+      "is_method": false,
+      "module": "fraq.cli",
+      "docstring_hash": "-2279916"
+    },
+    "fraq.cli.cmd_network_scan": {
+      "signature": "cmd_network_scan(args)",
+      "is_method": false,
+      "module": "fraq.cli",
+      "docstring_hash": "-6439680"
+    },
+    "fraq.cli.cmd_web_crawl": {
+      "signature": "cmd_web_crawl(args)",
+      "is_method": false,
+      "module": "fraq.cli",
+      "docstring_hash": "79823724"
+    },
+    "fraq.cli.main": {
+      "signature": "main(argv)",
+      "is_method": false,
+      "module": "fraq.cli",
+      "docstring_hash": "55611351"
+    },
+    "fraq.api.generate": {
+      "signature": "generate(fields, count, seed, output)",
+      "is_method": false,
+      "module": "fraq.api",
+      "docstring_hash": "-8501067"
+    },
+    "fraq.api.stream": {
+      "signature": "stream(fields, count, interval)",
+      "is_method": false,
+      "module": "fraq.api",
+      "docstring_hash": "-8118165"
+    },
+    "fraq.api.quick_schema": {
+      "signature": "quick_schema()",
+      "is_method": false,
+      "module": "fraq.api",
+      "docstring_hash": "34748306"
+    },
+    "fraq.benchmarks.SpeedBenchmark.fraq_generate": {
+      "signature": "fraq_generate(count)",
+      "is_method": true,
+      "module": "fraq.benchmarks",
+      "docstring_hash": "32361740"
+    },
+    "fraq.benchmarks.SpeedBenchmark.fraq_stream": {
+      "signature": "fraq_stream(count)",
+      "is_method": true,
+      "module": "fraq.benchmarks",
+      "docstring_hash": "14059013"
+    },
+    "fraq.benchmarks.MemoryBenchmark.measure_memory_usage": {
+      "signature": "measure_memory_usage(generator_fn, count)",
+      "is_method": true,
+      "module": "fraq.benchmarks",
+      "docstring_hash": "-4410901"
+    },
+    "fraq.benchmarks.MemoryBenchmark.compare_memory": {
+      "signature": "compare_memory(count)",
+      "is_method": true,
+      "module": "fraq.benchmarks",
+      "docstring_hash": "-5764081"
+    },
+    "fraq.benchmarks.StructuralBenchmark.test_self_similarity": {
+      "signature": "test_self_similarity(data, column)",
+      "is_method": true,
+      "module": "fraq.benchmarks",
+      "docstring_hash": "-6675798"
+    },
+    "fraq.benchmarks.StructuralBenchmark.compare_structures": {
+      "signature": "compare_structures()",
+      "is_method": true,
+      "module": "fraq.benchmarks",
+      "docstring_hash": "18741141"
+    },
+    "fraq.benchmarks.run_all_benchmarks": {
+      "signature": "run_all_benchmarks(speed_count, memory_count)",
+      "is_method": false,
+      "module": "fraq.benchmarks",
+      "docstring_hash": "78168946"
+    },
+    "fraq.benchmarks.print_summary": {
+      "signature": "print_summary(results)",
+      "is_method": false,
+      "module": "fraq.benchmarks",
+      "docstring_hash": "26608442"
+    },
+    "fraq.core.FraqNode.zoom": {
+      "signature": "zoom(self, direction)",
+      "is_method": true,
+      "module": "fraq.core",
+      "docstring_hash": "-9069047"
+    },
+    "fraq.core.FraqNode.children": {
+      "signature": "children(self, directions)",
+      "is_method": true,
+      "module": "fraq.core",
+      "docstring_hash": "22207065"
+    },
+    "fraq.core.FraqNode.to_dict": {
+      "signature": "to_dict(self, max_depth)",
+      "is_method": true,
+      "module": "fraq.core",
+      "docstring_hash": "71781537"
+    },
+    "fraq.core.FraqSchema.add_field": {
+      "signature": "add_field(self, name, type, direction, transform)",
+      "is_method": true,
+      "module": "fraq.core",
+      "docstring_hash": "0"
+    },
+    "fraq.core.FraqSchema.record": {
+      "signature": "record(self, node)",
+      "is_method": true,
+      "module": "fraq.core",
+      "docstring_hash": "57624204"
+    },
+    "fraq.core.FraqSchema.records": {
+      "signature": "records(self, depth, branching, count, node)",
+      "is_method": true,
+      "module": "fraq.core",
+      "docstring_hash": "-5796786"
+    },
+    "fraq.core.FraqCursor.advance": {
+      "signature": "advance(self, direction)",
+      "is_method": true,
+      "module": "fraq.core",
+      "docstring_hash": "63728867"
+    },
+    "fraq.core.FraqCursor.back": {
+      "signature": "back(self)",
+      "is_method": true,
+      "module": "fraq.core",
+      "docstring_hash": "-4696806"
+    },
+    "fraq.core.FraqCursor.reset": {
+      "signature": "reset(self)",
+      "is_method": true,
+      "module": "fraq.core",
+      "docstring_hash": "-5582559"
+    },
+    "fraq.core.FraqCursor.snapshot": {
+      "signature": "snapshot(self)",
+      "is_method": true,
+      "module": "fraq.core",
+      "docstring_hash": "-2616656"
+    },
+    "fraq.ifs.AffineTransform.apply": {
+      "signature": "apply(self, point)",
+      "is_method": true,
+      "module": "fraq.ifs",
+      "docstring_hash": "-6621052"
+    },
+    "fraq.ifs.ValueMapper.map_value": {
+      "signature": "map_value(self, coordinate, depth)",
+      "is_method": true,
+      "module": "fraq.ifs",
+      "docstring_hash": "48179314"
+    },
+    "fraq.ifs.IFSGenerator.generate_coordinate": {
+      "signature": "generate_coordinate(self, depth, start)",
+      "is_method": true,
+      "module": "fraq.ifs",
+      "docstring_hash": "51637565"
+    },
+    "fraq.ifs.IFSGenerator.generate": {
+      "signature": "generate(self, count, depth, mapper)",
+      "is_method": true,
+      "module": "fraq.ifs",
+      "docstring_hash": "44662127"
+    },
+    "fraq.ifs.IFSGenerator.generate_hierarchy": {
+      "signature": "generate_hierarchy(self, root, branching, depth)",
+      "is_method": true,
+      "module": "fraq.ifs",
+      "docstring_hash": "90428968"
+    },
+    "fraq.ifs.OrganizationalMapper.map_value": {
+      "signature": "map_value(self, coordinate, depth)",
+      "is_method": true,
+      "module": "fraq.ifs",
+      "docstring_hash": "68775956"
+    },
+    "fraq.ifs.NetworkMapper.map_value": {
+      "signature": "map_value(self, coordinate, depth)",
+      "is_method": true,
+      "module": "fraq.ifs",
+      "docstring_hash": "-5795461"
+    },
+    "fraq.ifs.create_ifs": {
+      "signature": "create_ifs(pattern, seed)",
+      "is_method": false,
+      "module": "fraq.ifs",
+      "docstring_hash": "-1723410"
+    },
+    "fraq.inference.FractalAnalyzer.box_counting_dimension": {
+      "signature": "box_counting_dimension(self, values, min_box_size, max_box_size)",
+      "is_method": true,
+      "module": "fraq.inference",
+      "docstring_hash": "-1224899"
+    },
+    "fraq.inference.FractalAnalyzer.detect_hierarchy": {
+      "signature": "detect_hierarchy(self, data, parent_column)",
+      "is_method": true,
+      "module": "fraq.inference",
+      "docstring_hash": "51442457"
+    },
+    "fraq.inference.FractalAnalyzer.analyze_correlations": {
+      "signature": "analyze_correlations(self, data)",
+      "is_method": true,
+      "module": "fraq.inference",
+      "docstring_hash": "29614283"
+    },
+    "fraq.inference.infer_fractal": {
+      "signature": "infer_fractal(data, min_depth, max_depth)",
+      "is_method": false,
+      "module": "fraq.inference",
+      "docstring_hash": "-9873321"
+    },
+    "fraq.inference.InferredSchema.generate": {
+      "signature": "generate(self, count, seed)",
+      "is_method": true,
+      "module": "fraq.inference",
+      "docstring_hash": "-8396649"
+    },
+    "fraq.inference.InferredSchema.to_dict": {
+      "signature": "to_dict(self)",
+      "is_method": true,
+      "module": "fraq.inference",
+      "docstring_hash": "-8218727"
+    },
+    "fraq.schema_export.to_nlp2cmd_schema": {
+      "signature": "to_nlp2cmd_schema(schema, command_name, version, category)",
+      "is_method": false,
+      "module": "fraq.schema_export",
+      "docstring_hash": "42680391"
+    },
+    "fraq.schema_export.to_nlp2cmd_actions": {
+      "signature": "to_nlp2cmd_actions(schema)",
+      "is_method": false,
+      "module": "fraq.schema_export",
+      "docstring_hash": "-4848952"
+    },
+    "fraq.schema_export.to_openapi": {
+      "signature": "to_openapi(schema, title, version, base_path)",
+      "is_method": false,
+      "module": "fraq.schema_export",
+      "docstring_hash": "-4931773"
+    },
+    "fraq.schema_export.to_graphql": {
+      "signature": "to_graphql(schema, type_name)",
+      "is_method": false,
+      "module": "fraq.schema_export",
+      "docstring_hash": "-6228196"
+    },
+    "fraq.schema_export.to_asyncapi": {
+      "signature": "to_asyncapi(schema, title, version)",
+      "is_method": false,
+      "module": "fraq.schema_export",
+      "docstring_hash": "74130715"
+    },
+    "fraq.schema_export.to_proto": {
+      "signature": "to_proto(schema, package, message_name)",
+      "is_method": false,
+      "module": "fraq.schema_export",
+      "docstring_hash": "-3945636"
+    },
+    "fraq.schema_export.to_json_schema": {
+      "signature": "to_json_schema(schema, title)",
+      "is_method": false,
+      "module": "fraq.schema_export",
+      "docstring_hash": "-5482442"
+    },
+    "examples.new_features_demo.example_1_faker": {
+      "signature": "example_1_faker()",
+      "is_method": false,
+      "module": "examples.new_features_demo",
+      "docstring_hash": "72178384"
+    },
+    "examples.new_features_demo.example_2_dataframes": {
+      "signature": "example_2_dataframes()",
+      "is_method": false,
+      "module": "examples.new_features_demo",
+      "docstring_hash": "48645697"
+    },
+    "examples.new_features_demo.example_3_pytest_fixture": {
+      "signature": "example_3_pytest_fixture()",
+      "is_method": false,
+      "module": "examples.new_features_demo",
+      "docstring_hash": "-3326217"
+    },
+    "examples.new_features_demo.example_4_ifs_generator": {
+      "signature": "example_4_ifs_generator()",
+      "is_method": false,
+      "module": "examples.new_features_demo",
+      "docstring_hash": "-2646085"
+    },
+    "examples.new_features_demo.example_5_fractal_inference": {
+      "signature": "example_5_fractal_inference()",
+      "is_method": false,
+      "module": "examples.new_features_demo",
+      "docstring_hash": "-4495915"
+    },
+    "examples.new_features_demo.example_6_benchmarks": {
+      "signature": "example_6_benchmarks()",
+      "is_method": false,
+      "module": "examples.new_features_demo",
+      "docstring_hash": "-3013165"
+    },
+    "fraq.query.FraqFilter.matches": {
+      "signature": "matches(self, record)",
+      "is_method": true,
+      "module": "fraq.query",
+      "docstring_hash": "0"
+    },
+    "fraq.query.FraqQuery.zoom": {
+      "signature": "zoom(self, depth, direction)",
+      "is_method": true,
+      "module": "fraq.query",
+      "docstring_hash": "0"
+    },
+    "fraq.query.FraqQuery.select": {
+      "signature": "select(self)",
+      "is_method": true,
+      "module": "fraq.query",
+      "docstring_hash": "-6157269"
+    },
+    "fraq.query.FraqQuery.where": {
+      "signature": "where(self, field, op, value)",
+      "is_method": true,
+      "module": "fraq.query",
+      "docstring_hash": "0"
+    },
+    "fraq.query.FraqQuery.output": {
+      "signature": "output(self, fmt)",
+      "is_method": true,
+      "module": "fraq.query",
+      "docstring_hash": "0"
+    },
+    "fraq.query.FraqQuery.take": {
+      "signature": "take(self, n)",
+      "is_method": true,
+      "module": "fraq.query",
+      "docstring_hash": "0"
+    },
+    "fraq.query.FraqQuery.from_source": {
+      "signature": "from_source(self, source, uri)",
+      "is_method": true,
+      "module": "fraq.query",
+      "docstring_hash": "0"
+    },
+    "fraq.query.FraqExecutor.execute": {
+      "signature": "execute(self, query)",
+      "is_method": true,
+      "module": "fraq.query",
+      "docstring_hash": "-3142723"
+    },
+    "fraq.query.FraqExecutor.execute_iter": {
+      "signature": "execute_iter(self, query)",
+      "is_method": true,
+      "module": "fraq.query",
+      "docstring_hash": "-7402679"
+    },
+    "fraq.query.query": {
+      "signature": "query(depth, direction, fields, format, limit, dims, seed)",
+      "is_method": false,
+      "module": "fraq.query",
+      "docstring_hash": "85373053"
+    },
+    "examples.text2fraq.nlp2cmd_integration.build_sensor_schema": {
+      "signature": "build_sensor_schema()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "45995562"
+    },
+    "examples.text2fraq.nlp2cmd_integration.build_erp_schema": {
+      "signature": "build_erp_schema()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "-2067021"
+    },
+    "examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_command_schema": {
+      "signature": "example_nlp2cmd_command_schema()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "83282128"
+    },
+    "examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_actions": {
+      "signature": "example_nlp2cmd_actions()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "78324435"
+    },
+    "examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_erp": {
+      "signature": "example_nlp2cmd_erp()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "-5162240"
+    },
+    "examples.text2fraq.nlp2cmd_integration.example_openapi": {
+      "signature": "example_openapi()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "39613897"
+    },
+    "examples.text2fraq.nlp2cmd_integration.example_graphql": {
+      "signature": "example_graphql()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "-8794925"
+    },
+    "examples.text2fraq.nlp2cmd_integration.example_asyncapi": {
+      "signature": "example_asyncapi()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "69369849"
+    },
+    "examples.text2fraq.nlp2cmd_integration.example_grpc_proto": {
+      "signature": "example_grpc_proto()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "-1841091"
+    },
+    "examples.text2fraq.nlp2cmd_integration.example_json_schema": {
+      "signature": "example_json_schema()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "-7834677"
+    },
+    "examples.text2fraq.nlp2cmd_integration.example_full_nlp2cmd_workflow": {
+      "signature": "example_full_nlp2cmd_workflow()",
+      "is_method": false,
+      "module": "examples.text2fraq.nlp2cmd_integration",
+      "docstring_hash": "-8185176"
+    },
+    "examples.websocket-docker.run.run_docker": {
+      "signature": "run_docker()",
+      "is_method": false,
+      "module": "examples.websocket-docker.run",
+      "docstring_hash": "20465320"
+    },
+    "examples.websocket-docker.run.stop_docker": {
+      "signature": "stop_docker()",
+      "is_method": false,
+      "module": "examples.websocket-docker.run",
+      "docstring_hash": "86130854"
+    },
+    "examples.websocket-docker.run.run_local": {
+      "signature": "run_local()",
+      "is_method": false,
+      "module": "examples.websocket-docker.run",
+      "docstring_hash": "-5932658"
+    },
+    "examples.websocket-docker.run.test_websocket": {
+      "signature": "test_websocket()",
+      "is_method": false,
+      "module": "examples.websocket-docker.run",
+      "docstring_hash": "-7143980"
+    },
+    "examples.websocket-docker.run.main": {
+      "signature": "main()",
+      "is_method": false,
+      "module": "examples.websocket-docker.run",
+      "docstring_hash": "0"
+    },
+    "examples.text2fraq.text2fraq_files.example_pdf_search_rule_based": {
+      "signature": "example_pdf_search_rule_based()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_files",
+      "docstring_hash": "82739618"
+    },
+    "examples.text2fraq.text2fraq_files.example_pdf_search_with_llm": {
+      "signature": "example_pdf_search_with_llm()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_files",
+      "docstring_hash": "60801323"
+    },
+    "examples.text2fraq.text2fraq_files.example_convenience_function": {
+      "signature": "example_convenience_function()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_files",
+      "docstring_hash": "54615462"
+    },
+    "examples.text2fraq.text2fraq_files.example_file_search_adapter_direct": {
+      "signature": "example_file_search_adapter_direct()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_files",
+      "docstring_hash": "30610842"
+    },
+    "examples.text2fraq.text2fraq_files.example_llm_file_intent": {
+      "signature": "example_llm_file_intent()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_files",
+      "docstring_hash": "67857051"
+    },
+    "examples.websocket-docker.main.ws_stream": {
+      "signature": "ws_stream(websocket)",
+      "is_method": false,
+      "module": "examples.websocket-docker.main",
+      "docstring_hash": "53976670"
+    },
+    "examples.websocket-docker.main.ws_files": {
+      "signature": "ws_files(websocket)",
+      "is_method": false,
+      "module": "examples.websocket-docker.main",
+      "docstring_hash": "78934151"
+    },
+    "examples.websocket-docker.main.health": {
+      "signature": "health()",
+      "is_method": false,
+      "module": "examples.websocket-docker.main",
+      "docstring_hash": "0"
+    },
+    "examples.cli-docker.run.run_in_docker": {
+      "signature": "run_in_docker(args_list)",
+      "is_method": false,
+      "module": "examples.cli-docker.run",
+      "docstring_hash": "-6958137"
+    },
+    "examples.cli-docker.run.run_local": {
+      "signature": "run_local(args_list)",
+      "is_method": false,
+      "module": "examples.cli-docker.run",
+      "docstring_hash": "85942663"
+    },
+    "examples.cli-docker.run.main": {
+      "signature": "main()",
+      "is_method": false,
+      "module": "examples.cli-docker.run",
+      "docstring_hash": "0"
+    },
+    "examples.network.network_web_examples.example_network_scan_sync": {
+      "signature": "example_network_scan_sync()",
+      "is_method": false,
+      "module": "examples.network.network_web_examples",
+      "docstring_hash": "74696659"
+    },
+    "examples.network.network_web_examples.example_network_scan_async": {
+      "signature": "example_network_scan_async()",
+      "is_method": false,
+      "module": "examples.network.network_web_examples",
+      "docstring_hash": "-9035652"
+    },
+    "examples.network.network_web_examples.example_web_crawl_sync": {
+      "signature": "example_web_crawl_sync()",
+      "is_method": false,
+      "module": "examples.network.network_web_examples",
+      "docstring_hash": "74203717"
+    },
+    "examples.network.network_web_examples.example_web_crawl_async": {
+      "signature": "example_web_crawl_async()",
+      "is_method": false,
+      "module": "examples.network.network_web_examples",
+      "docstring_hash": "91956406"
+    },
+    "examples.network.network_web_examples.example_fractal_coordinates": {
+      "signature": "example_fractal_coordinates()",
+      "is_method": false,
+      "module": "examples.network.network_web_examples",
+      "docstring_hash": "36310605"
+    },
+    "examples.network.network_web_examples.example_streaming_comparison": {
+      "signature": "example_streaming_comparison()",
+      "is_method": false,
+      "module": "examples.network.network_web_examples",
+      "docstring_hash": "-3452633"
+    },
+    "examples.network.network_web_examples.main": {
+      "signature": "main()",
+      "is_method": false,
+      "module": "examples.network.network_web_examples",
+      "docstring_hash": "-1997456"
+    },
+    "examples.iot.sensor_examples.example_1_sensors": {
+      "signature": "example_1_sensors()",
+      "is_method": false,
+      "module": "examples.iot.sensor_examples",
+      "docstring_hash": "-1174473"
+    },
+    "examples.iot.sensor_examples.example_2_mqtt": {
+      "signature": "example_2_mqtt()",
+      "is_method": false,
+      "module": "examples.iot.sensor_examples",
+      "docstring_hash": "92162640"
+    },
+    "examples.iot.sensor_examples.example_3_streaming": {
+      "signature": "example_3_streaming()",
+      "is_method": false,
+      "module": "examples.iot.sensor_examples",
+      "docstring_hash": "-4885672"
+    },
+    "examples.streaming.sse_examples.example_1_sse": {
+      "signature": "example_1_sse()",
+      "is_method": false,
+      "module": "examples.streaming.sse_examples",
+      "docstring_hash": "-7198966"
+    },
+    "examples.streaming.sse_examples.example_2_websocket": {
+      "signature": "example_2_websocket()",
+      "is_method": false,
+      "module": "examples.streaming.sse_examples",
+      "docstring_hash": "99639844"
+    },
+    "examples.streaming.sse_examples.example_3_streaming": {
+      "signature": "example_3_streaming()",
+      "is_method": false,
+      "module": "examples.streaming.sse_examples",
+      "docstring_hash": "-4885672"
+    },
+    "examples.streaming.sse_examples.example_4_kafka": {
+      "signature": "example_4_kafka()",
+      "is_method": false,
+      "module": "examples.streaming.sse_examples",
+      "docstring_hash": "-3960150"
+    },
+    "examples.v028.new_features.example_model_router": {
+      "signature": "example_model_router()",
+      "is_method": false,
+      "module": "examples.v028.new_features",
+      "docstring_hash": "-4488819"
+    },
+    "examples.v028.new_features.example_fraq_session": {
+      "signature": "example_fraq_session()",
+      "is_method": false,
+      "module": "examples.v028.new_features",
+      "docstring_hash": "89177938"
+    },
+    "examples.v028.new_features.example_fastapi_server": {
+      "signature": "example_fastapi_server()",
+      "is_method": false,
+      "module": "examples.v028.new_features",
+      "docstring_hash": "16965579"
+    },
+    "examples.v028.new_features.example_combined_usage": {
+      "signature": "example_combined_usage()",
+      "is_method": false,
+      "module": "examples.v028.new_features",
+      "docstring_hash": "-3726879"
+    },
+    "examples.ai_ml.training_data.example_1_classification": {
+      "signature": "example_1_classification()",
+      "is_method": false,
+      "module": "examples.ai_ml.training_data",
+      "docstring_hash": "-8257524"
+    },
+    "examples.ai_ml.training_data.example_2_regression": {
+      "signature": "example_2_regression()",
+      "is_method": false,
+      "module": "examples.ai_ml.training_data",
+      "docstring_hash": "79720366"
+    },
+    "examples.ai_ml.training_data.example_3_timeseries": {
+      "signature": "example_3_timeseries()",
+      "is_method": false,
+      "module": "examples.ai_ml.training_data",
+      "docstring_hash": "-8159340"
+    },
+    "examples.fullstack-docker.run.run_docker": {
+      "signature": "run_docker()",
+      "is_method": false,
+      "module": "examples.fullstack-docker.run",
+      "docstring_hash": "67511256"
+    },
+    "examples.fullstack-docker.run.stop_docker": {
+      "signature": "stop_docker()",
+      "is_method": false,
+      "module": "examples.fullstack-docker.run",
+      "docstring_hash": "75641528"
+    },
+    "examples.fullstack-docker.run.test_stack": {
+      "signature": "test_stack()",
+      "is_method": false,
+      "module": "examples.fullstack-docker.run",
+      "docstring_hash": "45859700"
+    },
+    "examples.fullstack-docker.run.main": {
+      "signature": "main()",
+      "is_method": false,
+      "module": "examples.fullstack-docker.run",
+      "docstring_hash": "0"
+    },
+    "examples.text2fraq.text2fraq_examples.example_simple_parser": {
+      "signature": "example_simple_parser()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_examples",
+      "docstring_hash": "12667948"
+    },
+    "examples.text2fraq.text2fraq_examples.example_qwen25": {
+      "signature": "example_qwen25()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_examples",
+      "docstring_hash": "-9939267"
+    },
+    "examples.text2fraq.text2fraq_examples.example_llama32": {
+      "signature": "example_llama32()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_examples",
+      "docstring_hash": "-6768640"
+    },
+    "examples.text2fraq.text2fraq_examples.example_phi3": {
+      "signature": "example_phi3()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_examples",
+      "docstring_hash": "-5393411"
+    },
+    "examples.text2fraq.text2fraq_examples.example_convenience_functions": {
+      "signature": "example_convenience_functions()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_examples",
+      "docstring_hash": "-5967937"
+    },
+    "examples.text2fraq.text2fraq_examples.example_file_search_direct": {
+      "signature": "example_file_search_direct()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_examples",
+      "docstring_hash": "-3219317"
+    },
+    "examples.text2fraq.text2fraq_examples.example_env_config": {
+      "signature": "example_env_config()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_examples",
+      "docstring_hash": "45148788"
+    },
+    "examples.text2fraq.text2fraq_examples.example_full_pipeline": {
+      "signature": "example_full_pipeline()",
+      "is_method": false,
+      "module": "examples.text2fraq.text2fraq_examples",
+      "docstring_hash": "81585604"
+    },
+    "examples.fastapi-docker.main.root": {
+      "signature": "root()",
+      "is_method": false,
+      "module": "examples.fastapi-docker.main",
+      "docstring_hash": "0"
+    },
+    "examples.fastapi-docker.main.health": {
+      "signature": "health()",
+      "is_method": false,
+      "module": "examples.fastapi-docker.main",
+      "docstring_hash": "0"
+    },
+    "examples.fastapi-docker.main.explore": {
+      "signature": "explore(depth, dims, format)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.main",
+      "docstring_hash": "-3003825"
+    },
+    "examples.fastapi-docker.main.files_search": {
+      "signature": "files_search(path, ext, limit, sort)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.main",
+      "docstring_hash": "-1073883"
+    },
+    "examples.fastapi-docker.main.files_stat": {
+      "signature": "files_stat(file_path)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.main",
+      "docstring_hash": "-3918069"
+    },
+    "examples.etl.pipeline_examples.example_1_extract": {
+      "signature": "example_1_extract()",
+      "is_method": false,
+      "module": "examples.etl.pipeline_examples",
+      "docstring_hash": "-2536920"
+    },
+    "examples.etl.pipeline_examples.example_2_transform": {
+      "signature": "example_2_transform()",
+      "is_method": false,
+      "module": "examples.etl.pipeline_examples",
+      "docstring_hash": "-5279182"
+    },
+    "examples.etl.pipeline_examples.example_3_validate": {
+      "signature": "example_3_validate()",
+      "is_method": false,
+      "module": "examples.etl.pipeline_examples",
+      "docstring_hash": "-7817189"
+    },
+    "examples.etl.pipeline_examples.example_4_pipeline": {
+      "signature": "example_4_pipeline()",
+      "is_method": false,
+      "module": "examples.etl.pipeline_examples",
+      "docstring_hash": "11344784"
+    },
+    "examples.fastapi-docker.run.run_local": {
+      "signature": "run_local()",
+      "is_method": false,
+      "module": "examples.fastapi-docker.run",
+      "docstring_hash": "-7003618"
+    },
+    "examples.fastapi-docker.run.run_docker": {
+      "signature": "run_docker()",
+      "is_method": false,
+      "module": "examples.fastapi-docker.run",
+      "docstring_hash": "20465320"
+    },
+    "examples.fastapi-docker.run.stop_docker": {
+      "signature": "stop_docker()",
+      "is_method": false,
+      "module": "examples.fastapi-docker.run",
+      "docstring_hash": "86130854"
+    },
+    "examples.fastapi-docker.run.test_api": {
+      "signature": "test_api()",
+      "is_method": false,
+      "module": "examples.fastapi-docker.run",
+      "docstring_hash": "88022947"
+    },
+    "examples.fastapi-docker.run.main": {
+      "signature": "main()",
+      "is_method": false,
+      "module": "examples.fastapi-docker.run",
+      "docstring_hash": "0"
+    },
+    "examples.database.sqlite_examples.example_1_sqlite": {
+      "signature": "example_1_sqlite()",
+      "is_method": false,
+      "module": "examples.database.sqlite_examples",
+      "docstring_hash": "55446125"
+    },
+    "examples.database.sqlite_examples.example_2_hybrid": {
+      "signature": "example_2_hybrid()",
+      "is_method": false,
+      "module": "examples.database.sqlite_examples",
+      "docstring_hash": "-7674227"
+    },
+    "examples.database.sqlite_examples.example_3_schema_save": {
+      "signature": "example_3_schema_save()",
+      "is_method": false,
+      "module": "examples.database.sqlite_examples",
+      "docstring_hash": "45657031"
+    },
+    "examples.basic.applications.example_1_iot_sensors": {
+      "signature": "example_1_iot_sensors()",
+      "is_method": false,
+      "module": "examples.basic.applications",
+      "docstring_hash": "-2535728"
+    },
+    "examples.basic.applications.example_2_erp_invoices": {
+      "signature": "example_2_erp_invoices()",
+      "is_method": false,
+      "module": "examples.basic.applications",
+      "docstring_hash": "-7340025"
+    },
+    "examples.basic.applications.example_3_ai_training": {
+      "signature": "example_3_ai_training()",
+      "is_method": false,
+      "module": "examples.basic.applications",
+      "docstring_hash": "-8502071"
+    },
+    "examples.basic.applications.example_4_devops_metrics": {
+      "signature": "example_4_devops_metrics()",
+      "is_method": false,
+      "module": "examples.basic.applications",
+      "docstring_hash": "-2087896"
+    },
+    "examples.basic.applications.example_5_finance": {
+      "signature": "example_5_finance()",
+      "is_method": false,
+      "module": "examples.basic.applications",
+      "docstring_hash": "-3656357"
+    },
+    "examples.basic.async_streaming.example_1_basic": {
+      "signature": "example_1_basic()",
+      "is_method": false,
+      "module": "examples.basic.async_streaming",
+      "docstring_hash": "-6540806"
+    },
+    "examples.basic.async_streaming.example_2_typed": {
+      "signature": "example_2_typed()",
+      "is_method": false,
+      "module": "examples.basic.async_streaming",
+      "docstring_hash": "14039279"
+    },
+    "examples.basic.async_streaming.example_3_kafka": {
+      "signature": "example_3_kafka()",
+      "is_method": false,
+      "module": "examples.basic.async_streaming",
+      "docstring_hash": "-3960150"
+    },
+    "examples.basic.async_streaming.main": {
+      "signature": "main()",
+      "is_method": false,
+      "module": "examples.basic.async_streaming",
+      "docstring_hash": "0"
+    },
+    "examples.basic.query_examples.example_1_basic_query": {
+      "signature": "example_1_basic_query()",
+      "is_method": false,
+      "module": "examples.basic.query_examples",
+      "docstring_hash": "27501190"
+    },
+    "examples.basic.query_examples.example_2_json_output": {
+      "signature": "example_2_json_output()",
+      "is_method": false,
+      "module": "examples.basic.query_examples",
+      "docstring_hash": "-8765030"
+    },
+    "examples.basic.query_examples.example_3_csv_output": {
+      "signature": "example_3_csv_output()",
+      "is_method": false,
+      "module": "examples.basic.query_examples",
+      "docstring_hash": "69075081"
+    },
+    "examples.basic.query_examples.example_4_streaming": {
+      "signature": "example_4_streaming()",
+      "is_method": false,
+      "module": "examples.basic.query_examples",
+      "docstring_hash": "-4885672"
+    },
+    "examples.basic.query_examples.example_5_schema": {
+      "signature": "example_5_schema()",
+      "is_method": false,
+      "module": "examples.basic.query_examples",
+      "docstring_hash": "90839626"
+    },
+    "examples.basic.query_examples.example_6_custom_schema": {
+      "signature": "example_6_custom_schema()",
+      "is_method": false,
+      "module": "examples.basic.query_examples",
+      "docstring_hash": "-3738935"
+    },
+    "examples.basic.app_integrations.example_fastapi_app": {
+      "signature": "example_fastapi_app()",
+      "is_method": false,
+      "module": "examples.basic.app_integrations",
+      "docstring_hash": "-8785766"
+    },
+    "examples.basic.app_integrations.example_streamlit_app": {
+      "signature": "example_streamlit_app()",
+      "is_method": false,
+      "module": "examples.basic.app_integrations",
+      "docstring_hash": "-2555038"
+    },
+    "examples.basic.app_integrations.example_flask_app": {
+      "signature": "example_flask_app()",
+      "is_method": false,
+      "module": "examples.basic.app_integrations",
+      "docstring_hash": "54641539"
+    },
+    "examples.basic.app_integrations.example_cli_chat": {
+      "signature": "example_cli_chat()",
+      "is_method": false,
+      "module": "examples.basic.app_integrations",
+      "docstring_hash": "-3159712"
+    },
+    "examples.basic.app_integrations.example_websocket_server": {
+      "signature": "example_websocket_server()",
+      "is_method": false,
+      "module": "examples.basic.app_integrations",
+      "docstring_hash": "15501198"
+    },
+    "examples.basic.app_integrations.example_kafka_producer": {
+      "signature": "example_kafka_producer()",
+      "is_method": false,
+      "module": "examples.basic.app_integrations",
+      "docstring_hash": "-3013218"
+    },
+    "examples.basic.app_integrations.example_grpc_service": {
+      "signature": "example_grpc_service()",
+      "is_method": false,
+      "module": "examples.basic.app_integrations",
+      "docstring_hash": "-6062184"
+    },
+    "examples.basic.app_integrations.example_jupyter_notebook": {
+      "signature": "example_jupyter_notebook()",
+      "is_method": false,
+      "module": "examples.basic.app_integrations",
+      "docstring_hash": "-9048223"
+    },
+    "examples.basic.app_integrations.example_celery_task": {
+      "signature": "example_celery_task()",
+      "is_method": false,
+      "module": "examples.basic.app_integrations",
+      "docstring_hash": "17031952"
+    },
+    "examples.fastapi-docker.api_server.lifespan": {
+      "signature": "lifespan(app)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "-6686976"
+    },
+    "examples.fastapi-docker.api_server.root": {
+      "signature": "root()",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "-1570071"
+    },
+    "examples.fastapi-docker.api_server.health": {
+      "signature": "health()",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "58814527"
+    },
+    "examples.fastapi-docker.api_server.explore": {
+      "signature": "explore(depth, dims, seed, format)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "72465382"
+    },
+    "examples.fastapi-docker.api_server.stream": {
+      "signature": "stream(count, dims, format)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "-7946770"
+    },
+    "examples.fastapi-docker.api_server.query_data": {
+      "signature": "query_data(fields, depth, format, limit, dims)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "89707162"
+    },
+    "examples.fastapi-docker.api_server.schema_records": {
+      "signature": "schema_records(fields, depth, branching, format, dims)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "29573230"
+    },
+    "examples.fastapi-docker.api_server.files_search": {
+      "signature": "files_search(path, ext, pattern, limit, sort, recursive, format)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "63368486"
+    },
+    "examples.fastapi-docker.api_server.files_list": {
+      "signature": "files_list(path, ext, limit, sort, recursive)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "84699470"
+    },
+    "examples.fastapi-docker.api_server.files_stat": {
+      "signature": "files_stat(file_path)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "-5006811"
+    },
+    "examples.fastapi-docker.api_server.natural_language": {
+      "signature": "natural_language(query, path, format)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "-5753548"
+    },
+    "examples.fastapi-docker.api_server.ws_stream": {
+      "signature": "ws_stream(websocket)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "44039173"
+    },
+    "examples.fastapi-docker.api_server.ws_files": {
+      "signature": "ws_files(websocket)",
+      "is_method": false,
+      "module": "examples.fastapi-docker.api_server",
+      "docstring_hash": "26211895"
+    },
+    "examples.fullstack-docker.websocket.main.ws_stream": {
+      "signature": "ws_stream(websocket)",
+      "is_method": false,
+      "module": "examples.fullstack-docker.websocket.main",
+      "docstring_hash": "0"
+    },
+    "examples.fullstack-docker.websocket.main.ws_files": {
+      "signature": "ws_files(websocket)",
+      "is_method": false,
+      "module": "examples.fullstack-docker.websocket.main",
+      "docstring_hash": "0"
+    },
+    "examples.fullstack-docker.websocket.main.health": {
+      "signature": "health()",
+      "is_method": false,
+      "module": "examples.fullstack-docker.websocket.main",
+      "docstring_hash": "0"
+    },
+    "examples.fullstack-docker.api.main.root": {
+      "signature": "root()",
+      "is_method": false,
+      "module": "examples.fullstack-docker.api.main",
+      "docstring_hash": "0"
+    },
+    "examples.fullstack-docker.api.main.health": {
+      "signature": "health()",
+      "is_method": false,
+      "module": "examples.fullstack-docker.api.main",
+      "docstring_hash": "0"
+    },
+    "examples.fullstack-docker.api.main.explore": {
+      "signature": "explore(depth)",
+      "is_method": false,
+      "module": "examples.fullstack-docker.api.main",
+      "docstring_hash": "0"
+    },
+    "examples.fullstack-docker.api.main.files_search": {
+      "signature": "files_search(path, ext, limit)",
+      "is_method": false,
+      "module": "examples.fullstack-docker.api.main",
+      "docstring_hash": "0"
+    },
+    "fraq.text2fraq.config.Text2FraqConfig.from_env": {
+      "signature": "from_env(cls)",
+      "is_method": true,
+      "module": "fraq.text2fraq.config",
+      "docstring_hash": "-8567020"
+    },
+    "fraq.text2fraq.parser_rules.Text2FraqSimple.parse": {
+      "signature": "parse(self, text)",
+      "is_method": true,
+      "module": "fraq.text2fraq.parser_rules",
+      "docstring_hash": "-2196500"
+    },
+    "fraq.text2fraq.parser_rules.Text2FraqSimple.execute": {
+      "signature": "execute(self, text, root)",
+      "is_method": true,
+      "module": "fraq.text2fraq.parser_rules",
+      "docstring_hash": "-8737104"
+    },
+    "fraq.text2fraq.file_search_parser.FileSearchText2Fraq.parse": {
+      "signature": "parse(self, text)",
+      "is_method": true,
+      "module": "fraq.text2fraq.file_search_parser",
+      "docstring_hash": "68691292"
+    },
+    "fraq.text2fraq.file_search_parser.FileSearchText2Fraq.search": {
+      "signature": "search(self, text)",
+      "is_method": true,
+      "module": "fraq.text2fraq.file_search_parser",
+      "docstring_hash": "-4740952"
+    },
+    "fraq.text2fraq.file_search_parser.FileSearchText2Fraq.format_results": {
+      "signature": "format_results(self, results, fmt, fields)",
+      "is_method": true,
+      "module": "fraq.text2fraq.file_search_parser",
+      "docstring_hash": "63522550"
+    },
+    "fraq.text2fraq.session.FraqSession.ask": {
+      "signature": "ask(self, text)",
+      "is_method": true,
+      "module": "fraq.text2fraq.session",
+      "docstring_hash": "45431179"
+    },
+    "fraq.text2fraq.session.FraqSession.get_context_summary": {
+      "signature": "get_context_summary(self)",
+      "is_method": true,
+      "module": "fraq.text2fraq.session",
+      "docstring_hash": "-6018429"
+    },
+    "fraq.text2fraq.session.FraqSession.clear": {
+      "signature": "clear(self)",
+      "is_method": true,
+      "module": "fraq.text2fraq.session",
+      "docstring_hash": "-6884345"
+    },
+    "fraq.text2fraq.router.ModelRouter.route": {
+      "signature": "route(self, text)",
+      "is_method": true,
+      "module": "fraq.text2fraq.router",
+      "docstring_hash": "-3858892"
+    },
+    "fraq.text2fraq.router.ModelRouter.get_config_for_model": {
+      "signature": "get_config_for_model(self, model)",
+      "is_method": true,
+      "module": "fraq.text2fraq.router",
+      "docstring_hash": "77410312"
+    },
+    "fraq.text2fraq.parser_llm.Text2Fraq.parse": {
+      "signature": "parse(self, text)",
+      "is_method": true,
+      "module": "fraq.text2fraq.parser_llm",
+      "docstring_hash": "80524627"
+    },
+    "fraq.text2fraq.parser_llm.Text2Fraq.execute": {
+      "signature": "execute(self, text, root)",
+      "is_method": true,
+      "module": "fraq.text2fraq.parser_llm",
+      "docstring_hash": "42260071"
+    },
+    "fraq.text2fraq.models.ParsedQuery.to_fraq_query": {
+      "signature": "to_fraq_query(self)",
+      "is_method": true,
+      "module": "fraq.text2fraq.models",
+      "docstring_hash": "-6680617"
+    },
+    "fraq.text2fraq.models.LLMClient.complete": {
+      "signature": "complete(self, prompt)",
+      "is_method": true,
+      "module": "fraq.text2fraq.models",
+      "docstring_hash": "0"
+    },
+    "fraq.text2fraq.shortcuts.text2filesearch": {
+      "signature": "text2filesearch(text, base_path, fmt)",
+      "is_method": false,
+      "module": "fraq.text2fraq.shortcuts",
+      "docstring_hash": "27138371"
+    },
+    "fraq.text2fraq.shortcuts.text2query": {
+      "signature": "text2query(text, config)",
+      "is_method": false,
+      "module": "fraq.text2fraq.shortcuts",
+      "docstring_hash": "90971874"
+    },
+    "fraq.text2fraq.shortcuts.text2fraq": {
+      "signature": "text2fraq(text, config, root)",
+      "is_method": false,
+      "module": "fraq.text2fraq.shortcuts",
+      "docstring_hash": "46176478"
+    },
+    "fraq.formats.registry.FormatRegistry.register": {
+      "signature": "register(cls, name, fn)",
+      "is_method": true,
+      "module": "fraq.formats.registry",
+      "docstring_hash": "25044009"
+    },
+    "fraq.formats.registry.FormatRegistry.get": {
+      "signature": "get(cls, name)",
+      "is_method": true,
+      "module": "fraq.formats.registry",
+      "docstring_hash": "0"
+    },
+    "fraq.formats.registry.FormatRegistry.available": {
+      "signature": "available(cls)",
+      "is_method": true,
+      "module": "fraq.formats.registry",
+      "docstring_hash": "0"
+    },
+    "fraq.formats.registry.FormatRegistry.serialize": {
+      "signature": "serialize(cls, name, data)",
+      "is_method": true,
+      "module": "fraq.formats.registry",
+      "docstring_hash": "0"
+    },
+    "fraq.formats.prepare.prepare": {
+      "signature": "prepare(obj)",
+      "is_method": false,
+      "module": "fraq.formats.prepare",
+      "docstring_hash": "-6415537"
+    },
+    "fraq.formats.prepare.encode_value": {
+      "signature": "encode_value(v)",
+      "is_method": false,
+      "module": "fraq.formats.prepare",
+      "docstring_hash": "-1405797"
+    },
+    "fraq.formats.binary.to_binary": {
+      "signature": "to_binary(data)",
+      "is_method": false,
+      "module": "fraq.formats.binary",
+      "docstring_hash": "-6523897"
+    },
+    "fraq.formats.binary.to_msgpack_lite": {
+      "signature": "to_msgpack_lite(data)",
+      "is_method": false,
+      "module": "fraq.formats.binary",
+      "docstring_hash": "-7163691"
+    },
+    "fraq.formats.binary.mp_encode": {
+      "signature": "mp_encode(obj)",
+      "is_method": false,
+      "module": "fraq.formats.binary",
+      "docstring_hash": "-2770605"
+    },
+    "fraq.formats.text.to_json": {
+      "signature": "to_json(data)",
+      "is_method": false,
+      "module": "fraq.formats.text",
+      "docstring_hash": "48554105"
+    },
+    "fraq.formats.text.to_jsonl": {
+      "signature": "to_jsonl(data)",
+      "is_method": false,
+      "module": "fraq.formats.text",
+      "docstring_hash": "-1341855"
+    },
+    "fraq.formats.text.to_csv": {
+      "signature": "to_csv(data)",
+      "is_method": false,
+      "module": "fraq.formats.text",
+      "docstring_hash": "64701088"
+    },
+    "fraq.formats.text.to_yaml": {
+      "signature": "to_yaml(data)",
+      "is_method": false,
+      "module": "fraq.formats.text",
+      "docstring_hash": "-8023217"
+    },
+    "fraq.formats.text.simple_yaml": {
+      "signature": "simple_yaml(obj, indent)",
+      "is_method": false,
+      "module": "fraq.formats.text",
+      "docstring_hash": "65273365"
+    },
+    "fraq.adapters.base.BaseAdapter.load_root": {
+      "signature": "load_root(self, uri)",
+      "is_method": true,
+      "module": "fraq.adapters.base",
+      "docstring_hash": "25944945"
+    },
+    "fraq.adapters.base.BaseAdapter.save": {
+      "signature": "save(self, node, uri, fmt)",
+      "is_method": true,
+      "module": "fraq.adapters.base",
+      "docstring_hash": "-5481981"
+    },
+    "fraq.adapters.base.BaseAdapter.execute": {
+      "signature": "execute(self, query)",
+      "is_method": true,
+      "module": "fraq.adapters.base",
+      "docstring_hash": "38579933"
+    },
+    "fraq.adapters.base.BaseAdapter.execute_iter": {
+      "signature": "execute_iter(self, query)",
+      "is_method": true,
+      "module": "fraq.adapters.base",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.registry.get_adapter": {
+      "signature": "get_adapter(source)",
+      "is_method": false,
+      "module": "fraq.adapters.registry",
+      "docstring_hash": "14606105"
+    },
+    "fraq.providers.faker_provider.ValueProvider.supports": {
+      "signature": "supports(self, type_spec)",
+      "is_method": true,
+      "module": "fraq.providers.faker_provider",
+      "docstring_hash": "79183438"
+    },
+    "fraq.providers.faker_provider.ValueProvider.generate": {
+      "signature": "generate(self, type_spec, seed)",
+      "is_method": true,
+      "module": "fraq.providers.faker_provider",
+      "docstring_hash": "41293968"
+    },
+    "fraq.providers.faker_provider.FakerProvider.supports": {
+      "signature": "supports(self, type_spec)",
+      "is_method": true,
+      "module": "fraq.providers.faker_provider",
+      "docstring_hash": "30755602"
+    },
+    "fraq.providers.faker_provider.FakerProvider.generate": {
+      "signature": "generate(self, type_spec, seed)",
+      "is_method": true,
+      "module": "fraq.providers.faker_provider",
+      "docstring_hash": "44264237"
+    },
+    "fraq.providers.faker_provider.ProviderRegistry.register": {
+      "signature": "register(self, provider)",
+      "is_method": true,
+      "module": "fraq.providers.faker_provider",
+      "docstring_hash": "22744510"
+    },
+    "fraq.providers.faker_provider.ProviderRegistry.get_faker_provider": {
+      "signature": "get_faker_provider(self, locale)",
+      "is_method": true,
+      "module": "fraq.providers.faker_provider",
+      "docstring_hash": "79852309"
+    },
+    "fraq.providers.faker_provider.ProviderRegistry.find_provider": {
+      "signature": "find_provider(self, type_spec)",
+      "is_method": true,
+      "module": "fraq.providers.faker_provider",
+      "docstring_hash": "-1372532"
+    },
+    "fraq.providers.faker_provider.ProviderRegistry.generate": {
+      "signature": "generate(self, type_spec, seed)",
+      "is_method": true,
+      "module": "fraq.providers.faker_provider",
+      "docstring_hash": "45023704"
+    },
+    "fraq.providers.faker_provider.get_provider_registry": {
+      "signature": "get_provider_registry()",
+      "is_method": false,
+      "module": "fraq.providers.faker_provider",
+      "docstring_hash": "-7459665"
+    },
+    "fraq.providers.faker_provider.generate_with_faker": {
+      "signature": "generate_with_faker(type_spec, seed)",
+      "is_method": false,
+      "module": "fraq.providers.faker_provider",
+      "docstring_hash": "-3162696"
+    },
+    "fraq.adapters.file_adapter.FileAdapter.load_root": {
+      "signature": "load_root(self, uri)",
+      "is_method": true,
+      "module": "fraq.adapters.file_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.file_adapter.FileAdapter.save": {
+      "signature": "save(self, node, uri, fmt)",
+      "is_method": true,
+      "module": "fraq.adapters.file_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.http_adapter.HTTPAdapter.load_root": {
+      "signature": "load_root(self, uri)",
+      "is_method": true,
+      "module": "fraq.adapters.http_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.http_adapter.HTTPAdapter.save": {
+      "signature": "save(self, node, uri, fmt)",
+      "is_method": true,
+      "module": "fraq.adapters.http_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.sql_adapter.SQLAdapter.load_root": {
+      "signature": "load_root(self, uri)",
+      "is_method": true,
+      "module": "fraq.adapters.sql_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.sql_adapter.SQLAdapter.save": {
+      "signature": "save(self, node, uri, fmt)",
+      "is_method": true,
+      "module": "fraq.adapters.sql_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.sql_adapter.SQLAdapter.generate_sql_function": {
+      "signature": "generate_sql_function(self, dims)",
+      "is_method": true,
+      "module": "fraq.adapters.sql_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.sensor_adapter.SensorAdapter.load_root": {
+      "signature": "load_root(self, uri)",
+      "is_method": true,
+      "module": "fraq.adapters.sensor_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.sensor_adapter.SensorAdapter.save": {
+      "signature": "save(self, node, uri, fmt)",
+      "is_method": true,
+      "module": "fraq.adapters.sensor_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.sensor_adapter.SensorAdapter.stream": {
+      "signature": "stream(self, depth, count, direction)",
+      "is_method": true,
+      "module": "fraq.adapters.sensor_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.hybrid_adapter.HybridAdapter.add": {
+      "signature": "add(self, adapter, uri)",
+      "is_method": true,
+      "module": "fraq.adapters.hybrid_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.hybrid_adapter.HybridAdapter.load_root": {
+      "signature": "load_root(self, uri)",
+      "is_method": true,
+      "module": "fraq.adapters.hybrid_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.hybrid_adapter.HybridAdapter.save": {
+      "signature": "save(self, node, uri, fmt)",
+      "is_method": true,
+      "module": "fraq.adapters.hybrid_adapter",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.file_search.FileSystemPort.stat": {
+      "signature": "stat(self, path)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "-7632279"
+    },
+    "fraq.adapters.file_search.FileSystemPort.list_files": {
+      "signature": "list_files(self, base_path, pattern, recursive)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "76047864"
+    },
+    "fraq.adapters.file_search.FileSystemPort.is_file": {
+      "signature": "is_file(self, path)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "-1541083"
+    },
+    "fraq.adapters.file_search.FileSystemPort.write_bytes": {
+      "signature": "write_bytes(self, path, data)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "51963387"
+    },
+    "fraq.adapters.file_search.RealFileSystem.stat": {
+      "signature": "stat(self, path)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.file_search.RealFileSystem.list_files": {
+      "signature": "list_files(self, base_path, pattern, recursive)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.file_search.RealFileSystem.is_file": {
+      "signature": "is_file(self, path)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.file_search.RealFileSystem.write_bytes": {
+      "signature": "write_bytes(self, path, data)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.file_search.FileSearchAdapter.load_root": {
+      "signature": "load_root(self, uri)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "0"
+    },
+    "fraq.adapters.file_search.FileSearchAdapter.search": {
+      "signature": "search(self, extension, pattern, limit, sort_by, newer_than)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "-2125662"
+    },
+    "fraq.adapters.file_search.FileSearchAdapter.save": {
+      "signature": "save(self, node, uri, fmt)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "-8179131"
+    },
+    "fraq.adapters.file_search.FileSearchAdapter.stream": {
+      "signature": "stream(self, extension, pattern, count)",
+      "is_method": true,
+      "module": "fraq.adapters.file_search",
+      "docstring_hash": "-7305496"
+    },
+    "fraq.server.natural_language": {
+      "signature": "natural_language(query)",
+      "is_method": false,
+      "module": "fraq.server",
+      "docstring_hash": "-7272874"
+    },
+    "fraq.server.files_search": {
+      "signature": "files_search(ext, pattern, limit, sort_by, path)",
+      "is_method": false,
+      "module": "fraq.server",
+      "docstring_hash": "-6044814"
+    },
+    "fraq.server.files_search_post": {
+      "signature": "files_search_post(request)",
+      "is_method": false,
+      "module": "fraq.server",
+      "docstring_hash": "-3573258"
+    },
+    "fraq.server.files_nl": {
+      "signature": "files_nl(query, path)",
+      "is_method": false,
+      "module": "fraq.server",
+      "docstring_hash": "18825657"
+    },
+    "fraq.server.ws_stream": {
+      "signature": "ws_stream(websocket)",
+      "is_method": false,
+      "module": "fraq.server",
+      "docstring_hash": "47927648"
+    },
+    "fraq.server.health_check": {
+      "signature": "health_check()",
+      "is_method": false,
+      "module": "fraq.server",
+      "docstring_hash": "75987252"
+    },
+    "fraq.server.clear_session": {
+      "signature": "clear_session(session_id)",
+      "is_method": false,
+      "module": "fraq.server",
+      "docstring_hash": "28508184"
+    },
+    "fraq.text2fraq.llm_client.LiteLLMClient.complete": {
+      "signature": "complete(self, prompt)",
+      "is_method": true,
+      "module": "fraq.text2fraq.llm_client",
+      "docstring_hash": "59044804"
+    }
+  },
+  "classes": {
+    "fraq.streaming.AsyncFraqStream": {
+      "bases": [],
+      "methods": [
+        "fraq.streaming.AsyncFraqStream.__aiter__",
+        "fraq.streaming.AsyncFraqStream.__init__",
+        "fraq.streaming.AsyncFraqStream.depth",
+        "fraq.streaming.AsyncFraqStream.stop"
+      ],
+      "module": "fraq.streaming"
+    },
+    "fraq.benchmarks.BenchmarkResult": {
+      "bases": [],
+      "methods": [],
+      "module": "fraq.benchmarks"
+    },
+    "fraq.benchmarks.SpeedBenchmark": {
+      "bases": [],
+      "methods": [
+        "fraq.benchmarks.SpeedBenchmark.fraq_generate",
+        "fraq.benchmarks.SpeedBenchmark.fraq_stream"
+      ],
+      "module": "fraq.benchmarks"
+    },
+    "fraq.benchmarks.MemoryBenchmark": {
+      "bases": [],
+      "methods": [
+        "fraq.benchmarks.MemoryBenchmark.compare_memory",
+        "fraq.benchmarks.MemoryBenchmark.measure_memory_usage"
+      ],
+      "module": "fraq.benchmarks"
+    },
+    "fraq.benchmarks.StructuralBenchmark": {
+      "bases": [],
+      "methods": [
+        "fraq.benchmarks.StructuralBenchmark.compare_structures",
+        "fraq.benchmarks.StructuralBenchmark.test_self_similarity"
+      ],
+      "module": "fraq.benchmarks"
+    },
+    "fraq.generators.HashGenerator": {
+      "bases": [],
+      "methods": [
+        "fraq.generators.HashGenerator.__call__",
+        "fraq.generators.HashGenerator.__init__"
+      ],
+      "module": "fraq.generators"
+    },
+    "fraq.generators.FibonacciGenerator": {
+      "bases": [],
+      "methods": [
+        "fraq.generators.FibonacciGenerator.__call__",
+        "fraq.generators.FibonacciGenerator.__init__",
+        "fraq.generators.FibonacciGenerator._fib"
+      ],
+      "module": "fraq.generators"
+    },
+    "fraq.generators.PerlinGenerator": {
+      "bases": [],
+      "methods": [
+        "fraq.generators.PerlinGenerator.__call__",
+        "fraq.generators.PerlinGenerator.__init__"
+      ],
+      "module": "fraq.generators"
+    },
+    "fraq.generators.SensorStreamGenerator": {
+      "bases": [],
+      "methods": [
+        "fraq.generators.SensorStreamGenerator.__call__",
+        "fraq.generators.SensorStreamGenerator.__init__"
+      ],
+      "module": "fraq.generators"
+    },
+    "fraq.core.FraqNode": {
+      "bases": [],
+      "methods": [
+        "fraq.core.FraqNode.__repr__",
+        "fraq.core.FraqNode._child",
+        "fraq.core.FraqNode.children",
+        "fraq.core.FraqNode.to_dict",
+        "fraq.core.FraqNode.value",
+        "fraq.core.FraqNode.zoom"
+      ],
+      "module": "fraq.core"
+    },
+    "fraq.core.FieldDef": {
+      "bases": [],
+      "methods": [],
+      "module": "fraq.core"
+    },
+    "fraq.core.FraqSchema": {
+      "bases": [],
+      "methods": [
+        "fraq.core.FraqSchema._cast",
+        "fraq.core.FraqSchema.add_field",
+        "fraq.core.FraqSchema.record",
+        "fraq.core.FraqSchema.records"
+      ],
+      "module": "fraq.core"
+    },
+    "fraq.core.FraqCursor": {
+      "bases": [],
+      "methods": [
+        "fraq.core.FraqCursor.advance",
+        "fraq.core.FraqCursor.back",
+        "fraq.core.FraqCursor.current",
+        "fraq.core.FraqCursor.depth",
+        "fraq.core.FraqCursor.reset",
+        "fraq.core.FraqCursor.snapshot"
+      ],
+      "module": "fraq.core"
+    },
+    "fraq.ifs.AffineTransform": {
+      "bases": [],
+      "methods": [
+        "fraq.ifs.AffineTransform.apply"
+      ],
+      "module": "fraq.ifs"
+    },
+    "fraq.ifs.ValueMapper": {
+      "bases": [
+        "Protocol"
+      ],
+      "methods": [
+        "fraq.ifs.ValueMapper.map_value"
+      ],
+      "module": "fraq.ifs"
+    },
+    "fraq.ifs.IFSGenerator": {
+      "bases": [],
+      "methods": [
+        "fraq.ifs.IFSGenerator.__init__",
+        "fraq.ifs.IFSGenerator._select_transform",
+        "fraq.ifs.IFSGenerator.generate",
+        "fraq.ifs.IFSGenerator.generate_coordinate",
+        "fraq.ifs.IFSGenerator.generate_hierarchy"
+      ],
+      "module": "fraq.ifs"
+    },
+    "fraq.ifs.OrganizationalMapper": {
+      "bases": [
+        "ValueMapper"
+      ],
+      "methods": [
+        "fraq.ifs.OrganizationalMapper.__init__",
+        "fraq.ifs.OrganizationalMapper.map_value"
+      ],
+      "module": "fraq.ifs"
+    },
+    "fraq.ifs.NetworkMapper": {
+      "bases": [
+        "ValueMapper"
+      ],
+      "methods": [
+        "fraq.ifs.NetworkMapper.map_value"
+      ],
+      "module": "fraq.ifs"
+    },
+    "fraq.inference.FractalDimension": {
+      "bases": [],
+      "methods": [],
+      "module": "fraq.inference"
+    },
+    "fraq.inference.PatternSignature": {
+      "bases": [],
+      "methods": [],
+      "module": "fraq.inference"
+    },
+    "fraq.inference.FractalAnalyzer": {
+      "bases": [],
+      "methods": [
+        "fraq.inference.FractalAnalyzer.__init__",
+        "fraq.inference.FractalAnalyzer.analyze_correlations",
+        "fraq.inference.FractalAnalyzer.box_counting_dimension",
+        "fraq.inference.FractalAnalyzer.detect_hierarchy"
+      ],
+      "module": "fraq.inference"
+    },
+    "fraq.inference.InferredSchema": {
+      "bases": [],
+      "methods": [
+        "fraq.inference.InferredSchema.__init__",
+        "fraq.inference.InferredSchema._build_ifs",
+        "fraq.inference.InferredSchema._generate_value",
+        "fraq.inference.InferredSchema.generate",
+        "fraq.inference.InferredSchema.to_dict"
+      ],
+      "module": "fraq.inference"
+    },
+    "fraq.query.SourceType": {
+      "bases": [
+        "str",
+        "Enum"
+      ],
+      "methods": [],
+      "module": "fraq.query"
+    },
+    "fraq.query.FraqFilter": {
+      "bases": [],
+      "methods": [
+        "fraq.query.FraqFilter.matches"
+      ],
+      "module": "fraq.query"
+    },
+    "fraq.query.FraqQuery": {
+      "bases": [],
+      "methods": [
+        "fraq.query.FraqQuery.from_source",
+        "fraq.query.FraqQuery.output",
+        "fraq.query.FraqQuery.select",
+        "fraq.query.FraqQuery.take",
+        "fraq.query.FraqQuery.where",
+        "fraq.query.FraqQuery.zoom"
+      ],
+      "module": "fraq.query"
+    },
+    "fraq.query.FraqExecutor": {
+      "bases": [],
+      "methods": [
+        "fraq.query.FraqExecutor.__init__",
+        "fraq.query.FraqExecutor._iter_records",
+        "fraq.query.FraqExecutor.execute",
+        "fraq.query.FraqExecutor.execute_iter"
+      ],
+      "module": "fraq.query"
+    },
+    "fraq.text2fraq.config.Text2FraqConfig": {
+      "bases": [],
+      "methods": [
+        "fraq.text2fraq.config.Text2FraqConfig.from_env"
+      ],
+      "module": "fraq.text2fraq.config"
+    },
+    "fraq.text2fraq.parser_rules.Text2FraqSimple": {
+      "bases": [],
+      "methods": [
+        "fraq.text2fraq.parser_rules.Text2FraqSimple._detect_fields",
+        "fraq.text2fraq.parser_rules.Text2FraqSimple._matches_pattern",
+        "fraq.text2fraq.parser_rules.Text2FraqSimple.execute",
+        "fraq.text2fraq.parser_rules.Text2FraqSimple.parse"
+      ],
+      "module": "fraq.text2fraq.parser_rules"
+    },
+    "fraq.text2fraq.file_search_parser.FileSearchText2Fraq": {
+      "bases": [],
+      "methods": [
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq.__init__",
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq._collect_files_filtered",
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq._detect_extension",
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq._detect_limit",
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq._detect_newer_than",
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq._detect_path",
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq._detect_sort_by",
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq._should_exclude",
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq.format_results",
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq.parse",
+        "fraq.text2fraq.file_search_parser.FileSearchText2Fraq.search"
+      ],
+      "module": "fraq.text2fraq.file_search_parser"
+    },
+    "fraq.text2fraq.session.FraqSession": {
+      "bases": [],
+      "methods": [
+        "fraq.text2fraq.session.FraqSession.__post_init__",
+        "fraq.text2fraq.session.FraqSession._detect_new_fields",
+        "fraq.text2fraq.session.FraqSession._is_followup",
+        "fraq.text2fraq.session.FraqSession._modify_last",
+        "fraq.text2fraq.session.FraqSession._update_context",
+        "fraq.text2fraq.session.FraqSession.ask",
+        "fraq.text2fraq.session.FraqSession.clear",
+        "fraq.text2fraq.session.FraqSession.get_context_summary"
+      ],
+      "module": "fraq.text2fraq.session"
+    },
+    "fraq.text2fraq.router.ModelRouter": {
+      "bases": [],
+      "methods": [
+        "fraq.text2fraq.router.ModelRouter.__post_init__",
+        "fraq.text2fraq.router.ModelRouter._estimate_complexity",
+        "fraq.text2fraq.router.ModelRouter.get_config_for_model",
+        "fraq.text2fraq.router.ModelRouter.route"
+      ],
+      "module": "fraq.text2fraq.router"
+    },
+    "fraq.text2fraq.parser_llm.Text2Fraq": {
+      "bases": [],
+      "methods": [
+        "fraq.text2fraq.parser_llm.Text2Fraq.__init__",
+        "fraq.text2fraq.parser_llm.Text2Fraq._extract_structured_response",
+        "fraq.text2fraq.parser_llm.Text2Fraq._fallback_fields",
+        "fraq.text2fraq.parser_llm.Text2Fraq._fallback_parse",
+        "fraq.text2fraq.parser_llm.Text2Fraq._parse_response",
+        "fraq.text2fraq.parser_llm.Text2Fraq.execute",
+        "fraq.text2fraq.parser_llm.Text2Fraq.parse"
+      ],
+      "module": "fraq.text2fraq.parser_llm"
+    },
+    "fraq.text2fraq.models.ParsedQuery": {
+      "bases": [],
+      "methods": [
+        "fraq.text2fraq.models.ParsedQuery.to_fraq_query"
+      ],
+      "module": "fraq.text2fraq.models"
+    },
+    "fraq.text2fraq.models.LLMClient": {
+      "bases": [
+        "Protocol"
+      ],
+      "methods": [
+        "fraq.text2fraq.models.LLMClient.complete"
+      ],
+      "module": "fraq.text2fraq.models"
+    },
+    "fraq.formats.registry.FormatRegistry": {
+      "bases": [],
+      "methods": [
+        "fraq.formats.registry.FormatRegistry.available",
+        "fraq.formats.registry.FormatRegistry.get",
+        "fraq.formats.registry.FormatRegistry.register",
+        "fraq.formats.registry.FormatRegistry.serialize"
+      ],
+      "module": "fraq.formats.registry"
+    },
+    "fraq.adapters.base.BaseAdapter": {
+      "bases": [
+        "ABC"
+      ],
+      "methods": [
+        "fraq.adapters.base.BaseAdapter.execute",
+        "fraq.adapters.base.BaseAdapter.execute_iter",
+        "fraq.adapters.base.BaseAdapter.load_root",
+        "fraq.adapters.base.BaseAdapter.save"
+      ],
+      "module": "fraq.adapters.base"
+    },
+    "fraq.providers.faker_provider.ValueProvider": {
+      "bases": [
+        "Protocol"
+      ],
+      "methods": [
+        "fraq.providers.faker_provider.ValueProvider.generate",
+        "fraq.providers.faker_provider.ValueProvider.supports"
+      ],
+      "module": "fraq.providers.faker_provider"
+    },
+    "fraq.providers.faker_provider.FakerProvider": {
+      "bases": [],
+      "methods": [
+        "fraq.providers.faker_provider.FakerProvider.__init__",
+        "fraq.providers.faker_provider.FakerProvider._get_faker",
+        "fraq.providers.faker_provider.FakerProvider.generate",
+        "fraq.providers.faker_provider.FakerProvider.supports"
+      ],
+      "module": "fraq.providers.faker_provider"
+    },
+    "fraq.providers.faker_provider.ProviderRegistry": {
+      "bases": [],
+      "methods": [
+        "fraq.providers.faker_provider.ProviderRegistry.__init__",
+        "fraq.providers.faker_provider.ProviderRegistry.find_provider",
+        "fraq.providers.faker_provider.ProviderRegistry.generate",
+        "fraq.providers.faker_provider.ProviderRegistry.get_faker_provider",
+        "fraq.providers.faker_provider.ProviderRegistry.register"
+      ],
+      "module": "fraq.providers.faker_provider"
+    },
+    "fraq.adapters.file_adapter.FileAdapter": {
+      "bases": [
+        "BaseAdapter"
+      ],
+      "methods": [
+        "fraq.adapters.file_adapter.FileAdapter._dict_to_node",
+        "fraq.adapters.file_adapter.FileAdapter.load_root",
+        "fraq.adapters.file_adapter.FileAdapter.save"
+      ],
+      "module": "fraq.adapters.file_adapter"
+    },
+    "fraq.adapters.http_adapter.HTTPAdapter": {
+      "bases": [
+        "BaseAdapter"
+      ],
+      "methods": [
+        "fraq.adapters.http_adapter.HTTPAdapter.load_root",
+        "fraq.adapters.http_adapter.HTTPAdapter.save"
+      ],
+      "module": "fraq.adapters.http_adapter"
+    },
+    "fraq.adapters.sql_adapter.SQLAdapter": {
+      "bases": [
+        "BaseAdapter"
+      ],
+      "methods": [
+        "fraq.adapters.sql_adapter.SQLAdapter.__init__",
+        "fraq.adapters.sql_adapter.SQLAdapter._default_row_to_node",
+        "fraq.adapters.sql_adapter.SQLAdapter.generate_sql_function",
+        "fraq.adapters.sql_adapter.SQLAdapter.load_root",
+        "fraq.adapters.sql_adapter.SQLAdapter.save"
+      ],
+      "module": "fraq.adapters.sql_adapter"
+    },
+    "fraq.adapters.sensor_adapter.SensorAdapter": {
+      "bases": [
+        "BaseAdapter"
+      ],
+      "methods": [
+        "fraq.adapters.sensor_adapter.SensorAdapter.__init__",
+        "fraq.adapters.sensor_adapter.SensorAdapter.load_root",
+        "fraq.adapters.sensor_adapter.SensorAdapter.save",
+        "fraq.adapters.sensor_adapter.SensorAdapter.stream"
+      ],
+      "module": "fraq.adapters.sensor_adapter"
+    },
+    "fraq.adapters.hybrid_adapter.HybridAdapter": {
+      "bases": [
+        "BaseAdapter"
+      ],
+      "methods": [
+        "fraq.adapters.hybrid_adapter.HybridAdapter.__init__",
+        "fraq.adapters.hybrid_adapter.HybridAdapter.add",
+        "fraq.adapters.hybrid_adapter.HybridAdapter.load_root",
+        "fraq.adapters.hybrid_adapter.HybridAdapter.save"
+      ],
+      "module": "fraq.adapters.hybrid_adapter"
+    },
+    "fraq.adapters.file_search.FileSystemPort": {
+      "bases": [
+        "Protocol"
+      ],
+      "methods": [
+        "fraq.adapters.file_search.FileSystemPort.is_file",
+        "fraq.adapters.file_search.FileSystemPort.list_files",
+        "fraq.adapters.file_search.FileSystemPort.stat",
+        "fraq.adapters.file_search.FileSystemPort.write_bytes"
+      ],
+      "module": "fraq.adapters.file_search"
+    },
+    "fraq.adapters.file_search.RealFileSystem": {
+      "bases": [
+        "FileSystemPort"
+      ],
+      "methods": [
+        "fraq.adapters.file_search.RealFileSystem.is_file",
+        "fraq.adapters.file_search.RealFileSystem.list_files",
+        "fraq.adapters.file_search.RealFileSystem.stat",
+        "fraq.adapters.file_search.RealFileSystem.write_bytes"
+      ],
+      "module": "fraq.adapters.file_search"
+    },
+    "fraq.adapters.file_search.FileSearchAdapter": {
+      "bases": [
+        "BaseAdapter"
+      ],
+      "methods": [
+        "fraq.adapters.file_search.FileSearchAdapter.__init__",
+        "fraq.adapters.file_search.FileSearchAdapter._build_glob",
+        "fraq.adapters.file_search.FileSearchAdapter._collect_files",
+        "fraq.adapters.file_search.FileSearchAdapter._file_to_record",
+        "fraq.adapters.file_search.FileSearchAdapter._filter_by_time",
+        "fraq.adapters.file_search.FileSearchAdapter._sort_and_limit",
+        "fraq.adapters.file_search.FileSearchAdapter.load_root",
+        "fraq.adapters.file_search.FileSearchAdapter.save",
+        "fraq.adapters.file_search.FileSearchAdapter.search",
+        "fraq.adapters.file_search.FileSearchAdapter.stream"
+      ],
+      "module": "fraq.adapters.file_search"
+    },
+    "fraq.server.NLQueryRequest": {
+      "bases": [
+        "BaseModel"
+      ],
+      "methods": [],
+      "module": "fraq.server"
+    },
+    "fraq.server.NLQueryResponse": {
+      "bases": [
+        "BaseModel"
+      ],
+      "methods": [],
+      "module": "fraq.server"
+    },
+    "fraq.server.FilesSearchRequest": {
+      "bases": [
+        "BaseModel"
+      ],
+      "methods": [],
+      "module": "fraq.server"
+    },
+    "fraq.text2fraq.llm_client.LiteLLMClient": {
+      "bases": [],
+      "methods": [
+        "fraq.text2fraq.llm_client.LiteLLMClient.__init__",
+        "fraq.text2fraq.llm_client.LiteLLMClient.complete"
+      ],
+      "module": "fraq.text2fraq.llm_client"
+    }
+  }
+}

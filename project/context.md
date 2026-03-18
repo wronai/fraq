@@ -4,32 +4,32 @@
 
 - **Project**: fraq
 - **Language**: python
-- **Files**: 38
-- **Lines**: 7433
-- **Functions**: 261
-- **Classes**: 53
+- **Files**: 36
+- **Lines**: 7683
+- **Functions**: 241
+- **Classes**: 51
 - **Avg CC**: 3.1
-- **Critical (CC≥10)**: 10
+- **Critical (CC≥10)**: 8
 
 ## Architecture
 
-### fraq/ (14 files, 3459L, 121 functions)
+### fraq/ (14 files, 3563L, 124 functions)
 
 - `inference.py` — 347L, 10 methods, CC↑16
 - `benchmarks.py` — 263L, 8 methods, CC↑11
-- `api.py` — 189L, 6 methods, CC↑10
+- `api.py` — 281L, 9 methods, CC↑10
 - `query.py` — 220L, 12 methods, CC↑9
 - `cli.py` — 467L, 24 methods, CC↑8
 - _9 more files_
 
-### fraq/adapters/ (11 files, 1017L, 64 functions)
+### fraq/adapters/ (9 files, 621L, 41 functions)
 
-- `web_crawler.py` — 204L, 12 methods, CC↑10
 - `hybrid_adapter.py` — 51L, 4 methods, CC↑8
 - `file_search.py` — 268L, 18 methods, CC↑7
 - `sql_adapter.py` — 64L, 5 methods, CC↑6
-- `network.py` — 186L, 11 methods, CC↑5
-- _6 more files_
+- `file_adapter.py` — 47L, 3 methods, CC↑3
+- `http_adapter.py` — 46L, 2 methods, CC↑3
+- _4 more files_
 
 ### fraq/formats/ (5 files, 294L, 14 functions)
 
@@ -82,7 +82,7 @@ True fractals have non-
 - **_parse_transform** — fan-out=12: Parse type specification and return transform function.
 
 Handles: range hints (f
-- **WebCrawlerAdapter.crawl_async** — fan-out=12: Crawl website and return all pages.
+- **ws_stream** — fan-out=11: Orchestrates 11 calls
 
 ## Refactoring Priorities
 

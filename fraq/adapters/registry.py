@@ -10,7 +10,6 @@ from fraq.adapters.file_adapter import FileAdapter
 from fraq.adapters.http_adapter import HTTPAdapter
 from fraq.adapters.sql_adapter import SQLAdapter
 from fraq.adapters.sensor_adapter import SensorAdapter
-from fraq.adapters.network import NetworkAdapter
 from fraq.adapters.hybrid_adapter import HybridAdapter
 
 
@@ -19,7 +18,6 @@ _ADAPTERS: Dict[SourceType, Type[BaseAdapter]] = {
     SourceType.HTTP: HTTPAdapter,
     SourceType.SQL: SQLAdapter,
     SourceType.SENSOR: SensorAdapter,
-    SourceType.NETWORK: NetworkAdapter,
     SourceType.HYBRID: HybridAdapter,
     SourceType.MEMORY: BaseAdapter,
 }

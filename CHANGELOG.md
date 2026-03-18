@@ -1,6 +1,44 @@
 # Changelog
 
-## [Unreleased]
+## [Unreleased] - 2026-03-18
+
+### Implemented - Phase 2 Completion
+
+#### DataFrame Export Integration (`fraq/api.py`)
+- **`generate()` enhanced with `output` parameter**
+  - `output='list'` (default) - List[Dict] backward compatible
+  - `output='polars'` - Returns `pl.DataFrame`
+  - `output='pandas'` - Returns `pd.DataFrame`
+  - `output='arrow'` - Returns `pa.Table`
+  - `output='records'` - Returns iterator for streaming
+  - Lazy imports with helpful error messages for missing dependencies
+
+- **New conversion functions:**
+  - `_to_polars()` - Convert records to Polars DataFrame
+  - `_to_pandas()` - Convert records to Pandas DataFrame
+  - `_to_arrow()` - Convert records to PyArrow Table
+
+#### pytest Plugin Enhancement (`fraq/testing.py`)
+- **Entry point registration** (`pyproject.toml`)
+  - `[project.entry-points."pytest11"]` for auto-discovery
+  - `pytest --fixtures | grep fraq` now works
+
+- **New fixtures:**
+  - `fraq_session` - Session-scoped utilities
+  - `fraq_data` - Function-scoped data generator
+  - `fraq_schema` - Function-scoped schema builder
+
+- **`fixture_factory` decorator**
+  - Create fixtures directly from fraq specs
+  - Supports all output formats (list, polars, pandas, arrow)
+
+#### IFS Integration (`fraq/__init__.py`)
+- **Added to public API:**
+  - `IFSGenerator` - True fractal data generation
+  - `AffineTransform` - Configurable transformations
+  - `OrganizationalMapper` - Hierarchical org data
+  - `NetworkMapper` - Network topology data
+  - `create_ifs()` - Factory for pre-configured patterns
 
 ### Refactoring - Phase 1: Core Stabilization
 
@@ -170,6 +208,42 @@ fraq/
 ├── benchmarks.py       # Performance benchmarks
 └── cli.py              # Refactored CLI
 ```
+
+## [0.2.12] - 2026-03-18
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update docs/CONTRIBUTING.md
+- Update docs/README.md
+- Update docs/api-changelog.md
+- Update docs/api.md
+- Update docs/architecture.md
+- Update docs/configuration.md
+- Update docs/coverage.md
+- Update docs/dependency-graph.md
+- ... and 7 more files
+
+### Test
+- Update tests/test_api_export.py
+- Update tests/test_dataframes.py
+- Update tests/test_ifs.py
+- Update tests/test_inference.py
+- Update tests/test_providers.py
+- Update tests/test_testing.py
+
+### Other
+- Update .code2docs.api_snapshot.json
+- Update code2docs.yaml
+- Update examples/new_features_demo.py
+- Update fraq/__init__.py
+- Update fraq/adapters/registry.py
+- Update fraq/api.py
+- Update fraq/testing.py
+- Update project/analysis.json
+- Update project/analysis.toon
+- Update project/analysis.yaml
+- ... and 14 more files
 
 ## [0.2.11] - 2026-03-17
 

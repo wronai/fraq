@@ -1,10 +1,10 @@
-# fraq/flow | 385 func | 12 pipelines | 8 hub-types | 2026-03-17
+# fraq/flow | 371 func | 12 pipelines | 8 hub-types | 2026-03-18
 
-PIPELINES[12] (IO:5, NLP:1, Unknown:6):
+PIPELINES[12] (IO:3, NLP:1, Unknown:8):
   Fraq [Unknown]: Dict[str, str] → ProviderRegistry
               → generate_df(fields:Dict[str, str], count:int, seed:Optional[int], output:str) → Any CC=4    pure ▶
               → to_arrow(fields:Dict[str, str], count:int, seed:Optional[int]) → pa.Table CC=2    pure
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any] CC=6    pure
               → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
               → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
               → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
@@ -14,7 +14,27 @@ PIPELINES[12] (IO:5, NLP:1, Unknown:6):
   Fraq [Unknown]: int → ProviderRegistry
               → run_all_benchmarks(speed_count:int, memory_count:int) → Dict[str, Any] CC=5    IO ▶
               → compare_structures() → Dict[str, float] CC=3    pure
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any] CC=6    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 5/7 pure  BOTTLENECK: _parse_transform(CC=10)
+
+  Fraq [Unknown]: ? → ProviderRegistry
+              → example_2_dataframes()                  CC=2    IO ▶
+              → to_polars(fields:Dict[str, str], count:int, seed:Optional[int]) → pl.DataFrame CC=2    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any] CC=6    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 5/7 pure  BOTTLENECK: _parse_transform(CC=10)
+
+  Fraq [Unknown]: ? → ProviderRegistry
+              → example_6_benchmarks()                  CC=2    IO ▶
+              → fraq_generate(count:int) → BenchmarkResult CC=2    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any] CC=6    pure
               → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
               → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
               → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
@@ -24,7 +44,7 @@ PIPELINES[12] (IO:5, NLP:1, Unknown:6):
   Fraq [Unknown]: ? → ProviderRegistry
               → main()                                  CC=1    IO ▶
               → example_3_kafka()                       CC=2    IO
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any] CC=6    pure
               → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
               → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
               → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
@@ -50,9 +70,18 @@ PIPELINES[12] (IO:5, NLP:1, Unknown:6):
               → available(cls) → List[str]              CC=1    pure ■
               PURITY: 6/6 pure  BOTTLENECK: main(CC=1)
 
+  Fraq [Unknown]: ? → ProviderRegistry
+              → example_1_faker()                       CC=3    IO ▶
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any] CC=6    pure
+              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
+              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
+              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
+              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
+              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
+
   Fraq [IO]: ? → ProviderRegistry
               → example_1_sensors()                     CC=3    IO ▶
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any] CC=6    pure
               → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
               → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
               → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
@@ -61,7 +90,7 @@ PIPELINES[12] (IO:5, NLP:1, Unknown:6):
 
   Fraq [IO]: ? → ProviderRegistry
               → example_2_mqtt()                        CC=3    IO ▶
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any] CC=6    pure
               → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
               → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
               → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
@@ -70,7 +99,7 @@ PIPELINES[12] (IO:5, NLP:1, Unknown:6):
 
   Fraq [Unknown]: ? → ProviderRegistry
               → example_1_sse()                         CC=2    IO ▶
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any] CC=6    pure
               → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
               → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
               → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
@@ -79,34 +108,7 @@ PIPELINES[12] (IO:5, NLP:1, Unknown:6):
 
   Fraq [Unknown]: ? → ProviderRegistry
               → example_4_kafka()                       CC=2    IO ▶
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
-              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
-              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
-              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
-              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
-              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
-
-  Fraq [IO]: ? → ProviderRegistry
-              → example_1_classification()              CC=4    IO ▶
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
-              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
-              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
-              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
-              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
-              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
-
-  Fraq [IO]: ? → ProviderRegistry
-              → example_2_regression()                  CC=3    IO ▶
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
-              → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
-              → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
-              → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
-              → get_provider_registry() → ProviderRegistry CC=2    mutation ■
-              PURITY: 4/6 pure  BOTTLENECK: _parse_transform(CC=10)
-
-  Fraq [Unknown]: ? → ProviderRegistry
-              → example_1_extract()                     CC=4    IO ▶
-              → generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]] CC=1    pure
+              → generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any] CC=6    pure
               → _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema CC=3    pure
               → _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]] CC=10   pure
               → generate_with_faker(type_spec:str, seed:Optional[int]) → Any CC=1    pure
@@ -141,9 +143,9 @@ CONTRACTS:
       IN:  fields:Dict[str, str], count:int, seed:Optional[int]
       OUT: pa.Table
 
-    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
-      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
-      OUT: List[Dict[str, Any]]
+    generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput
+      OUT: Union[List[Dict[str, Any]], Any]
 
     _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
       IN:  fields:Dict[str, str], seed:Optional[int]
@@ -172,9 +174,71 @@ CONTRACTS:
       IN:  ()
       OUT: Dict[str, float]
 
-    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
+    generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput
+      OUT: Union[List[Dict[str, Any]], Any]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
+  Pipeline: Fraq
+    example_2_dataframes()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    to_polars(fields:Dict[str, str], count:int, seed:Optional[int]) → pl.DataFrame
       IN:  fields:Dict[str, str], count:int, seed:Optional[int]
-      OUT: List[Dict[str, Any]]
+      OUT: pl.DataFrame
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput
+      OUT: Union[List[Dict[str, Any]], Any]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
+  Pipeline: Fraq
+    example_6_benchmarks()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    fraq_generate(count:int) → BenchmarkResult
+      IN:  count:int
+      OUT: BenchmarkResult
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput
+      OUT: Union[List[Dict[str, Any]], Any]
 
     _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
       IN:  fields:Dict[str, str], seed:Optional[int]
@@ -204,9 +268,9 @@ CONTRACTS:
       OUT: None
       SIDE-EFFECT: IO(print, print, print)
 
-    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
-      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
-      OUT: List[Dict[str, Any]]
+    generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput
+      OUT: Union[List[Dict[str, Any]], Any]
 
     _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
       IN:  fields:Dict[str, str], seed:Optional[int]
@@ -283,14 +347,41 @@ CONTRACTS:
       OUT: List[str]
 
   Pipeline: Fraq
+    example_1_faker()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput
+      OUT: Union[List[Dict[str, Any]], Any]
+
+    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
+      IN:  fields:Dict[str, str], seed:Optional[int]
+      OUT: FraqSchema
+
+    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
+      IN:  name:str, type_spec:str
+      OUT: Optional[Callable[[Any], Any]]
+
+    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
+      IN:  type_spec:str, seed:Optional[int]
+      OUT: Any
+
+    get_provider_registry() → ProviderRegistry
+      IN:  ()
+      OUT: ProviderRegistry
+      SIDE-EFFECT: global(_default_registry)
+
+  Pipeline: Fraq
     example_1_sensors()
       IN:  ()
       OUT: None
       SIDE-EFFECT: IO(print, print, print)
 
-    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
-      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
-      OUT: List[Dict[str, Any]]
+    generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput
+      OUT: Union[List[Dict[str, Any]], Any]
 
     _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
       IN:  fields:Dict[str, str], seed:Optional[int]
@@ -315,9 +406,9 @@ CONTRACTS:
       OUT: None
       SIDE-EFFECT: IO(print, print, print)
 
-    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
-      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
-      OUT: List[Dict[str, Any]]
+    generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput
+      OUT: Union[List[Dict[str, Any]], Any]
 
     _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
       IN:  fields:Dict[str, str], seed:Optional[int]
@@ -342,9 +433,9 @@ CONTRACTS:
       OUT: None
       SIDE-EFFECT: IO(print, print, print); generator
 
-    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
-      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
-      OUT: List[Dict[str, Any]]
+    generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput
+      OUT: Union[List[Dict[str, Any]], Any]
 
     _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
       IN:  fields:Dict[str, str], seed:Optional[int]
@@ -369,90 +460,9 @@ CONTRACTS:
       OUT: None
       SIDE-EFFECT: IO(print, print, print)
 
-    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
-      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
-      OUT: List[Dict[str, Any]]
-
-    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
-      IN:  fields:Dict[str, str], seed:Optional[int]
-      OUT: FraqSchema
-
-    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
-      IN:  name:str, type_spec:str
-      OUT: Optional[Callable[[Any], Any]]
-
-    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
-      IN:  type_spec:str, seed:Optional[int]
-      OUT: Any
-
-    get_provider_registry() → ProviderRegistry
-      IN:  ()
-      OUT: ProviderRegistry
-      SIDE-EFFECT: global(_default_registry)
-
-  Pipeline: Fraq
-    example_1_classification()
-      IN:  ()
-      OUT: None
-      SIDE-EFFECT: IO(print, print, print)
-
-    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
-      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
-      OUT: List[Dict[str, Any]]
-
-    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
-      IN:  fields:Dict[str, str], seed:Optional[int]
-      OUT: FraqSchema
-
-    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
-      IN:  name:str, type_spec:str
-      OUT: Optional[Callable[[Any], Any]]
-
-    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
-      IN:  type_spec:str, seed:Optional[int]
-      OUT: Any
-
-    get_provider_registry() → ProviderRegistry
-      IN:  ()
-      OUT: ProviderRegistry
-      SIDE-EFFECT: global(_default_registry)
-
-  Pipeline: Fraq
-    example_2_regression()
-      IN:  ()
-      OUT: None
-      SIDE-EFFECT: IO(print, print, print)
-
-    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
-      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
-      OUT: List[Dict[str, Any]]
-
-    _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
-      IN:  fields:Dict[str, str], seed:Optional[int]
-      OUT: FraqSchema
-
-    _parse_transform(name:str, type_spec:str) → Optional[Callable[[Any], Any]]
-      IN:  name:str, type_spec:str
-      OUT: Optional[Callable[[Any], Any]]
-
-    generate_with_faker(type_spec:str, seed:Optional[int]) → Any
-      IN:  type_spec:str, seed:Optional[int]
-      OUT: Any
-
-    get_provider_registry() → ProviderRegistry
-      IN:  ()
-      OUT: ProviderRegistry
-      SIDE-EFFECT: global(_default_registry)
-
-  Pipeline: Fraq
-    example_1_extract()
-      IN:  ()
-      OUT: None
-      SIDE-EFFECT: IO(print, print, print)
-
-    generate(fields:Dict[str, str], count:int, seed:Optional[int]) → List[Dict[str, Any]]
-      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
-      OUT: List[Dict[str, Any]]
+    generate(fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput) → Union[List[Dict[str, Any]], Any]
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:DataFrameOutput
+      OUT: Union[List[Dict[str, Any]], Any]
 
     _fields_to_schema(fields:Dict[str, str], seed:Optional[int]) → FraqSchema
       IN:  fields:Dict[str, str], seed:Optional[int]
@@ -472,38 +482,38 @@ CONTRACTS:
       SIDE-EFFECT: global(_default_registry)
 
 
-DATA_TYPES (by cross-function usage) [290 annotated, 0 inferred / 385 functions]:
-  str                  consumed:178 produced:33   !! HUB-TYPE → split interface
-  int                  consumed:104 produced:5    !! HUB-TYPE → split interface
-  str, Any             consumed:13  produced:31   !! HUB-TYPE → split interface
-  FraqNode             consumed:20  produced:18   !! HUB-TYPE → split interface
-  float                consumed:26  produced:7    !! HUB-TYPE → split interface
+DATA_TYPES (by cross-function usage) [270 annotated, 0 inferred / 371 functions]:
+  str                  consumed:161 produced:28   !! HUB-TYPE → split interface
+  int                  consumed:88  produced:5    !! HUB-TYPE → split interface
+  str, Any             consumed:16  produced:22   !! HUB-TYPE → split interface
+  FraqNode             consumed:18  produced:16   !! HUB-TYPE → split interface
+  float                consumed:23  produced:7    !! HUB-TYPE → split interface
   Vector               consumed:19  produced:4    !! HUB-TYPE → split interface
-  bool                 consumed:7   produced:10 
+  bool                 consumed:5   produced:10 
   FraqSchema           consumed:9   produced:5  
   FraqQuery            consumed:6   produced:7  
   Path                 consumed:11  produced:0    !! HUB-TYPE → split interface
   argparse.Namespace   consumed:10  produced:1    !! HUB-TYPE → split interface
-  Iterator[Dict[str, Any]] consumed:0   produced:10   output-heavy
   dict[str, Any]       consumed:2   produced:7  
   WebSocket            consumed:9   produced:0    input-heavy (read-only flow)
+  Iterator[Dict[str, Any]] consumed:0   produced:8    output-heavy
   str, str             consumed:7   produced:0    input-heavy (read-only flow)
   ParsedQuery          consumed:1   produced:5    output-heavy
-  bytes                consumed:2   produced:4  
   dict                 consumed:0   produced:6    output-heavy
+  bytes                consumed:2   produced:4  
   str | None           consumed:5   produced:0    input-heavy (read-only flow)
-  AsyncIterator[Dict[str, Any]] consumed:0   produced:4    narrow scope
+  str | list[dict[str, Any]] consumed:0   produced:4    narrow scope
 
   HUB TYPES (consumed ≥10):
-    str → 178 consumers → split into:
+    str → 161 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    int → 104 consumers → split into:
+    int → 88 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    str, Any → 13 consumers → split into:
+    str, Any → 16 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    FraqNode → 20 consumers → split into:
+    FraqNode → 18 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    float → 26 consumers → split into:
+    float → 23 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
     Vector → 19 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
@@ -520,11 +530,11 @@ SIDE_EFFECTS:
   PIPELINE PURITY:
     Fraq            ███░ 85% pure
     Fraq            ██░░ 71% pure
+    Fraq            ██░░ 71% pure
+    Fraq            ██░░ 71% pure
     Fraq            ██░░ 57% pure
     Fraq            ██░░ 57% pure
     Fraq            ████ 100% pure
-    Fraq            ██░░ 66% pure
-    Fraq            ██░░ 66% pure
     Fraq            ██░░ 66% pure
     Fraq            ██░░ 66% pure
     Fraq            ██░░ 66% pure

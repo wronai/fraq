@@ -1,0 +1,88 @@
+project:
+  name: fraq
+  source: ./
+  output: ./docs/
+  readme_output: ./README.md
+  repo_url: https://github.com/wronai/fraq
+  verbose: false
+  exclude_tests: true
+  skip_private: false
+readme:
+  sections:
+  - overview
+  - install
+  - quickstart
+  - generated_output
+  - config
+  - sync_markers
+  - architecture
+  - api
+  - structure
+  - requirements
+  - contributing
+  - docs_nav
+  badges:
+  - version
+  - python
+  - coverage
+  - complexity
+  sync_markers: true
+docs:
+  api_reference: true
+  module_docs: true
+  architecture: true
+  changelog: true
+examples:
+  auto_generate: true
+  from_entry_points: true
+sync:
+  strategy: markers
+  watch: false
+  ignore:
+  - tests/
+  - __pycache__
+llm:
+  enabled: false
+  model: ''
+  api_base: ''
+  max_tokens: 1024
+  temperature: 0.3
+code2llm:
+  enabled: true
+  formats:
+  - all
+  strategy: standard
+  output_dir: project
+  chunk: false
+  no_png: false
+  max_depth: 6
+  mermaid:
+    enabled: true
+    format: svg
+    theme: default
+    auto_generate: false
+  exclude_patterns:
+  - venv
+  - .venv
+  - env
+  - .env
+  - node_modules
+  - bower_components
+  - __pycache__
+  - .pytest_cache
+  - .mypy_cache
+  - .git
+  - .hg
+  - .svn
+  - dist
+  - build
+  - target
+  - out
+  - .tox
+  - .eggs
+  - '*.egg-info'
+  - vendor
+  - third_party
+  - third-party
+  - site-packages
+  - lib/python*

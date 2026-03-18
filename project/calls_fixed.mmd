@@ -1,0 +1,63 @@
+flowchart LR
+    %% Core fraq modules
+    subgraph fraq_core
+        FraqNode_child["FraqNode.child"]
+        vec_add["vec_add"]
+        vec_hash["vec_hash"]
+        vec_scale["vec_scale"]
+    end
+
+    subgraph fraq_api
+        api_generate["generate"]
+        api_stream["stream"]
+        api_quick_schema["quick_schema"]
+        to_pandas["to_pandas"]
+        to_polars["to_polars"]
+        to_arrow["to_arrow"]
+    end
+
+    subgraph fraq_cli
+        cli_main["main"]
+        cmd_schema["cmd_schema"]
+        cmd_stream["cmd_stream"]
+        cmd_explore["cmd_explore"]
+        cmd_nl["cmd_nl"]
+    end
+
+    subgraph fraq_formats
+        registry["FormatRegistry"]
+        to_json["to_json"]
+        to_csv["to_csv"]
+        to_yaml["to_yaml"]
+    end
+
+    subgraph fraq_text2fraq
+        text2fraq["text2fraq"]
+        text2query["text2query"]
+        parse["parse"]
+    end
+
+    %% Key connections
+    cli_main --> cmd_schema
+    cli_main --> cmd_stream
+    cli_main --> cmd_explore
+    cli_main --> cmd_nl
+    
+    cmd_schema --> api_generate
+    cmd_stream --> api_stream
+    cmd_explore --> registry
+    
+    api_generate --> to_pandas
+    api_generate --> to_polars
+    api_generate --> to_arrow
+    
+    cmd_nl --> text2fraq
+    text2fraq --> parse
+    
+    registry --> to_json
+    registry --> to_csv
+    registry --> to_yaml
+    
+    FraqNode_child --> vec_hash
+    FraqNode_child --> vec_add
+    FraqNode_child --> vec_scale

@@ -21,10 +21,19 @@ from fraq.generators import (
 )
 from fraq.query import FraqQuery, FraqExecutor, FraqFilter, SourceType, query
 
+# IFS - Iterated Function System (fractal generator)
+from fraq.ifs import (
+    IFSGenerator,
+    AffineTransform,
+    OrganizationalMapper,
+    NetworkMapper,
+    create_ifs,
+)
+
 # NEW: High-level API (moved to api.py for cleaner structure)
 from fraq.api import generate, stream, quick_schema
 
-__version__ = "0.2.11"
+__version__ = "0.2.12"
 
 # Public API list - used for lazy loading and IDE support
 __all__ = [
@@ -33,6 +42,8 @@ __all__ = [
     "FormatRegistry",
     "HashGenerator", "FibonacciGenerator", "PerlinGenerator", "SensorStreamGenerator",
     "FraqQuery", "FraqExecutor", "FraqFilter", "SourceType", "query",
+    # IFS - Iterated Function System
+    "IFSGenerator", "AffineTransform", "OrganizationalMapper", "NetworkMapper", "create_ifs",
     # Simplified API
     "generate", "stream", "quick_schema",
     # Lazy-loaded from types
@@ -42,9 +53,11 @@ __all__ = [
     "ZoomDepth", "RecordLimit", "BranchingFactor", "Dimensions", "Seed",
     "HostAddress", "PortNumber", "NetworkCidr", "TimeoutSeconds",
     "FieldName", "SchemaVersion",
-    # Lazy-loaded from adapters
+    # Lazy-loaded from adapters (core only - Network/WebCrawler moved to optional)
     "FileAdapter", "HTTPAdapter", "SQLAdapter", "SensorAdapter", "HybridAdapter",
-    "FileSearchAdapter", "NetworkAdapter", "WebCrawlerAdapter", "get_adapter",
+    "FileSearchAdapter", "get_adapter",
+    # Note: NetworkAdapter and WebCrawlerAdapter available via:
+    #   from fraq.adapters import NetworkAdapter, WebCrawlerAdapter
     # Lazy-loaded from schema_export
     "to_nlp2cmd_schema", "to_nlp2cmd_actions",
     "to_openapi", "to_graphql", "to_asyncapi", "to_proto", "to_json_schema",
@@ -81,8 +94,7 @@ _LAZY_IMPORTS: dict[str, str] = {
     "SensorAdapter": "fraq.adapters",
     "HybridAdapter": "fraq.adapters",
     "FileSearchAdapter": "fraq.adapters",
-    "NetworkAdapter": "fraq.adapters",
-    "WebCrawlerAdapter": "fraq.adapters",
+    # Note: NetworkAdapter, WebCrawlerAdapter moved to fraq.adapters directly
     "get_adapter": "fraq.adapters",
     # schema_export
     "to_nlp2cmd_schema": "fraq.schema_export",

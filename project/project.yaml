@@ -3,16 +3,16 @@ project:
   name: fraq
   repo: /home/tom/github/wronai/fraq
   language: python
-  analyzed_at: '2026-03-17T22:01:26Z'
+  analyzed_at: '2026-03-18T12:34:32Z'
   tool: code2llm
   stats:
-    files: 38
-    lines: 7433
-    functions: 261
-    classes: 53
+    files: 36
+    lines: 7683
+    functions: 241
+    classes: 51
 health:
   cc_avg: 3.1
-  critical_count: 10
+  critical_count: 8
   critical_limit: 10
   duplicates: 0
   cycles: 3
@@ -59,11 +59,6 @@ health:
     severity: warning
   - type: high_fan_out
     target: _parse_transform
-    value: 12
-    limit: 10
-    severity: warning
-  - type: high_fan_out
-    target: WebCrawlerAdapter.crawl_async
     value: 12
     limit: 10
     severity: warning
@@ -118,7 +113,7 @@ modules:
   classes: 4
   methods: 10
   cc_max: 16
-  inbound_deps: 0
+  inbound_deps: 1
   exports:
   - name: FractalDimension
     type: class
@@ -203,32 +198,16 @@ modules:
     - name: _collect_files_filtered
       cc: 11
       fan_out: 16
-- path: fraq/adapters/web_crawler.py
-  lines: 204
-  classes: 1
-  methods: 12
-  cc_max: 10
-  inbound_deps: 0
-  exports:
-  - name: WebCrawlerAdapter
-    type: class
-    cc_avg: 3.7
-    methods:
-    - name: crawl_async
-      cc: 10
-      fan_out: 12
-    - name: stream_pages
-      cc: 10
 - path: fraq/api.py
-  lines: 189
+  lines: 281
   classes: 0
-  methods: 6
+  methods: 9
   cc_max: 10
-  inbound_deps: 10
+  inbound_deps: 11
   exports:
   - name: generate
     type: function
-    cc: 1
+    cc: 6
   - name: stream
     type: function
     cc: 10
@@ -434,7 +413,7 @@ modules:
   classes: 5
   methods: 11
   cc_max: 7
-  inbound_deps: 1
+  inbound_deps: 2
   exports:
   - name: AffineTransform
     type: class
@@ -510,16 +489,6 @@ modules:
   - name: FraqSession
     type: class
     cc_avg: 2.9
-- path: fraq/adapters/network.py
-  lines: 186
-  classes: 1
-  methods: 11
-  cc_max: 5
-  inbound_deps: 0
-  exports:
-  - name: NetworkAdapter
-    type: class
-    cc_avg: 2.8
 - path: fraq/schema_export.py
   lines: 476
   classes: 0
@@ -593,7 +562,7 @@ modules:
   classes: 0
   methods: 4
   cc_max: 4
-  inbound_deps: 0
+  inbound_deps: 1
   exports:
   - name: to_polars
     type: function
@@ -646,7 +615,7 @@ modules:
       cc: 3
       fan_out: 10
 - path: fraq/adapters/registry.py
-  lines: 33
+  lines: 31
   classes: 0
   methods: 1
   cc_max: 3
@@ -682,7 +651,7 @@ modules:
     type: function
     cc: 3
 - path: fraq/__init__.py
-  lines: 155
+  lines: 167
   classes: 0
   methods: 1
   cc_max: 2
@@ -753,7 +722,7 @@ modules:
     type: class
     cc_avg: 1.0
 - path: fraq/adapters/__init__.py
-  lines: 25
+  lines: 21
   classes: 0
   methods: 0
   cc_max: 0
@@ -816,9 +785,6 @@ hotspots:
 
 
     Handles: range hints (f'
-- name: WebCrawlerAdapter.crawl_async
-  fan_out: 12
-  note: Crawl website and return all pages.
 - name: ws_stream
   fan_out: 11
   note: Orchestrates 11 calls
@@ -828,6 +794,14 @@ hotspots:
 - name: _dispatch_command
   fan_out: 10
   note: 10-way dispatch
+- name: stream
+  fan_out: 10
+  note: 'Stream records lazily. Like generate() but returns iterator.
+
+
+    Parameters
+
+    -------'
 refactoring:
   priorities:
   - action: Split FractalAnalyzer.box_counting_dimension (CC=16 → target CC<10)
@@ -860,4 +834,9 @@ evolution:
   cc_avg: 3.1
   critical: 10
   lines: 7433
+  note: Automated analysis
+- date: '2026-03-18'
+  cc_avg: 3.1
+  critical: 8
+  lines: 7683
   note: Automated analysis
