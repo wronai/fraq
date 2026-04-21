@@ -1,0 +1,320 @@
+# code2llm call graph | /home/tom/github/wronai/fraq
+# nodes: 184 | edges: 176 | modules: 50
+# CC̄=2.8
+
+HUBS[20]:
+  fraq.inference.schema.InferredSchema.generate
+    CC=4  in:40  out:6  total:46
+  fraq.export.proto.to_proto
+    CC=2  in:2  out:27  total:29
+  fraq.cli._build_files_parsers
+    CC=1  in:1  out:22  total:23
+  examples.text2fraq.nlp2cmd_integration.example_full_nlp2cmd_workflow
+    CC=3  in:0  out:19  total:19
+  fraq.formats.prepare.prepare
+    CC=8  in:7  out:12  total:19
+  examples.network.network_web_examples.example_streaming_comparison
+    CC=1  in:1  out:18  total:19
+  fraq.formats.text.simple_yaml
+    CC=7  in:3  out:15  total:18
+  fraq.export.graphql.to_graphql
+    CC=2  in:1  out:17  total:18
+  examples.text2fraq.text2fraq_examples.example_full_pipeline
+    CC=3  in:0  out:18  total:18
+  examples.streaming.sse_examples.example_1_sse
+    CC=2  in:0  out:17  total:17
+  fraq.cli._dispatch_command
+    CC=8  in:1  out:16  total:17
+  examples.new_features_demo.example_5_fractal_inference
+    CC=5  in:0  out:17  total:17
+  examples.network.network_web_examples.example_fractal_coordinates
+    CC=1  in:1  out:16  total:17
+  examples.network.network_web_examples.example_web_crawl_sync
+    CC=2  in:1  out:16  total:17
+  examples.integrations.jupyter_example.jupyter_visualization
+    CC=1  in:0  out:16  total:16
+  examples.fastapi-docker.run.test_api
+    CC=4  in:1  out:15  total:16
+  examples.text2fraq.text2fraq_files.example_convenience_function
+    CC=6  in:0  out:16  total:16
+  examples.integrations.websocket_example.fraq_websocket_handler
+    CC=7  in:0  out:15  total:15
+  examples.integrations.jupyter_example.jupyter_interactive_widget
+    CC=2  in:0  out:15  total:15
+  examples.text2fraq.nlp2cmd_integration.build_sensor_schema
+    CC=1  in:8  out:7  total:15
+
+MODULES:
+  examples.ai_ml.training_data  [2 funcs]
+    example_1_classification  CC=4  out:11
+    example_2_regression  CC=3  out:11
+  examples.basic.applications  [5 funcs]
+    example_1_iot_sensors  CC=5  out:13
+    example_2_erp_invoices  CC=4  out:10
+    example_3_ai_training  CC=3  out:14
+    example_4_devops_metrics  CC=3  out:7
+    example_5_finance  CC=2  out:7
+  examples.basic.async_streaming  [4 funcs]
+    example_1_basic  CC=2  out:5
+    example_2_typed  CC=2  out:14
+    example_3_kafka  CC=2  out:8
+    main  CC=1  out:6
+  examples.basic.query_examples  [5 funcs]
+    example_1_basic_query  CC=2  out:7
+    example_2_json_output  CC=1  out:6
+    example_3_csv_output  CC=2  out:6
+    example_4_streaming  CC=2  out:7
+    example_5_schema  CC=2  out:9
+  examples.cli-docker.run  [3 funcs]
+    main  CC=3  out:6
+    run_in_docker  CC=1  out:4
+    run_local  CC=1  out:4
+  examples.database.sqlite_examples  [2 funcs]
+    example_1_sqlite  CC=3  out:14
+    example_2_hybrid  CC=3  out:9
+  examples.etl.pipeline_examples  [4 funcs]
+    example_1_extract  CC=4  out:10
+    example_2_transform  CC=3  out:15
+    example_3_validate  CC=4  out:10
+    example_4_pipeline  CC=5  out:10
+  examples.fastapi-docker.api_server  [1 funcs]
+    ws_stream  CC=6  out:11
+  examples.fastapi-docker.run  [5 funcs]
+    main  CC=4  out:9
+    run_docker  CC=1  out:5
+    run_local  CC=2  out:5
+    stop_docker  CC=1  out:3
+    test_api  CC=4  out:15
+  examples.fullstack-docker.run  [4 funcs]
+    main  CC=4  out:9
+    run_docker  CC=1  out:6
+    stop_docker  CC=1  out:3
+    test_stack  CC=3  out:9
+  examples.integrations.cli_chat_example  [2 funcs]
+    do_generate  CC=8  out:15
+    do_stream  CC=5  out:12
+  examples.integrations.fastapi_example  [2 funcs]
+    generate_data  CC=1  out:5
+    stream_data  CC=1  out:8
+  examples.integrations.flask_example  [2 funcs]
+    api_generate  CC=2  out:8
+    api_stream  CC=1  out:7
+  examples.integrations.grpc_example  [1 funcs]
+    generate_proto_file  CC=1  out:14
+  examples.integrations.jupyter_example  [4 funcs]
+    jupyter_basic_usage  CC=1  out:4
+    jupyter_fractal_analysis  CC=3  out:12
+    jupyter_interactive_widget  CC=2  out:15
+    jupyter_visualization  CC=1  out:16
+  examples.integrations.kafka_example  [2 funcs]
+    produce_to_kafka  CC=3  out:10
+    stream_to_kafka  CC=4  out:12
+  examples.integrations.websocket_example  [1 funcs]
+    fraq_websocket_handler  CC=7  out:15
+  examples.iot.sensor_examples  [3 funcs]
+    example_1_sensors  CC=3  out:7
+    example_2_mqtt  CC=3  out:10
+    example_3_streaming  CC=2  out:7
+  examples.network.network_web_examples  [5 funcs]
+    example_fractal_coordinates  CC=1  out:16
+    example_network_scan_sync  CC=2  out:14
+    example_streaming_comparison  CC=1  out:18
+    example_web_crawl_sync  CC=2  out:16
+    main  CC=1  out:13
+  examples.new_features_demo  [6 funcs]
+    example_1_faker  CC=3  out:9
+    example_2_dataframes  CC=2  out:10
+    example_3_pytest_fixture  CC=5  out:11
+    example_4_ifs_generator  CC=2  out:13
+    example_5_fractal_inference  CC=5  out:17
+    example_6_benchmarks  CC=2  out:11
+  examples.streaming.sse_examples  [3 funcs]
+    example_1_sse  CC=2  out:17
+    example_3_streaming  CC=2  out:7
+    example_4_kafka  CC=2  out:7
+  examples.text2fraq.nlp2cmd_integration  [11 funcs]
+    build_erp_schema  CC=1  out:8
+    build_sensor_schema  CC=1  out:7
+    example_asyncapi  CC=1  out:9
+    example_full_nlp2cmd_workflow  CC=3  out:19
+    example_graphql  CC=1  out:5
+    example_grpc_proto  CC=1  out:5
+    example_json_schema  CC=1  out:6
+    example_nlp2cmd_actions  CC=3  out:6
+    example_nlp2cmd_command_schema  CC=1  out:6
+    example_nlp2cmd_erp  CC=3  out:11
+  examples.text2fraq.text2fraq_examples  [11 funcs]
+    _print_file_params  CC=1  out:6
+    _print_header  CC=1  out:3
+    _print_parsed_query  CC=2  out:3
+    example_convenience_functions  CC=3  out:14
+    example_env_config  CC=1  out:11
+    example_file_search_direct  CC=3  out:13
+    example_full_pipeline  CC=3  out:18
+    example_llama32  CC=2  out:7
+    example_phi3  CC=2  out:7
+    example_qwen25  CC=3  out:7
+  examples.text2fraq.text2fraq_files  [1 funcs]
+    example_convenience_function  CC=6  out:16
+  examples.websocket-docker.run  [5 funcs]
+    main  CC=4  out:10
+    run_docker  CC=1  out:3
+    run_local  CC=2  out:5
+    stop_docker  CC=1  out:2
+    test_websocket  CC=3  out:14
+  fraq.adapters.sensor_adapter  [1 funcs]
+    stream  CC=3  out:3
+  fraq.api  [11 funcs]
+    _build_stream_config  CC=2  out:1
+    _faker_factory  CC=1  out:3
+    _fields_to_schema  CC=3  out:5
+    _generate_records  CC=1  out:1
+    _stream_records  CC=6  out:3
+    _to_arrow  CC=5  out:6
+    _to_pandas  CC=3  out:3
+    _to_polars  CC=3  out:3
+    generate  CC=6  out:8
+    quick_schema  CC=6  out:12
+  fraq.benchmarks  [8 funcs]
+    compare_memory  CC=3  out:11
+    fraq_generate  CC=2  out:5
+    fraq_stream  CC=3  out:6
+    compare_structures  CC=3  out:9
+    _print_memory_section  CC=7  out:3
+    _print_speed_section  CC=2  out:3
+    _print_structural_section  CC=4  out:4
+    print_summary  CC=1  out:10
+  fraq.cli  [20 funcs]
+    _build_core_parsers  CC=1  out:14
+    _build_files_parsers  CC=1  out:22
+    _build_network_parsers  CC=1  out:8
+    _build_parser  CC=1  out:6
+    _build_web_parsers  CC=1  out:8
+    _collect_file_stat  CC=2  out:11
+    _dispatch_command  CC=8  out:16
+    _get_shared_parser  CC=1  out:5
+    _is_file_query  CC=2  out:2
+    _make_root  CC=2  out:4
+  fraq.core  [4 funcs]
+    _child  CC=2  out:4
+    _vec_add  CC=2  out:2
+    _vec_hash  CC=1  out:4
+    _vec_scale  CC=2  out:1
+  fraq.dataframes  [4 funcs]
+    generate_df  CC=4  out:4
+    to_arrow  CC=2  out:4
+    to_pandas  CC=2  out:3
+    to_polars  CC=2  out:3
+  fraq.export.asyncapi  [1 funcs]
+    to_asyncapi  CC=2  out:1
+  fraq.export.graphql  [1 funcs]
+    to_graphql  CC=2  out:17
+  fraq.export.json_schema  [1 funcs]
+    to_json_schema  CC=2  out:2
+  fraq.export.nlp2cmd  [2 funcs]
+    to_nlp2cmd_actions  CC=2  out:0
+    to_nlp2cmd_schema  CC=5  out:6
+  fraq.export.openapi  [1 funcs]
+    to_openapi  CC=2  out:2
+  fraq.export.proto  [1 funcs]
+    to_proto  CC=2  out:27
+  fraq.formats.binary  [7 funcs]
+    _encode_dict  CC=2  out:8
+    _encode_fallback  CC=1  out:2
+    _encode_list  CC=2  out:5
+    _encode_str  CC=1  out:3
+    mp_encode  CC=2  out:4
+    to_binary  CC=3  out:8
+    to_msgpack_lite  CC=1  out:2
+  fraq.formats.prepare  [2 funcs]
+    encode_value  CC=6  out:10
+    prepare  CC=8  out:12
+  fraq.formats.text  [5 funcs]
+    simple_yaml  CC=7  out:15
+    to_csv  CC=4  out:9
+    to_json  CC=1  out:2
+    to_jsonl  CC=3  out:4
+    to_yaml  CC=1  out:2
+  fraq.generators  [1 funcs]
+    __call__  CC=1  out:5
+  fraq.ifs  [1 funcs]
+    create_ifs  CC=3  out:8
+  fraq.inference  [1 funcs]
+    infer_fractal  CC=2  out:4
+  fraq.inference.schema  [1 funcs]
+    generate  CC=4  out:6
+  fraq.providers.faker_provider  [2 funcs]
+    generate_with_faker  CC=1  out:2
+    get_provider_registry  CC=2  out:1
+  fraq.streaming  [1 funcs]
+    async_stream  CC=3  out:2
+  fraq.testing  [3 funcs]
+    fixture_factory  CC=1  out:1
+    fraq_fixture  CC=1  out:1
+    make_fixture  CC=1  out:1
+  fraq.text2fraq.parser_llm  [2 funcs]
+    _fallback_fields  CC=5  out:4
+    _fallback_parse  CC=1  out:5
+  fraq.text2fraq.parser_rules  [6 funcs]
+    _matches_pattern  CC=1  out:1
+    parse  CC=1  out:6
+    _detect_depth  CC=5  out:0
+    _detect_format  CC=6  out:0
+    _detect_limit  CC=2  out:3
+    _word_match  CC=1  out:2
+  fraq.text2fraq.shortcuts  [3 funcs]
+    text2filesearch  CC=2  out:3
+    text2fraq  CC=2  out:3
+    text2query  CC=2  out:3
+
+EDGES:
+  fraq.dataframes.to_polars → fraq.inference.schema.InferredSchema.generate
+  fraq.dataframes.to_pandas → fraq.inference.schema.InferredSchema.generate
+  fraq.dataframes.to_arrow → fraq.inference.schema.InferredSchema.generate
+  fraq.dataframes.generate_df → fraq.dataframes.to_polars
+  fraq.dataframes.generate_df → fraq.dataframes.to_pandas
+  fraq.dataframes.generate_df → fraq.dataframes.to_arrow
+  fraq.text2fraq.parser_rules.Text2FraqSimple.parse → fraq.text2fraq.parser_rules._detect_depth
+  fraq.text2fraq.parser_rules.Text2FraqSimple.parse → fraq.text2fraq.parser_rules._detect_format
+  fraq.text2fraq.parser_rules.Text2FraqSimple.parse → fraq.text2fraq.parser_rules._detect_limit
+  fraq.text2fraq.parser_rules.Text2FraqSimple._matches_pattern → fraq.text2fraq.parser_rules._word_match
+  fraq.text2fraq.parser_llm.Text2Fraq._fallback_parse → fraq.text2fraq.parser_rules._detect_depth
+  fraq.text2fraq.parser_llm.Text2Fraq._fallback_parse → fraq.text2fraq.parser_rules._detect_format
+  fraq.text2fraq.parser_llm.Text2Fraq._fallback_parse → fraq.text2fraq.parser_rules._detect_limit
+  fraq.text2fraq.parser_llm.Text2Fraq._fallback_fields → fraq.text2fraq.parser_rules._word_match
+  fraq.testing.fraq_fixture → fraq.inference.schema.InferredSchema.generate
+  fraq.testing.fixture_factory → fraq.testing.fraq_fixture
+  fraq.testing.make_fixture → fraq.inference.schema.InferredSchema.generate
+  fraq.formats.binary.to_binary → fraq.formats.prepare.encode_value
+  fraq.formats.binary.to_msgpack_lite → fraq.formats.binary.mp_encode
+  fraq.formats.binary.to_msgpack_lite → fraq.formats.prepare.prepare
+  fraq.formats.binary.mp_encode → fraq.formats.binary._encode_fallback
+  fraq.formats.binary._encode_list → fraq.formats.binary.mp_encode
+  fraq.formats.binary._encode_dict → fraq.formats.binary.mp_encode
+  fraq.formats.binary._encode_fallback → fraq.formats.binary._encode_str
+  fraq.generators.SensorStreamGenerator.__call__ → fraq.core._vec_hash
+  fraq.formats.text.to_json → fraq.formats.prepare.prepare
+  fraq.formats.text.to_jsonl → fraq.formats.prepare.prepare
+  fraq.formats.text.to_csv → fraq.formats.prepare.prepare
+  fraq.formats.text.to_yaml → fraq.formats.text.simple_yaml
+  fraq.formats.text.to_yaml → fraq.formats.prepare.prepare
+  fraq.cli.cmd_explore → fraq.cli._make_root
+  fraq.cli.cmd_stream → fraq.cli._make_root
+  fraq.cli.cmd_schema → fraq.cli._make_root
+  fraq.cli.cmd_files_stat → fraq.cli._collect_file_stat
+  fraq.cli.cmd_files_stat → fraq.cli._print_stat
+  fraq.cli.cmd_nl → fraq.cli._is_file_query
+  fraq.cli.cmd_nl → fraq.cli._run_nl_fraq_query
+  fraq.cli.cmd_nl → fraq.cli._run_nl_file_query
+  fraq.cli._parse_args → fraq.cli._build_parser
+  fraq.cli._build_parser → fraq.cli._build_core_parsers
+  fraq.cli._build_parser → fraq.cli._build_files_parsers
+  fraq.cli._build_parser → fraq.cli._build_network_parsers
+  fraq.cli._build_parser → fraq.cli._build_web_parsers
+  fraq.cli._build_core_parsers → fraq.cli._get_shared_parser
+  fraq.cli._build_files_parsers → fraq.cli._get_shared_parser
+  fraq.cli.main → fraq.cli._parse_args
+  fraq.cli.main → fraq.cli._dispatch_command
+  examples.new_features_demo.example_1_faker → fraq.inference.schema.InferredSchema.generate
+  examples.new_features_demo.example_2_dataframes → fraq.dataframes.to_polars
+  examples.new_features_demo.example_3_pytest_fixture → fraq.testing.fraq_fixture

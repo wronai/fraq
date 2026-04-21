@@ -209,6 +209,28 @@ fraq/
 └── cli.py              # Refactored CLI
 ```
 
+## [0.2.15] - 2026-04-21
+
+### Docs
+- Update SUMD.md
+- Update SUMR.md
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Other
+- Update app.doql.less
+- Update project.sh
+- Update project/analysis.toon
+- Update project/analysis.toon.yaml
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/calls.toon.yaml
+- Update project/compact_flow.mmd
+- Update project/compact_flow.png
+- Update project/duplication.toon.yaml
+- ... and 13 more files
+
 ## [0.2.14] - 2026-03-18
 
 ### Other

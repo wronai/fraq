@@ -1,0 +1,98 @@
+# redup/duplication | 8 groups | 90f 10454L | 2026-04-21
+
+SUMMARY:
+  files_scanned: 90
+  total_lines:   10454
+  dup_groups:    8
+  dup_fragments: 16
+  saved_lines:   114
+  scan_ms:       4460
+
+HOTSPOTS[7] (files with most duplication):
+  fraq/dataframes.py  dup=66L  groups=1  frags=2  (0.6%)
+  examples/text2fraq/text2fraq_examples.py  dup=37L  groups=1  frags=2  (0.4%)
+  fraq/api.py  dup=32L  groups=1  frags=2  (0.3%)
+  examples/fullstack-docker/websocket/main.py  dup=31L  groups=2  frags=2  (0.3%)
+  main_websocket.py  dup=31L  groups=2  frags=2  (0.3%)
+  fraq/text2fraq/parser_llm.py  dup=9L  groups=1  frags=1  (0.1%)
+  fraq/text2fraq/parser_rules.py  dup=9L  groups=1  frags=1  (0.1%)
+
+DUPLICATES[8] (ranked by impact):
+  [0cc62d8aaf39f238] ! STRU  to_polars  L=33 N=2 saved=33 sim=1.00
+      fraq/dataframes.py:35-67  (to_polars)
+      fraq/dataframes.py:70-102  (to_pandas)
+  [a26e99e7f0ce579e]   STRU  example_llama32  L=17 N=2 saved=17 sim=1.00
+      examples/text2fraq/text2fraq_examples.py:123-139  (example_llama32)
+      examples/text2fraq/text2fraq_examples.py:142-161  (example_phi3)
+  [dddd74b80b8a123c]   EXAC  ws_files  L=16 N=2 saved=16 sim=1.00
+      examples/fullstack-docker/websocket/main.py:32-47  (ws_files)
+      main_websocket.py:32-47  (ws_files)
+  [68876a7ec8c1925b]   STRU  _to_polars  L=16 N=2 saved=16 sim=1.00
+      fraq/api.py:286-301  (_to_polars)
+      fraq/api.py:304-319  (_to_pandas)
+  [a47d8a35c0a0ca14]   EXAC  ws_stream  L=15 N=2 saved=15 sim=1.00
+      examples/fullstack-docker/websocket/main.py:14-28  (ws_stream)
+      main_websocket.py:14-28  (ws_stream)
+  [df73d5d66adcbe29]   EXAC  execute  L=9 N=2 saved=9 sim=1.00
+      fraq/text2fraq/parser_llm.py:101-109  (execute)
+      fraq/text2fraq/parser_rules.py:85-93  (execute)
+  [a5c2ef63466153ac]   STRU  stop_docker  L=5 N=2 saved=5 sim=1.00
+      examples/fastapi-docker/run.py:38-42  (stop_docker)
+      examples/fullstack-docker/run.py:28-32  (stop_docker)
+  [eadde397df441f32]   STRU  to_msgpack_lite  L=3 N=2 saved=3 sim=1.00
+      fraq/formats/binary.py:33-35  (to_msgpack_lite)
+      fraq/formats/text.py:45-47  (to_yaml)
+
+REFACTOR[8] (ranked by priority):
+  [1] ○ extract_function   → fraq/utils/to_polars.py
+      WHY: 2 occurrences of 33-line block across 1 files — saves 33 lines
+      FILES: fraq/dataframes.py
+  [2] ○ extract_function   → examples/text2fraq/utils/example_llama32.py
+      WHY: 2 occurrences of 17-line block across 1 files — saves 17 lines
+      FILES: examples/text2fraq/text2fraq_examples.py
+  [3] ○ extract_function   → utils/ws_files.py
+      WHY: 2 occurrences of 16-line block across 2 files — saves 16 lines
+      FILES: examples/fullstack-docker/websocket/main.py, main_websocket.py
+  [4] ○ extract_function   → fraq/utils/_to_polars.py
+      WHY: 2 occurrences of 16-line block across 1 files — saves 16 lines
+      FILES: fraq/api.py
+  [5] ○ extract_function   → utils/ws_stream.py
+      WHY: 2 occurrences of 15-line block across 2 files — saves 15 lines
+      FILES: examples/fullstack-docker/websocket/main.py, main_websocket.py
+  [6] ○ extract_function   → fraq/text2fraq/utils/execute.py
+      WHY: 2 occurrences of 9-line block across 2 files — saves 9 lines
+      FILES: fraq/text2fraq/parser_llm.py, fraq/text2fraq/parser_rules.py
+  [7] ○ extract_function   → examples/utils/stop_docker.py
+      WHY: 2 occurrences of 5-line block across 2 files — saves 5 lines
+      FILES: examples/fastapi-docker/run.py, examples/fullstack-docker/run.py
+  [8] ○ extract_function   → fraq/formats/utils/to_msgpack_lite.py
+      WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
+      FILES: fraq/formats/binary.py, fraq/formats/text.py
+
+QUICK_WINS[6] (low risk, high savings — do first):
+  [1] extract_function   saved=33L  → fraq/utils/to_polars.py
+      FILES: dataframes.py
+  [2] extract_function   saved=17L  → examples/text2fraq/utils/example_llama32.py
+      FILES: text2fraq_examples.py
+  [3] extract_function   saved=16L  → utils/ws_files.py
+      FILES: main.py, main_websocket.py
+  [4] extract_function   saved=16L  → fraq/utils/_to_polars.py
+      FILES: api.py
+  [5] extract_function   saved=15L  → utils/ws_stream.py
+      FILES: main.py, main_websocket.py
+  [6] extract_function   saved=9L  → fraq/text2fraq/utils/execute.py
+      FILES: parser_llm.py, parser_rules.py
+
+EFFORT_ESTIMATE (total ≈ 4.3h):
+  hard   to_polars                           saved=33L  ~99min
+  medium example_llama32                     saved=17L  ~34min
+  medium ws_files                            saved=16L  ~32min
+  medium _to_polars                          saved=16L  ~32min
+  medium ws_stream                           saved=15L  ~30min
+  easy   execute                             saved=9L  ~18min
+  easy   stop_docker                         saved=5L  ~10min
+  easy   to_msgpack_lite                     saved=3L  ~6min
+
+METRICS-TARGET:
+  dup_groups:  8 → 0
+  saved_lines: 114 lines recoverable

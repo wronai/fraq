@@ -1,0 +1,160 @@
+# code2llm | 93f 11271L | python:89,shell:4 | 2026-04-21
+# CC̄=2.8 | critical:3/439 | dups:0 | cycles:2
+
+HEALTH[3]:
+  🟡 CC    box_counting_dimension CC=16 (limit:15)
+  🟡 CC    detect_hierarchy CC=15 (limit:15)
+  🟡 CC    analyze_correlations CC=15 (limit:15)
+
+REFACTOR[2]:
+  1. split 3 high-CC methods  (CC>15)
+  2. break 2 circular dependencies
+
+PIPELINES[313]:
+  [1] Src [generate_df]: generate_df → to_polars → generate
+      PURITY: 100% pure
+  [2] Src [__init__]: __init__
+      PURITY: 100% pure
+  [3] Src [__aiter__]: __aiter__
+      PURITY: 100% pure
+  [4] Src [async_query]: async_query
+      PURITY: 100% pure
+  [5] Src [ws_stream]: ws_stream
+      PURITY: 100% pure
+
+LAYERS:
+  ./                              CC̄=3.7    ←in:0  →out:0
+  │ main_websocket              52L  0C    3m  CC=5      ←0
+  │ project.sh                  36L  0C    0m  CC=0.0    ←0
+  │
+  fraq/                           CC̄=2.9    ←in:11  →out:19  !! split
+  │ cli                        477L  0C   24m  CC=9      ←0
+  │ core                       412L  4C   17m  CC=8      ←1
+  │ api                        354L  2C   18m  CC=6      ←1
+  │ ifs                        288L  5C   11m  CC=7      ←2
+  │ benchmarks                 276L  4C   11m  CC=7      ←1
+  │ file_search                268L  3C   18m  CC=7      ←0
+  │ !! inference                  247L  3C    5m  CC=16     ←2
+  │ file_search_parser         233L  1C   14m  CC=6      ←0
+  │ testing                    231L  0C    3m  CC=1      ←1
+  │ query                      220L  4C   12m  CC=9      ←0
+  │ server                     217L  3C    7m  CC=8      ←0
+  │ faker_provider             177L  3C   13m  CC=6      ←1
+  │ dataframes                 173L  0C    4m  CC=4      ←1
+  │ __init__                   167L  0C    1m  CC=2      ←0
+  │ session                    149L  1C    8m  CC=6      ←0
+  │ nlp2cmd                    138L  0C    2m  CC=5      ←1
+  │ hierarchy                  130L  2C    7m  CC=5      ←0
+  │ dimension                  126L  2C    8m  CC=7      ←0
+  │ generators                 117L  4C    9m  CC=2      ←0
+  │ openapi                    116L  0C    1m  CC=2      ←1
+  │ parser_llm                 109L  1C    7m  CC=5      ←0
+  │ schema                     109L  1C    5m  CC=5      ←17
+  │ binary                     100L  0C   11m  CC=3      ←0
+  │ correlation                 98L  1C    4m  CC=8      ←0
+  │ streaming                   93L  1C    5m  CC=3      ←3
+  │ parser_rules                93L  1C    8m  CC=6      ←1
+  │ router                      88L  1C    4m  CC=9      ←0
+  │ __init__                    74L  0C    0m  CC=0.0    ←0
+  │ text                        71L  0C    5m  CC=7      ←0
+  │ asyncapi                    67L  0C    1m  CC=2      ←1
+  │ sql_adapter                 64L  1C    5m  CC=6      ←0
+  │ sensor_adapter              61L  1C    4m  CC=3      ←9
+  │ proto                       56L  0C    1m  CC=2      ←2
+  │ hybrid_adapter              51L  1C    4m  CC=8      ←0
+  │ shortcuts                   47L  0C    3m  CC=2      ←2
+  │ prepare                     47L  0C    2m  CC=8      ←2
+  │ file_adapter                47L  1C    3m  CC=3      ←1
+  │ http_adapter                46L  1C    2m  CC=3      ←0
+  │ schema_export               43L  0C    0m  CC=0.0    ←0
+  │ config                      42L  1C    1m  CC=1      ←8
+  │ types                       42L  0C    0m  CC=0.0    ←0
+  │ models                      41L  2C    2m  CC=5      ←0
+  │ registry                    40L  1C    4m  CC=2      ←8
+  │ common                      37L  0C    0m  CC=0.0    ←0
+  │ graphql                     36L  0C    1m  CC=2      ←1
+  │ llm_client                  35L  1C    2m  CC=4      ←0
+  │ __init__                    35L  0C    0m  CC=0.0    ←0
+  │ json_schema                 32L  0C    1m  CC=2      ←1
+  │ base                        32L  1C    4m  CC=1      ←0
+  │ registry                    31L  0C    1m  CC=3      ←0
+  │ __init__                    31L  0C    0m  CC=0.0    ←0
+  │ __init__                    30L  0C    0m  CC=0.0    ←0
+  │ __init__                    21L  0C    0m  CC=0.0    ←0
+  │
+  examples/                       CC̄=2.5    ←in:0  →out:8  !! split
+  │ api_server                 405L  0C   13m  CC=7      ←0
+  │ bash_examples.sh           314L  0C    0m  CC=0.0    ←0
+  │ text2fraq_files            275L  0C    5m  CC=9      ←0
+  │ text2fraq_examples         258L  0C   11m  CC=3      ←0
+  │ nlp_examples.sh            233L  0C    0m  CC=0.0    ←0
+  │ nlp2cmd_integration        223L  0C   11m  CC=3      ←0
+  │ new_features_demo          196L  0C    6m  CC=5      ←0
+  │ bash_examples.sh           193L  0C    0m  CC=0.0    ←0
+  │ network_web_examples       192L  0C    7m  CC=3      ←0
+  │ cli_chat_example           157L  1C   10m  CC=8      ←0
+  │ new_features               144L  0C    4m  CC=1      ←0
+  │ jupyter_example            138L  0C    4m  CC=3      ←0
+  │ applications               129L  0C    5m  CC=5      ←0
+  │ pipeline_examples          124L  0C    4m  CC=5      ←0
+  │ kafka_example              121L  0C    3m  CC=4      ←0
+  │ query_examples             114L  0C    6m  CC=2      ←0
+  │ grpc_example               106L  0C    2m  CC=1      ←0
+  │ main                       104L  0C    3m  CC=7      ←0
+  │ sse_examples               102L  0C    4m  CC=2      ←0
+  │ run                         98L  0C    5m  CC=4      ←0
+  │ websocket_example           95L  0C    3m  CC=7      ←0
+  │ sqlite_examples             93L  0C    3m  CC=3      ←0
+  │ run                         88L  0C    5m  CC=4      ←0
+  │ main                        86L  0C    5m  CC=2      ←0
+  │ fastapi_example             85L  0C    5m  CC=2      ←0
+  │ sensor_examples             84L  0C    3m  CC=3      ←0
+  │ training_data               79L  0C    3m  CC=4      ←0
+  │ run                         76L  0C    4m  CC=4      ←0
+  │ flask_example               74L  0C    5m  CC=5      ←0
+  │ async_streaming             72L  0C    4m  CC=2      ←0
+  │ streamlit_example           71L  0C    0m  CC=0.0    ←0
+  │ run                         63L  0C    3m  CC=3      ←0
+  │ app                         60L  0C    0m  CC=0.0    ←0
+  │ main                        52L  0C    3m  CC=5      ←0
+  │ app_integrations            51L  0C    0m  CC=0.0    ←0
+  │ main                        38L  0C    4m  CC=1      ←0
+  │
+  docs/                           CC̄=0.0    ←in:0  →out:0
+  │ quickstart                  16L  0C    0m  CC=0.0    ←0
+  │ advanced_usage               9L  0C    0m  CC=0.0    ←0
+  │
+
+COUPLING:
+                                    fraq.inference                     fraq       examples.text2fraq    examples.integrations             fraq.formats            fraq.adapters           examples.basic           fraq.text2fraq              fraq.export                 examples  examples.fastapi-docker             examples.etl             examples.iot       examples.streaming           examples.ai_ml
+           fraq.inference                       ──                       ←8                                                ←9                                                                         ←8                                                                         ←2                                                ←5                       ←2                       ←2                       ←2  hub
+                     fraq                        8                       ──                                                ←2                        7                        1                       ←2                        2                                                ←6                       ←1                                                                                                      hub
+       examples.text2fraq                                                                         ──                                                                                                                            7                       10                                                                                                                                                        !! fan-out
+    examples.integrations                        9                        2                                                ──                                                 4                                                                          1                                                                                                                                                        !! fan-out
+             fraq.formats                                                ←7                                                                         ──                       ←4                                                ←1                                                                         ←4                                                                                                      hub
+            fraq.adapters                                                ←1                                                ←4                        4                       ──                       ←2                                                                                                                                                    ←1                       ←1                           hub
+           examples.basic                        8                        2                                                                                                   2                       ──                                                                                                                                                                                                          !! fan-out
+           fraq.text2fraq                                                ←2                       ←7                                                 1                                                                         ──                                                                         ←1                                                                                                      hub
+              fraq.export                                                                        ←10                       ←1                                                                                                                           ──                                                                                                                                                        hub
+                 examples                        2                        6                                                                                                                                                                                                      ──                                                                                                                               !! fan-out
+  examples.fastapi-docker                                                 1                                                                          4                                                                          1                                                                         ──                                                                                                    
+             examples.etl                        5                                                                                                                                                                                                                                                                                 ──                                                                           
+             examples.iot                        2                                                                                                                            1                                                                                                                                                                             ──                                                  
+       examples.streaming                        2                                                                                                                            1                                                                                                                                                                                                      ──                         
+           examples.ai_ml                        2                                                                                                                                                                                                                                                                                                                                                            ──
+  CYCLES: 2
+  HUB: fraq.export/ (fan-in=11)
+  HUB: fraq.adapters/ (fan-in=9)
+  HUB: fraq/ (fan-in=11)
+  HUB: fraq.formats/ (fan-in=16)
+  HUB: fraq.text2fraq/ (fan-in=11)
+  HUB: fraq.inference/ (fan-in=40)
+  SMELL: examples/ fan-out=8 → split needed
+  SMELL: examples.text2fraq/ fan-out=17 → split needed
+  SMELL: examples.integrations/ fan-out=16 → split needed
+  SMELL: fraq/ fan-out=19 → split needed
+  SMELL: examples.basic/ fan-out=12 → split needed
+
+EXTERNAL:
+  validation: run `vallm batch .` → validation.toon
+  duplication: run `redup scan .` → duplication.toon

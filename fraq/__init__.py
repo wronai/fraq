@@ -33,7 +33,7 @@ from fraq.ifs import (
 # NEW: High-level API (moved to api.py for cleaner structure)
 from fraq.api import generate, stream, quick_schema
 
-__version__ = "0.2.14"
+__version__ = "0.2.15"
 
 # Public API list - used for lazy loading and IDE support
 __all__ = [
