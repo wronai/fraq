@@ -1,6 +1,6 @@
 # fraq — Module Reference
 
-> 70 modules | 371 functions | 51 classes
+> 118 modules | 257 functions | 133 classes
 
 ## Module Overview
 
@@ -39,25 +39,25 @@
 | `fraq.adapters.registry` | 31 | 1 | 0 | 3.0 | Adapter registry and factory. | [source](https://github.com/wronai/fraq/blob/main/fraq/adapters/registry.py) |
 | `fraq.adapters.sensor_adapter` | 61 | 0 | 1 | 1.8 | Sensor/IoT adapter for live data streams. | [source](https://github.com/wronai/fraq/blob/main/fraq/adapters/sensor_adapter.py) |
 | `fraq.adapters.sql_adapter` | 64 | 0 | 1 | 3.0 | SQL adapter for PostgreSQL/SQLite databases. | [source](https://github.com/wronai/fraq/blob/main/fraq/adapters/sql_adapter.py) |
-| `fraq.api` | 281 | 9 | 0 | 5.2 | High-level API for fraq - simplified convenience functions. | [source](https://github.com/wronai/fraq/blob/main/fraq/api.py) |
-| `fraq.benchmarks` | 263 | 2 | 4 | 4.1 | Benchmark suite for fraq - compare with competitors. | [source](https://github.com/wronai/fraq/blob/main/fraq/benchmarks.py) |
-| `fraq.cli` | 467 | 24 | 0 | 2.6 | fraq CLI — quick exploration of fractal data from the termin | [source](https://github.com/wronai/fraq/blob/main/fraq/cli.py) |
-| `fraq.core` | 412 | 4 | 4 | 3.4 | Core fractal data structures. | [source](https://github.com/wronai/fraq/blob/main/fraq/core.py) |
-| `fraq.dataframes` | 173 | 4 | 0 | 2.5 | DataFrame export for fraq - Polars, Pandas, Arrow integratio | [source](https://github.com/wronai/fraq/blob/main/fraq/dataframes.py) |
+| `fraq.api` | 355 | 11 | 2 | 5.2 | High-level API for fraq - simplified convenience functions. | [source](https://github.com/wronai/fraq/blob/main/fraq/api.py) |
+| `fraq.benchmarks` | 277 | 8 | 4 | 4.1 | Benchmark suite for fraq - compare with competitors. | [source](https://github.com/wronai/fraq/blob/main/fraq/benchmarks.py) |
+| `fraq.cli` | 478 | 20 | 0 | 2.6 | fraq CLI — quick exploration of fractal data from the termin | [source](https://github.com/wronai/fraq/blob/main/fraq/cli.py) |
+| `fraq.core` | 413 | 8 | 4 | 3.4 | Core fractal data structures. | [source](https://github.com/wronai/fraq/blob/main/fraq/core.py) |
+| `fraq.dataframes` | 174 | 4 | 0 | 2.5 | DataFrame export for fraq - Polars, Pandas, Arrow integratio | [source](https://github.com/wronai/fraq/blob/main/fraq/dataframes.py) |
 | `fraq.formats.binary` | 62 | 3 | 0 | 5.0 | Binary format serializers. | [source](https://github.com/wronai/fraq/blob/main/fraq/formats/binary.py) |
 | `fraq.formats.prepare` | 47 | 2 | 0 | 7.0 | Data preparation utilities for format serialization. | [source](https://github.com/wronai/fraq/blob/main/fraq/formats/prepare.py) |
 | `fraq.formats.registry` | 40 | 0 | 1 | 1.5 | Format registry - clean registry without serialization logic | [source](https://github.com/wronai/fraq/blob/main/fraq/formats/registry.py) |
 | `fraq.formats.text` | 71 | 5 | 0 | 3.2 | Text format serializers. | [source](https://github.com/wronai/fraq/blob/main/fraq/formats/text.py) |
 | `fraq.generators` | 117 | 0 | 4 | 1.2 | Procedural generators for FraqNode values. | [source](https://github.com/wronai/fraq/blob/main/fraq/generators.py) |
 | `fraq.ifs` | 288 | 1 | 5 | 3.1 | IFS (Iterated Function System) generator for fractal data. | [source](https://github.com/wronai/fraq/blob/main/fraq/ifs.py) |
-| `fraq.inference` | 347 | 1 | 4 | 6.6 | Fractal Schema Inference - detect fractal patterns in existi | [source](https://github.com/wronai/fraq/blob/main/fraq/inference.py) |
+| `fraq.inference` | 248 | 4 | 4 | 6.6 | Fractal Schema Inference - detect fractal patterns in existi | [source](https://github.com/wronai/fraq/blob/main/fraq/inference.py) |
 | `fraq.providers.faker_provider` | 177 | 2 | 3 | 2.1 | Faker integration for fraq - realistic data in fractal struc | [source](https://github.com/wronai/fraq/blob/main/fraq/providers/faker_provider.py) |
 | `fraq.query` | 220 | 1 | 4 | 3.2 | FraqQL — Unified Query Language for fractal data across sour | [source](https://github.com/wronai/fraq/blob/main/fraq/query.py) |
-| `fraq.schema_export` | 476 | 7 | 0 | 2.4 | Schema export for interoperability. | [source](https://github.com/wronai/fraq/blob/main/fraq/schema_export.py) |
+| `fraq.schema_export` | 44 | 0 | 0 | 2.4 | Schema export shim — re-exports from fraq.export. | [source](https://github.com/wronai/fraq/blob/main/fraq/schema_export.py) |
 | `fraq.server` | 217 | 7 | 3 | 2.6 | FastAPI server for fraq - production-ready API. | [source](https://github.com/wronai/fraq/blob/main/fraq/server.py) |
 | `fraq.streaming` | 93 | 2 | 1 | 2.2 | Async streaming for fraq. | [source](https://github.com/wronai/fraq/blob/main/fraq/streaming.py) |
 | `fraq.text2fraq.config` | 42 | 0 | 1 | 1.0 | Configuration for text2fraq. | [source](https://github.com/wronai/fraq/blob/main/fraq/text2fraq/config.py) |
-| `fraq.text2fraq.file_search_parser` | 200 | 0 | 1 | 4.2 | Natural language file search parser. | [source](https://github.com/wronai/fraq/blob/main/fraq/text2fraq/file_search_parser.py) |
+| `fraq.text2fraq.file_search_parser` | 234 | 0 | 1 | 4.2 | Natural language file search parser. | [source](https://github.com/wronai/fraq/blob/main/fraq/text2fraq/file_search_parser.py) |
 | `fraq.text2fraq.llm_client` | 35 | 0 | 1 | 2.5 | LLM client implementations. | [source](https://github.com/wronai/fraq/blob/main/fraq/text2fraq/llm_client.py) |
 | `fraq.text2fraq.models` | 41 | 0 | 2 | 3.0 | Data models for text2fraq. | [source](https://github.com/wronai/fraq/blob/main/fraq/text2fraq/models.py) |
 | `fraq.text2fraq.parser_llm` | 109 | 0 | 1 | 2.6 | LLM-based text parser for natural language queries. | [source](https://github.com/wronai/fraq/blob/main/fraq/text2fraq/parser_llm.py) |

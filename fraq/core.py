@@ -329,7 +329,8 @@ class FraqSchema:
             return
         
         # Otherwise use depth-based exploration
-        depth = depth or 1
+        if depth is None:
+            depth = 1
         if depth <= 0:
             yield self.record(node)
             return

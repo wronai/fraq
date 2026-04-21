@@ -1,0 +1,449 @@
+# fraq/flow | 451 func | 12 pipelines | 9 hub-types | 2026-03-18
+
+PIPELINES[12] (IO:3, NLP:2, Unknown:7):
+  Fraq [NLP]: str → bool
+              → execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]] CC=2    IO ▶
+              → parse(text:str) → ParsedQuery           CC=1    pure
+              → _parse_response(response:str) → ParsedQuery CC=3    pure
+              → _extract_structured_response(response:str) → dict[str, Any] CC=3    IO
+              → _fallback_parse(text:str) → dict[str, Any] CC=1    pure
+              → _fallback_fields(text:str) → list[str]  CC=5    mutation
+              → _word_match(text:str, pattern:str) → bool CC=1    pure ■
+              PURITY: 4/7 pure  BOTTLENECK: _fallback_fields(CC=5)
+
+  Fraq [IO]: List[str] | None → List[str]
+              → main(argv:List[str] | None) → None      CC=1    pure ▶
+              → _parse_args(argv:List[str] | None) → argparse.Namespace CC=1    pure
+              → _build_parser() → argparse.ArgumentParser CC=1    pure
+              → _build_files_parsers(sub:argparse._SubParsersAction) → None CC=1    pure
+              → _get_shared_parser() → argparse.ArgumentParser CC=1    pure
+              → available(cls) → List[str]              CC=1    pure ■
+              PURITY: 6/6 pure  BOTTLENECK: main(CC=1)
+
+  Fraq [Unknown]: Dict[str, str] → AffineTransform
+              → generate_df(fields:Dict[str, str], count:int, seed:Optional[int], output:str) → Any CC=4    pure ▶
+              → to_arrow(fields:Dict[str, str], count:int, seed:Optional[int]) → pa.Table CC=2    pure
+              → generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]] CC=4    mutation
+              → generate_coordinate(depth:int, start:Vector) → Vector CC=2    pure
+              → _select_transform() → AffineTransform   CC=3    pure ■
+              PURITY: 4/5 pure  BOTTLENECK: generate_df(CC=4)
+
+  Fraq [Unknown]: int → AffineTransform
+              → run_all_benchmarks(speed_count:int, memory_count:int) → Dict[str, Any] CC=5    IO ▶
+              → compare_structures() → Dict[str, float] CC=3    pure
+              → generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]] CC=4    mutation
+              → generate_coordinate(depth:int, start:Vector) → Vector CC=2    pure
+              → _select_transform() → AffineTransform   CC=3    pure ■
+              PURITY: 3/5 pure  BOTTLENECK: run_all_benchmarks(CC=5)
+
+  Fraq [Unknown]: ? → AffineTransform
+              → example_2_dataframes()                  CC=2    IO ▶
+              → to_polars(fields:Dict[str, str], count:int, seed:Optional[int]) → pl.DataFrame CC=2    pure
+              → generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]] CC=4    mutation
+              → generate_coordinate(depth:int, start:Vector) → Vector CC=2    pure
+              → _select_transform() → AffineTransform   CC=3    pure ■
+              PURITY: 3/5 pure  BOTTLENECK: generate(CC=4)
+
+  Fraq [Unknown]: ? → AffineTransform
+              → example_6_benchmarks()                  CC=2    IO ▶
+              → fraq_generate(count:int) → BenchmarkResult CC=2    pure
+              → generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]] CC=4    mutation
+              → generate_coordinate(depth:int, start:Vector) → Vector CC=2    pure
+              → _select_transform() → AffineTransform   CC=3    pure ■
+              PURITY: 3/5 pure  BOTTLENECK: generate(CC=4)
+
+  Fraq [Unknown]: ? → AffineTransform
+              → main()                                  CC=1    IO ▶
+              → example_3_kafka()                       CC=2    IO
+              → generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]] CC=4    mutation
+              → generate_coordinate(depth:int, start:Vector) → Vector CC=2    pure
+              → _select_transform() → AffineTransform   CC=3    pure ■
+              PURITY: 2/5 pure  BOTTLENECK: generate(CC=4)
+
+  Fraq [NLP]: str → bool
+              → execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]] CC=2    IO ▶
+              → parse(text:str) → ParsedQuery           CC=1    pure
+              → _detect_fields(text:str) → list[str]    CC=5    mutation
+              → _matches_pattern(text:str, pattern:str) → bool CC=1    pure
+              → _word_match(text:str, pattern:str) → bool CC=1    pure ■
+              PURITY: 3/5 pure  BOTTLENECK: _detect_fields(CC=5)
+
+  Fraq [Unknown]: ? → AffineTransform
+              → example_1_faker()                       CC=3    IO ▶
+              → generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]] CC=4    mutation
+              → generate_coordinate(depth:int, start:Vector) → Vector CC=2    pure
+              → _select_transform() → AffineTransform   CC=3    pure ■
+              PURITY: 2/4 pure  BOTTLENECK: generate(CC=4)
+
+  Fraq [IO]: ? → AffineTransform
+              → example_1_sensors()                     CC=3    IO ▶
+              → generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]] CC=4    mutation
+              → generate_coordinate(depth:int, start:Vector) → Vector CC=2    pure
+              → _select_transform() → AffineTransform   CC=3    pure ■
+              PURITY: 2/4 pure  BOTTLENECK: generate(CC=4)
+
+  Fraq [IO]: ? → AffineTransform
+              → example_2_mqtt()                        CC=3    IO ▶
+              → generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]] CC=4    mutation
+              → generate_coordinate(depth:int, start:Vector) → Vector CC=2    pure
+              → _select_transform() → AffineTransform   CC=3    pure ■
+              PURITY: 2/4 pure  BOTTLENECK: generate(CC=4)
+
+  Fraq [Unknown]: ? → AffineTransform
+              → example_1_sse()                         CC=2    IO ▶
+              → generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]] CC=4    mutation
+              → generate_coordinate(depth:int, start:Vector) → Vector CC=2    pure
+              → _select_transform() → AffineTransform   CC=3    pure ■
+              PURITY: 2/4 pure  BOTTLENECK: generate(CC=4)
+
+
+TRANSFORMS (fan-out ≥10):
+  query_data(fields:str, depth:int, format:str, limit:int, dims:int) fan=18   fan=18
+  ws_files(websocket:WebSocket)                           fan=16   fan=16
+  schema_records(fields:str, depth:int, branching:int, format:str, dims:int) fan=16   fan=16
+  _collect_files_filtered(base_path:str, extension:Optional[str], limit:int, sort_by:str, newer_than:Optional[float]) → List[dict[str, Any]] fan=16   PIPELINE:FileSearchText2Fraq.entry
+  ws_stream(websocket:WebSocket)                          fan=14   fan=14
+  stream(count:int, dims:int, format:str)                 fan=14   fan=14
+  files_stat(file_path:str)                               fan=14   fan=14
+  ws_files(websocket:WebSocket)                           fan=14   fan=14
+  example_1_sse()                                         fan=13   fan=13
+  example_full_pipeline() → None                          fan=13   fan=13
+  jupyter_interactive_widget()                            fan=13   fan=13
+  load_root(uri:str, **opts:Any) → FraqNode               fan=13   PIPELINE:FileAdapter.entry
+  ws_stream(websocket:WebSocket)                          fan=13   fan=13
+  example_pdf_search_with_llm()                           fan=12   fan=12
+  explore(depth:int, dims:int, seed:int, format:str)      fan=12   fan=12
+
+CONTRACTS:
+  Pipeline: Fraq
+    execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]]
+      IN:  text:str, root:FraqNode | None
+      OUT: str | list[dict[str, Any]]
+      SIDE-EFFECT: IO(execute)
+
+    parse(text:str) → ParsedQuery
+      IN:  text:str
+      OUT: ParsedQuery
+
+    _parse_response(response:str) → ParsedQuery
+      IN:  response:str
+      OUT: ParsedQuery
+
+    _extract_structured_response(response:str) → dict[str, Any]
+      IN:  response:str
+      OUT: dict[str, Any]
+      SIDE-EFFECT: IO(loads)
+
+    _fallback_parse(text:str) → dict[str, Any]
+      IN:  text:str
+      OUT: dict[str, Any]
+
+    _fallback_fields(text:str) → list[str]
+      IN:  text:str
+      OUT: list[str]
+      SIDE-EFFECT: pure
+
+    _word_match(text:str, pattern:str) → bool
+      IN:  text:str, pattern:str
+      OUT: bool
+
+  Pipeline: Fraq
+    main(argv:List[str] | None) → None
+      IN:  argv:List[str] | None
+      OUT: None
+
+    _parse_args(argv:List[str] | None) → argparse.Namespace
+      IN:  argv:List[str] | None
+      OUT: argparse.Namespace
+
+    _build_parser() → argparse.ArgumentParser
+      IN:  ()
+      OUT: argparse.ArgumentParser
+
+    _build_files_parsers(sub:argparse._SubParsersAction) → None
+      IN:  sub:argparse._SubParsersAction
+      OUT: None
+
+    _get_shared_parser() → argparse.ArgumentParser
+      IN:  ()
+      OUT: argparse.ArgumentParser
+
+    available(cls) → List[str]
+      IN:  cls
+      OUT: List[str]
+
+  Pipeline: Fraq
+    generate_df(fields:Dict[str, str], count:int, seed:Optional[int], output:str) → Any
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int], output:str
+      OUT: Any
+
+    to_arrow(fields:Dict[str, str], count:int, seed:Optional[int]) → pa.Table
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: pa.Table
+
+    generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]]
+      IN:  count:int, depth:int, mapper:Optional[ValueMapper]
+      OUT: List[Dict[str, Any]]
+      SIDE-EFFECT: pure
+
+    generate_coordinate(depth:int, start:Vector) → Vector
+      IN:  depth:int, start:Vector
+      OUT: Vector
+
+    _select_transform() → AffineTransform
+      IN:  ()
+      OUT: AffineTransform
+
+  Pipeline: Fraq
+    run_all_benchmarks(speed_count:int, memory_count:int) → Dict[str, Any]
+      IN:  speed_count:int, memory_count:int
+      OUT: Dict[str, Any]
+      SIDE-EFFECT: IO(print, print, print)
+
+    compare_structures() → Dict[str, float]
+      IN:  ()
+      OUT: Dict[str, float]
+
+    generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]]
+      IN:  count:int, depth:int, mapper:Optional[ValueMapper]
+      OUT: List[Dict[str, Any]]
+      SIDE-EFFECT: pure
+
+    generate_coordinate(depth:int, start:Vector) → Vector
+      IN:  depth:int, start:Vector
+      OUT: Vector
+
+    _select_transform() → AffineTransform
+      IN:  ()
+      OUT: AffineTransform
+
+  Pipeline: Fraq
+    example_2_dataframes()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    to_polars(fields:Dict[str, str], count:int, seed:Optional[int]) → pl.DataFrame
+      IN:  fields:Dict[str, str], count:int, seed:Optional[int]
+      OUT: pl.DataFrame
+
+    generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]]
+      IN:  count:int, depth:int, mapper:Optional[ValueMapper]
+      OUT: List[Dict[str, Any]]
+      SIDE-EFFECT: pure
+
+    generate_coordinate(depth:int, start:Vector) → Vector
+      IN:  depth:int, start:Vector
+      OUT: Vector
+
+    _select_transform() → AffineTransform
+      IN:  ()
+      OUT: AffineTransform
+
+  Pipeline: Fraq
+    example_6_benchmarks()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    fraq_generate(count:int) → BenchmarkResult
+      IN:  count:int
+      OUT: BenchmarkResult
+
+    generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]]
+      IN:  count:int, depth:int, mapper:Optional[ValueMapper]
+      OUT: List[Dict[str, Any]]
+      SIDE-EFFECT: pure
+
+    generate_coordinate(depth:int, start:Vector) → Vector
+      IN:  depth:int, start:Vector
+      OUT: Vector
+
+    _select_transform() → AffineTransform
+      IN:  ()
+      OUT: AffineTransform
+
+  Pipeline: Fraq
+    main()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    example_3_kafka()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]]
+      IN:  count:int, depth:int, mapper:Optional[ValueMapper]
+      OUT: List[Dict[str, Any]]
+      SIDE-EFFECT: pure
+
+    generate_coordinate(depth:int, start:Vector) → Vector
+      IN:  depth:int, start:Vector
+      OUT: Vector
+
+    _select_transform() → AffineTransform
+      IN:  ()
+      OUT: AffineTransform
+
+  Pipeline: Fraq
+    execute(text:str, root:FraqNode | None) → str | list[dict[str, Any]]
+      IN:  text:str, root:FraqNode | None
+      OUT: str | list[dict[str, Any]]
+      SIDE-EFFECT: IO(execute)
+
+    parse(text:str) → ParsedQuery
+      IN:  text:str
+      OUT: ParsedQuery
+
+    _detect_fields(text:str) → list[str]
+      IN:  text:str
+      OUT: list[str]
+      SIDE-EFFECT: pure
+
+    _matches_pattern(text:str, pattern:str) → bool
+      IN:  text:str, pattern:str
+      OUT: bool
+
+    _word_match(text:str, pattern:str) → bool
+      IN:  text:str, pattern:str
+      OUT: bool
+
+  Pipeline: Fraq
+    example_1_faker()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]]
+      IN:  count:int, depth:int, mapper:Optional[ValueMapper]
+      OUT: List[Dict[str, Any]]
+      SIDE-EFFECT: pure
+
+    generate_coordinate(depth:int, start:Vector) → Vector
+      IN:  depth:int, start:Vector
+      OUT: Vector
+
+    _select_transform() → AffineTransform
+      IN:  ()
+      OUT: AffineTransform
+
+  Pipeline: Fraq
+    example_1_sensors()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]]
+      IN:  count:int, depth:int, mapper:Optional[ValueMapper]
+      OUT: List[Dict[str, Any]]
+      SIDE-EFFECT: pure
+
+    generate_coordinate(depth:int, start:Vector) → Vector
+      IN:  depth:int, start:Vector
+      OUT: Vector
+
+    _select_transform() → AffineTransform
+      IN:  ()
+      OUT: AffineTransform
+
+  Pipeline: Fraq
+    example_2_mqtt()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]]
+      IN:  count:int, depth:int, mapper:Optional[ValueMapper]
+      OUT: List[Dict[str, Any]]
+      SIDE-EFFECT: pure
+
+    generate_coordinate(depth:int, start:Vector) → Vector
+      IN:  depth:int, start:Vector
+      OUT: Vector
+
+    _select_transform() → AffineTransform
+      IN:  ()
+      OUT: AffineTransform
+
+  Pipeline: Fraq
+    example_1_sse()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print); generator
+
+    generate(count:int, depth:int, mapper:Optional[ValueMapper]) → List[Dict[str, Any]]
+      IN:  count:int, depth:int, mapper:Optional[ValueMapper]
+      OUT: List[Dict[str, Any]]
+      SIDE-EFFECT: pure
+
+    generate_coordinate(depth:int, start:Vector) → Vector
+      IN:  depth:int, start:Vector
+      OUT: Vector
+
+    _select_transform() → AffineTransform
+      IN:  ()
+      OUT: AffineTransform
+
+
+DATA_TYPES (by cross-function usage) [334 annotated, 0 inferred / 451 functions]:
+  str                  consumed:201 produced:31   !! HUB-TYPE → split interface
+  int                  consumed:106 produced:7    !! HUB-TYPE → split interface
+  float                consumed:42  produced:14   !! HUB-TYPE → split interface
+  str, Any             consumed:21  produced:29   !! HUB-TYPE → split interface
+  FraqNode             consumed:18  produced:16   !! HUB-TYPE → split interface
+  Vector               consumed:19  produced:4    !! HUB-TYPE → split interface
+  FraqSchema           consumed:17  produced:6    !! HUB-TYPE → split interface
+  bool                 consumed:6   produced:12 
+  bytes                consumed:2   produced:12 
+  FraqQuery            consumed:6   produced:7  
+  Path                 consumed:11  produced:0    !! HUB-TYPE → split interface
+  argparse.Namespace   consumed:10  produced:1    !! HUB-TYPE → split interface
+  WebSocket            consumed:9   produced:0    input-heavy (read-only flow)
+  dict[str, Any]       consumed:2   produced:7  
+  Iterator[Dict[str, Any]] consumed:0   produced:9    output-heavy
+  dict                 consumed:2   produced:6  
+  str, str             consumed:8   produced:0    input-heavy (read-only flow)
+  ParsedQuery          consumed:1   produced:5    output-heavy
+  Callable[[Any], Any] consumed:1   produced:5    output-heavy
+  str | None           consumed:5   produced:0    input-heavy (read-only flow)
+
+  HUB TYPES (consumed ≥10):
+    str → 201 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    int → 106 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    float → 42 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    str, Any → 21 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    FraqNode → 18 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    Vector → 19 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    FraqSchema → 17 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    Path → 11 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    argparse.Namespace → 10 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+
+SIDE_EFFECTS:
+  IO:        ws_stream, ws_files, cmd_explore, cmd_stream, cmd_schema, cmd_files_search, cmd_files_list, _print_stat, cmd_files_stat, _run_nl_file_query
+  Mutation:  AsyncFraqStream.__init__, AsyncFraqStream.__aiter__, AsyncFraqStream.stop, SpeedBenchmark.fraq_stream, AffineTransform.apply, IFSGenerator.__init__, IFSGenerator.generate, IFSGenerator.generate_hierarchy, OrganizationalMapper.__init__, HashGenerator.__init__
+  Pure:      health, async_query, async_stream, to_polars, to_pandas, to_arrow, generate_df, _make_root, _collect_file_stat, cmd_nl
+
+  PIPELINE PURITY:
+    Fraq            ██░░ 57% pure
+    Fraq            ████ 100% pure
+    Fraq            ███░ 80% pure
+    Fraq            ██░░ 60% pure
+    Fraq            ██░░ 60% pure
+    Fraq            ██░░ 60% pure
+    Fraq            █░░░ 40% pure
+    Fraq            ██░░ 60% pure
+    Fraq            ██░░ 50% pure
+    Fraq            ██░░ 50% pure
+    Fraq            ██░░ 50% pure
+    Fraq            ██░░ 50% pure

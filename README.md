@@ -374,6 +374,12 @@ fraq/
 │   ├── prepare.py   # Data preparation (shared)
 │   ├── text.py      # JSON, CSV, YAML
 │   └── binary.py    # Binary, msgpack_lite
+├── export/          # Schema exports: OpenAPI, GraphQL, Protobuf, AsyncAPI, JSON Schema
+│   ├── openapi.py
+│   ├── graphql.py
+│   ├── proto.py
+│   ├── asyncapi.py
+│   └── json_schema.py
 ├── adapters/        # Data source adapters
 │   ├── base.py      # BaseAdapter
 │   └── file_search.py  # Port/Adapter pattern example
@@ -618,7 +624,13 @@ fraq/
 │   │   ├── router.py        # v0.2.10: ModelRouter
 │   │   ├── session.py       # v0.2.10: FraqSession
 │   │   └── shortcuts.py
-│   ├── schema_export.py     # NLP2CMD, OpenAPI, GraphQL, AsyncAPI, Proto, JSON Schema
+│   ├── export/              # OpenAPI, GraphQL, Protobuf, AsyncAPI, JSON Schema
+│   │   ├── openapi.py
+│   │   ├── graphql.py
+│   │   ├── proto.py
+│   │   ├── asyncapi.py
+│   │   └── json_schema.py
+│   ├── schema_export.py     # Deprecation shim — re-exports from fraq.export
 │   ├── streaming.py         # AsyncFraqStream, async_query, async_stream
 │   ├── server.py            # v0.2.10: FastAPI production server
 │   └── cli.py               # CLI entry point

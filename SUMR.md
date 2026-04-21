@@ -17,7 +17,7 @@ SUMD - Structured Unified Markdown Descriptor for AI-aware project refactorizati
 ## Metadata
 
 - **name**: `fraq`
-- **version**: `0.2.14`
+- **version**: `0.2.15`
 - **python_requires**: `>=3.10`
 - **license**: Apache-2.0
 - **ecosystem**: SUMD + DOQL + testql + taskfile
@@ -1156,15 +1156,15 @@ EXTERNAL:
 ### Duplication (`project/duplication.toon.yaml`)
 
 ```toon markpact:analysis path=project/duplication.toon.yaml
-# redup/duplication | 8 groups | 90f 10454L | 2026-04-21
+# redup/duplication | 8 groups | 90f 10455L | 2026-04-21
 
 SUMMARY:
   files_scanned: 90
-  total_lines:   10454
+  total_lines:   10455
   dup_groups:    8
   dup_fragments: 16
   saved_lines:   114
-  scan_ms:       4460
+  scan_ms:       4659
 
 HOTSPOTS[7] (files with most duplication):
   fraq/dataframes.py  dup=66L  groups=1  frags=2  (0.6%)

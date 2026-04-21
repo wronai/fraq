@@ -22,7 +22,7 @@ Fractal Query Data Library — model data as infinite, self-similar fractal stru
 ## Metadata
 
 - **name**: `fraq`
-- **version**: `0.2.14`
+- **version**: `0.2.15`
 - **python_requires**: `>=3.10`
 - **license**: Apache-2.0
 - **ecosystem**: SUMD + DOQL + testql + taskfile
@@ -189,7 +189,7 @@ pipeline:
 ```yaml
 project:
   name: fraq
-  version: 0.2.14
+  version: 0.2.15
   env: local
 ```
 
@@ -273,7 +273,7 @@ pip install -e .[dev]
 ### `project/map.toon.yaml`
 
 ```toon markpact:analysis path=project/map.toon.yaml
-# fraq | 118f 14002L | python:109,shell:8,less:1 | 2026-04-21
+# fraq | 118f 14003L | python:109,shell:8,less:1 | 2026-04-21
 # stats: 257 func | 133 cls | 118 mod | CC̄=2.6 | critical:0 | cycles:0
 # alerts[5]: CC example_pdf_search_with_llm=9; CC cmd_network_scan=9; CC cmd_web_crawl=8; CC _dispatch_command=8; CC prepare=8
 # hotspots[5]: query_data fan=18; ws_files fan=16; schema_records fan=15; stream fan=14; files_stat fan=14
@@ -337,7 +337,7 @@ M[118]:
   fraq/api.py,355
   fraq/benchmarks.py,277
   fraq/cli.py,478
-  fraq/core.py,413
+  fraq/core.py,414
   fraq/dataframes.py,174
   fraq/export/__init__.py,31
   fraq/export/asyncapi.py,68

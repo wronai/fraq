@@ -1,0 +1,2413 @@
+project: /home/tom/github/wronai/fraq
+generated_from: code2llm call graph analysis
+stats:
+  total_nodes: 184
+  total_edges: 176
+  modules_count: 50
+nodes:
+  fraq.testing.make_fixture:
+    name: make_fixture
+    module: fraq.testing
+    line: 123
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  examples.text2fraq.text2fraq_examples._print_file_params:
+    name: _print_file_params
+    module: examples.text2fraq.text2fraq_examples
+    line: 60
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 2
+  examples.basic.async_streaming.main:
+    name: main
+    module: examples.basic.async_streaming
+    line: 62
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 0
+  examples.basic.query_examples.example_3_csv_output:
+    name: example_3_csv_output
+    module: examples.basic.query_examples
+    line: 43
+    cyclomatic_complexity: 2
+    calls_out: 6
+    calls_in: 0
+  examples.integrations.fastapi_example.generate_data:
+    name: generate_data
+    module: examples.integrations.fastapi_example
+    line: 76
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 0
+  fraq.api._build_stream_config:
+    name: _build_stream_config
+    module: fraq.api
+    line: 198
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+  fraq.cli._collect_file_stat:
+    name: _collect_file_stat
+    module: fraq.cli
+    line: 118
+    cyclomatic_complexity: 2
+    calls_out: 11
+    calls_in: 1
+  examples.iot.sensor_examples.example_2_mqtt:
+    name: example_2_mqtt
+    module: examples.iot.sensor_examples
+    line: 33
+    cyclomatic_complexity: 3
+    calls_out: 10
+    calls_in: 0
+  fraq.cli._build_files_parsers:
+    name: _build_files_parsers
+    module: fraq.cli
+    line: 368
+    cyclomatic_complexity: 1
+    calls_out: 22
+    calls_in: 1
+  examples.basic.applications.example_5_finance:
+    name: example_5_finance
+    module: examples.basic.applications
+    line: 104
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  fraq.text2fraq.parser_rules._word_match:
+    name: _word_match
+    module: fraq.text2fraq.parser_rules
+    line: 16
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 2
+  fraq.formats.prepare.encode_value:
+    name: encode_value
+    module: fraq.formats.prepare
+    line: 32
+    cyclomatic_complexity: 6
+    calls_out: 10
+    calls_in: 3
+  fraq.formats.text.to_jsonl:
+    name: to_jsonl
+    module: fraq.formats.text
+    line: 23
+    cyclomatic_complexity: 3
+    calls_out: 4
+    calls_in: 0
+  examples.basic.query_examples.example_1_basic_query:
+    name: example_1_basic_query
+    module: examples.basic.query_examples
+    line: 9
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  fraq.text2fraq.parser_rules.Text2FraqSimple.parse:
+    name: parse
+    module: fraq.text2fraq.parser_rules
+    line: 64
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 0
+  examples.text2fraq.nlp2cmd_integration.example_grpc_proto:
+    name: example_grpc_proto
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 139
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 0
+  fraq.benchmarks.SpeedBenchmark.fraq_generate:
+    name: fraq_generate
+    module: fraq.benchmarks
+    line: 35
+    cyclomatic_complexity: 2
+    calls_out: 5
+    calls_in: 0
+  examples.text2fraq.nlp2cmd_integration.example_graphql:
+    name: example_graphql
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 120
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 0
+  examples.cli-docker.run.main:
+    name: main
+    module: examples.cli-docker.run
+    line: 39
+    cyclomatic_complexity: 3
+    calls_out: 6
+    calls_in: 0
+  fraq.cli._parse_args:
+    name: _parse_args
+    module: fraq.cli
+    line: 314
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 1
+  examples.integrations.websocket_example.fraq_websocket_handler:
+    name: fraq_websocket_handler
+    module: examples.integrations.websocket_example
+    line: 16
+    cyclomatic_complexity: 7
+    calls_out: 15
+    calls_in: 0
+  examples.integrations.jupyter_example.jupyter_visualization:
+    name: jupyter_visualization
+    module: examples.integrations.jupyter_example
+    line: 34
+    cyclomatic_complexity: 1
+    calls_out: 16
+    calls_in: 0
+  examples.basic.async_streaming.example_3_kafka:
+    name: example_3_kafka
+    module: examples.basic.async_streaming
+    line: 43
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 1
+  fraq.core._vec_add:
+    name: _vec_add
+    module: fraq.core
+    line: 45
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 1
+  examples.text2fraq.text2fraq_examples._print_header:
+    name: _print_header
+    module: examples.text2fraq.text2fraq_examples
+    line: 44
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 8
+  examples.fastapi-docker.run.test_api:
+    name: test_api
+    module: examples.fastapi-docker.run
+    line: 45
+    cyclomatic_complexity: 4
+    calls_out: 15
+    calls_in: 1
+  examples.integrations.fastapi_example.stream_data:
+    name: stream_data
+    module: examples.integrations.fastapi_example
+    line: 47
+    cyclomatic_complexity: 1
+    calls_out: 8
+    calls_in: 0
+  fraq.cli._is_file_query:
+    name: _is_file_query
+    module: fraq.cli
+    line: 172
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 1
+  examples.text2fraq.nlp2cmd_integration.example_asyncapi:
+    name: example_asyncapi
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 129
+    cyclomatic_complexity: 1
+    calls_out: 9
+    calls_in: 0
+  examples.etl.pipeline_examples.example_1_extract:
+    name: example_1_extract
+    module: examples.etl.pipeline_examples
+    line: 9
+    cyclomatic_complexity: 4
+    calls_out: 10
+    calls_in: 0
+  fraq.cli.cmd_schema:
+    name: cmd_schema
+    module: fraq.cli
+    line: 49
+    cyclomatic_complexity: 3
+    calls_out: 11
+    calls_in: 0
+  examples.integrations.jupyter_example.jupyter_interactive_widget:
+    name: jupyter_interactive_widget
+    module: examples.integrations.jupyter_example
+    line: 72
+    cyclomatic_complexity: 2
+    calls_out: 15
+    calls_in: 0
+  examples.streaming.sse_examples.example_1_sse:
+    name: example_1_sse
+    module: examples.streaming.sse_examples
+    line: 12
+    cyclomatic_complexity: 2
+    calls_out: 17
+    calls_in: 0
+  fraq.dataframes.to_arrow:
+    name: to_arrow
+    module: fraq.dataframes
+    line: 105
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 1
+  fraq.api._to_arrow:
+    name: _to_arrow
+    module: fraq.api
+    line: 322
+    cyclomatic_complexity: 5
+    calls_out: 6
+    calls_in: 1
+  fraq.cli._dispatch_command:
+    name: _dispatch_command
+    module: fraq.cli
+    line: 429
+    cyclomatic_complexity: 8
+    calls_out: 16
+    calls_in: 1
+  fraq.benchmarks.StructuralBenchmark.compare_structures:
+    name: compare_structures
+    module: fraq.benchmarks
+    line: 163
+    cyclomatic_complexity: 3
+    calls_out: 9
+    calls_in: 0
+  examples.fullstack-docker.run.run_docker:
+    name: run_docker
+    module: examples.fullstack-docker.run
+    line: 18
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 1
+  fraq.api._stream_records:
+    name: _stream_records
+    module: fraq.api
+    line: 211
+    cyclomatic_complexity: 6
+    calls_out: 3
+    calls_in: 1
+  examples.integrations.grpc_example.generate_proto_file:
+    name: generate_proto_file
+    module: examples.integrations.grpc_example
+    line: 12
+    cyclomatic_complexity: 1
+    calls_out: 14
+    calls_in: 0
+  fraq.cli._print_stat:
+    name: _print_stat
+    module: fraq.cli
+    line: 139
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 1
+  examples.streaming.sse_examples.example_3_streaming:
+    name: example_3_streaming
+    module: examples.streaming.sse_examples
+    line: 63
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  examples.new_features_demo.example_5_fractal_inference:
+    name: example_5_fractal_inference
+    module: examples.new_features_demo
+    line: 122
+    cyclomatic_complexity: 5
+    calls_out: 17
+    calls_in: 0
+  fraq.formats.text.to_yaml:
+    name: to_yaml
+    module: fraq.formats.text
+    line: 45
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  fraq.ifs.create_ifs:
+    name: create_ifs
+    module: fraq.ifs
+    line: 251
+    cyclomatic_complexity: 3
+    calls_out: 8
+    calls_in: 2
+  examples.text2fraq.text2fraq_examples.example_phi3:
+    name: example_phi3
+    module: examples.text2fraq.text2fraq_examples
+    line: 142
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  examples.text2fraq.nlp2cmd_integration.example_json_schema:
+    name: example_json_schema
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 148
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 0
+  fraq.text2fraq.parser_rules._detect_limit:
+    name: _detect_limit
+    module: fraq.text2fraq.parser_rules
+    line: 38
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 2
+  examples.websocket-docker.run.stop_docker:
+    name: stop_docker
+    module: examples.websocket-docker.run
+    line: 26
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 1
+  fraq.adapters.sensor_adapter.SensorAdapter.stream:
+    name: stream
+    module: fraq.adapters.sensor_adapter
+    line: 49
+    cyclomatic_complexity: 3
+    calls_out: 3
+    calls_in: 9
+  examples.ai_ml.training_data.example_2_regression:
+    name: example_2_regression
+    module: examples.ai_ml.training_data
+    line: 33
+    cyclomatic_complexity: 3
+    calls_out: 11
+    calls_in: 0
+  fraq.benchmarks.SpeedBenchmark.fraq_stream:
+    name: fraq_stream
+    module: fraq.benchmarks
+    line: 59
+    cyclomatic_complexity: 3
+    calls_out: 6
+    calls_in: 0
+  examples.network.network_web_examples.main:
+    name: main
+    module: examples.network.network_web_examples
+    line: 169
+    cyclomatic_complexity: 1
+    calls_out: 13
+    calls_in: 0
+  examples.basic.query_examples.example_2_json_output:
+    name: example_2_json_output
+    module: examples.basic.query_examples
+    line: 25
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 0
+  fraq.formats.text.to_csv:
+    name: to_csv
+    module: fraq.formats.text
+    line: 31
+    cyclomatic_complexity: 4
+    calls_out: 9
+    calls_in: 0
+  examples.websocket-docker.run.main:
+    name: main
+    module: examples.websocket-docker.run
+    line: 69
+    cyclomatic_complexity: 4
+    calls_out: 10
+    calls_in: 0
+  examples.integrations.jupyter_example.jupyter_basic_usage:
+    name: jupyter_basic_usage
+    module: examples.integrations.jupyter_example
+    line: 16
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 0
+  examples.text2fraq.text2fraq_examples.example_simple_parser:
+    name: example_simple_parser
+    module: examples.text2fraq.text2fraq_examples
+    line: 68
+    cyclomatic_complexity: 3
+    calls_out: 10
+    calls_in: 0
+  examples.database.sqlite_examples.example_1_sqlite:
+    name: example_1_sqlite
+    module: examples.database.sqlite_examples
+    line: 10
+    cyclomatic_complexity: 3
+    calls_out: 14
+    calls_in: 0
+  fraq.api._to_polars:
+    name: _to_polars
+    module: fraq.api
+    line: 286
+    cyclomatic_complexity: 3
+    calls_out: 3
+    calls_in: 1
+  examples.text2fraq.nlp2cmd_integration.example_full_nlp2cmd_workflow:
+    name: example_full_nlp2cmd_workflow
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 161
+    cyclomatic_complexity: 3
+    calls_out: 19
+    calls_in: 0
+  examples.basic.applications.example_2_erp_invoices:
+    name: example_2_erp_invoices
+    module: examples.basic.applications
+    line: 37
+    cyclomatic_complexity: 4
+    calls_out: 10
+    calls_in: 0
+  fraq.core._vec_hash:
+    name: _vec_hash
+    module: fraq.core
+    line: 57
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 2
+  examples.fastapi-docker.run.stop_docker:
+    name: stop_docker
+    module: examples.fastapi-docker.run
+    line: 38
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  fraq.export.openapi.to_openapi:
+    name: to_openapi
+    module: fraq.export.openapi
+    line: 15
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 1
+  examples.database.sqlite_examples.example_2_hybrid:
+    name: example_2_hybrid
+    module: examples.database.sqlite_examples
+    line: 43
+    cyclomatic_complexity: 3
+    calls_out: 9
+    calls_in: 0
+  fraq.api.stream:
+    name: stream
+    module: fraq.api
+    line: 228
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  fraq.cli._build_network_parsers:
+    name: _build_network_parsers
+    module: fraq.cli
+    line: 401
+    cyclomatic_complexity: 1
+    calls_out: 8
+    calls_in: 1
+  fraq.export.proto.to_proto:
+    name: to_proto
+    module: fraq.export.proto
+    line: 13
+    cyclomatic_complexity: 2
+    calls_out: 27
+    calls_in: 2
+  fraq.formats.binary.mp_encode:
+    name: mp_encode
+    module: fraq.formats.binary
+    line: 38
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 4
+  fraq.text2fraq.shortcuts.text2filesearch:
+    name: text2filesearch
+    module: fraq.text2fraq.shortcuts
+    line: 21
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 3
+  fraq.cli._build_parser:
+    name: _build_parser
+    module: fraq.cli
+    line: 320
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 1
+  examples.iot.sensor_examples.example_1_sensors:
+    name: example_1_sensors
+    module: examples.iot.sensor_examples
+    line: 10
+    cyclomatic_complexity: 3
+    calls_out: 7
+    calls_in: 0
+  fraq.formats.prepare.prepare:
+    name: prepare
+    module: fraq.formats.prepare
+    line: 14
+    cyclomatic_complexity: 8
+    calls_out: 12
+    calls_in: 7
+  examples.new_features_demo.example_2_dataframes:
+    name: example_2_dataframes
+    module: examples.new_features_demo
+    line: 46
+    cyclomatic_complexity: 2
+    calls_out: 10
+    calls_in: 0
+  fraq.generators.SensorStreamGenerator.__call__:
+    name: __call__
+    module: fraq.generators
+    line: 105
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 0
+  fraq.api._faker_factory:
+    name: _faker_factory
+    module: fraq.api
+    line: 53
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  fraq.benchmarks.MemoryBenchmark.compare_memory:
+    name: compare_memory
+    module: fraq.benchmarks
+    line: 101
+    cyclomatic_complexity: 3
+    calls_out: 11
+    calls_in: 0
+  fraq.cli.cmd_explore:
+    name: cmd_explore
+    module: fraq.cli
+    line: 32
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 0
+  fraq.cli.cmd_files_stat:
+    name: cmd_files_stat
+    module: fraq.cli
+    line: 152
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 0
+  examples.basic.applications.example_3_ai_training:
+    name: example_3_ai_training
+    module: examples.basic.applications
+    line: 60
+    cyclomatic_complexity: 3
+    calls_out: 14
+    calls_in: 0
+  fraq.cli._make_root:
+    name: _make_root
+    module: fraq.cli
+    line: 27
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 3
+  examples.new_features_demo.example_6_benchmarks:
+    name: example_6_benchmarks
+    module: examples.new_features_demo
+    line: 158
+    cyclomatic_complexity: 2
+    calls_out: 11
+    calls_in: 0
+  fraq.providers.faker_provider.get_provider_registry:
+    name: get_provider_registry
+    module: fraq.providers.faker_provider
+    line: 145
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+  fraq.benchmarks._print_structural_section:
+    name: _print_structural_section
+    module: fraq.benchmarks
+    line: 251
+    cyclomatic_complexity: 4
+    calls_out: 4
+    calls_in: 1
+  fraq.text2fraq.parser_rules._detect_depth:
+    name: _detect_depth
+    module: fraq.text2fraq.parser_rules
+    line: 30
+    cyclomatic_complexity: 5
+    calls_out: 0
+    calls_in: 2
+  fraq.export.nlp2cmd.to_nlp2cmd_schema:
+    name: to_nlp2cmd_schema
+    module: fraq.export.nlp2cmd
+    line: 15
+    cyclomatic_complexity: 5
+    calls_out: 6
+    calls_in: 3
+  fraq.text2fraq.parser_llm.Text2Fraq._fallback_fields:
+    name: _fallback_fields
+    module: fraq.text2fraq.parser_llm
+    line: 94
+    cyclomatic_complexity: 5
+    calls_out: 4
+    calls_in: 0
+  examples.cli-docker.run.run_local:
+    name: run_local
+    module: examples.cli-docker.run
+    line: 28
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 1
+  examples.etl.pipeline_examples.example_4_pipeline:
+    name: example_4_pipeline
+    module: examples.etl.pipeline_examples
+    line: 89
+    cyclomatic_complexity: 5
+    calls_out: 10
+    calls_in: 0
+  examples.text2fraq.nlp2cmd_integration.build_sensor_schema:
+    name: build_sensor_schema
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 25
+    cyclomatic_complexity: 1
+    calls_out: 7
+    calls_in: 8
+  examples.integrations.flask_example.api_stream:
+    name: api_stream
+    module: examples.integrations.flask_example
+    line: 37
+    cyclomatic_complexity: 1
+    calls_out: 7
+    calls_in: 0
+  fraq.testing.fraq_fixture:
+    name: fraq_fixture
+    module: fraq.testing
+    line: 32
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 2
+  examples.new_features_demo.example_1_faker:
+    name: example_1_faker
+    module: examples.new_features_demo
+    line: 15
+    cyclomatic_complexity: 3
+    calls_out: 9
+    calls_in: 0
+  examples.websocket-docker.run.test_websocket:
+    name: test_websocket
+    module: examples.websocket-docker.run
+    line: 45
+    cyclomatic_complexity: 3
+    calls_out: 14
+    calls_in: 1
+  examples.text2fraq.text2fraq_examples.example_convenience_functions:
+    name: example_convenience_functions
+    module: examples.text2fraq.text2fraq_examples
+    line: 164
+    cyclomatic_complexity: 3
+    calls_out: 14
+    calls_in: 0
+  examples.streaming.sse_examples.example_4_kafka:
+    name: example_4_kafka
+    module: examples.streaming.sse_examples
+    line: 77
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  fraq.text2fraq.parser_llm.Text2Fraq._fallback_parse:
+    name: _fallback_parse
+    module: fraq.text2fraq.parser_llm
+    line: 83
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 0
+  examples.basic.query_examples.example_5_schema:
+    name: example_5_schema
+    module: examples.basic.query_examples
+    line: 72
+    cyclomatic_complexity: 2
+    calls_out: 9
+    calls_in: 0
+  examples.text2fraq.nlp2cmd_integration.build_erp_schema:
+    name: build_erp_schema
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 37
+    cyclomatic_complexity: 1
+    calls_out: 8
+    calls_in: 1
+  examples.websocket-docker.run.run_docker:
+    name: run_docker
+    module: examples.websocket-docker.run
+    line: 19
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  examples.text2fraq.nlp2cmd_integration.example_openapi:
+    name: example_openapi
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 109
+    cyclomatic_complexity: 1
+    calls_out: 12
+    calls_in: 0
+  fraq.api.quick_schema:
+    name: quick_schema
+    module: fraq.api
+    line: 254
+    cyclomatic_complexity: 6
+    calls_out: 12
+    calls_in: 1
+  examples.integrations.kafka_example.produce_to_kafka:
+    name: produce_to_kafka
+    module: examples.integrations.kafka_example
+    line: 22
+    cyclomatic_complexity: 3
+    calls_out: 10
+    calls_in: 0
+  examples.new_features_demo.example_3_pytest_fixture:
+    name: example_3_pytest_fixture
+    module: examples.new_features_demo
+    line: 70
+    cyclomatic_complexity: 5
+    calls_out: 11
+    calls_in: 0
+  fraq.cli.cmd_nl:
+    name: cmd_nl
+    module: fraq.cli
+    line: 164
+    cyclomatic_complexity: 3
+    calls_out: 5
+    calls_in: 0
+  examples.new_features_demo.example_4_ifs_generator:
+    name: example_4_ifs_generator
+    module: examples.new_features_demo
+    line: 96
+    cyclomatic_complexity: 2
+    calls_out: 13
+    calls_in: 0
+  fraq.cli._build_web_parsers:
+    name: _build_web_parsers
+    module: fraq.cli
+    line: 415
+    cyclomatic_complexity: 1
+    calls_out: 8
+    calls_in: 1
+  examples.basic.async_streaming.example_1_basic:
+    name: example_1_basic
+    module: examples.basic.async_streaming
+    line: 11
+    cyclomatic_complexity: 2
+    calls_out: 5
+    calls_in: 1
+  fraq.streaming.async_stream:
+    name: async_stream
+    module: fraq.streaming
+    line: 78
+    cyclomatic_complexity: 3
+    calls_out: 2
+    calls_in: 3
+  examples.text2fraq.text2fraq_examples.example_llama32:
+    name: example_llama32
+    module: examples.text2fraq.text2fraq_examples
+    line: 123
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  fraq.cli._run_nl_fraq_query:
+    name: _run_nl_fraq_query
+    module: fraq.cli
+    line: 190
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 1
+  fraq.cli._run_nl_file_query:
+    name: _run_nl_file_query
+    module: fraq.cli
+    line: 182
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 1
+  fraq.inference.infer_fractal:
+    name: infer_fractal
+    module: fraq.inference
+    line: 210
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 2
+  fraq.providers.faker_provider.generate_with_faker:
+    name: generate_with_faker
+    module: fraq.providers.faker_provider
+    line: 153
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 1
+  fraq.api._generate_records:
+    name: _generate_records
+    module: fraq.api
+    line: 113
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  examples.integrations.jupyter_example.jupyter_fractal_analysis:
+    name: jupyter_fractal_analysis
+    module: examples.integrations.jupyter_example
+    line: 103
+    cyclomatic_complexity: 3
+    calls_out: 12
+    calls_in: 0
+  fraq.core.FraqNode._child:
+    name: _child
+    module: fraq.core
+    line: 165
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 0
+  fraq.cli._get_shared_parser:
+    name: _get_shared_parser
+    module: fraq.cli
+    line: 334
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 2
+  fraq.core._vec_scale:
+    name: _vec_scale
+    module: fraq.core
+    line: 49
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+  examples.fullstack-docker.run.main:
+    name: main
+    module: examples.fullstack-docker.run
+    line: 57
+    cyclomatic_complexity: 4
+    calls_out: 9
+    calls_in: 0
+  fraq.text2fraq.shortcuts.text2query:
+    name: text2query
+    module: fraq.text2fraq.shortcuts
+    line: 34
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 1
+  examples.integrations.cli_chat_example.FraqChat.do_generate:
+    name: do_generate
+    module: examples.integrations.cli_chat_example
+    line: 32
+    cyclomatic_complexity: 8
+    calls_out: 15
+    calls_in: 0
+  fraq.benchmarks.print_summary:
+    name: print_summary
+    module: fraq.benchmarks
+    line: 261
+    cyclomatic_complexity: 1
+    calls_out: 10
+    calls_in: 0
+  fraq.dataframes.to_pandas:
+    name: to_pandas
+    module: fraq.dataframes
+    line: 70
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 1
+  fraq.benchmarks._print_speed_section:
+    name: _print_speed_section
+    module: fraq.benchmarks
+    line: 230
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 1
+  fraq.cli._build_core_parsers:
+    name: _build_core_parsers
+    module: fraq.cli
+    line: 344
+    cyclomatic_complexity: 1
+    calls_out: 14
+    calls_in: 1
+  examples.text2fraq.text2fraq_examples._print_parsed_query:
+    name: _print_parsed_query
+    module: examples.text2fraq.text2fraq_examples
+    line: 50
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 5
+  examples.integrations.kafka_example.stream_to_kafka:
+    name: stream_to_kafka
+    module: examples.integrations.kafka_example
+    line: 49
+    cyclomatic_complexity: 4
+    calls_out: 12
+    calls_in: 0
+  examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_erp:
+    name: example_nlp2cmd_erp
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 86
+    cyclomatic_complexity: 3
+    calls_out: 11
+    calls_in: 0
+  examples.basic.async_streaming.example_2_typed:
+    name: example_2_typed
+    module: examples.basic.async_streaming
+    line: 24
+    cyclomatic_complexity: 2
+    calls_out: 14
+    calls_in: 1
+  examples.integrations.cli_chat_example.FraqChat.do_stream:
+    name: do_stream
+    module: examples.integrations.cli_chat_example
+    line: 65
+    cyclomatic_complexity: 5
+    calls_out: 12
+    calls_in: 0
+  fraq.formats.text.simple_yaml:
+    name: simple_yaml
+    module: fraq.formats.text
+    line: 50
+    cyclomatic_complexity: 7
+    calls_out: 15
+    calls_in: 3
+  examples.text2fraq.text2fraq_examples.example_file_search_direct:
+    name: example_file_search_direct
+    module: examples.text2fraq.text2fraq_examples
+    line: 184
+    cyclomatic_complexity: 3
+    calls_out: 13
+    calls_in: 0
+  examples.basic.applications.example_1_iot_sensors:
+    name: example_1_iot_sensors
+    module: examples.basic.applications
+    line: 9
+    cyclomatic_complexity: 5
+    calls_out: 13
+    calls_in: 0
+  fraq.cli.main:
+    name: main
+    module: fraq.cli
+    line: 470
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  examples.iot.sensor_examples.example_3_streaming:
+    name: example_3_streaming
+    module: examples.iot.sensor_examples
+    line: 63
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  examples.websocket-docker.run.run_local:
+    name: run_local
+    module: examples.websocket-docker.run
+    line: 32
+    cyclomatic_complexity: 2
+    calls_out: 5
+    calls_in: 1
+  examples.ai_ml.training_data.example_1_classification:
+    name: example_1_classification
+    module: examples.ai_ml.training_data
+    line: 9
+    cyclomatic_complexity: 4
+    calls_out: 11
+    calls_in: 0
+  examples.network.network_web_examples.example_fractal_coordinates:
+    name: example_fractal_coordinates
+    module: examples.network.network_web_examples
+    line: 116
+    cyclomatic_complexity: 1
+    calls_out: 16
+    calls_in: 1
+  examples.network.network_web_examples.example_streaming_comparison:
+    name: example_streaming_comparison
+    module: examples.network.network_web_examples
+    line: 140
+    cyclomatic_complexity: 1
+    calls_out: 18
+    calls_in: 1
+  fraq.formats.binary.to_binary:
+    name: to_binary
+    module: fraq.formats.binary
+    line: 16
+    cyclomatic_complexity: 3
+    calls_out: 8
+    calls_in: 0
+  examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_command_schema:
+    name: example_nlp2cmd_command_schema
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 54
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 0
+  examples.network.network_web_examples.example_network_scan_sync:
+    name: example_network_scan_sync
+    module: examples.network.network_web_examples
+    line: 13
+    cyclomatic_complexity: 2
+    calls_out: 14
+    calls_in: 1
+  fraq.api.generate:
+    name: generate
+    module: fraq.api
+    line: 118
+    cyclomatic_complexity: 6
+    calls_out: 8
+    calls_in: 0
+  fraq.inference.schema.InferredSchema.generate:
+    name: generate
+    module: fraq.inference.schema
+    line: 71
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 40
+  examples.fastapi-docker.run.run_docker:
+    name: run_docker
+    module: examples.fastapi-docker.run
+    line: 29
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 1
+  fraq.api._fields_to_schema:
+    name: _fields_to_schema
+    module: fraq.api
+    line: 88
+    cyclomatic_complexity: 3
+    calls_out: 5
+    calls_in: 1
+  fraq.dataframes.to_polars:
+    name: to_polars
+    module: fraq.dataframes
+    line: 35
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 2
+  examples.fullstack-docker.run.stop_docker:
+    name: stop_docker
+    module: examples.fullstack-docker.run
+    line: 28
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  fraq.formats.binary._encode_list:
+    name: _encode_list
+    module: fraq.formats.binary
+    line: 71
+    cyclomatic_complexity: 2
+    calls_out: 5
+    calls_in: 0
+  examples.text2fraq.text2fraq_files.example_convenience_function:
+    name: example_convenience_function
+    module: examples.text2fraq.text2fraq_files
+    line: 135
+    cyclomatic_complexity: 6
+    calls_out: 16
+    calls_in: 0
+  examples.text2fraq.text2fraq_examples.example_qwen25:
+    name: example_qwen25
+    module: examples.text2fraq.text2fraq_examples
+    line: 97
+    cyclomatic_complexity: 3
+    calls_out: 7
+    calls_in: 0
+  fraq.text2fraq.parser_rules.Text2FraqSimple._matches_pattern:
+    name: _matches_pattern
+    module: fraq.text2fraq.parser_rules
+    line: 82
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  examples.etl.pipeline_examples.example_3_validate:
+    name: example_3_validate
+    module: examples.etl.pipeline_examples
+    line: 71
+    cyclomatic_complexity: 4
+    calls_out: 10
+    calls_in: 0
+  examples.basic.query_examples.example_4_streaming:
+    name: example_4_streaming
+    module: examples.basic.query_examples
+    line: 61
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  examples.fastapi-docker.run.main:
+    name: main
+    module: examples.fastapi-docker.run
+    line: 79
+    cyclomatic_complexity: 4
+    calls_out: 9
+    calls_in: 0
+  examples.etl.pipeline_examples.example_2_transform:
+    name: example_2_transform
+    module: examples.etl.pipeline_examples
+    line: 46
+    cyclomatic_complexity: 3
+    calls_out: 15
+    calls_in: 0
+  examples.integrations.flask_example.api_generate:
+    name: api_generate
+    module: examples.integrations.flask_example
+    line: 25
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 0
+  fraq.formats.text.to_json:
+    name: to_json
+    module: fraq.formats.text
+    line: 18
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  examples.fastapi-docker.run.run_local:
+    name: run_local
+    module: examples.fastapi-docker.run
+    line: 16
+    cyclomatic_complexity: 2
+    calls_out: 5
+    calls_in: 1
+  fraq.formats.binary._encode_dict:
+    name: _encode_dict
+    module: fraq.formats.binary
+    line: 78
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 0
+  fraq.cli.cmd_stream:
+    name: cmd_stream
+    module: fraq.cli
+    line: 39
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 0
+  fraq.api._to_pandas:
+    name: _to_pandas
+    module: fraq.api
+    line: 304
+    cyclomatic_complexity: 3
+    calls_out: 3
+    calls_in: 1
+  fraq.export.json_schema.to_json_schema:
+    name: to_json_schema
+    module: fraq.export.json_schema
+    line: 15
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 1
+  fraq.benchmarks._print_memory_section:
+    name: _print_memory_section
+    module: fraq.benchmarks
+    line: 238
+    cyclomatic_complexity: 7
+    calls_out: 3
+    calls_in: 1
+  examples.cli-docker.run.run_in_docker:
+    name: run_in_docker
+    module: examples.cli-docker.run
+    line: 17
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 1
+  examples.text2fraq.text2fraq_examples.example_env_config:
+    name: example_env_config
+    module: examples.text2fraq.text2fraq_examples
+    line: 208
+    cyclomatic_complexity: 1
+    calls_out: 11
+    calls_in: 0
+  fraq.export.nlp2cmd.to_nlp2cmd_actions:
+    name: to_nlp2cmd_actions
+    module: fraq.export.nlp2cmd
+    line: 93
+    cyclomatic_complexity: 2
+    calls_out: 0
+    calls_in: 2
+  examples.network.network_web_examples.example_web_crawl_sync:
+    name: example_web_crawl_sync
+    module: examples.network.network_web_examples
+    line: 64
+    cyclomatic_complexity: 2
+    calls_out: 16
+    calls_in: 1
+  examples.basic.applications.example_4_devops_metrics:
+    name: example_4_devops_metrics
+    module: examples.basic.applications
+    line: 87
+    cyclomatic_complexity: 3
+    calls_out: 7
+    calls_in: 0
+  fraq.testing.fixture_factory:
+    name: fixture_factory
+    module: fraq.testing
+    line: 84
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  fraq.formats.binary._encode_fallback:
+    name: _encode_fallback
+    module: fraq.formats.binary
+    line: 86
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 1
+  examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_actions:
+    name: example_nlp2cmd_actions
+    module: examples.text2fraq.nlp2cmd_integration
+    line: 74
+    cyclomatic_complexity: 3
+    calls_out: 6
+    calls_in: 0
+  examples.fastapi-docker.api_server.ws_stream:
+    name: ws_stream
+    module: examples.fastapi-docker.api_server
+    line: 335
+    cyclomatic_complexity: 6
+    calls_out: 11
+    calls_in: 0
+  fraq.dataframes.generate_df:
+    name: generate_df
+    module: fraq.dataframes
+    line: 145
+    cyclomatic_complexity: 4
+    calls_out: 4
+    calls_in: 0
+  fraq.formats.binary._encode_str:
+    name: _encode_str
+    module: fraq.formats.binary
+    line: 66
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  fraq.formats.binary.to_msgpack_lite:
+    name: to_msgpack_lite
+    module: fraq.formats.binary
+    line: 33
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  fraq.export.graphql.to_graphql:
+    name: to_graphql
+    module: fraq.export.graphql
+    line: 13
+    cyclomatic_complexity: 2
+    calls_out: 17
+    calls_in: 1
+  examples.fullstack-docker.run.test_stack:
+    name: test_stack
+    module: examples.fullstack-docker.run
+    line: 35
+    cyclomatic_complexity: 3
+    calls_out: 9
+    calls_in: 1
+  fraq.text2fraq.shortcuts.text2fraq:
+    name: text2fraq
+    module: fraq.text2fraq.shortcuts
+    line: 40
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 2
+  examples.text2fraq.text2fraq_examples.example_full_pipeline:
+    name: example_full_pipeline
+    module: examples.text2fraq.text2fraq_examples
+    line: 223
+    cyclomatic_complexity: 3
+    calls_out: 18
+    calls_in: 0
+  fraq.text2fraq.parser_rules._detect_format:
+    name: _detect_format
+    module: fraq.text2fraq.parser_rules
+    line: 20
+    cyclomatic_complexity: 6
+    calls_out: 0
+    calls_in: 2
+  fraq.export.asyncapi.to_asyncapi:
+    name: to_asyncapi
+    module: fraq.export.asyncapi
+    line: 15
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+edges:
+- caller: fraq.dataframes.to_polars
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: fraq.dataframes.to_pandas
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: fraq.dataframes.to_arrow
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: fraq.dataframes.generate_df
+  callee: fraq.dataframes.to_polars
+  call_type: resolved
+- caller: fraq.dataframes.generate_df
+  callee: fraq.dataframes.to_pandas
+  call_type: resolved
+- caller: fraq.dataframes.generate_df
+  callee: fraq.dataframes.to_arrow
+  call_type: resolved
+- caller: fraq.text2fraq.parser_rules.Text2FraqSimple.parse
+  callee: fraq.text2fraq.parser_rules._detect_depth
+  call_type: resolved
+- caller: fraq.text2fraq.parser_rules.Text2FraqSimple.parse
+  callee: fraq.text2fraq.parser_rules._detect_format
+  call_type: resolved
+- caller: fraq.text2fraq.parser_rules.Text2FraqSimple.parse
+  callee: fraq.text2fraq.parser_rules._detect_limit
+  call_type: resolved
+- caller: fraq.text2fraq.parser_rules.Text2FraqSimple._matches_pattern
+  callee: fraq.text2fraq.parser_rules._word_match
+  call_type: resolved
+- caller: fraq.text2fraq.parser_llm.Text2Fraq._fallback_parse
+  callee: fraq.text2fraq.parser_rules._detect_depth
+  call_type: resolved
+- caller: fraq.text2fraq.parser_llm.Text2Fraq._fallback_parse
+  callee: fraq.text2fraq.parser_rules._detect_format
+  call_type: resolved
+- caller: fraq.text2fraq.parser_llm.Text2Fraq._fallback_parse
+  callee: fraq.text2fraq.parser_rules._detect_limit
+  call_type: resolved
+- caller: fraq.text2fraq.parser_llm.Text2Fraq._fallback_fields
+  callee: fraq.text2fraq.parser_rules._word_match
+  call_type: resolved
+- caller: fraq.testing.fraq_fixture
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: fraq.testing.fixture_factory
+  callee: fraq.testing.fraq_fixture
+  call_type: resolved
+- caller: fraq.testing.make_fixture
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: fraq.formats.binary.to_binary
+  callee: fraq.formats.prepare.encode_value
+  call_type: resolved
+- caller: fraq.formats.binary.to_msgpack_lite
+  callee: fraq.formats.binary.mp_encode
+  call_type: resolved
+- caller: fraq.formats.binary.to_msgpack_lite
+  callee: fraq.formats.prepare.prepare
+  call_type: resolved
+- caller: fraq.formats.binary.mp_encode
+  callee: fraq.formats.binary._encode_fallback
+  call_type: resolved
+- caller: fraq.formats.binary._encode_list
+  callee: fraq.formats.binary.mp_encode
+  call_type: resolved
+- caller: fraq.formats.binary._encode_dict
+  callee: fraq.formats.binary.mp_encode
+  call_type: resolved
+- caller: fraq.formats.binary._encode_fallback
+  callee: fraq.formats.binary._encode_str
+  call_type: resolved
+- caller: fraq.generators.SensorStreamGenerator.__call__
+  callee: fraq.core._vec_hash
+  call_type: resolved
+- caller: fraq.formats.text.to_json
+  callee: fraq.formats.prepare.prepare
+  call_type: resolved
+- caller: fraq.formats.text.to_jsonl
+  callee: fraq.formats.prepare.prepare
+  call_type: resolved
+- caller: fraq.formats.text.to_csv
+  callee: fraq.formats.prepare.prepare
+  call_type: resolved
+- caller: fraq.formats.text.to_yaml
+  callee: fraq.formats.text.simple_yaml
+  call_type: resolved
+- caller: fraq.formats.text.to_yaml
+  callee: fraq.formats.prepare.prepare
+  call_type: resolved
+- caller: fraq.cli.cmd_explore
+  callee: fraq.cli._make_root
+  call_type: resolved
+- caller: fraq.cli.cmd_stream
+  callee: fraq.cli._make_root
+  call_type: resolved
+- caller: fraq.cli.cmd_schema
+  callee: fraq.cli._make_root
+  call_type: resolved
+- caller: fraq.cli.cmd_files_stat
+  callee: fraq.cli._collect_file_stat
+  call_type: resolved
+- caller: fraq.cli.cmd_files_stat
+  callee: fraq.cli._print_stat
+  call_type: resolved
+- caller: fraq.cli.cmd_nl
+  callee: fraq.cli._is_file_query
+  call_type: resolved
+- caller: fraq.cli.cmd_nl
+  callee: fraq.cli._run_nl_fraq_query
+  call_type: resolved
+- caller: fraq.cli.cmd_nl
+  callee: fraq.cli._run_nl_file_query
+  call_type: resolved
+- caller: fraq.cli._parse_args
+  callee: fraq.cli._build_parser
+  call_type: resolved
+- caller: fraq.cli._build_parser
+  callee: fraq.cli._build_core_parsers
+  call_type: resolved
+- caller: fraq.cli._build_parser
+  callee: fraq.cli._build_files_parsers
+  call_type: resolved
+- caller: fraq.cli._build_parser
+  callee: fraq.cli._build_network_parsers
+  call_type: resolved
+- caller: fraq.cli._build_parser
+  callee: fraq.cli._build_web_parsers
+  call_type: resolved
+- caller: fraq.cli._build_core_parsers
+  callee: fraq.cli._get_shared_parser
+  call_type: resolved
+- caller: fraq.cli._build_files_parsers
+  callee: fraq.cli._get_shared_parser
+  call_type: resolved
+- caller: fraq.cli.main
+  callee: fraq.cli._parse_args
+  call_type: resolved
+- caller: fraq.cli.main
+  callee: fraq.cli._dispatch_command
+  call_type: resolved
+- caller: examples.new_features_demo.example_1_faker
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.new_features_demo.example_2_dataframes
+  callee: fraq.dataframes.to_polars
+  call_type: resolved
+- caller: examples.new_features_demo.example_3_pytest_fixture
+  callee: fraq.testing.fraq_fixture
+  call_type: resolved
+- caller: examples.new_features_demo.example_4_ifs_generator
+  callee: fraq.ifs.create_ifs
+  call_type: resolved
+- caller: examples.new_features_demo.example_5_fractal_inference
+  callee: fraq.inference.infer_fractal
+  call_type: resolved
+- caller: examples.new_features_demo.example_6_benchmarks
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_command_schema
+  callee: examples.text2fraq.nlp2cmd_integration.build_sensor_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_command_schema
+  callee: fraq.export.nlp2cmd.to_nlp2cmd_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_actions
+  callee: examples.text2fraq.nlp2cmd_integration.build_sensor_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_actions
+  callee: fraq.export.nlp2cmd.to_nlp2cmd_actions
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_erp
+  callee: examples.text2fraq.nlp2cmd_integration.build_erp_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_erp
+  callee: fraq.export.nlp2cmd.to_nlp2cmd_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_openapi
+  callee: examples.text2fraq.nlp2cmd_integration.build_sensor_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_openapi
+  callee: fraq.export.openapi.to_openapi
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_graphql
+  callee: examples.text2fraq.nlp2cmd_integration.build_sensor_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_graphql
+  callee: fraq.export.graphql.to_graphql
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_asyncapi
+  callee: examples.text2fraq.nlp2cmd_integration.build_sensor_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_asyncapi
+  callee: fraq.export.asyncapi.to_asyncapi
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_grpc_proto
+  callee: examples.text2fraq.nlp2cmd_integration.build_sensor_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_grpc_proto
+  callee: fraq.export.proto.to_proto
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_json_schema
+  callee: examples.text2fraq.nlp2cmd_integration.build_sensor_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_json_schema
+  callee: fraq.export.json_schema.to_json_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_full_nlp2cmd_workflow
+  callee: examples.text2fraq.nlp2cmd_integration.build_sensor_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_full_nlp2cmd_workflow
+  callee: fraq.export.nlp2cmd.to_nlp2cmd_schema
+  call_type: resolved
+- caller: examples.text2fraq.nlp2cmd_integration.example_full_nlp2cmd_workflow
+  callee: fraq.export.nlp2cmd.to_nlp2cmd_actions
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_files.example_convenience_function
+  callee: fraq.text2fraq.shortcuts.text2filesearch
+  call_type: resolved
+- caller: examples.websocket-docker.run.main
+  callee: examples.websocket-docker.run.stop_docker
+  call_type: resolved
+- caller: examples.websocket-docker.run.main
+  callee: examples.websocket-docker.run.test_websocket
+  call_type: resolved
+- caller: examples.websocket-docker.run.main
+  callee: examples.websocket-docker.run.run_local
+  call_type: resolved
+- caller: examples.websocket-docker.run.main
+  callee: examples.websocket-docker.run.run_docker
+  call_type: resolved
+- caller: fraq.benchmarks.SpeedBenchmark.fraq_generate
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: fraq.benchmarks.SpeedBenchmark.fraq_stream
+  callee: fraq.adapters.sensor_adapter.SensorAdapter.stream
+  call_type: resolved
+- caller: fraq.benchmarks.MemoryBenchmark.compare_memory
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: fraq.benchmarks.StructuralBenchmark.compare_structures
+  callee: fraq.ifs.create_ifs
+  call_type: resolved
+- caller: fraq.benchmarks.StructuralBenchmark.compare_structures
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: fraq.benchmarks.print_summary
+  callee: fraq.benchmarks._print_speed_section
+  call_type: resolved
+- caller: fraq.benchmarks.print_summary
+  callee: fraq.benchmarks._print_memory_section
+  call_type: resolved
+- caller: fraq.benchmarks.print_summary
+  callee: fraq.benchmarks._print_structural_section
+  call_type: resolved
+- caller: examples.cli-docker.run.main
+  callee: examples.cli-docker.run.run_local
+  call_type: resolved
+- caller: examples.cli-docker.run.main
+  callee: examples.cli-docker.run.run_in_docker
+  call_type: resolved
+- caller: examples.network.network_web_examples.main
+  callee: examples.network.network_web_examples.example_network_scan_sync
+  call_type: resolved
+- caller: examples.network.network_web_examples.main
+  callee: examples.network.network_web_examples.example_web_crawl_sync
+  call_type: resolved
+- caller: examples.network.network_web_examples.main
+  callee: examples.network.network_web_examples.example_fractal_coordinates
+  call_type: resolved
+- caller: examples.network.network_web_examples.main
+  callee: examples.network.network_web_examples.example_streaming_comparison
+  call_type: resolved
+- caller: examples.iot.sensor_examples.example_1_sensors
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.iot.sensor_examples.example_2_mqtt
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.iot.sensor_examples.example_3_streaming
+  callee: fraq.adapters.sensor_adapter.SensorAdapter.stream
+  call_type: resolved
+- caller: examples.streaming.sse_examples.example_1_sse
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.streaming.sse_examples.example_3_streaming
+  callee: fraq.adapters.sensor_adapter.SensorAdapter.stream
+  call_type: resolved
+- caller: examples.streaming.sse_examples.example_4_kafka
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.fullstack-docker.run.main
+  callee: examples.fullstack-docker.run.stop_docker
+  call_type: resolved
+- caller: examples.fullstack-docker.run.main
+  callee: examples.fullstack-docker.run.test_stack
+  call_type: resolved
+- caller: examples.fullstack-docker.run.main
+  callee: examples.fullstack-docker.run.run_docker
+  call_type: resolved
+- caller: examples.ai_ml.training_data.example_1_classification
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.ai_ml.training_data.example_2_regression
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.fastapi-docker.run.main
+  callee: examples.fastapi-docker.run.stop_docker
+  call_type: resolved
+- caller: examples.fastapi-docker.run.main
+  callee: examples.fastapi-docker.run.test_api
+  call_type: resolved
+- caller: examples.fastapi-docker.run.main
+  callee: examples.fastapi-docker.run.run_docker
+  call_type: resolved
+- caller: examples.fastapi-docker.run.main
+  callee: examples.fastapi-docker.run.run_local
+  call_type: resolved
+- caller: examples.etl.pipeline_examples.example_1_extract
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.etl.pipeline_examples.example_2_transform
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.etl.pipeline_examples.example_3_validate
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.etl.pipeline_examples.example_4_pipeline
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.database.sqlite_examples.example_1_sqlite
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.database.sqlite_examples.example_2_hybrid
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.basic.applications.example_1_iot_sensors
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.basic.applications.example_2_erp_invoices
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.basic.applications.example_3_ai_training
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.basic.applications.example_4_devops_metrics
+  callee: fraq.adapters.sensor_adapter.SensorAdapter.stream
+  call_type: resolved
+- caller: examples.basic.applications.example_5_finance
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.basic.async_streaming.example_1_basic
+  callee: fraq.streaming.async_stream
+  call_type: resolved
+- caller: examples.basic.async_streaming.example_3_kafka
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.basic.async_streaming.main
+  callee: examples.basic.async_streaming.example_1_basic
+  call_type: resolved
+- caller: examples.basic.async_streaming.main
+  callee: examples.basic.async_streaming.example_2_typed
+  call_type: resolved
+- caller: examples.basic.async_streaming.main
+  callee: examples.basic.async_streaming.example_3_kafka
+  call_type: resolved
+- caller: examples.integrations.grpc_example.generate_proto_file
+  callee: fraq.export.proto.to_proto
+  call_type: resolved
+- caller: examples.basic.query_examples.example_1_basic_query
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.basic.query_examples.example_2_json_output
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.basic.query_examples.example_3_csv_output
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.basic.query_examples.example_4_streaming
+  callee: fraq.adapters.sensor_adapter.SensorAdapter.stream
+  call_type: resolved
+- caller: examples.basic.query_examples.example_5_schema
+  callee: fraq.api.quick_schema
+  call_type: resolved
+- caller: examples.integrations.fastapi_example.stream_data
+  callee: fraq.streaming.async_stream
+  call_type: resolved
+- caller: examples.integrations.fastapi_example.stream_data
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.integrations.fastapi_example.generate_data
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.fastapi-docker.api_server.ws_stream
+  callee: fraq.streaming.async_stream
+  call_type: resolved
+- caller: examples.integrations.flask_example.api_generate
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.integrations.flask_example.api_stream
+  callee: fraq.adapters.sensor_adapter.SensorAdapter.stream
+  call_type: resolved
+- caller: examples.integrations.jupyter_example.jupyter_basic_usage
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.integrations.jupyter_example.jupyter_visualization
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.integrations.jupyter_example.jupyter_interactive_widget
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.integrations.jupyter_example.jupyter_fractal_analysis
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.integrations.jupyter_example.jupyter_fractal_analysis
+  callee: fraq.inference.infer_fractal
+  call_type: resolved
+- caller: examples.integrations.kafka_example.produce_to_kafka
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.integrations.kafka_example.stream_to_kafka
+  callee: fraq.adapters.sensor_adapter.SensorAdapter.stream
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_simple_parser
+  callee: examples.text2fraq.text2fraq_examples._print_header
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_simple_parser
+  callee: examples.text2fraq.text2fraq_examples._print_parsed_query
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_simple_parser
+  callee: examples.text2fraq.text2fraq_examples._print_file_params
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_qwen25
+  callee: examples.text2fraq.text2fraq_examples._print_header
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_qwen25
+  callee: examples.text2fraq.text2fraq_examples._print_parsed_query
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_llama32
+  callee: examples.text2fraq.text2fraq_examples._print_header
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_llama32
+  callee: examples.text2fraq.text2fraq_examples._print_parsed_query
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_phi3
+  callee: examples.text2fraq.text2fraq_examples._print_header
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_phi3
+  callee: examples.text2fraq.text2fraq_examples._print_parsed_query
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_convenience_functions
+  callee: examples.text2fraq.text2fraq_examples._print_header
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_convenience_functions
+  callee: fraq.text2fraq.shortcuts.text2query
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_convenience_functions
+  callee: fraq.text2fraq.shortcuts.text2filesearch
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_convenience_functions
+  callee: fraq.text2fraq.shortcuts.text2fraq
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_file_search_direct
+  callee: examples.text2fraq.text2fraq_examples._print_header
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_file_search_direct
+  callee: fraq.text2fraq.shortcuts.text2filesearch
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_env_config
+  callee: examples.text2fraq.text2fraq_examples._print_header
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_full_pipeline
+  callee: examples.text2fraq.text2fraq_examples._print_header
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_full_pipeline
+  callee: examples.text2fraq.text2fraq_examples._print_parsed_query
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_full_pipeline
+  callee: examples.text2fraq.text2fraq_examples._print_file_params
+  call_type: resolved
+- caller: examples.text2fraq.text2fraq_examples.example_full_pipeline
+  callee: fraq.text2fraq.shortcuts.text2fraq
+  call_type: resolved
+- caller: examples.integrations.websocket_example.fraq_websocket_handler
+  callee: fraq.adapters.sensor_adapter.SensorAdapter.stream
+  call_type: resolved
+- caller: examples.integrations.cli_chat_example.FraqChat.do_generate
+  callee: fraq.inference.schema.InferredSchema.generate
+  call_type: resolved
+- caller: examples.integrations.cli_chat_example.FraqChat.do_stream
+  callee: fraq.adapters.sensor_adapter.SensorAdapter.stream
+  call_type: resolved
+- caller: fraq.api._faker_factory
+  callee: fraq.providers.faker_provider.generate_with_faker
+  call_type: resolved
+- caller: fraq.api.generate
+  callee: fraq.api._fields_to_schema
+  call_type: resolved
+- caller: fraq.api.generate
+  callee: fraq.api._generate_records
+  call_type: resolved
+- caller: fraq.api.generate
+  callee: fraq.api._to_polars
+  call_type: resolved
+- caller: fraq.api.generate
+  callee: fraq.api._to_pandas
+  call_type: resolved
+- caller: fraq.api.generate
+  callee: fraq.api._to_arrow
+  call_type: resolved
+- caller: fraq.api.stream
+  callee: fraq.api._build_stream_config
+  call_type: resolved
+- caller: fraq.api.stream
+  callee: fraq.api._stream_records
+  call_type: resolved
+- caller: fraq.core.FraqNode._child
+  callee: fraq.core._vec_hash
+  call_type: resolved
+- caller: fraq.core.FraqNode._child
+  callee: fraq.core._vec_add
+  call_type: resolved
+- caller: fraq.core.FraqNode._child
+  callee: fraq.core._vec_scale
+  call_type: resolved
+- caller: fraq.providers.faker_provider.generate_with_faker
+  callee: fraq.providers.faker_provider.get_provider_registry
+  call_type: resolved
+modules:
+  examples.ai_ml.training_data:
+  - examples.ai_ml.training_data.example_1_classification
+  - examples.ai_ml.training_data.example_2_regression
+  examples.basic.applications:
+  - examples.basic.applications.example_1_iot_sensors
+  - examples.basic.applications.example_2_erp_invoices
+  - examples.basic.applications.example_3_ai_training
+  - examples.basic.applications.example_4_devops_metrics
+  - examples.basic.applications.example_5_finance
+  examples.basic.async_streaming:
+  - examples.basic.async_streaming.example_1_basic
+  - examples.basic.async_streaming.example_2_typed
+  - examples.basic.async_streaming.example_3_kafka
+  - examples.basic.async_streaming.main
+  examples.basic.query_examples:
+  - examples.basic.query_examples.example_1_basic_query
+  - examples.basic.query_examples.example_2_json_output
+  - examples.basic.query_examples.example_3_csv_output
+  - examples.basic.query_examples.example_4_streaming
+  - examples.basic.query_examples.example_5_schema
+  examples.cli-docker.run:
+  - examples.cli-docker.run.main
+  - examples.cli-docker.run.run_in_docker
+  - examples.cli-docker.run.run_local
+  examples.database.sqlite_examples:
+  - examples.database.sqlite_examples.example_1_sqlite
+  - examples.database.sqlite_examples.example_2_hybrid
+  examples.etl.pipeline_examples:
+  - examples.etl.pipeline_examples.example_1_extract
+  - examples.etl.pipeline_examples.example_2_transform
+  - examples.etl.pipeline_examples.example_3_validate
+  - examples.etl.pipeline_examples.example_4_pipeline
+  examples.fastapi-docker.api_server:
+  - examples.fastapi-docker.api_server.ws_stream
+  examples.fastapi-docker.run:
+  - examples.fastapi-docker.run.main
+  - examples.fastapi-docker.run.run_docker
+  - examples.fastapi-docker.run.run_local
+  - examples.fastapi-docker.run.stop_docker
+  - examples.fastapi-docker.run.test_api
+  examples.fullstack-docker.run:
+  - examples.fullstack-docker.run.main
+  - examples.fullstack-docker.run.run_docker
+  - examples.fullstack-docker.run.stop_docker
+  - examples.fullstack-docker.run.test_stack
+  examples.integrations.cli_chat_example:
+  - examples.integrations.cli_chat_example.FraqChat.do_generate
+  - examples.integrations.cli_chat_example.FraqChat.do_stream
+  examples.integrations.fastapi_example:
+  - examples.integrations.fastapi_example.generate_data
+  - examples.integrations.fastapi_example.stream_data
+  examples.integrations.flask_example:
+  - examples.integrations.flask_example.api_generate
+  - examples.integrations.flask_example.api_stream
+  examples.integrations.grpc_example:
+  - examples.integrations.grpc_example.generate_proto_file
+  examples.integrations.jupyter_example:
+  - examples.integrations.jupyter_example.jupyter_basic_usage
+  - examples.integrations.jupyter_example.jupyter_fractal_analysis
+  - examples.integrations.jupyter_example.jupyter_interactive_widget
+  - examples.integrations.jupyter_example.jupyter_visualization
+  examples.integrations.kafka_example:
+  - examples.integrations.kafka_example.produce_to_kafka
+  - examples.integrations.kafka_example.stream_to_kafka
+  examples.integrations.websocket_example:
+  - examples.integrations.websocket_example.fraq_websocket_handler
+  examples.iot.sensor_examples:
+  - examples.iot.sensor_examples.example_1_sensors
+  - examples.iot.sensor_examples.example_2_mqtt
+  - examples.iot.sensor_examples.example_3_streaming
+  examples.network.network_web_examples:
+  - examples.network.network_web_examples.example_fractal_coordinates
+  - examples.network.network_web_examples.example_network_scan_sync
+  - examples.network.network_web_examples.example_streaming_comparison
+  - examples.network.network_web_examples.example_web_crawl_sync
+  - examples.network.network_web_examples.main
+  examples.new_features_demo:
+  - examples.new_features_demo.example_1_faker
+  - examples.new_features_demo.example_2_dataframes
+  - examples.new_features_demo.example_3_pytest_fixture
+  - examples.new_features_demo.example_4_ifs_generator
+  - examples.new_features_demo.example_5_fractal_inference
+  - examples.new_features_demo.example_6_benchmarks
+  examples.streaming.sse_examples:
+  - examples.streaming.sse_examples.example_1_sse
+  - examples.streaming.sse_examples.example_3_streaming
+  - examples.streaming.sse_examples.example_4_kafka
+  examples.text2fraq.nlp2cmd_integration:
+  - examples.text2fraq.nlp2cmd_integration.build_erp_schema
+  - examples.text2fraq.nlp2cmd_integration.build_sensor_schema
+  - examples.text2fraq.nlp2cmd_integration.example_asyncapi
+  - examples.text2fraq.nlp2cmd_integration.example_full_nlp2cmd_workflow
+  - examples.text2fraq.nlp2cmd_integration.example_graphql
+  - examples.text2fraq.nlp2cmd_integration.example_grpc_proto
+  - examples.text2fraq.nlp2cmd_integration.example_json_schema
+  - examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_actions
+  - examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_command_schema
+  - examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_erp
+  - examples.text2fraq.nlp2cmd_integration.example_openapi
+  examples.text2fraq.text2fraq_examples:
+  - examples.text2fraq.text2fraq_examples._print_file_params
+  - examples.text2fraq.text2fraq_examples._print_header
+  - examples.text2fraq.text2fraq_examples._print_parsed_query
+  - examples.text2fraq.text2fraq_examples.example_convenience_functions
+  - examples.text2fraq.text2fraq_examples.example_env_config
+  - examples.text2fraq.text2fraq_examples.example_file_search_direct
+  - examples.text2fraq.text2fraq_examples.example_full_pipeline
+  - examples.text2fraq.text2fraq_examples.example_llama32
+  - examples.text2fraq.text2fraq_examples.example_phi3
+  - examples.text2fraq.text2fraq_examples.example_qwen25
+  - examples.text2fraq.text2fraq_examples.example_simple_parser
+  examples.text2fraq.text2fraq_files:
+  - examples.text2fraq.text2fraq_files.example_convenience_function
+  examples.websocket-docker.run:
+  - examples.websocket-docker.run.main
+  - examples.websocket-docker.run.run_docker
+  - examples.websocket-docker.run.run_local
+  - examples.websocket-docker.run.stop_docker
+  - examples.websocket-docker.run.test_websocket
+  fraq.adapters.sensor_adapter:
+  - fraq.adapters.sensor_adapter.SensorAdapter.stream
+  fraq.api:
+  - fraq.api._build_stream_config
+  - fraq.api._faker_factory
+  - fraq.api._fields_to_schema
+  - fraq.api._generate_records
+  - fraq.api._stream_records
+  - fraq.api._to_arrow
+  - fraq.api._to_pandas
+  - fraq.api._to_polars
+  - fraq.api.generate
+  - fraq.api.quick_schema
+  - fraq.api.stream
+  fraq.benchmarks:
+  - fraq.benchmarks.MemoryBenchmark.compare_memory
+  - fraq.benchmarks.SpeedBenchmark.fraq_generate
+  - fraq.benchmarks.SpeedBenchmark.fraq_stream
+  - fraq.benchmarks.StructuralBenchmark.compare_structures
+  - fraq.benchmarks._print_memory_section
+  - fraq.benchmarks._print_speed_section
+  - fraq.benchmarks._print_structural_section
+  - fraq.benchmarks.print_summary
+  fraq.cli:
+  - fraq.cli._build_core_parsers
+  - fraq.cli._build_files_parsers
+  - fraq.cli._build_network_parsers
+  - fraq.cli._build_parser
+  - fraq.cli._build_web_parsers
+  - fraq.cli._collect_file_stat
+  - fraq.cli._dispatch_command
+  - fraq.cli._get_shared_parser
+  - fraq.cli._is_file_query
+  - fraq.cli._make_root
+  - fraq.cli._parse_args
+  - fraq.cli._print_stat
+  - fraq.cli._run_nl_file_query
+  - fraq.cli._run_nl_fraq_query
+  - fraq.cli.cmd_explore
+  - fraq.cli.cmd_files_stat
+  - fraq.cli.cmd_nl
+  - fraq.cli.cmd_schema
+  - fraq.cli.cmd_stream
+  - fraq.cli.main
+  fraq.core:
+  - fraq.core.FraqNode._child
+  - fraq.core._vec_add
+  - fraq.core._vec_hash
+  - fraq.core._vec_scale
+  fraq.dataframes:
+  - fraq.dataframes.generate_df
+  - fraq.dataframes.to_arrow
+  - fraq.dataframes.to_pandas
+  - fraq.dataframes.to_polars
+  fraq.export.asyncapi:
+  - fraq.export.asyncapi.to_asyncapi
+  fraq.export.graphql:
+  - fraq.export.graphql.to_graphql
+  fraq.export.json_schema:
+  - fraq.export.json_schema.to_json_schema
+  fraq.export.nlp2cmd:
+  - fraq.export.nlp2cmd.to_nlp2cmd_actions
+  - fraq.export.nlp2cmd.to_nlp2cmd_schema
+  fraq.export.openapi:
+  - fraq.export.openapi.to_openapi
+  fraq.export.proto:
+  - fraq.export.proto.to_proto
+  fraq.formats.binary:
+  - fraq.formats.binary._encode_dict
+  - fraq.formats.binary._encode_fallback
+  - fraq.formats.binary._encode_list
+  - fraq.formats.binary._encode_str
+  - fraq.formats.binary.mp_encode
+  - fraq.formats.binary.to_binary
+  - fraq.formats.binary.to_msgpack_lite
+  fraq.formats.prepare:
+  - fraq.formats.prepare.encode_value
+  - fraq.formats.prepare.prepare
+  fraq.formats.text:
+  - fraq.formats.text.simple_yaml
+  - fraq.formats.text.to_csv
+  - fraq.formats.text.to_json
+  - fraq.formats.text.to_jsonl
+  - fraq.formats.text.to_yaml
+  fraq.generators:
+  - fraq.generators.SensorStreamGenerator.__call__
+  fraq.ifs:
+  - fraq.ifs.create_ifs
+  fraq.inference:
+  - fraq.inference.infer_fractal
+  fraq.inference.schema:
+  - fraq.inference.schema.InferredSchema.generate
+  fraq.providers.faker_provider:
+  - fraq.providers.faker_provider.generate_with_faker
+  - fraq.providers.faker_provider.get_provider_registry
+  fraq.streaming:
+  - fraq.streaming.async_stream
+  fraq.testing:
+  - fraq.testing.fixture_factory
+  - fraq.testing.fraq_fixture
+  - fraq.testing.make_fixture
+  fraq.text2fraq.parser_llm:
+  - fraq.text2fraq.parser_llm.Text2Fraq._fallback_fields
+  - fraq.text2fraq.parser_llm.Text2Fraq._fallback_parse
+  fraq.text2fraq.parser_rules:
+  - fraq.text2fraq.parser_rules.Text2FraqSimple._matches_pattern
+  - fraq.text2fraq.parser_rules.Text2FraqSimple.parse
+  - fraq.text2fraq.parser_rules._detect_depth
+  - fraq.text2fraq.parser_rules._detect_format
+  - fraq.text2fraq.parser_rules._detect_limit
+  - fraq.text2fraq.parser_rules._word_match
+  fraq.text2fraq.shortcuts:
+  - fraq.text2fraq.shortcuts.text2filesearch
+  - fraq.text2fraq.shortcuts.text2fraq
+  - fraq.text2fraq.shortcuts.text2query
+entry_points:
+- examples.ai_ml.training_data.example_1_classification
+- examples.ai_ml.training_data.example_2_regression
+- examples.ai_ml.training_data.example_3_timeseries
+- examples.basic.applications.example_1_iot_sensors
+- examples.basic.applications.example_2_erp_invoices
+- examples.basic.applications.example_3_ai_training
+- examples.basic.applications.example_4_devops_metrics
+- examples.basic.applications.example_5_finance
+- examples.basic.async_streaming.main
+- examples.basic.query_examples.example_1_basic_query
+- examples.basic.query_examples.example_2_json_output
+- examples.basic.query_examples.example_3_csv_output
+- examples.basic.query_examples.example_4_streaming
+- examples.basic.query_examples.example_5_schema
+- examples.basic.query_examples.example_6_custom_schema
+- examples.cli-docker.run.main
+- examples.database.sqlite_examples.example_1_sqlite
+- examples.database.sqlite_examples.example_2_hybrid
+- examples.database.sqlite_examples.example_3_schema_save
+- examples.etl.pipeline_examples.example_1_extract
+- examples.etl.pipeline_examples.example_2_transform
+- examples.etl.pipeline_examples.example_3_validate
+- examples.etl.pipeline_examples.example_4_pipeline
+- examples.fastapi-docker.api_server.explore
+- examples.fastapi-docker.api_server.files_list
+- examples.fastapi-docker.api_server.files_search
+- examples.fastapi-docker.api_server.files_stat
+- examples.fastapi-docker.api_server.health
+- examples.fastapi-docker.api_server.lifespan
+- examples.fastapi-docker.api_server.natural_language
+- examples.fastapi-docker.api_server.query_data
+- examples.fastapi-docker.api_server.root
+- examples.fastapi-docker.api_server.schema_records
+- examples.fastapi-docker.api_server.stream
+- examples.fastapi-docker.api_server.ws_files
+- examples.fastapi-docker.api_server.ws_stream
+- examples.fastapi-docker.main.explore
+- examples.fastapi-docker.main.files_search
+- examples.fastapi-docker.main.files_stat
+- examples.fastapi-docker.main.health
+- examples.fastapi-docker.main.root
+- examples.fastapi-docker.run.main
+- examples.fullstack-docker.api.main.explore
+- examples.fullstack-docker.api.main.files_search
+- examples.fullstack-docker.api.main.health
+- examples.fullstack-docker.api.main.root
+- examples.fullstack-docker.run.main
+- examples.fullstack-docker.websocket.main.health
+- examples.fullstack-docker.websocket.main.ws_files
+- examples.fullstack-docker.websocket.main.ws_stream
+- examples.integrations.cli_chat_example.FraqChat.__init__
+- examples.integrations.cli_chat_example.FraqChat.do_EOF
+- examples.integrations.cli_chat_example.FraqChat.do_generate
+- examples.integrations.cli_chat_example.FraqChat.do_quit
+- examples.integrations.cli_chat_example.FraqChat.do_save
+- examples.integrations.cli_chat_example.FraqChat.do_schema
+- examples.integrations.cli_chat_example.FraqChat.do_stats
+- examples.integrations.cli_chat_example.FraqChat.do_stream
+- examples.integrations.cli_chat_example.FraqChat.emptyline
+- examples.integrations.cli_chat_example.main
+- examples.integrations.fastapi_example.generate_data
+- examples.integrations.fastapi_example.query_data
+- examples.integrations.fastapi_example.root
+- examples.integrations.fastapi_example.stream_data
+- examples.integrations.fastapi_example.zoom
+- examples.integrations.flask_example.api_generate
+- examples.integrations.flask_example.api_schema
+- examples.integrations.flask_example.api_stream
+- examples.integrations.flask_example.health
+- examples.integrations.flask_example.index
+- examples.integrations.grpc_example.example_grpc_server_stub
+- examples.integrations.grpc_example.generate_proto_file
+- examples.integrations.jupyter_example.jupyter_basic_usage
+- examples.integrations.jupyter_example.jupyter_fractal_analysis
+- examples.integrations.jupyter_example.jupyter_interactive_widget
+- examples.integrations.jupyter_example.jupyter_visualization
+- examples.integrations.kafka_example.consume_from_kafka
+- examples.integrations.kafka_example.produce_to_kafka
+- examples.integrations.kafka_example.stream_to_kafka
+- examples.integrations.websocket_example.fraq_websocket_handler
+- examples.integrations.websocket_example.main
+- examples.integrations.websocket_example.test_client
+- examples.iot.sensor_examples.example_1_sensors
+- examples.iot.sensor_examples.example_2_mqtt
+- examples.iot.sensor_examples.example_3_streaming
+- examples.network.network_web_examples.main
+- examples.new_features_demo.example_1_faker
+- examples.new_features_demo.example_2_dataframes
+- examples.new_features_demo.example_3_pytest_fixture
+- examples.new_features_demo.example_4_ifs_generator
+- examples.new_features_demo.example_5_fractal_inference
+- examples.new_features_demo.example_6_benchmarks
+- examples.streaming.sse_examples.example_1_sse
+- examples.streaming.sse_examples.example_2_websocket
+- examples.streaming.sse_examples.example_3_streaming
+- examples.streaming.sse_examples.example_4_kafka
+- examples.text2fraq.nlp2cmd_integration.example_asyncapi
+- examples.text2fraq.nlp2cmd_integration.example_full_nlp2cmd_workflow
+- examples.text2fraq.nlp2cmd_integration.example_graphql
+- examples.text2fraq.nlp2cmd_integration.example_grpc_proto
+- examples.text2fraq.nlp2cmd_integration.example_json_schema
+- examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_actions
+- examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_command_schema
+- examples.text2fraq.nlp2cmd_integration.example_nlp2cmd_erp
+- examples.text2fraq.nlp2cmd_integration.example_openapi
+- examples.text2fraq.text2fraq_examples.example_convenience_functions
+- examples.text2fraq.text2fraq_examples.example_env_config
+- examples.text2fraq.text2fraq_examples.example_file_search_direct
+- examples.text2fraq.text2fraq_examples.example_full_pipeline
+- examples.text2fraq.text2fraq_examples.example_llama32
+- examples.text2fraq.text2fraq_examples.example_phi3
+- examples.text2fraq.text2fraq_examples.example_qwen25
+- examples.text2fraq.text2fraq_examples.example_simple_parser
+- examples.text2fraq.text2fraq_files.example_convenience_function
+- examples.text2fraq.text2fraq_files.example_file_search_adapter_direct
+- examples.text2fraq.text2fraq_files.example_llm_file_intent
+- examples.text2fraq.text2fraq_files.example_pdf_search_rule_based
+- examples.text2fraq.text2fraq_files.example_pdf_search_with_llm
+- examples.v028.new_features.example_combined_usage
+- examples.v028.new_features.example_fastapi_server
+- examples.v028.new_features.example_fraq_session
+- examples.v028.new_features.example_model_router
+- examples.websocket-docker.main.health
+- examples.websocket-docker.main.ws_files
+- examples.websocket-docker.main.ws_stream
+- examples.websocket-docker.run.main
+- fraq.__getattr__
+- fraq.adapters.base.BaseAdapter.execute
+- fraq.adapters.base.BaseAdapter.execute_iter
+- fraq.adapters.base.BaseAdapter.load_root
+- fraq.adapters.base.BaseAdapter.save
+- fraq.adapters.file_adapter.FileAdapter._dict_to_node
+- fraq.adapters.file_adapter.FileAdapter.load_root
+- fraq.adapters.file_adapter.FileAdapter.save
+- fraq.adapters.file_search.FileSearchAdapter.__init__
+- fraq.adapters.file_search.FileSearchAdapter._build_glob
+- fraq.adapters.file_search.FileSearchAdapter._collect_files
+- fraq.adapters.file_search.FileSearchAdapter._file_to_record
+- fraq.adapters.file_search.FileSearchAdapter._filter_by_time
+- fraq.adapters.file_search.FileSearchAdapter._sort_and_limit
+- fraq.adapters.file_search.FileSearchAdapter.load_root
+- fraq.adapters.file_search.FileSearchAdapter.save
+- fraq.adapters.file_search.FileSearchAdapter.search
+- fraq.adapters.file_search.FileSearchAdapter.stream
+- fraq.adapters.file_search.FileSystemPort.is_file
+- fraq.adapters.file_search.FileSystemPort.list_files
+- fraq.adapters.file_search.FileSystemPort.stat
+- fraq.adapters.file_search.FileSystemPort.write_bytes
+- fraq.adapters.file_search.RealFileSystem.is_file
+- fraq.adapters.file_search.RealFileSystem.list_files
+- fraq.adapters.file_search.RealFileSystem.stat
+- fraq.adapters.file_search.RealFileSystem.write_bytes
+- fraq.adapters.http_adapter.HTTPAdapter.load_root
+- fraq.adapters.http_adapter.HTTPAdapter.save
+- fraq.adapters.hybrid_adapter.HybridAdapter.__init__
+- fraq.adapters.hybrid_adapter.HybridAdapter.add
+- fraq.adapters.hybrid_adapter.HybridAdapter.load_root
+- fraq.adapters.hybrid_adapter.HybridAdapter.save
+- fraq.adapters.registry.get_adapter
+- fraq.adapters.sensor_adapter.SensorAdapter.__init__
+- fraq.adapters.sensor_adapter.SensorAdapter.load_root
+- fraq.adapters.sensor_adapter.SensorAdapter.save
+- fraq.adapters.sql_adapter.SQLAdapter.__init__
+- fraq.adapters.sql_adapter.SQLAdapter._default_row_to_node
+- fraq.adapters.sql_adapter.SQLAdapter.generate_sql_function
+- fraq.adapters.sql_adapter.SQLAdapter.load_root
+- fraq.adapters.sql_adapter.SQLAdapter.save
+- fraq.api.StreamConfig.build_schema
+- fraq.api.TypeTransformRegistry._default_transform
+- fraq.api.TypeTransformRegistry.register
+- fraq.api.TypeTransformRegistry.resolve
+- fraq.api._faker_factory
+- fraq.api._float_factory
+- fraq.api._int_factory
+- fraq.api._parse_transform
+- fraq.api.generate
+- fraq.api.stream
+- fraq.benchmarks.MemoryBenchmark.compare_memory
+- fraq.benchmarks.MemoryBenchmark.measure_memory_usage
+- fraq.benchmarks.SpeedBenchmark.fraq_generate
+- fraq.benchmarks.SpeedBenchmark.fraq_stream
+- fraq.benchmarks.StructuralBenchmark.compare_structures
+- fraq.benchmarks.StructuralBenchmark.test_self_similarity
+- fraq.benchmarks.print_summary
+- fraq.benchmarks.run_all_benchmarks
+- fraq.cli.cmd_explore
+- fraq.cli.cmd_files_list
+- fraq.cli.cmd_files_search
+- fraq.cli.cmd_files_stat
+- fraq.cli.cmd_network_scan
+- fraq.cli.cmd_nl
+- fraq.cli.cmd_schema
+- fraq.cli.cmd_stream
+- fraq.cli.cmd_web_crawl
+- fraq.cli.main
+- fraq.core.FraqCursor.advance
+- fraq.core.FraqCursor.back
+- fraq.core.FraqCursor.reset
+- fraq.core.FraqCursor.snapshot
+- fraq.core.FraqNode.__repr__
+- fraq.core.FraqNode._child
+- fraq.core.FraqNode.children
+- fraq.core.FraqNode.to_dict
+- fraq.core.FraqNode.zoom
+- fraq.core.FraqSchema._cast
+- fraq.core.FraqSchema.add_field
+- fraq.core.FraqSchema.record
+- fraq.core.FraqSchema.records
+- fraq.core._vec_norm
+- fraq.dataframes.generate_df
+- fraq.formats.binary._encode_bool
+- fraq.formats.binary._encode_dict
+- fraq.formats.binary._encode_float
+- fraq.formats.binary._encode_int
+- fraq.formats.binary._encode_list
+- fraq.formats.binary._encode_none
+- fraq.formats.binary.to_binary
+- fraq.formats.binary.to_msgpack_lite
+- fraq.formats.registry.FormatRegistry.available
+- fraq.formats.registry.FormatRegistry.get
+- fraq.formats.registry.FormatRegistry.register
+- fraq.formats.registry.FormatRegistry.serialize
+- fraq.formats.text.to_csv
+- fraq.formats.text.to_json
+- fraq.formats.text.to_jsonl
+- fraq.formats.text.to_yaml
+- fraq.generators.FibonacciGenerator.__call__
+- fraq.generators.FibonacciGenerator.__init__
+- fraq.generators.FibonacciGenerator._fib
+- fraq.generators.HashGenerator.__call__
+- fraq.generators.HashGenerator.__init__
+- fraq.generators.PerlinGenerator.__call__
+- fraq.generators.PerlinGenerator.__init__
+- fraq.generators.SensorStreamGenerator.__call__
+- fraq.generators.SensorStreamGenerator.__init__
+- fraq.ifs.AffineTransform.apply
+- fraq.ifs.IFSGenerator.__init__
+- fraq.ifs.IFSGenerator._select_transform
+- fraq.ifs.IFSGenerator.generate
+- fraq.ifs.IFSGenerator.generate_coordinate
+- fraq.ifs.IFSGenerator.generate_hierarchy
+- fraq.ifs.NetworkMapper.map_value
+- fraq.ifs.OrganizationalMapper.__init__
+- fraq.ifs.OrganizationalMapper.map_value
+- fraq.ifs.ValueMapper.map_value
+- fraq.inference.FractalAnalyzer.__init__
+- fraq.inference.FractalAnalyzer.analyze_correlations
+- fraq.inference.FractalAnalyzer.box_counting_dimension
+- fraq.inference.FractalAnalyzer.detect_hierarchy
+- fraq.inference.correlation.CorrelationAnalyzer._calculate_correlation
+- fraq.inference.correlation.CorrelationAnalyzer._calculate_means
+- fraq.inference.correlation.CorrelationAnalyzer._extract_numeric_column
+- fraq.inference.correlation.CorrelationAnalyzer.analyze
+- fraq.inference.dimension.BoxCountingAnalyzer.__init__
+- fraq.inference.dimension.BoxCountingAnalyzer._calculate_confidence
+- fraq.inference.dimension.BoxCountingAnalyzer._compute_scales
+- fraq.inference.dimension.BoxCountingAnalyzer._count_boxes
+- fraq.inference.dimension.BoxCountingAnalyzer._fit_dimension
+- fraq.inference.dimension.BoxCountingAnalyzer._normalize
+- fraq.inference.dimension.BoxCountingAnalyzer._validate_values
+- fraq.inference.dimension.BoxCountingAnalyzer.estimate
+- fraq.inference.hierarchy.HierarchyDetector.__init__
+- fraq.inference.hierarchy.HierarchyDetector._detect_pattern_type
+- fraq.inference.hierarchy.HierarchyDetector._estimate_branching
+- fraq.inference.hierarchy.HierarchyDetector._estimate_depth
+- fraq.inference.hierarchy.HierarchyDetector._extract_numeric_values
+- fraq.inference.hierarchy.HierarchyDetector.detect
+- fraq.inference.hierarchy.PatternSignature.__init__
+- fraq.inference.schema.InferredSchema.__init__
+- fraq.inference.schema.InferredSchema._build_ifs
+- fraq.inference.schema.InferredSchema._generate_value
+- fraq.inference.schema.InferredSchema.to_dict
+- fraq.providers.faker_provider.FakerProvider.__init__
+- fraq.providers.faker_provider.FakerProvider._get_faker
+- fraq.providers.faker_provider.FakerProvider.generate
+- fraq.providers.faker_provider.FakerProvider.supports
+- fraq.providers.faker_provider.ProviderRegistry.__init__
+- fraq.providers.faker_provider.ProviderRegistry.find_provider
+- fraq.providers.faker_provider.ProviderRegistry.generate
+- fraq.providers.faker_provider.ProviderRegistry.get_faker_provider
+- fraq.providers.faker_provider.ProviderRegistry.register
+- fraq.providers.faker_provider.ValueProvider.generate
+- fraq.providers.faker_provider.ValueProvider.supports
+- fraq.query.FraqExecutor.__init__
+- fraq.query.FraqExecutor._iter_records
+- fraq.query.FraqExecutor.execute
+- fraq.query.FraqExecutor.execute_iter
+- fraq.query.FraqFilter.matches
+- fraq.query.FraqQuery.from_source
+- fraq.query.FraqQuery.output
+- fraq.query.FraqQuery.select
+- fraq.query.FraqQuery.take
+- fraq.query.FraqQuery.where
+- fraq.query.FraqQuery.zoom
+- fraq.query.query
+- fraq.server.clear_session
+- fraq.server.files_nl
+- fraq.server.files_search
+- fraq.server.files_search_post
+- fraq.server.health_check
+- fraq.server.natural_language
+- fraq.server.ws_stream
+- fraq.streaming.AsyncFraqStream.__aiter__
+- fraq.streaming.AsyncFraqStream.__init__
+- fraq.streaming.AsyncFraqStream.stop
+- fraq.streaming.async_query
+- fraq.testing.fixture_factory
+- fraq.testing.make_fixture
+- fraq.text2fraq.config.Text2FraqConfig.from_env
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq.__init__
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq._apply_filters
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq._collect_files
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq._collect_files_filtered
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq._detect_extension
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq._detect_limit
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq._detect_newer_than
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq._detect_path
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq._detect_sort_by
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq._should_exclude
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq._sort_and_limit
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq.format_results
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq.parse
+- fraq.text2fraq.file_search_parser.FileSearchText2Fraq.search
+- fraq.text2fraq.llm_client.LiteLLMClient.__init__
+- fraq.text2fraq.llm_client.LiteLLMClient.complete
+- fraq.text2fraq.models.LLMClient.complete
+- fraq.text2fraq.models.ParsedQuery.to_fraq_query
+- fraq.text2fraq.parser_llm.Text2Fraq.__init__
+- fraq.text2fraq.parser_llm.Text2Fraq._extract_structured_response
+- fraq.text2fraq.parser_llm.Text2Fraq._fallback_fields
+- fraq.text2fraq.parser_llm.Text2Fraq._fallback_parse
+- fraq.text2fraq.parser_llm.Text2Fraq._parse_response
+- fraq.text2fraq.parser_llm.Text2Fraq.execute
+- fraq.text2fraq.parser_llm.Text2Fraq.parse
+- fraq.text2fraq.parser_rules.Text2FraqSimple._detect_fields
+- fraq.text2fraq.parser_rules.Text2FraqSimple._matches_pattern
+- fraq.text2fraq.parser_rules.Text2FraqSimple.execute
+- fraq.text2fraq.parser_rules.Text2FraqSimple.parse
+- fraq.text2fraq.router.ModelRouter.__post_init__
+- fraq.text2fraq.router.ModelRouter._estimate_complexity
+- fraq.text2fraq.router.ModelRouter.get_config_for_model
+- fraq.text2fraq.router.ModelRouter.route
+- fraq.text2fraq.session.FraqSession.__post_init__
+- fraq.text2fraq.session.FraqSession._detect_new_fields
+- fraq.text2fraq.session.FraqSession._is_followup
+- fraq.text2fraq.session.FraqSession._modify_last
+- fraq.text2fraq.session.FraqSession._update_context
+- fraq.text2fraq.session.FraqSession.ask
+- fraq.text2fraq.session.FraqSession.clear
+- fraq.text2fraq.session.FraqSession.get_context_summary
+- main_websocket.health
+- main_websocket.ws_files
+- main_websocket.ws_stream

@@ -209,6 +209,30 @@ fraq/
 └── cli.py              # Refactored CLI
 ```
 
+## [0.2.16] - 2026-04-21
+
+### Docs
+- Update README.md
+- Update SUMD.md
+- Update SUMR.md
+- Update docs/README.md
+- Update docs/architecture.md
+- Update docs/configuration.md
+- Update docs/modules.md
+
+### Other
+- Update fraq/core.py
+- Update project/analysis.toon
+- Update project/calls.yaml
+- Update project/duplication.toon.yaml
+- Update project/flow.mmd
+- Update project/flow.png
+- Update project/flow.toon
+- Update project/map.toon
+- Update project/map.toon.yaml
+- Update project/project.toon
+- ... and 1 more files
+
 ## [0.2.15] - 2026-04-21
 
 ### Docs

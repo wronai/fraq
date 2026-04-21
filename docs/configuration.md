@@ -1,106 +1,159 @@
 # fraq — Configuration Reference
 
-> All options for `code2docs.yaml`
+> Project metadata, dependencies, environment, deployment, and release management.
 
-## Top-level
+## Metadata
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `project_name` | `str` | "" | Name of the project (used in headings and badges) |
-| `source` | `str` | ./ | Root directory to analyze |
-| `output` | `str` | ./docs/ | Output directory for generated docs |
-| `readme_output` | `str` | ./README.md | Path for the generated README file |
-| `repo_url` | `str` | "" |  |
-| `org_name` | `str` | "" |  |
-| `readme` | `ReadmeConfig` | *see `readme` section* |  |
-| `docs` | `DocsConfig` | *see `docs` section* |  |
-| `examples` | `ExamplesConfig` | *see `examples` section* |  |
-| `sync` | `SyncConfig` | *see `sync` section* |  |
-| `llm` | `LLMConfig` | *see `llm` section* |  |
-| `code2llm` | `Code2LlmConfig` | *see `code2llm` section* |  |
-| `verbose` | `bool` | false | Print detailed analysis info during generation |
-| `exclude_tests` | `bool` | true | Exclude test files from analysis |
-| `skip_private` | `bool` | false | Skip private functions/classes in output |
+| Property | Value |
+|----------|-------|
+| **name** | `fraq` |
+| **version** | `0.2.14` |
+| **python_requires** | `>=3.10` |
+| **license** | Apache-2.0 |
+| **ecosystem** | SUMD + DOQL + testql + taskfile |
 
-## `readme`
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `sections` | `List` | overview, install, quickstart, generated_output, config, sync_markers, architecture, api, structure, requirements, contributing, docs_nav | README sections to include |
-| `badges` | `List` | version, python, coverage, complexity | Badge types to show in README header |
-| `sync_markers` | `bool` | true | Wrap generated content in `<!-- code2docs:start/end -->` markers |
-
-## `docs`
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `api_reference` | `bool` | true | Generate per-module API reference docs |
-| `module_docs` | `bool` | true | Generate detailed module documentation |
-| `architecture` | `bool` | true | Generate architecture overview with Mermaid diagrams |
-| `changelog` | `bool` | true | Generate changelog from git history |
-
-## `examples`
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `auto_generate` | `bool` | true | Auto-generate usage example files |
-| `from_entry_points` | `bool` | true | Generate examples from detected entry points |
-
-## `sync`
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `strategy` | `str` | markers | Sync strategy: `markers`, `full`, or `git-diff` |
-| `watch` | `bool` | false | Enable file watcher for auto-resync |
-| `ignore` | `List` | tests/, __pycache__ | Glob patterns to ignore during sync |
-
-## `llm`
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `enabled` | `bool` | false | Enable LLM-assisted documentation generation |
-| `model` | `str` | "" | LLM model identifier (litellm format, e.g. `openai/gpt-4o-mini`, `ollama/llama3`) |
-| `api_key` | `str` | "" | API key for the LLM provider (use `.env` or env var `CODE2DOCS_LLM_API_KEY`) |
-| `api_base` | `str` | "" | Custom API base URL (for self-hosted or proxy endpoints) |
-| `max_tokens` | `int` | 1024 | Maximum tokens per LLM call |
-| `temperature` | `float` | 0.3 | Sampling temperature (low = factual, high = creative) |
-
-## `code2llm`
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `enabled` | `bool` | true | Enable LLM-assisted documentation generation |
-| `formats` | `List` | all |  |
-| `strategy` | `str` | standard | Sync strategy: `markers`, `full`, or `git-diff` |
-| `output_dir` | `str` | project |  |
-| `chunk` | `bool` | false |  |
-| `no_png` | `bool` | true |  |
-| `max_depth` | `int` | 6 |  |
-| `exclude_patterns` | `List` | venv, .venv, env, .env, node_modules, bower_components, __pycache__, .pytest_cache, .mypy_cache, .git, .hg, .svn, dist, build, target, out, .tox, .eggs, *.egg-info, vendor, third_party, third-party, site-packages, lib/python* |  |
-
-## Example `code2docs.yaml`
+## Configuration
 
 ```yaml
-project_name: fraq
-source: ./
-output: ./docs/
-readme_output: ./README.md
-verbose: false
-
-readme:
-  sections:
-    - overview
-    - install
-    - quickstart
-    - api
-    - structure
-  sync_markers: true
-
-docs:
-  api_reference: True
-  module_docs: True
-  architecture: True
-
-examples:
-  auto_generate: True
+project:
+  name: fraq
+  version: 0.2.14
+  env: local
 ```
+
+## Dependencies
+
+### Runtime
+
+*(see `pyproject.toml`)*
+
+### Development
+
+```text
+pytest>=7.0
+pytest-cov>=4.0
+pytest-asyncio>=0.21.0
+mypy>=1.0
+ruff>=0.1.0
+faker>=20.0
+polars>=1.0
+```
+
+## Deployment
+
+```bash
+pip install fraq
+
+# development install
+pip install -e .[dev]
+```
+
+### Docker
+
+- **base image**: `python:3.11-slim`
+- **expose**: `8000`
+- **entrypoint**: `["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]`
+
+### Docker Compose (`docker-compose.yml`)
+
+| Service | Context | Dockerfile | Ports |
+|---------|---------|------------|-------|
+| **fraq-api** | `.` | `Dockerfile` | `8000:8000` |
+| **fraq-websocket** | `.` | `Dockerfile.websocket` | `8001:8001` |
+| **fraq-cli** | `.` | `Dockerfile.cli` | — |
+
+## Environment Variables (`.env.example`)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LITELLM_PROVIDER` | `ollama` | API provider: openai, ollama, anthropic, cohere, etc. |
+| `LITELLM_MODEL` | `qwen2.5:3b` | Model name (supports small models like qwen2.5:3b, llama3.2:3b, phi3:3.8b) |
+| `LITELLM_API_KEY` | *(not set)* | Leave empty for local models via Ollama |
+| `LITELLM_BASE_URL` | `http://localhost:11434` | Base URL for API (e.g., for Ollama: http://localhost:11434, for OpenRouter) |
+| `LITELLM_TEMPERATURE` | `0.1` | Temperature for generation (0.0 - 1.0, lower = more deterministic) |
+| `LITELLM_MAX_TOKENS` | `512` | Max tokens per request |
+| `LITELLM_TIMEOUT` | `30` | Timeout in seconds |
+| `TEXT2FRAQ_DEFAULT_FORMAT` | `json` | Default output format: json, csv, yaml, jsonl |
+| `TEXT2FRAQ_DEFAULT_DIMS` | `3` | Default dimensions for fractal (2-10) |
+| `TEXT2FRAQ_DEFAULT_DEPTH` | `3` | Default depth for queries (1-20) |
+| `TEXT2FRAQ_CACHE_ENABLED` | `true` | Enable caching of parsed queries |
+| `TEXT2FRAQ_CACHE_TTL` | `3600` | Cache TTL in seconds (3600 = 1 hour) |
+| `SENSOR_BASE_TEMP` | `23.5` | IoT/Sensor simulation settings |
+| `SENSOR_BASE_HUMIDITY` | `60.0` |  |
+| `SENSOR_SAMPLE_HZ` | `10` |  |
+| `DATABASE_URL` | `sqlite:///fraq_examples.db` | Example: postgresql://user:pass@localhost/fraq or sqlite:///fraq.db |
+| `HTTP_API_BASE_URL` | `https://api.example.com` | HTTP API base URL (for HTTP adapter examples) |
+| `ENABLE_IOT_EXAMPLES` | `true` | Enable/disable specific examples |
+| `ENABLE_ERP_EXAMPLES` | `true` |  |
+| `ENABLE_FINANCE_EXAMPLES` | `true` |  |
+| `ENABLE_LEGAL_EXAMPLES` | `true` |  |
+| `ENABLE_AI_ML_EXAMPLES` | `true` |  |
+| `ENABLE_DEVOPS_EXAMPLES` | `true` |  |
+
+## Quality Pipeline (`pyqual.yaml`)
+
+```yaml
+pipeline:
+  name: fraq-quality
+
+  metrics:
+    cc_max: 15
+    critical_max: 0
+
+  custom_tools:
+    - name: code2llm_fraq
+      binary: code2llm
+      command: >-
+        code2llm {workdir} -f toon -o ./project --no-chunk
+        --exclude .git .venv .venv_test build dist __pycache__ .pytest_cache .code2llm_cache .benchmarks .mypy_cache .ruff_cache node_modules
+      output: ""
+      allow_failure: false
+
+    - name: vallm_fraq
+      binary: vallm
+      command: >-
+        vallm batch {workdir} --recursive --format toon --output ./project
+        --exclude .git,.venv,.venv_test,build,dist,__pycache__,.pytest_cache,.code2llm_cache,.benchmarks,.mypy_cache,.ruff_cache,node_modules
+      output: ""
+      allow_failure: false
+
+  stages:
+    - name: analyze
+      tool: code2llm_fraq
+      optional: true
+      timeout: 0
+
+    - name: validate
+      tool: vallm_fraq
+      optional: true
+      timeout: 0
+
+    - name: lint
+      tool: ruff
+      optional: true
+
+    - name: fix
+      tool: prefact
+      optional: true
+      when: metrics_fail
+      timeout: 900
+
+    - name: test
+      run: python3 -m pytest -q
+      when: always
+
+  loop:
+    max_iterations: 3
+    on_fail: report
+
+  env:
+    LLM_MODEL: openrouter/qwen/qwen3-coder-next
+```
+
+## Release Management (`goal.yaml`)
+
+- **versioning**: `semver`
+- **commits**: `conventional` scope=`fraq`
+- **changelog**: `keep-a-changelog`
+- **build strategies**: `python`, `nodejs`, `rust`
+- **version files**: `VERSION`, `pyproject.toml:version`, `fraq/__init__.py:__version__`

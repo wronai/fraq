@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fraq"
-version = "0.2.15"
+version = "0.2.16"
 description = "Fractal Query Data Library — model data as infinite, self-similar fractal structures"
 readme = "README.md"
 license = "Apache-2.0"

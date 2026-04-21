@@ -1,0 +1,47 @@
+flowchart TD
+
+    %% Entry points (blue)
+    classDef entry fill:#4dabf7,stroke:#1971c2,color:#fff
+
+    subgraph CLI
+        fraq__cli___make_root["_make_root"]
+        fraq__cli__cmd_explore["cmd_explore"]
+        fraq__cli__cmd_stream["cmd_stream"]
+        fraq__cli__cmd_schema["cmd_schema"]
+        fraq__cli__cmd_files_search["cmd_files_search"]
+        fraq__cli__cmd_files_list["cmd_files_list"]
+        fraq__cli___collect_file_stat["_collect_file_stat"]
+        fraq__cli___print_stat["_print_stat"]
+        fraq__cli__cmd_files_stat["cmd_files_stat"]
+        fraq__cli__cmd_nl["cmd_nl"]
+        fraq__cli___is_file_query["_is_file_query"]
+        fraq__cli___run_nl_file_query["_run_nl_file_query"]
+        fraq__cli___run_nl_fraq_query["_run_nl_fraq_query"]
+        fraq__cli__cmd_network_scan["cmd_network_scan"]
+        fraq__cli__cmd_web_crawl["cmd_web_crawl"]
+        ...["+9 more"]
+    end
+
+    subgraph Core
+        fraq__dataframes__generate_df["generate_df"]
+        fraq__streaming__AsyncFraqStream____aiter__["__aiter__"]
+        fraq__streaming__AsyncFraqStream__stop["stop"]
+        fraq__streaming__async_query["async_query"]
+        main_websocket__ws_stream["ws_stream"]
+        main_websocket__ws_files["ws_files"]
+        main_websocket__health["health"]
+        fraq__text2fraq__parser_rules__Text2FraqSimple__parse["parse"]
+        fraq__text2fraq__parser_rules__Text2FraqSimple___detect_fields["_detect_fields"]
+        fraq__text2fraq__parser_rules__Text2FraqSimple___matches_pattern["_matches_pattern"]
+        fraq__text2fraq__parser_rules__Text2FraqSimple__execute["execute"]
+        fraq__text2fraq__file_search_parser__FileSearchText2Fraq___detect_path["_detect_path"]
+        fraq__text2fraq__file_search_parser__FileSearchText2Fraq___should_exclude["_should_exclude"]
+        fraq__text2fraq__file_search_parser__FileSearchText2Fraq___collect_files["_collect_files"]
+        fraq__text2fraq__file_search_parser__FileSearchText2Fraq___apply_filters["_apply_filters"]
+        ...["+171 more"]
+    end
+
+    subgraph Exporters
+    end
+
+    class fraq__dataframes__generate_df,fraq__streaming__AsyncFraqStream____aiter__,fraq__streaming__AsyncFraqStream__stop,fraq__streaming__async_query,main_websocket__ws_stream,main_websocket__ws_files,main_websocket__health,fraq__text2fraq__parser_rules__Text2FraqSimple__parse,fraq__text2fraq__parser_rules__Text2FraqSimple___detect_fields,fraq__text2fraq__parser_rules__Text2FraqSimple___matches_pattern entry

@@ -1,12 +1,12 @@
-# redup/duplication | 8 groups | 90f 10454L | 2026-04-21
+# redup/duplication | 8 groups | 90f 10455L | 2026-04-21
 
 SUMMARY:
   files_scanned: 90
-  total_lines:   10454
+  total_lines:   10455
   dup_groups:    8
   dup_fragments: 16
   saved_lines:   114
-  scan_ms:       4460
+  scan_ms:       4659
 
 HOTSPOTS[7] (files with most duplication):
   fraq/dataframes.py  dup=66L  groups=1  frags=2  (0.6%)
